@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masterov.Storage", "Masterov.Storage\Masterov.Storage.csproj", "{77124822-5471-4FF9-B0A1-6E73391302AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masterov.Domain", "Masterov.Domain\Masterov.Domain.csproj", "{7E402E30-34AF-496E-8F43-1B6F10FCF44C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masterov.Storage.DI", "Masterov.Storage.DI\Masterov.Storage.DI.csproj", "{A71D0958-DCC2-4922-AC31-B97DBE914D4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masterov.Domain.DI", "Masterov.Domain.DI\Masterov.Domain.DI.csproj", "{BD57AE94-194B-469C-884E-1137F23F1917}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masterov.API", "Masterov.API\Masterov.API.csproj", "{BEE3A51C-5292-410C-8415-F893A6378E23}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{77124822-5471-4FF9-B0A1-6E73391302AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77124822-5471-4FF9-B0A1-6E73391302AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77124822-5471-4FF9-B0A1-6E73391302AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77124822-5471-4FF9-B0A1-6E73391302AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E402E30-34AF-496E-8F43-1B6F10FCF44C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E402E30-34AF-496E-8F43-1B6F10FCF44C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E402E30-34AF-496E-8F43-1B6F10FCF44C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E402E30-34AF-496E-8F43-1B6F10FCF44C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A71D0958-DCC2-4922-AC31-B97DBE914D4B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A71D0958-DCC2-4922-AC31-B97DBE914D4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A71D0958-DCC2-4922-AC31-B97DBE914D4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A71D0958-DCC2-4922-AC31-B97DBE914D4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD57AE94-194B-469C-884E-1137F23F1917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD57AE94-194B-469C-884E-1137F23F1917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD57AE94-194B-469C-884E-1137F23F1917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD57AE94-194B-469C-884E-1137F23F1917}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEE3A51C-5292-410C-8415-F893A6378E23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEE3A51C-5292-410C-8415-F893A6378E23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEE3A51C-5292-410C-8415-F893A6378E23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEE3A51C-5292-410C-8415-F893A6378E23}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
