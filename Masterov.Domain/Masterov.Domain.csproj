@@ -14,7 +14,6 @@
 
     <ItemGroup>
       <Folder Include="Masterov\Product\" />
-      <Folder Include="Masterov\ProductType\" />
     </ItemGroup>
 
 </Project>

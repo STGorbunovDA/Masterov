@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.Product.GetProductById;
 
 public interface IGetProductByIdStorage
 {
-    Task<ProductDomain?> GetProductById(Guid graveyardId, CancellationToken cancellationToken);
+    Task<ProductDomain?> GetProductById(Guid productId, CancellationToken cancellationToken);
 }

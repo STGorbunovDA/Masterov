@@ -1,6 +1,7 @@
 ﻿using Masterov.Domain.Masterov.Product.GetProductById;
 using Masterov.Domain.Masterov.Product.GetProducts;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
+using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Masterov.Domain.DI;
@@ -14,6 +15,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductsUseCase, GetProductsUseCase>();
 
         services
+            .AddScoped<IGetProductTypeByIdUseCase, GetProductTypeByIdUseCase>()
             .AddScoped<IGetProductsTypeUseCase, GetProductsTypeUseCase>();
             
         return services;
