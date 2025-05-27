@@ -1,6 +1,7 @@
 ﻿using Masterov.Domain.Masterov.Product.GetProductById;
 using Masterov.Domain.Masterov.Product.GetProducts;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
+using Masterov.Domain.Masterov.ProductType.DeleteProductType;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
@@ -17,6 +18,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductsUseCase, GetProductsUseCase>();
 
         services
+            .AddScoped<IDeleteProductTypeUseCase, DeleteProductTypeUseCase>()
             .AddScoped<IGetProductTypeByNameUseCase, GetProductTypeByNameUseCase>()
             .AddScoped<IAddProductTypeUseCase, AddProductTypeUseCase>()
             .AddScoped<IGetProductTypeByIdUseCase, GetProductTypeByIdUseCase>()

@@ -2,6 +2,8 @@
 using Masterov.API.Models;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.AddProductType.Command;
+using Masterov.Domain.Masterov.ProductType.DeleteProductType;
+using Masterov.Domain.Masterov.ProductType.DeleteProductType.Command;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById.Query;
@@ -18,8 +20,8 @@ public class MasterovProductTypeController(IMapper mapper): ControllerBase
     /// <summary>
     /// Получить все типы изделий
     /// </summary>
-    /// <param name="useCase"></param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="useCase">ценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Типы изделий</returns>
     [HttpGet("getProductsType")]
     [ProducesResponseType(200, Type = typeof(ProductTypeRequest[]))]
@@ -75,10 +77,10 @@ public class MasterovProductTypeController(IMapper mapper): ControllerBase
     /// <summary>
     /// Добавить тип изделия
     /// </summary>
-    /// <param name="request"></param>
-    /// <param name="useCase"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <param name="request">Изделие</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о типе изделия</returns>
     [HttpPost("addProductType")]
     [ProducesResponseType(201, Type = typeof(ProductTypeRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -93,4 +95,23 @@ public class MasterovProductTypeController(IMapper mapper): ControllerBase
         return CreatedAtAction(nameof(GetProductTypeById), new { productTypeId = productType.ProductTypeId }, mapper.Map<ProductTypeRequest>(productType));
     }
     
+    /// <summary>
+    /// Удалить тип изделия по Id
+    /// </summary>
+    /// <param name="productTypeId">Идентификатор типа изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация выполения</returns>
+    [HttpDelete("deleteProductType/{productTypeId:guid}/")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(410)]
+    public async Task<IActionResult> DeleteProductType(
+        Guid productTypeId,
+        [FromServices] IDeleteProductTypeUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        await useCase.Execute(new DeleteProductTypeCommand(productTypeId), cancellationToken);
+        return NoContent();
+    }
 }
