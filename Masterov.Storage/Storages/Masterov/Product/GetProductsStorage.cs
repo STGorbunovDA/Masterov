@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Masterov.Domain.Masterov.GetProducts;
+using Masterov.Domain.Masterov.Product.GetProducts;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Masterov.Storage.Storages.Masterov;
+namespace Masterov.Storage.Storages.Masterov.Product;
 
 internal class GetProductsStorage (MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetProductsStorage
 {

@@ -7,6 +7,8 @@ internal class StorageProfile : Profile
 {
     public StorageProfile()
     {
-        CreateMap<Product, ProductDomain>();
+        CreateMap<Product, ProductDomain>()
+            .ForMember(dest => dest.Type, 
+                opt => opt.MapFrom(src => src.ProductType != null ? src.ProductType.Name : null));
     }
 }

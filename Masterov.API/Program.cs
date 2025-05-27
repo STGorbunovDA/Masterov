@@ -9,6 +9,7 @@ using Masterov.Storage.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddLogging();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -20,6 +21,7 @@ builder.Services
 builder.Services.AddValidatorsFromAssemblyContaining<ProductDomain>();
 builder.Services.AddCustomSwagger();
 builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.GetExecutingAssembly()));
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 var mapper = app.Services.GetRequiredService<IMapper>();

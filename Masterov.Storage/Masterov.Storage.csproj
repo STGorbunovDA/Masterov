@@ -25,4 +25,8 @@
         <ProjectReference Include="..\Masterov.Domain\Masterov.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Storages\Masterov\ProductType\" />
+    </ItemGroup>
+
 </Project>

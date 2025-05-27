@@ -1,6 +1,6 @@
 ﻿using Masterov.Domain.Models;
 
-namespace Masterov.Domain.Masterov.GetProducts;
+namespace Masterov.Domain.Masterov.Product.GetProducts;
 
 public interface IGetProductsUseCase
 {
