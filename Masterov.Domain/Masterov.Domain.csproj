@@ -13,8 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Masterov\ProductType\" />
       <Folder Include="Masterov\Product\" />
+      <Folder Include="Masterov\ProductType\" />
     </ItemGroup>
 
 </Project>

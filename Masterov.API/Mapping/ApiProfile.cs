@@ -9,5 +9,6 @@ internal class ApiProfile : Profile
     public ApiProfile()
     {
         CreateMap<ProductDomain, ProductRequest>();
+        CreateMap<ProductTypeDomain, ProductTypeRequest>();
     }
 }
