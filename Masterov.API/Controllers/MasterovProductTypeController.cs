@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Masterov.API.Models;
-using Masterov.Domain.Masterov.Product.GetProductById;
-using Masterov.Domain.Masterov.Product.GetProductById.Query;
-using Masterov.Domain.Masterov.Product.GetProducts;
+using Masterov.Domain.Masterov.ProductType.AddProductType;
+using Masterov.Domain.Masterov.ProductType.AddProductType.Command;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById.Query;
+using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
+using Masterov.Domain.Masterov.ProductType.GetProductTypeByName.Query;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
@@ -34,7 +35,7 @@ public class MasterovProductTypeController(IMapper mapper): ControllerBase
     /// <summary>
     /// Получить изделие по Id
     /// </summary>
-    /// <param name="productTypeId">Идентификатор изделия</param>
+    /// <param name="productTypeId">Идентификатор типа изделия</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе изделия</returns>
@@ -47,29 +48,49 @@ public class MasterovProductTypeController(IMapper mapper): ControllerBase
         [FromServices] IGetProductTypeByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var product = await useCase.Execute(new GetProductTypeByIdQuery(productTypeId), cancellationToken);
-        return Ok(mapper.Map<ProductTypeRequest>(product));
+        var productType = await useCase.Execute(new GetProductTypeByIdQuery(productTypeId), cancellationToken);
+        return Ok(mapper.Map<ProductTypeRequest>(productType));
     }
     
-    // /// <summary>
-    // /// Добавить изделие
-    // /// </summary>
-    // [HttpPost("addProduct")]
-    // [ProducesResponseType(201, Type = typeof(ProductRequest))]
-    // [ProducesResponseType(400, Type = typeof(string))]
-    // [ProducesResponseType(410)]
-    // public async Task<IActionResult> AddProduct(
-    //     [FromForm] AddProductRequest request,
-    //     [FromServices] IAddProductUseCase useCase,
-    //     CancellationToken cancellationToken)
-    // {
-    //     if (request.Content is { Length: 0 })
-    //         return BadRequest("Изображение изделия не загружено или пустое изображение");
-    //
-    //     var product = await useCase.Execute(
-    //         new AddProductCommand(fileName, type, await request.File.ToByteArrayAsync()),
-    //         cancellationToken);
-    //
-    //     return CreatedAtAction(nameof(GetFileById), new { id = artifactDomain.ArtifactId }, mapper.Map<ArtifactDto>(artifactDomain));
-    // }
+    /// <summary>
+    /// Получить изделие по имени
+    /// </summary>
+    /// <param name="productTypeName">Название типа изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о типе изделия</returns>
+    [HttpGet("getProductTypeByName/{productTypeName}")]
+    [ProducesResponseType(200, Type = typeof(ProductTypeRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetProductTypeByName(
+        [FromRoute] string productTypeName,
+        [FromServices] IGetProductTypeByNameUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var productType = await useCase.Execute(new GetProductTypeByNameQuery(productTypeName), cancellationToken);
+        return Ok(mapper.Map<ProductTypeRequest>(productType));
+    }
+    
+    /// <summary>
+    /// Добавить тип изделия
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="useCase"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPost("addProductType")]
+    [ProducesResponseType(201, Type = typeof(ProductTypeRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    public async Task<IActionResult> AddProductType(
+        [FromBody] AddProductTypeRequest request,
+        [FromServices] IAddProductTypeUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var productType = await useCase.Execute(new AddProductTypeCommand(request.Name, request.Description), cancellationToken);
+        
+        return CreatedAtAction(nameof(GetProductTypeById), new { productTypeId = productType.ProductTypeId }, mapper.Map<ProductTypeRequest>(productType));
+    }
+    
 }

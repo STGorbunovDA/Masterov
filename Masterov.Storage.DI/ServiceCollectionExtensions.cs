@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
 using Masterov.Domain.Masterov.Product.GetProductById;
 using Masterov.Domain.Masterov.Product.GetProducts;
+using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
+using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
 using Masterov.Storage.Extension;
 using Masterov.Storage.Storages.Masterov;
 using Masterov.Storage.Storages.Masterov.Product;
@@ -23,6 +25,8 @@ public static class ServiceCollectionExtensions
             .AddDbContextPool<MasterovDbContext>(options => options.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString)));
 
         services
+            .AddScoped<IAddProductTypeStorage, AddProductTypeStorage>()
+            .AddScoped<IGetProductTypeByNameStorage, GetProductTypeByNameStorage>()
             .AddScoped<IGetProductsTypeStorage, GetProductsTypeStorage>()
             .AddScoped<IGetProductTypeByIdStorage, GetProductTypeByIdStorage>();
         
