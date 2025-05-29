@@ -6,7 +6,7 @@ public class MasterovDbContext : DbContext
 {
     public MasterovDbContext(DbContextOptions<MasterovDbContext> options) : base(options) { }
     
-    public DbSet<Product> Products { get; set; }
+    public DbSet<FinishedProduct> Products { get; set; }
     public DbSet<ProductComponent> ProductComponents { get; set; }
     public DbSet<ProductionOrder> ProductionOrders { get; set; }
     public DbSet<ProductType> ProductTypes { get; set; }

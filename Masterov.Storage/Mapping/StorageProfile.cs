@@ -8,7 +8,7 @@ internal class StorageProfile : Profile
     public StorageProfile()
     {
         // Product mapping
-        CreateMap<Product, ProductDomain>()
+        CreateMap<FinishedProduct, FinishedProductDomain>()
             .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders));
             
         // ProductionOrder mapping

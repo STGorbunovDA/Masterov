@@ -1,15 +1,16 @@
 ﻿using AutoMapper;
 using Masterov.API.Models;
-using Masterov.Domain.Masterov.Product.GetProductById;
-using Masterov.Domain.Masterov.Product.GetProductById.Query;
-using Masterov.Domain.Masterov.Product.GetProducts;
+using Masterov.API.Models.FinishedProduct;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetProducts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
 
 [ApiController]
-[Route("api/MasterovProduct")]
-public class MasterovProductController(IMapper mapper): ControllerBase
+[Route("api/finishedProduct")]
+public class FinishedProductController(IMapper mapper): ControllerBase
 {
     /// <summary>
     /// Получить все изделия
@@ -17,35 +18,35 @@ public class MasterovProductController(IMapper mapper): ControllerBase
     /// <param name="useCase"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpGet("getProducts")]
-    [ProducesResponseType(200, Type = typeof(ProductRequest[]))]
+    [HttpGet("getFinishedProducts")]
+    [ProducesResponseType(200, Type = typeof(FinishedProductRequest[]))]
     [ProducesResponseType(410)]
-    public async Task<IActionResult> GetProducts(
-        [FromServices] IGetProductsUseCase useCase,
+    public async Task<IActionResult> GetFinishedProducts(
+        [FromServices] IGetFinishedProductsUseCase useCase,
         CancellationToken cancellationToken)
     {
         var files = await useCase.Execute(cancellationToken);
-        return Ok(files.Select(mapper.Map<ProductRequest>));
+        return Ok(files.Select(mapper.Map<FinishedProductRequest>));
     }
-    
+
     /// <summary>
     /// Получить изделие по Id
     /// </summary>
-    /// <param name="productId">Идентификатор изделия</param>
+    /// <param name="finishedProductId">Идентификатор изделия</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация об изделии</returns>
-    [HttpGet("getProductById/{productId:guid}")] // Исправлено: используется стандартный constraint 'guid'
-    [ProducesResponseType(200, Type = typeof(ProductRequest))]
+    [HttpGet("getFinishedProductById/{finishedProductId:guid}")]
+    [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetProductById(
-        [FromRoute] Guid productId,
-        [FromServices] IGetProductByIdUseCase useCase,
+    public async Task<IActionResult> GetFinishedProductById(
+        [FromRoute] Guid finishedProductId,
+        [FromServices] IGetFinishedProductByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var product = await useCase.Execute(new GetProductByIdQuery(productId), cancellationToken);
-        return Ok(mapper.Map<ProductRequest>(product));
+        var product = await useCase.Execute(new GetFinishedProductByIdQuery(finishedProductId), cancellationToken);
+        return Ok(mapper.Map<FinishedProductRequest>(product));
     }
     
     // /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using Masterov.Domain.Masterov.Product.GetProductById;
-using Masterov.Domain.Masterov.Product.GetProducts;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
+using Masterov.Domain.Masterov.FinishedProduct.GetProducts;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.DeleteProductType;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
@@ -9,7 +9,7 @@ using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
 using Masterov.Domain.Masterov.ProductType.UpdateProductType;
 using Masterov.Storage.Extension;
 using Masterov.Storage.Storages.Masterov;
-using Masterov.Storage.Storages.Masterov.Product;
+using Masterov.Storage.Storages.Masterov.FinishedProduct;
 using Masterov.Storage.Storages.Masterov.ProductType;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,8 +21,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddStorage(this IServiceCollection services, string? dbConnectionString)
     {
         services
-            .AddScoped<IGetProductsStorage, GetProductsStorage>()
-            .AddScoped<IGetProductByIdStorage, GetProductByIdStorage>()
+            .AddScoped<IGetFinishedProductsStorage, GetFinishedProductsStorage>()
+            .AddScoped<IGetFinishedProductByIdStorage, GetFinishedProductByIdStorage>()
             .AddScoped<IGuidFactory, GuidFactory>()
             .AddDbContextPool<MasterovDbContext>(options => options.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString)));
 

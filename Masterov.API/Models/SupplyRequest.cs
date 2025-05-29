@@ -1,4 +1,6 @@
-﻿namespace Masterov.API.Models;
+﻿using Masterov.API.Models.ProductType;
+
+namespace Masterov.API.Models;
 
 public class SupplyRequest
 {

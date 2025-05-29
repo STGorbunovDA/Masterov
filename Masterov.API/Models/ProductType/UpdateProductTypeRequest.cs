@@ -1,4 +1,4 @@
-﻿namespace Masterov.API.Models;
+﻿namespace Masterov.API.Models.ProductType;
 
 public class UpdateProductTypeRequest
 {

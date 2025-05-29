@@ -1,6 +1,6 @@
-﻿namespace Masterov.API.Models;
+﻿namespace Masterov.API.Models.FinishedProduct;
 
-public class AddProductRequest
+public class AddFinishedProductRequest
 {
     public string Name { get; set; }
     public string Type { get; set; }
@@ -8,5 +8,5 @@ public class AddProductRequest
     public int? Width { get; set; }  // в мм
     public int? Height { get; set; }  // в мм
     public int? Depth { get; set; }  // в мм
-    public byte[]? Content { get; set; }
+    public byte[]? Image { get; set; }
 }

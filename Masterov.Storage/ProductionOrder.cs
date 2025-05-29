@@ -9,10 +9,10 @@ public class ProductionOrder
     [Key]
     public Guid OrderId { get; set; } = Guid.NewGuid();
 
-    [Required, ForeignKey(nameof(Product))]
+    [Required, ForeignKey(nameof(FinishedProduct))]
     public Guid ProductId { get; set; }
 
-    public Product Product { get; set; }
+    public FinishedProduct FinishedProduct { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

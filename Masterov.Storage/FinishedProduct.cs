@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Masterov.Storage;
 
-public class Product
+public class FinishedProduct
 {
     [Key]
     public Guid ProductId { get; set; } = Guid.NewGuid();

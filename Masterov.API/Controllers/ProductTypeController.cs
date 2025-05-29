@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Masterov.API.Models;
+using Masterov.API.Models.ProductType;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.AddProductType.Command;
 using Masterov.Domain.Masterov.ProductType.DeleteProductType;
@@ -17,7 +18,7 @@ namespace Masterov.API.Controllers;
 
 [ApiController]
 [Route("api/MasterovProductType")]
-public class MasterovProductTypeController(IMapper mapper): ControllerBase
+public class ProductTypeController(IMapper mapper): ControllerBase
 {
     /// <summary>
     /// Получить все типы изделий

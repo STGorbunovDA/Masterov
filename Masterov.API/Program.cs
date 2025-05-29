@@ -18,7 +18,7 @@ builder.Services
     .AddStorage(builder.Configuration.GetConnectionString("AppDbConnectionString"))
     .AddDomain();
 
-builder.Services.AddValidatorsFromAssemblyContaining<ProductDomain>();
+builder.Services.AddValidatorsFromAssemblyContaining<FinishedProductDomain>();
 builder.Services.AddCustomSwagger();
 builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.GetExecutingAssembly()));
 builder.Logging.AddConsole();

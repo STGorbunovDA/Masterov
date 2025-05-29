@@ -1,5 +1,5 @@
-﻿using Masterov.Domain.Masterov.Product.GetProductById;
-using Masterov.Domain.Masterov.Product.GetProducts;
+﻿using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
+using Masterov.Domain.Masterov.FinishedProduct.GetProducts;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.DeleteProductType;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
@@ -15,8 +15,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDomain(this IServiceCollection services)
     {
         services
-            .AddScoped<IGetProductByIdUseCase, GetProductByIdUseCase>()
-            .AddScoped<IGetProductsUseCase, GetProductsUseCase>();
+            .AddScoped<IGetFinishedProductByIdUseCase, GetFinishedProductByIdUseCase>()
+            .AddScoped<IGetFinishedProductsUseCase, GetFinishedProductsUseCase>();
 
         services
             .AddScoped<IUpdateProductTypeUseCase, UpdateProductTypeUseCase>()

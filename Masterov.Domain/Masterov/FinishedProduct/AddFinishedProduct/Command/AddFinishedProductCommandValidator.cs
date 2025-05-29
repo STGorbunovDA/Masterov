@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Extension;
 
-namespace Masterov.Domain.Masterov.Product.AddProduct.Command;
+namespace Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct.Command;
 
-public class AddProductCommandValidator : AbstractValidator<AddProductCommand>
+public class AddFinishedProductCommandValidator : AbstractValidator<AddFinishedProductCommand>
 {
-    public AddProductCommandValidator()
+    public AddFinishedProductCommandValidator()
     {
         RuleFor(c => c.Name).Cascade(CascadeMode.Stop)
             .NotEmpty()

@@ -1,7 +1,5 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
-using Masterov.Domain.Masterov.Product.GetProductById;
-using Masterov.Domain.Masterov.Product.GetProductById.Query;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById.Query;
 using Masterov.Domain.Models;
 

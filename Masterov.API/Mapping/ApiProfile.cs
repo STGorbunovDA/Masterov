@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Masterov.API.Models;
+using Masterov.API.Models.FinishedProduct;
+using Masterov.API.Models.ProductType;
 using Masterov.Domain.Models;
 
 namespace Masterov.API.Mapping;
@@ -9,7 +11,7 @@ internal class ApiProfile : Profile
     public ApiProfile()
     {
         // Product mappings
-        CreateMap<ProductDomain, ProductRequest>()
+        CreateMap<FinishedProductDomain, FinishedProductRequest>()
             .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders));
         
         // ProductionOrder mappings
