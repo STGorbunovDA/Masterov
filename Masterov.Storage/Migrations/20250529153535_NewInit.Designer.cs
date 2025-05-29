@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masterov.Storage.Migrations
 {
     [DbContext(typeof(MasterovDbContext))]
-    [Migration("20250529134855_ChangeLogic")]
-    partial class ChangeLogic
+    [Migration("20250529153535_NewInit")]
+    partial class NewInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,105 +25,7 @@ namespace Masterov.Storage.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
-            modelBuilder.Entity("Masterov.Storage.ProductComponent", b =>
-                {
-                    b.Property<Guid>("ProductComponentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ProductTypeId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductComponentId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductTypeId");
-
-                    b.ToTable("ProductComponents");
-                });
-
-            modelBuilder.Entity("Masterov.Storage.ProductType", b =>
-                {
-                    b.Property<Guid>("ProductTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
-
-                    b.HasKey("ProductTypeId");
-
-                    b.ToTable("ProductTypes");
-                });
-
-            modelBuilder.Entity("Masterov.Storage.Supplier", b =>
-                {
-                    b.Property<Guid>("SupplierId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
-
-                    b.HasKey("SupplierId");
-
-                    b.ToTable("Suppliers");
-                });
-
-            modelBuilder.Entity("Masterov.Storage.Supply", b =>
-                {
-                    b.Property<Guid>("SupplyId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<decimal>("PriceSupply")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("ProductTypeId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("SupplierId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("SupplyDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("SupplyId");
-
-                    b.HasIndex("ProductTypeId");
-
-                    b.HasIndex("SupplierId");
-
-                    b.ToTable("Supplies");
-                });
-
-            modelBuilder.Entity("Product", b =>
+            modelBuilder.Entity("Masterov.Storage.Product", b =>
                 {
                     b.Property<Guid>("ProductId")
                         .ValueGeneratedOnAdd()
@@ -162,9 +64,166 @@ namespace Masterov.Storage.Migrations
 
             modelBuilder.Entity("Masterov.Storage.ProductComponent", b =>
                 {
-                    b.HasOne("Product", "Product")
-                        .WithMany("ProductComponents")
-                        .HasForeignKey("ProductId")
+                    b.Property<Guid>("ProductComponentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid>("ProductTypeId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("char(36)")
+                        .UseCollation("ascii_general_ci");
+
+                    b.HasKey("ProductComponentId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("ProductComponents");
+                });
+
+            modelBuilder.Entity("Masterov.Storage.ProductType", b =>
+                {
+                    b.Property<Guid>("ProductTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.HasKey("ProductTypeId");
+
+                    b.ToTable("ProductTypes");
+                });
+
+            modelBuilder.Entity("Masterov.Storage.ProductionOrder", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductionOrders");
+                });
+
+            modelBuilder.Entity("Supplier", b =>
+                {
+                    b.Property<Guid>("SupplierId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("SupplierId");
+
+                    b.ToTable("Suppliers");
+                });
+
+            modelBuilder.Entity("Supply", b =>
+                {
+                    b.Property<Guid>("SupplyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<decimal>("PriceSupply")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductTypeId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SupplierId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("SupplyDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("WarehouseId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("SupplyId");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("Supplies");
+                });
+
+            modelBuilder.Entity("Warehouse", b =>
+                {
+                    b.Property<Guid>("WarehouseId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)")
+                        .UseCollation("ascii_general_ci");
+
+                    b.Property<decimal>("LastPurchasePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ProductTypeId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("WarehouseId");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.ToTable("Warehouses");
+                });
+
+            modelBuilder.Entity("Masterov.Storage.ProductComponent", b =>
+                {
+                    b.HasOne("Masterov.Storage.ProductionOrder", "Order")
+                        .WithMany("Components")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -174,12 +233,31 @@ namespace Masterov.Storage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.HasOne("Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
 
                     b.Navigation("ProductType");
+
+                    b.Navigation("Warehouse");
                 });
 
-            modelBuilder.Entity("Masterov.Storage.Supply", b =>
+            modelBuilder.Entity("Masterov.Storage.ProductionOrder", b =>
+                {
+                    b.HasOne("Masterov.Storage.Product", "Product")
+                        .WithMany("Orders")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("Supply", b =>
                 {
                     b.HasOne("Masterov.Storage.ProductType", "ProductType")
                         .WithMany("Supplies")
@@ -187,15 +265,39 @@ namespace Masterov.Storage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masterov.Storage.Supplier", "Supplier")
+                    b.HasOne("Supplier", "Supplier")
                         .WithMany("Supplies")
                         .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Warehouse", "Warehouse")
+                        .WithMany("Supplies")
+                        .HasForeignKey("WarehouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ProductType");
 
                     b.Navigation("Supplier");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("Warehouse", b =>
+                {
+                    b.HasOne("Masterov.Storage.ProductType", "ProductType")
+                        .WithMany()
+                        .HasForeignKey("ProductTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProductType");
+                });
+
+            modelBuilder.Entity("Masterov.Storage.Product", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Masterov.Storage.ProductType", b =>
@@ -205,14 +307,19 @@ namespace Masterov.Storage.Migrations
                     b.Navigation("Supplies");
                 });
 
-            modelBuilder.Entity("Masterov.Storage.Supplier", b =>
+            modelBuilder.Entity("Masterov.Storage.ProductionOrder", b =>
+                {
+                    b.Navigation("Components");
+                });
+
+            modelBuilder.Entity("Supplier", b =>
                 {
                     b.Navigation("Supplies");
                 });
 
-            modelBuilder.Entity("Product", b =>
+            modelBuilder.Entity("Warehouse", b =>
                 {
-                    b.Navigation("ProductComponents");
+                    b.Navigation("Supplies");
                 });
 #pragma warning restore 612, 618
         }

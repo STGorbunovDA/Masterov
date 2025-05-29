@@ -7,9 +7,23 @@ public class MasterovDbContext : DbContext
     public MasterovDbContext(DbContextOptions<MasterovDbContext> options) : base(options) { }
     
     public DbSet<Product> Products { get; set; }
-    public DbSet<ProductType> ProductTypes { get; set; }
     public DbSet<ProductComponent> ProductComponents { get; set; }
+    public DbSet<ProductionOrder> ProductionOrders { get; set; }
+    public DbSet<ProductType> ProductTypes { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<Supply> Supplies { get; set; }
-    
+    public DbSet<Warehouse> Warehouses { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<ProductComponent>()
+            .Property(p => p.WarehouseId)
+            .HasColumnType("char(36)")
+            .UseCollation("ascii_general_ci");
+
+        modelBuilder.Entity<Warehouse>()
+            .Property(w => w.WarehouseId)
+            .HasColumnType("char(36)")
+            .UseCollation("ascii_general_ci");
+    }
 }

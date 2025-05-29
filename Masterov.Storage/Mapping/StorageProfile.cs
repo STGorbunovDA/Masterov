@@ -7,11 +7,29 @@ internal class StorageProfile : Profile
 {
     public StorageProfile()
     {
-        CreateMap<ProductType, ProductTypeDomain>();
+        // Product mapping
         CreateMap<Product, ProductDomain>()
-            .ForMember(dest => dest.ProductComponents,
-                opt => opt.MapFrom(src => 
-                    src.ProductComponents.Select(pc => $"{pc.ProductType.Name} x {pc.Quantity}").ToArray()));
-
+            .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders));
+            
+        // ProductionOrder mapping
+        CreateMap<ProductionOrder, ProductionOrderDomain>()
+            .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components));
+            
+        // ProductComponent mapping
+        CreateMap<ProductComponent, ProductComponentDomain>()
+            .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType))
+            .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));
+            
+        // ProductType mapping
+        CreateMap<ProductType, ProductTypeDomain>();
+            
+        // Warehouse mapping
+        CreateMap<Warehouse, WarehouseDomain>();
+            
+        // Supplier mapping (если нужно)
+        CreateMap<Supplier, SupplierDomain>();
+            
+        // Supply mapping (если нужно)
+        CreateMap<Supply, SupplyDomain>();
     }
 }

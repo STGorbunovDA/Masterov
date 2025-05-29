@@ -8,14 +8,18 @@ public class ProductComponent
     [Key]
     public Guid ProductComponentId { get; set; } = Guid.NewGuid();
 
-    [ForeignKey(nameof(Product))]
-    public Guid ProductId { get; set; }
-    public Product Product { get; set; }
+    [Required, ForeignKey(nameof(Order))]
+    public Guid OrderId { get; set; }
+    public ProductionOrder Order { get; set; }
 
-    [ForeignKey(nameof(ProductType))]
+    [Required, ForeignKey(nameof(ProductType))]
     public Guid ProductTypeId { get; set; }
-    public ProductType ProductType { get; set; }
+    public ProductType ProductType { get; set; } // Например: ножка
+
+    [Required, ForeignKey(nameof(Warehouse))]
+    public Guid WarehouseId { get; set; }
+    public Warehouse Warehouse { get; set; } // С какого склада берем
 
     [Range(1, int.MaxValue)]
-    public int Quantity { get; set; }
+    public int Quantity { get; set; } // Сколько нужно
 }

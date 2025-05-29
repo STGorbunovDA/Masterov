@@ -1,14 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Masterov.Storage;
-
-public class Supplier // Поставщик
+public class Supplier
 {
     [Key]
     public Guid SupplierId { get; set; } = Guid.NewGuid();
 
-    [Required]
-    [MaxLength(100)]
+    [Required, MaxLength(100)]
     public string Name { get; set; }
 
     [MaxLength(200)]
