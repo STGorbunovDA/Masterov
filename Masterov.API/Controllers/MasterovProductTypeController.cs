@@ -9,6 +9,8 @@ using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById.Query;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName.Query;
+using Masterov.Domain.Masterov.ProductType.UpdateProductType;
+using Masterov.Domain.Masterov.ProductType.UpdateProductType.Command;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
@@ -113,5 +115,25 @@ public class MasterovProductTypeController(IMapper mapper): ControllerBase
     {
         await useCase.Execute(new DeleteProductTypeCommand(productTypeId), cancellationToken);
         return NoContent();
+    }
+    
+    /// <summary>
+    /// Обновить тип изделия по Id
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="useCase"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    [HttpPut("updateProductType")]
+    [ProducesResponseType(200, Type = typeof(ProductTypeRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    public async Task<IActionResult> UpdateProductType(
+        [FromBody] UpdateProductTypeRequest request,
+        [FromServices] IUpdateProductTypeUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var updatedProductType = await useCase.Execute(new UpdateProductTypeCommand(request.ProductTypeId, request.Name, request.Description), cancellationToken);
+        return Ok(mapper.Map<ProductTypeRequest>(updatedProductType));
     }
 }

@@ -9,10 +9,11 @@ public class ProductType
 
     [Required]
     [MaxLength(50)]
-    public string Name { get; set; } 
+    public string Name { get; set; }
 
     [MaxLength(200)]
     public string? Description { get; set; }
 
-    public ICollection<Product> Products { get; set; } = new List<Product>();
+    public ICollection<ProductComponent> ProductComponents { get; set; } = new List<ProductComponent>();
+    public ICollection<Supply> Supplies { get; set; } = new List<Supply>();
 }

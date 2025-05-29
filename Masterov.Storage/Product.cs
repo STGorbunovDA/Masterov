@@ -4,18 +4,15 @@ using Masterov.Storage;
 
 public class Product
 {
-    [Key] public Guid ProductId { get; set; } = Guid.NewGuid();
+    [Key] 
+    public Guid ProductId { get; set; } = Guid.NewGuid();
 
     [Required]
     [MaxLength(50)]
     public string Name { get; set; }
 
-    [ForeignKey(nameof(ProductType))]
-    public Guid ProductTypeId { get; set; }
-    public ProductType? ProductType { get; set; }
-
     [Column(TypeName = "decimal(18,2)")]
-    public decimal Price { get; set; }
+    public decimal Price { get; set; }  // Цена готового изделия
 
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -31,5 +28,7 @@ public class Product
     [Range(0, 30000)]
     public int Depth { get; set; }  // в мм
 
-    public byte[]? Content { get; set; }
+    public byte[]? Image { get; set; }  // Изображение изделия
+
+    public ICollection<ProductComponent> ProductComponents { get; set; } = new List<ProductComponent>();
 }

@@ -13,10 +13,10 @@ public class DeleteProductTypeUseCase(IValidator<DeleteProductTypeCommand> valid
     {
         await validator.ValidateAndThrowAsync(deleteProductTypeCommand, cancellationToken);
         
-        var productTypeExists = await getProductTypeByIdStorage.GetProductTypeById(deleteProductTypeCommand.productTypeId, cancellationToken);
+        var productTypeExists = await getProductTypeByIdStorage.GetProductTypeById(deleteProductTypeCommand.ProductTypeId, cancellationToken);
         if (productTypeExists is null)
-            throw new NotFoundByIdException(deleteProductTypeCommand.productTypeId, "Тип изделия");
+            throw new NotFoundByIdException(deleteProductTypeCommand.ProductTypeId, "Тип изделия");
         
-        return await storage.DeleteProductType(deleteProductTypeCommand.productTypeId, cancellationToken);
+        return await storage.DeleteProductType(deleteProductTypeCommand.ProductTypeId, cancellationToken);
     }
 }

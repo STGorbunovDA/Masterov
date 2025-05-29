@@ -5,6 +5,7 @@ using Masterov.Domain.Masterov.ProductType.DeleteProductType;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
+using Masterov.Domain.Masterov.ProductType.UpdateProductType;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Masterov.Domain.DI;
@@ -18,6 +19,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductsUseCase, GetProductsUseCase>();
 
         services
+            .AddScoped<IUpdateProductTypeUseCase, UpdateProductTypeUseCase>()
             .AddScoped<IDeleteProductTypeUseCase, DeleteProductTypeUseCase>()
             .AddScoped<IGetProductTypeByNameUseCase, GetProductTypeByNameUseCase>()
             .AddScoped<IAddProductTypeUseCase, AddProductTypeUseCase>()

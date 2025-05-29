@@ -9,7 +9,9 @@ internal class StorageProfile : Profile
     {
         CreateMap<ProductType, ProductTypeDomain>();
         CreateMap<Product, ProductDomain>()
-            .ForMember(dest => dest.Type, 
-                opt => opt.MapFrom(src => src.ProductType != null ? src.ProductType.Name : null));
+            .ForMember(dest => dest.ProductComponents,
+                opt => opt.MapFrom(src => 
+                    src.ProductComponents.Select(pc => $"{pc.ProductType.Name} x {pc.Quantity}").ToArray()));
+
     }
 }

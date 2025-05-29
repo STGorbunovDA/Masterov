@@ -8,11 +8,8 @@ public class MasterovDbContext : DbContext
     
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductType> ProductTypes { get; set; }
+    public DbSet<ProductComponent> ProductComponents { get; set; }
+    public DbSet<Supplier> Suppliers { get; set; }
+    public DbSet<Supply> Supplies { get; set; }
     
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Product>()
-            .Property(p => p.ProductTypeId)
-            .HasDefaultValue(null);
-    }
 }
