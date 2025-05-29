@@ -2,7 +2,7 @@
 
 public class FinishedProductDomain
 {
-    public Guid ProductId { get; set; }
+    public Guid FinishedProductId { get; set; }
     public string Name { get; set; }
     public decimal Price { get; set; }
     public DateTime CreatedAt { get; set; }

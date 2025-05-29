@@ -6,22 +6,32 @@ internal static class DomainExtension
 {
     internal static bool IsImage(byte[] content)
     {
-        if (content == null || content.Length < 4)
+        if (content == null || content.Length < 12)
             return false;
 
         // Проверка сигнатур популярных форматов изображений
-        var signatures = new Dictionary<string, byte[]>
+        var signatures = new List<Func<byte[], bool>>
         {
-            { "JPEG", new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 } },
-            { "PNG", new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A } },
-            { "GIF", new byte[] { 0x47, 0x49, 0x46, 0x38 } },
-            { "BMP", new byte[] { 0x42, 0x4D } },
-            { "WEBP", new byte[] { 0x52, 0x49, 0x46, 0x46, 0, 0, 0, 0, 0x57, 0x45, 0x42, 0x50 } }
+            // JPEG
+            bytes => bytes.Take(4).SequenceEqual(new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 }),
+        
+            // PNG
+            bytes => bytes.Take(8).SequenceEqual(new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A }),
+        
+            // GIF
+            bytes => bytes.Take(4).SequenceEqual(new byte[] { 0x47, 0x49, 0x46, 0x38 }),
+        
+            // BMP
+            bytes => bytes.Take(2).SequenceEqual(new byte[] { 0x42, 0x4D }),
+        
+            // WEBP: "RIFF....WEBP" (байты 0–3 и 8–11)
+            bytes => bytes[0] == 0x52 && bytes[1] == 0x49 && bytes[2] == 0x46 && bytes[3] == 0x46 &&
+                     bytes[8] == 0x57 && bytes[9] == 0x45 && bytes[10] == 0x42 && bytes[11] == 0x50
         };
 
-        return signatures.Any(signature => 
-            signature.Value.SequenceEqual(content.Take(signature.Value.Length)));
+        return signatures.Any(check => check(content));
     }
+
     
     internal static bool HasValidPrecisionAndScale(decimal value, int precision, int scale)
     {

@@ -10,7 +10,7 @@ public class ProductionOrder
     public Guid OrderId { get; set; } = Guid.NewGuid();
 
     [Required, ForeignKey(nameof(FinishedProduct))]
-    public Guid ProductId { get; set; }
+    public Guid FinishedProductId { get; set; }
 
     public FinishedProduct FinishedProduct { get; set; }
 

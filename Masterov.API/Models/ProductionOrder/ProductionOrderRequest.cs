@@ -1,6 +1,6 @@
 ﻿using Masterov.Domain.Extension;
 
-namespace Masterov.API.Models;
+namespace Masterov.API.Models.ProductionOrder;
 
 public class ProductionOrderRequest
 {

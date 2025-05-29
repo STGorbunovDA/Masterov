@@ -15,24 +15,16 @@ public class AddFinishedProductCommandValidator : AbstractValidator<AddFinishedP
             .WithErrorCode("TooLong")
             .WithMessage("The maximum length of the name should not be more than 50");
         
-        RuleFor(c => c.Type)
-            .NotEmpty()
-            .WithErrorCode("Empty")
-            .WithMessage("The type should not be empty.")
-            .MaximumLength(50)
-            .WithErrorCode("TooLong")
-            .WithMessage("The maximum length of the type should not be more than 50");
-        
         RuleFor(c => c.Price)
-            .NotNull()
-            .WithErrorCode("Null")
-            .WithMessage("The price should not be null.")
-            .GreaterThan(0)
+            .Cascade(CascadeMode.Stop)
+            .Must(price => price == null || price > 0)
             .WithErrorCode("Invalid")
-            .WithMessage("The price should be greater than 0.")
-            .Must(price => DomainExtension.HasValidPrecisionAndScale(price!.Value, 18, 2))
+            .WithMessage("The price should be greater than 0 if specified.")
+            .Must(price => price == null || DomainExtension.HasValidPrecisionAndScale(price.Value, 18, 2))
             .WithErrorCode("InvalidFormat")
             .WithMessage("The price should have maximum 2 decimal places and no more than 18 digits total.");
+
+
         
         When(c => c.Width.HasValue, () =>
         {
@@ -55,16 +47,15 @@ public class AddFinishedProductCommandValidator : AbstractValidator<AddFinishedP
             RuleFor(c => c.Depth)
                 .GreaterThan(0)
                 .WithErrorCode("Invalid")
-                .WithMessage("The depth should be greater than 0.");
+                .WithMessage("The depth should be greaater than 0.");
         });
         
-        RuleFor(x => x.Content)
+        RuleFor(x => x.Image)
+            .Cascade(CascadeMode.Stop)
             .Must(content => content == null || (content.Length > 0 && content.Length <= 100 * 1024 * 1024))
             .WithMessage("Если файл предоставлен, он не должен быть пустым и должен быть не больше 100 МБ.")
-            .When(x => x.Content != null)
             .Must(content => content == null || DomainExtension.IsImage(content))
-            .WithMessage("Файл должен быть изображением.")
-            .When(x => x.Content != null);
+            .WithMessage("Файл должен быть изображением.");
         
     }
 }

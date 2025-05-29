@@ -18,7 +18,7 @@ public class AddProductTypeUseCase(IValidator<AddProductTypeCommand> validator,
         var productType = await getProductTypeByNameStorage.GetProductTypeByName(addProductTypeCommand.Name, cancellationToken);
 
         if (productType is not null)
-            throw new ProductTypeExistsException();
+            throw new ProductTypeExistsException(addProductTypeCommand.Name);
         
         
         return await addProductTypeStorage.AddProductType(addProductTypeCommand.Name, addProductTypeCommand?.Description, cancellationToken);

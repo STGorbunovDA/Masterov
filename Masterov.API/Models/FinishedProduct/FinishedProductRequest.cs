@@ -1,8 +1,10 @@
-﻿namespace Masterov.API.Models.FinishedProduct;
+﻿using Masterov.API.Models.ProductionOrder;
+
+namespace Masterov.API.Models.FinishedProduct;
 
 public class FinishedProductRequest
 {
-    public Guid ProductId { get; set; }
+    public Guid FinishedProductId { get; set; }
     public string Name { get; set; }
     public decimal Price { get; set; }
     public DateTime CreatedAt { get; set; }

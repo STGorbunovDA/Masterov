@@ -6,7 +6,7 @@ namespace Masterov.Storage;
 public class FinishedProduct
 {
     [Key]
-    public Guid ProductId { get; set; } = Guid.NewGuid();
+    public Guid FinishedProductId { get; set; } = Guid.NewGuid();
 
     [Required, MaxLength(50)]
     public string Name { get; set; }

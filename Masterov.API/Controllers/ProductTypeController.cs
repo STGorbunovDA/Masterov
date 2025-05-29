@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Masterov.API.Models;
 using Masterov.API.Models.ProductType;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.AddProductType.Command;
@@ -17,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Masterov.API.Controllers;
 
 [ApiController]
-[Route("api/MasterovProductType")]
+[Route("api/productType")]
 public class ProductTypeController(IMapper mapper): ControllerBase
 {
     /// <summary>

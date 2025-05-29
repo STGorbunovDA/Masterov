@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Masterov.API.Models;
 using Masterov.API.Models.FinishedProduct;
+using Masterov.API.Models.ProductionOrder;
 using Masterov.API.Models.ProductType;
 using Masterov.Domain.Models;
 

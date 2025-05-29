@@ -1,8 +1,12 @@
 ﻿using AutoMapper;
-using Masterov.API.Models;
+using Masterov.API.Extensions;
 using Masterov.API.Models.FinishedProduct;
+using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
+using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct.Command;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetProducts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,11 +17,11 @@ namespace Masterov.API.Controllers;
 public class FinishedProductController(IMapper mapper): ControllerBase
 {
     /// <summary>
-    /// Получить все изделия
+    /// Получить все готовые мебельные изделия
     /// </summary>
-    /// <param name="useCase"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о всех готовых мебельных изделий</returns>
     [HttpGet("getFinishedProducts")]
     [ProducesResponseType(200, Type = typeof(FinishedProductRequest[]))]
     [ProducesResponseType(410)]
@@ -30,12 +34,12 @@ public class FinishedProductController(IMapper mapper): ControllerBase
     }
 
     /// <summary>
-    /// Получить изделие по Id
+    /// Получить готовое мебельное изделие по Id
     /// </summary>
     /// <param name="finishedProductId">Идентификатор изделия</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация об изделии</returns>
+    /// <returns>Информация о готовом мебельном изделии</returns>
     [HttpGet("getFinishedProductById/{finishedProductId:guid}")]
     [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -49,25 +53,55 @@ public class FinishedProductController(IMapper mapper): ControllerBase
         return Ok(mapper.Map<FinishedProductRequest>(product));
     }
     
-    // /// <summary>
-    // /// Добавить изделие
-    // /// </summary>
-    // [HttpPost("addProduct")]
-    // [ProducesResponseType(201, Type = typeof(ProductRequest))]
-    // [ProducesResponseType(400, Type = typeof(string))]
-    // [ProducesResponseType(410)]
-    // public async Task<IActionResult> AddProduct(
-    //     [FromForm] AddProductRequest request,
-    //     [FromServices] IAddProductUseCase useCase,
-    //     CancellationToken cancellationToken)
-    // {
-    //     if (request.Content is { Length: 0 })
-    //         return BadRequest("Изображение изделия не загружено или пустое изображение");
-    //
-    //     var product = await useCase.Execute(
-    //         new AddProductCommand(fileName, type, await request.File.ToByteArrayAsync()),
-    //         cancellationToken);
-    //
-    //     return CreatedAtAction(nameof(GetFileById), new { id = artifactDomain.ArtifactId }, mapper.Map<ArtifactDto>(artifactDomain));
-    // }
+    /// <summary>
+    /// Получить готовое мебельное изделие по имени
+    /// </summary>
+    /// <param name="finishedProductName">Название готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о готовом мебельном изделии</returns>
+    [HttpGet("getFinishedProductByName/{finishedProductName}")]
+    [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetFinishedProductByName(
+        [FromRoute] string finishedProductName,
+        [FromServices] IGetFinishedProductByNameUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var productType = await useCase.Execute(new GetFinishedProductByNameQuery(finishedProductName), cancellationToken);
+        return Ok(mapper.Map<FinishedProductRequest>(productType));
+    }
+    
+    /// <summary>
+    /// Добавить готовое мебельное изделие
+    /// </summary>
+    [HttpPost("addFinishedProduct")]
+    [ProducesResponseType(201, Type = typeof(FinishedProductRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    public async Task<IActionResult> AddFinishedProduct(
+        [FromForm] AddFinishedProductRequest request,
+        [FromServices] IAddFinishedProductUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        if (request.Image is { Length: 0 })
+            return BadRequest("Изображение изделия не загружено или пустое изображение");
+        
+        if (request.Image is { Length: > 100 * 1024 * 1024 } )
+            return BadRequest("Изображение должно быть не более 100 мб.");
+    
+        var finishedProduct = await useCase.Execute(
+            new AddFinishedProductCommand(
+                request.Name, 
+                request.Price, 
+                request.Width, 
+                request.Height, 
+                request.Depth, 
+                request.Image == null ? null : await request.Image.ToByteArrayAsync()),
+            cancellationToken);
+
+        return Ok(finishedProduct);
+        //return CreatedAtAction(nameof(GetFileById), new { id = artifactDomain.ArtifactId }, mapper.Map<ArtifactDto>(artifactDomain));
+    }
 }
