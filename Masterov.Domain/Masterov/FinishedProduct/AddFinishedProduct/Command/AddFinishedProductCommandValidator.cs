@@ -56,6 +56,5 @@ public class AddFinishedProductCommandValidator : AbstractValidator<AddFinishedP
             .WithMessage("Если файл предоставлен, он не должен быть пустым и должен быть не больше 100 МБ.")
             .Must(content => content == null || DomainExtension.IsImage(content))
             .WithMessage("Файл должен быть изображением.");
-        
     }
 }

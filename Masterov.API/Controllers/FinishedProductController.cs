@@ -12,10 +12,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
 
+/// <summary>
+/// Готовое изделие
+/// </summary>
+/// <param name="mapper"></param>
 [ApiController]
 [Route("api/finishedProduct")]
 public class FinishedProductController(IMapper mapper): ControllerBase
 {
+    //TODO удалить, обновить, получить список всех ордеров для данного готового изделия с возможностью фильтрации
+    
     /// <summary>
     /// Получить все готовые мебельные изделия
     /// </summary>
@@ -101,7 +107,6 @@ public class FinishedProductController(IMapper mapper): ControllerBase
                 request.Image == null ? null : await request.Image.ToByteArrayAsync()),
             cancellationToken);
 
-        return Ok(finishedProduct);
-        //return CreatedAtAction(nameof(GetFileById), new { id = artifactDomain.ArtifactId }, mapper.Map<ArtifactDto>(artifactDomain));
+        return CreatedAtAction(nameof(GetFinishedProductById), new { finishedProductId = finishedProduct.FinishedProductId }, mapper.Map<FinishedProductRequest>(finishedProduct));
     }
 }

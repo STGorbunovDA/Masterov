@@ -1,4 +1,6 @@
-﻿namespace Masterov.API.Models.FinishedProduct;
+﻿using Masterov.API.Models.ProductionOrder;
+
+namespace Masterov.API.Models.FinishedProduct;
 
 public class AddFinishedProductRequest
 {
