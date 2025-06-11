@@ -3,11 +3,15 @@ using Masterov.API.Extensions;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct.Command;
+using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct;
+using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct.Command;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetProducts;
+using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
+using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct.Command;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
@@ -20,7 +24,7 @@ namespace Masterov.API.Controllers;
 [Route("api/finishedProduct")]
 public class FinishedProductController(IMapper mapper): ControllerBase
 {
-    //TODO удалить, обновить, получить список всех ордеров для данного готового изделия с возможностью фильтрации
+    //TODO получить список всех ордеров для данного готового изделия с возможностью фильтрации, добавить ордера
     
     /// <summary>
     /// Получить все готовые мебельные изделия
@@ -82,6 +86,10 @@ public class FinishedProductController(IMapper mapper): ControllerBase
     /// <summary>
     /// Добавить готовое мебельное изделие
     /// </summary>
+    /// <param name="request">Данные готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий добавления</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат выполнения</returns>
     [HttpPost("addFinishedProduct")]
     [ProducesResponseType(201, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -108,5 +116,42 @@ public class FinishedProductController(IMapper mapper): ControllerBase
             cancellationToken);
 
         return CreatedAtAction(nameof(GetFinishedProductById), new { finishedProductId = finishedProduct.FinishedProductId }, mapper.Map<FinishedProductRequest>(finishedProduct));
+    }
+    
+    /// <summary>
+    /// Удаление готового мебельного изделия по указанному Id.
+    /// </summary>
+    /// <param name="finishedProductId">Идентификатор готового мебельного изделия для удаления.</param>
+    /// <param name="useCase">Сценарий удаления готового мебольного изделия.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Ответ с кодом 204, если файл был успешно удален.</returns>
+    [HttpDelete("deleteFinishedProduct")]
+    public async Task<IActionResult> DeleteFinishedProduct(
+        Guid finishedProductId,
+        [FromServices] IDeleteFinishedProductUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        await useCase.Execute(new DeleteFinishedProductCommand(finishedProductId), cancellationToken);
+        return NoContent();
+    }
+    
+    /// <summary>
+    /// Обновить готовое мебельное изделие по Id
+    /// </summary>
+    /// <param name="request">Данные для обновления готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий обновления готового мебельного изделия</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат обновления</returns>
+    [HttpPatch("updateFinishedProduct")]
+    [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    public async Task<IActionResult> UpdateFinishedProduct(
+        [FromForm] UpdateFinishedProductRequest request,
+        [FromServices] IUpdateFinishedProductUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var updateFinishedProduct = await useCase.Execute(new UpdateFinishedProductCommand(request.FinishedProductId, request.Name, request.Price, request.Width, request.Height, request.Depth,  request.Image == null ? null : await request.Image.ToByteArrayAsync()), cancellationToken);
+        return Ok(mapper.Map<FinishedProductRequest>(updateFinishedProduct));
     }
 }
