@@ -54,4 +54,13 @@ internal static class DomainExtension
         return true;
     }
     
+    internal static bool BeAValidDate(DateTime? date)
+    {
+        if (!date.HasValue) return true;
+        
+        var minDate = new DateTime(1000, 1, 1); 
+        var currentDate = DateTime.UtcNow;
+
+        return date.Value >= minDate && date.Value <= currentDate;
+    }
 }

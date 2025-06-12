@@ -8,5 +8,6 @@ public class ProductionOrderDomain
     public DateTime CreatedAt { get; set; }
     public DateTime? CompletedAt { get; set; }
     public ProductionOrderStatus Status { get; set; }
+    public string? Description { get; set; }
     public List<ProductComponentDomain> Components { get; set; }
 }

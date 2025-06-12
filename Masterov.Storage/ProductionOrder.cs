@@ -17,6 +17,10 @@ public class ProductionOrder
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     public DateTime? CompletedAt { get; set; }
+    
+    [MaxLength(200)]
+    public string? Description { get; set; }
+    
     [Required]
     public ProductionOrderStatus Status { get; set; } = ProductionOrderStatus.Draft;
 
