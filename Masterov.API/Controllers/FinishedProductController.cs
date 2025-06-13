@@ -13,7 +13,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
-using Masterov.Domain.Masterov.FinishedProduct.GetProducts;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct.Command;
 using Microsoft.AspNetCore.Mvc;
@@ -21,15 +21,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Masterov.API.Controllers;
 
 /// <summary>
-/// Готовое изделие
+/// Готовое мебельное изделие
 /// </summary>
 /// <param name="mapper"></param>
 [ApiController]
 [Route("api/finishedProduct")]
 public class FinishedProductController(IMapper mapper) : ControllerBase
 {
-    //TODO получить список всех ордеров для данного готового изделия с возможностью фильтрации, добавить ордера
-
     /// <summary>
     /// Получить все готовые мебельные изделия
     /// </summary>
@@ -171,7 +169,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <param name="request">Данные для получения ордеров готового мебельного изделия</param>
     /// <param name="getFinishedProductOrdersUseCase"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
+    /// <returns>Результат получения списка ордеров готового мебельного изделия</returns>
     [HttpGet("GetFinishedProductOrders")]
     [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]

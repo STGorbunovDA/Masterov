@@ -1,6 +1,6 @@
 ﻿using Masterov.Domain.Models;
 
-namespace Masterov.Domain.Masterov.FinishedProduct.GetProducts;
+namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 
 public interface IGetFinishedProductsUseCase
 {
