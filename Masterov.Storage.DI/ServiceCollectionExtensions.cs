@@ -8,6 +8,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.DeleteProductType;
@@ -43,6 +44,7 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<IGetProductionOrdersStorage, GetProductionOrdersStorage>()
             .AddScoped<IGetProductionOrdersByCreatedAtStorage, GetProductionOrdersByCreatedAtStorage>()
+            .AddScoped<IGetProductionOrdersByCompletedAtStorage, GetProductionOrdersByCompletedAtStorage>()
             .AddScoped<IGetProductionOrderByIdStorage, GetProductionOrderByIdStorage>();
         
         services

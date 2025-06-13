@@ -4,6 +4,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt.Query;
 using Microsoft.AspNetCore.Mvc;
@@ -75,4 +77,23 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
         return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
     }
     
+    /// <summary>
+    /// Получить список ордеров (заказов) по дате закрытия
+    /// </summary>
+    /// <param name="request">Дата закрытия ордера (заказа)</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказах (ордерах)</returns>
+    [HttpGet("getProductionOrdersByCompletedAt")]
+    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetProductionOrdersByCompletedAt(
+        [FromQuery] GetProductionOrderByCompletedAtRequest request,
+        [FromServices] IGetProductionOrdersByCompletedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var orders = await useCase.Execute(new GetProductionOrdersByCompletedAtQuery(request.CompletedAt), cancellationToken);
+        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
+    }
 }
