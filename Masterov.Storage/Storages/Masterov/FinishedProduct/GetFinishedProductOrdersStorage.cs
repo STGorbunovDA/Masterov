@@ -47,7 +47,7 @@ public class GetFinishedProductOrdersStorage (MasterovDbContext dbContext, IMapp
 
         var orders = await query
             .Include(o => o.Components)
-            .ToListAsync(cancellationToken);
+            .ToArrayAsync(cancellationToken);
 
         return orders.Select(mapper.Map<ProductionOrderDomain>);
     }
