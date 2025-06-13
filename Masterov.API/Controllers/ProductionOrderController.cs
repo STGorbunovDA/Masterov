@@ -8,6 +8,8 @@ using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt.Query;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription.Query;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
@@ -94,6 +96,26 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var orders = await useCase.Execute(new GetProductionOrdersByCompletedAtQuery(request.CompletedAt), cancellationToken);
+        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
+    }
+    
+    /// <summary>
+    /// Получить список ордеров (заказов) по описанию
+    /// </summary>
+    /// <param name="request">Описание ордера (заказа)</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказах (ордерах)</returns>
+    [HttpGet("getProductionOrdersByDescription")]
+    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetProductionOrdersByDescription(
+        [FromQuery] GetProductionOrderByDescriptionRequest request,
+        [FromServices] IGetProductionOrdersByDescriptionUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var orders = await useCase.Execute(new GetProductionOrdersByDescriptionQuery(request.Description), cancellationToken);
         return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
     }
 }

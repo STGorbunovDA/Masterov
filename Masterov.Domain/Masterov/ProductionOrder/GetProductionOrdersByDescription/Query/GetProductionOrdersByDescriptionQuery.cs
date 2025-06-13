@@ -1,0 +1,3 @@
+﻿namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription.Query;
+
+public record GetProductionOrdersByDescriptionQuery(string Description);

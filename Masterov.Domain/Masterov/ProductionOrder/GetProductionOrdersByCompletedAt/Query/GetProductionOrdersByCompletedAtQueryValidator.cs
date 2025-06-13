@@ -2,9 +2,9 @@
 
 namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt.Query;
 
-public class GetByDeceasedDescriptionDeceasedsValidator : AbstractValidator<GetProductionOrdersByCompletedAtQuery>
+public class GetProductionOrdersByCompletedAtQueryValidator : AbstractValidator<GetProductionOrdersByCompletedAtQuery>
 {
-    public GetByDeceasedDescriptionDeceasedsValidator()
+    public GetProductionOrdersByCompletedAtQueryValidator()
     {
         RuleFor(q => q.CompletedAt)
             .LessThanOrEqualTo(DateTime.UtcNow) // Проверка, что дата не в будущем
