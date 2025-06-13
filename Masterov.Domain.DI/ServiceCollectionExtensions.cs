@@ -10,6 +10,7 @@ using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.DeleteProductType;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
@@ -38,6 +39,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductionOrdersByCreatedAtUseCase, GetProductionOrdersByCreatedAtUseCase>()
             .AddScoped<IGetProductionOrdersByCompletedAtUseCase, GetProductionOrdersByCompletedAtUseCase>()
             .AddScoped<IGetProductionOrdersByDescriptionUseCase, GetProductionOrdersByDescriptionUseCase>()
+            .AddScoped<IGetProductionOrdersByStatusUseCase, GetProductionOrdersByStatusUseCase>()
             .AddScoped<IGetProductionOrderByIdUseCase, GetProductionOrderByIdUseCase>();
         
         services

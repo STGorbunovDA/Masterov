@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using Masterov.API.Extensions;
 using Masterov.API.Models.ProductionOrder;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
+using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
@@ -10,6 +11,8 @@ using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription.Query;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus.Query;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
@@ -22,6 +25,9 @@ namespace Masterov.API.Controllers;
 [Route("api/productionOrder")]
 public class ProductionOrderController(IMapper mapper) : ControllerBase
 {
+    //TODO получить данные заказа по статусу, получить все компоненты у текущего ордера, получить готовое мебельное изделие у ордера (изделие одно)
+    //TODO Добавить ордер, Удалить, Обновить
+    
     /// <summary>
     /// Получить все заказы
     /// </summary>
@@ -116,6 +122,26 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var orders = await useCase.Execute(new GetProductionOrdersByDescriptionQuery(request.Description), cancellationToken);
+        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
+    }
+    
+    /// <summary>
+    /// Получить список ордеров (заказов) по статусу
+    /// </summary>
+    /// <param name="request">Статус ордера (заказа)</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказах (ордерах)</returns>
+    [HttpGet("getProductionOrdersByStatus")]
+    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetProductionOrdersByStatus(
+        [FromQuery] GetProductionOrderByStatusRequest request,
+        [FromServices] IGetProductionOrdersByStatusUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var orders = await useCase.Execute(new GetProductionOrdersByStatusQuery(StatusTypeHelper.FromExtension(request.Status)), cancellationToken);
         return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
     }
 }
