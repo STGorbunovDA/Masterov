@@ -1,0 +1,3 @@
+﻿namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt.Query;
+
+public record GetProductionOrdersByCreatedAtQuery(DateTime CreatedAt);
