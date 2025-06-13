@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Masterov.API.Models.ProductionOrder;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,5 +31,25 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     {
         var files = await useCase.Execute(cancellationToken);
         return Ok(files.Select(mapper.Map<ProductionOrderRequest>));
+    }
+    
+    /// <summary>
+    /// Получить ордер (заказ) по Id
+    /// </summary>
+    /// <param name="orderId">Идентификатор ордера (заказа)</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказе (ордере)</returns>
+    [HttpGet("getProductionOrderById/{orderId:guid}")]
+    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetProductionOrderById(
+        [FromRoute] Guid orderId,
+        [FromServices] IGetProductionOrderByIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var order = await useCase.Execute(new GetProductionOrderByIdQuery(orderId), cancellationToken);
+        return Ok(mapper.Map<ProductionOrderRequest>(order));
     }
 }

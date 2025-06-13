@@ -5,7 +5,7 @@ using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
+namespace Masterov.Storage.Storages.Masterov.ProductionOrder;
 
 internal class GetProductionOrdersStorage (MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetProductionOrdersStorage
 {

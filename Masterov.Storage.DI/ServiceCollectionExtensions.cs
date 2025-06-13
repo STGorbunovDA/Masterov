@@ -6,6 +6,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.DeleteProductType;
@@ -16,6 +17,7 @@ using Masterov.Domain.Masterov.ProductType.UpdateProductType;
 using Masterov.Storage.Extension;
 using Masterov.Storage.Storages.Masterov;
 using Masterov.Storage.Storages.Masterov.FinishedProduct;
+using Masterov.Storage.Storages.Masterov.ProductionOrder;
 using Masterov.Storage.Storages.Masterov.ProductType;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +40,8 @@ public static class ServiceCollectionExtensions
             .AddDbContextPool<MasterovDbContext>(options => options.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString)));
 
         services
-            .AddScoped<IGetProductionOrdersStorage, GetProductionOrdersStorage>();
+            .AddScoped<IGetProductionOrdersStorage, GetProductionOrdersStorage>()
+            .AddScoped<IGetProductionOrderByIdStorage, GetProductionOrderByIdStorage>();
         
         services
             .AddScoped<IUpdateProductTypeStorage, UpdateProductTypeStorage>()
