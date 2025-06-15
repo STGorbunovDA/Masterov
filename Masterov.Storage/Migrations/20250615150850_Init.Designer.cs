@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masterov.Storage.Migrations
 {
     [DbContext(typeof(MasterovDbContext))]
-    [Migration("20250615143217_NewInit2")]
-    partial class NewInit2
+    [Migration("20250615150850_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,7 +46,7 @@ namespace Masterov.Storage.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Masterov.Storage.FinishedProduct", b =>
@@ -113,7 +113,7 @@ namespace Masterov.Storage.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderPayment");
+                    b.ToTable("OrderPayments");
                 });
 
             modelBuilder.Entity("Masterov.Storage.ProductComponent", b =>

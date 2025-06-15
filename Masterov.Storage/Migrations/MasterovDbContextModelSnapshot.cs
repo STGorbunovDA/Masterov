@@ -43,7 +43,7 @@ namespace Masterov.Storage.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("Customer");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Masterov.Storage.FinishedProduct", b =>
@@ -110,7 +110,7 @@ namespace Masterov.Storage.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderPayment");
+                    b.ToTable("OrderPayments");
                 });
 
             modelBuilder.Entity("Masterov.Storage.ProductComponent", b =>

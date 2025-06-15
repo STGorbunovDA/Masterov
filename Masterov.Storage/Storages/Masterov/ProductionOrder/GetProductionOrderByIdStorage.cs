@@ -16,7 +16,7 @@ internal class GetProductionOrderByIdStorage(MasterovDbContext dbContext, IMemor
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.ProductionOrders
-                    .Where(f => f.FinishedProductId == orderId)
+                    .Where(f => f.OrderId == orderId)
                     .ProjectTo<ProductionOrderDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);
             }))!;
