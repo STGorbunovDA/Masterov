@@ -6,12 +6,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Masterov.Storage.Migrations
 {
     /// <inheritdoc />
-    public partial class NewInit : Migration
+    public partial class NewInit2 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Customer",
+                columns: table => new
+                {
+                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Phone = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customer", x => x.CustomerId);
+                })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -77,11 +95,20 @@ namespace Masterov.Storage.Migrations
                     FinishedProductId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false),
                     CompletedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Description = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductionOrders", x => x.OrderId);
+                    table.ForeignKey(
+                        name: "FK_ProductionOrders_Customer_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customer",
+                        principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductionOrders_FinishedProducts_FinishedProductId",
                         column: x => x.FinishedProductId,
@@ -110,6 +137,35 @@ namespace Masterov.Storage.Migrations
                         column: x => x.ProductTypeId,
                         principalTable: "ProductTypes",
                         principalColumn: "ProductTypeId",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "OrderPayment",
+                columns: table => new
+                {
+                    PaymentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    OrderId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    CustomerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    MethodPayment = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderPayment", x => x.PaymentId);
+                    table.ForeignKey(
+                        name: "FK_OrderPayment_Customer_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customer",
+                        principalColumn: "CustomerId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderPayment_ProductionOrders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "ProductionOrders",
+                        principalColumn: "OrderId",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -185,6 +241,16 @@ namespace Masterov.Storage.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderPayment_CustomerId",
+                table: "OrderPayment",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderPayment_OrderId",
+                table: "OrderPayment",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductComponents_OrderId",
                 table: "ProductComponents",
                 column: "OrderId");
@@ -198,6 +264,11 @@ namespace Masterov.Storage.Migrations
                 name: "IX_ProductComponents_WarehouseId",
                 table: "ProductComponents",
                 column: "WarehouseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductionOrders_CustomerId",
+                table: "ProductionOrders",
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductionOrders_FinishedProductId",
@@ -229,6 +300,9 @@ namespace Masterov.Storage.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "OrderPayment");
+
+            migrationBuilder.DropTable(
                 name: "ProductComponents");
 
             migrationBuilder.DropTable(
@@ -242,6 +316,9 @@ namespace Masterov.Storage.Migrations
 
             migrationBuilder.DropTable(
                 name: "Warehouses");
+
+            migrationBuilder.DropTable(
+                name: "Customer");
 
             migrationBuilder.DropTable(
                 name: "FinishedProducts");

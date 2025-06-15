@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models.ProductionOrder;
-using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
@@ -25,8 +24,11 @@ namespace Masterov.API.Controllers;
 [Route("api/productionOrder")]
 public class ProductionOrderController(IMapper mapper) : ControllerBase
 {
-    //TODO получить данные заказа по статусу, получить все компоненты у текущего ордера, получить готовое мебельное изделие у ордера (изделие одно)
-    //TODO Добавить ордер, Удалить, Обновить
+    // TODO получить все компоненты у текущего ордера, получить готовое мебельное изделие у ордера (изделие одно)
+    // TODO Добавить ордер, Удалить, Обновить (при добавления ордера нужно учитывать какой Customer сделал заказ и автоматически регать ему доступ к сайту и личному кадинету)
+    // TODO изменить статус заказа если InProgress тогда должна быть оплата или полностью или частичная
+    // TODO если статус Completed заказа тогда должна записаться дата CompletedAt
+    // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно 
     
     /// <summary>
     /// Получить все заказы

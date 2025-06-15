@@ -22,6 +22,30 @@ namespace Masterov.Storage.Migrations
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
 
+            modelBuilder.Entity("Masterov.Storage.Customer", b =>
+                {
+                    b.Property<Guid>("CustomerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("CustomerId");
+
+                    b.ToTable("Customer");
+                });
+
             modelBuilder.Entity("Masterov.Storage.FinishedProduct", b =>
                 {
                     b.Property<Guid>("FinishedProductId")
@@ -57,6 +81,36 @@ namespace Masterov.Storage.Migrations
                     b.HasKey("FinishedProductId");
 
                     b.ToTable("FinishedProducts");
+                });
+
+            modelBuilder.Entity("Masterov.Storage.OrderPayment", b =>
+                {
+                    b.Property<Guid>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<int>("MethodPayment")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderPayment");
                 });
 
             modelBuilder.Entity("Masterov.Storage.ProductComponent", b =>
@@ -121,6 +175,9 @@ namespace Masterov.Storage.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Description")
                         .HasMaxLength(200)
                         .HasColumnType("varchar(200)");
@@ -132,6 +189,8 @@ namespace Masterov.Storage.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("OrderId");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("FinishedProductId");
 
@@ -225,6 +284,25 @@ namespace Masterov.Storage.Migrations
                     b.ToTable("Warehouses");
                 });
 
+            modelBuilder.Entity("Masterov.Storage.OrderPayment", b =>
+                {
+                    b.HasOne("Masterov.Storage.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masterov.Storage.ProductionOrder", "Order")
+                        .WithMany("Payments")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("Masterov.Storage.ProductComponent", b =>
                 {
                     b.HasOne("Masterov.Storage.ProductionOrder", "Order")
@@ -254,11 +332,19 @@ namespace Masterov.Storage.Migrations
 
             modelBuilder.Entity("Masterov.Storage.ProductionOrder", b =>
                 {
+                    b.HasOne("Masterov.Storage.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Masterov.Storage.FinishedProduct", "FinishedProduct")
                         .WithMany("Orders")
                         .HasForeignKey("FinishedProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Customer");
 
                     b.Navigation("FinishedProduct");
                 });
@@ -301,6 +387,11 @@ namespace Masterov.Storage.Migrations
                     b.Navigation("ProductType");
                 });
 
+            modelBuilder.Entity("Masterov.Storage.Customer", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("Masterov.Storage.FinishedProduct", b =>
                 {
                     b.Navigation("Orders");
@@ -316,6 +407,8 @@ namespace Masterov.Storage.Migrations
             modelBuilder.Entity("Masterov.Storage.ProductionOrder", b =>
                 {
                     b.Navigation("Components");
+
+                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("Supplier", b =>
