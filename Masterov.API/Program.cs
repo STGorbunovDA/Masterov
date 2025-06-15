@@ -9,18 +9,28 @@ using Masterov.Storage.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(policy => policy.AddPolicy("default", opt =>
+{
+    opt.AllowAnyHeader();
+    opt.AllowCredentials();
+    opt.AllowAnyMethod();
+    opt.SetIsOriginAllowed(_ => true);
+}));
+
 builder.Services.AddLogging();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCustomSwagger();
+builder.Services.AddValidatorsFromAssemblyContaining<FinishedProductDomain>();
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
 builder.Services
     .AddStorage(builder.Configuration.GetConnectionString("AppDbConnectionString"))
     .AddDomain();
 
-builder.Services.AddValidatorsFromAssemblyContaining<FinishedProductDomain>();
-builder.Services.AddCustomSwagger();
 builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.GetExecutingAssembly()));
+
 builder.Logging.AddConsole();
 
 var app = builder.Build();
@@ -30,6 +40,9 @@ mapper.ConfigurationProvider.AssertConfigurationIsValid();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseCors("default");
+
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.UseMiddleware<ErrorHandlingMiddleware>();

@@ -6,7 +6,7 @@ public class UpdateProductTypeCommandValidator : AbstractValidator<UpdateProduct
 {
     public UpdateProductTypeCommandValidator()
     {
-        RuleFor(q => q.ProductTypeId)
+        RuleFor(q => q.ProductTypeId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
             .WithMessage("productTypeId must not be an empty GUID.");

@@ -18,6 +18,14 @@ using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
 using Masterov.Domain.Masterov.ProductType.UpdateProductType;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUser;
+using Masterov.Domain.Masterov.UserFolder.DeleteUserById;
+using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
+using Masterov.Domain.Masterov.UserFolder.GetUserById;
+using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
+using Masterov.Domain.Masterov.UserFolder.GetUsers;
+using Masterov.Domain.Masterov.UserFolder.LoginUser;
+using Masterov.Domain.Masterov.UserFolder.RegisterUser;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Masterov.Domain.DI;
@@ -51,6 +59,16 @@ public static class ServiceCollectionExtensions
             .AddScoped<IAddProductTypeUseCase, AddProductTypeUseCase>()
             .AddScoped<IGetProductTypeByIdUseCase, GetProductTypeByIdUseCase>()
             .AddScoped<IGetProductsTypeUseCase, GetProductsTypeUseCase>();
+        
+        services
+            .AddScoped<IRegisterUserUseCase, RegisterUserUseCase>()
+            .AddScoped<ILoginUserUseCase, LoginUserUseCase>()
+            .AddScoped<IGetUserByLoginUseCase, GetUserByLoginUseCase>()
+            .AddScoped<IGetUserByIdUseCase, GetUserByIdUseCase>()
+            .AddScoped<IDeleteUserByLoginUseCase, DeleteUserByLoginUseCase>()
+            .AddScoped<IDeleteUserByIdUseCase, DeleteUserByIdUseCase>()
+            .AddScoped<IChangeRoleUserUseCase, ChangeRoleUserUseCase>()
+            .AddScoped<IGetUsersUseCase, GetUsersUseCase>();
             
         return services;
     }

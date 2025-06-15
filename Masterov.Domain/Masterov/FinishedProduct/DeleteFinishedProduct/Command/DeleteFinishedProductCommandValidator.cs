@@ -6,7 +6,7 @@ public class DeleteFinishedProductCommandValidator : AbstractValidator<DeleteFin
 {
     public DeleteFinishedProductCommandValidator()
     {
-        RuleFor(q => q.FinishedProductId)
+        RuleFor(q => q.FinishedProductId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
             .WithMessage("FinishedProductId must not be an empty GUID.");}

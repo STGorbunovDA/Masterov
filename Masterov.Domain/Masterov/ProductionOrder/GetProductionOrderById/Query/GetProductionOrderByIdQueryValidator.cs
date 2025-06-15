@@ -6,7 +6,7 @@ public class GetProductionOrderByIdQueryValidator : AbstractValidator<GetProduct
 {
     public GetProductionOrderByIdQueryValidator()
     {
-        RuleFor(q => q.OrderId)
+        RuleFor(q => q.OrderId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
             .WithMessage("OrderId must not be an empty GUID.");

@@ -6,7 +6,7 @@ public class DeleteDeceasedCommandValidator : AbstractValidator<DeleteProductTyp
 {
     public DeleteDeceasedCommandValidator()
     {
-        RuleFor(q => q.ProductTypeId)
+        RuleFor(q => q.ProductTypeId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
             .WithMessage("ProductTypeId must not be an empty GUID.");

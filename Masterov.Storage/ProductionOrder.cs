@@ -22,6 +22,7 @@ public class ProductionOrder
     public string? Description { get; set; }
     
     [Required]
+    [Column(TypeName = "varchar(20)")]
     public ProductionOrderStatus Status { get; set; } = ProductionOrderStatus.Draft;
 
     public ICollection<ProductComponent> Components { get; set; } = new List<ProductComponent>();

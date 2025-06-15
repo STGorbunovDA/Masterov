@@ -6,7 +6,7 @@ public class GetProductionOrdersByDescriptionQueryValidator : AbstractValidator<
 {
     public GetProductionOrdersByDescriptionQueryValidator()
     {
-        RuleFor(q => q.Description)
+        RuleFor(q => q.Description).Cascade(CascadeMode.Stop)
             .MaximumLength(200)
             .WithErrorCode("DescriptionTooLong")
             .WithMessage("Description must be less than 200 characters.");

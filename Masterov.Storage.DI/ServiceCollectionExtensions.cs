@@ -19,11 +19,18 @@ using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
 using Masterov.Domain.Masterov.ProductType.UpdateProductType;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUser;
+using Masterov.Domain.Masterov.UserFolder.DeleteUserById;
+using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
+using Masterov.Domain.Masterov.UserFolder.GetUserById;
+using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
+using Masterov.Domain.Masterov.UserFolder.GetUsers;
+using Masterov.Domain.Masterov.UserFolder.RegisterUser;
 using Masterov.Storage.Extension;
-using Masterov.Storage.Storages.Masterov;
 using Masterov.Storage.Storages.Masterov.FinishedProduct;
 using Masterov.Storage.Storages.Masterov.ProductionOrder;
 using Masterov.Storage.Storages.Masterov.ProductType;
+using Masterov.Storage.Storages.UserFolder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -60,6 +67,15 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductTypeByNameStorage, GetProductTypeByNameStorage>()
             .AddScoped<IGetProductsTypeStorage, GetProductsTypeStorage>()
             .AddScoped<IGetProductTypeByIdStorage, GetProductTypeByIdStorage>();
+
+        services
+            .AddScoped<IRegisterUserStorage, RegisterUserStorage>()
+            .AddScoped<IGetUserByLoginStorage, GetUserByLoginStorage>()
+            .AddScoped<IGetUserByIdStorage, GetUserByIdStorage>()
+            .AddScoped<IDeleteUserByLoginStorage, DeleteUserByLoginStorage>()
+            .AddScoped<IDeleteUserByIdStorage, DeleteUserByIdStorage>()
+            .AddScoped<IChangeRoleUserStorage, ChangeRoleUserStorage>()
+            .AddScoped<IGetUsersStorage, GetUsersStorage>();
         
         
         services.AddMemoryCache();

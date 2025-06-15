@@ -18,6 +18,7 @@ public class OrderPayment
     public Customer Customer { get; set; }
 
     [Required]
+    [Column(TypeName = "varchar(20)")]
     public PaymentMethod MethodPayment { get; set; }
 
     [Required]

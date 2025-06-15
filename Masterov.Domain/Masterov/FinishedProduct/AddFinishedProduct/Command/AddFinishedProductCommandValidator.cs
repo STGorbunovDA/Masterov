@@ -15,7 +15,7 @@ public class AddFinishedProductCommandValidator : AbstractValidator<AddFinishedP
             .WithErrorCode("TooLong")
             .WithMessage("The maximum length of the name should not be more than 50");
         
-        RuleFor(c => c.Price)
+        RuleFor(c => c.Price).Cascade(CascadeMode.Stop)
             .Cascade(CascadeMode.Stop)
             .Must(price => price == null || price > 0)
             .WithErrorCode("Invalid")
@@ -50,7 +50,7 @@ public class AddFinishedProductCommandValidator : AbstractValidator<AddFinishedP
                 .WithMessage("The depth should be greaater than 0.");
         });
         
-        RuleFor(x => x.Image)
+        RuleFor(x => x.Image).Cascade(CascadeMode.Stop)
             .Cascade(CascadeMode.Stop)
             .Must(content => content == null || (content.Length > 0 && content.Length <= 100 * 1024 * 1024))
             .WithMessage("Если файл предоставлен, он не должен быть пустым и должен быть не больше 100 МБ.")

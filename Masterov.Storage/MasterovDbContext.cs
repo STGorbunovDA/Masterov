@@ -15,6 +15,7 @@ public class MasterovDbContext : DbContext
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<Supply> Supplies { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

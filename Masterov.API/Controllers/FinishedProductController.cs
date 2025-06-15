@@ -16,6 +16,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct.Command;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
@@ -97,6 +98,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     [ProducesResponseType(201, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddFinishedProduct(
         [FromForm] AddFinishedProductRequest request,
         [FromServices] IAddFinishedProductUseCase useCase,
@@ -131,6 +133,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Ответ с кодом 204, если файл был успешно удален.</returns>
     [HttpDelete("deleteFinishedProduct")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteFinishedProduct(
         Guid finishedProductId,
         [FromServices] IDeleteFinishedProductUseCase useCase,
@@ -151,6 +154,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateFinishedProduct(
         [FromForm] UpdateFinishedProductRequest request,
         [FromServices] IUpdateFinishedProductUseCase useCase,
@@ -174,6 +178,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetFinishedProductOrders(
         [FromQuery] GetFinishedProductOrdersRequest request,
         [FromServices] IGetFinishedProductOrdersUseCase getFinishedProductOrdersUseCase,

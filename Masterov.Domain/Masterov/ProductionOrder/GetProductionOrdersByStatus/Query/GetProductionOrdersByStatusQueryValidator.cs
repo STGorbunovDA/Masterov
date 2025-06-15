@@ -7,7 +7,7 @@ public class GetProductionOrdersByStatusQueryValidator : AbstractValidator<GetPr
 {
     public GetProductionOrdersByStatusQueryValidator()
     {
-        RuleFor(q => q.Status)
+        RuleFor(q => q.Status).Cascade(CascadeMode.Stop)
             .IsInEnum()
             .WithErrorCode("InvalidStatus")
             .WithMessage("Status must be a valid ProductionOrderStatus value.")

@@ -95,8 +95,9 @@ namespace Masterov.Storage.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("MethodPayment")
-                        .HasColumnType("int");
+                    b.Property<string>("MethodPayment")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
 
                     b.Property<Guid>("OrderId")
                         .HasColumnType("char(36)");
@@ -185,8 +186,9 @@ namespace Masterov.Storage.Migrations
                     b.Property<Guid>("FinishedProductId")
                         .HasColumnType("char(36)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
 
                     b.HasKey("OrderId");
 
@@ -195,6 +197,30 @@ namespace Masterov.Storage.Migrations
                     b.HasIndex("FinishedProductId");
 
                     b.ToTable("ProductionOrders");
+                });
+
+            modelBuilder.Entity("Masterov.Storage.User", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Supplier", b =>
