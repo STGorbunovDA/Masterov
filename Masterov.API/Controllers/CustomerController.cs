@@ -4,6 +4,8 @@ using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.AddCustomer.Command;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Customer.GetCustomerById.Query;
+using Masterov.Domain.Masterov.Customer.GetCustomerByName;
+using Masterov.Domain.Masterov.Customer.GetCustomerByName.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +56,27 @@ public class CustomerController(IMapper mapper) : ControllerBase
     {
         var customer = await useCase.Execute(new GetCustomerByIdQuery(customerId), cancellationToken);
         return Ok(mapper.Map<CustomerRequest>(customer));
+    }
+    
+    /// <summary>
+    /// Получить заказчика по имени
+    /// </summary>
+    /// <param name="customerName">Имя заказчика</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчике</returns>
+    [HttpGet("GetCustomerByName/{customerName}")]
+    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetCustomerByName(
+        [FromRoute] string customerName,
+        [FromServices] IGetCustomerByNameUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var productType =
+            await useCase.Execute(new GetCustomerByNameQuery(customerName), cancellationToken);
+        return Ok(mapper.Map<CustomerRequest>(productType));
     }
     
     /// <summary>
