@@ -20,6 +20,11 @@ internal class StorageProfile : Profile
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType))
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));
             
+        // Product mapping
+        CreateMap<Customer, CustomerDomain>()
+            .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders));
+
+        
         // ProductType mapping
         CreateMap<ProductType, ProductTypeDomain>();
             

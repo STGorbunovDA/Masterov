@@ -1,4 +1,6 @@
-﻿using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
+﻿using Masterov.Domain.Masterov.Customer.AddCustomer;
+using Masterov.Domain.Masterov.Customer.GetCustomerById;
+using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
@@ -35,6 +37,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDomain(this IServiceCollection services)
     {
+        //FinishedProduct
         services
             .AddScoped<IGetFinishedProductByIdUseCase, GetFinishedProductByIdUseCase>()
             .AddScoped<IGetFinishedProductByNameUseCase, GetFinishedProductByNameUseCase>()
@@ -44,6 +47,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetFinishedProductOrdersUseCase, GetFinishedProductOrdersUseCase>()
             .AddScoped<IGetFinishedProductsUseCase, GetFinishedProductsUseCase>();
 
+        //ProductionOrder
         services
             .AddScoped<IGetProductionOrdersUseCase, GetProductionOrdersUseCase>()
             .AddScoped<IGetProductionOrdersByCreatedAtUseCase, GetProductionOrdersByCreatedAtUseCase>()
@@ -54,6 +58,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductComponentAtOrderUseCase, GetProductComponentAtOrderUseCase>()
             .AddScoped<IGetProductionOrderByIdUseCase, GetProductionOrderByIdUseCase>();
         
+        // ProductType
         services
             .AddScoped<IUpdateProductTypeUseCase, UpdateProductTypeUseCase>()
             .AddScoped<IDeleteProductTypeUseCase, DeleteProductTypeUseCase>()
@@ -62,6 +67,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductTypeByIdUseCase, GetProductTypeByIdUseCase>()
             .AddScoped<IGetProductsTypeUseCase, GetProductsTypeUseCase>();
         
+        //users
         services
             .AddScoped<IRegisterUserUseCase, RegisterUserUseCase>()
             .AddScoped<ILoginUserUseCase, LoginUserUseCase>()
@@ -71,6 +77,11 @@ public static class ServiceCollectionExtensions
             .AddScoped<IDeleteUserByIdUseCase, DeleteUserByIdUseCase>()
             .AddScoped<IChangeRoleUserUseCase, ChangeRoleUserUseCase>()
             .AddScoped<IGetUsersUseCase, GetUsersUseCase>();
+        
+        //customer
+        services
+            .AddScoped<IAddCustomerUseCase, AddCustomerUseCase>()
+            .AddScoped<IGetCustomerByIdUseCase, GetCustomerByIdUseCase>();
             
         return services;
     }
