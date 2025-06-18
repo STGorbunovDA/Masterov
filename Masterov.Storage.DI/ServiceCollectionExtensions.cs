@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
+using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
@@ -89,6 +90,7 @@ public static class ServiceCollectionExtensions
         //customer
         services
             .AddScoped<IAddCustomerStorage, AddCustomerStorage>()
+            .AddScoped<IGetCustomersStorage, GetCustomersStorage>()
             .AddScoped<IGetCustomerByIdStorage, GetCustomerByIdStorage>();
         
         services.AddMemoryCache();

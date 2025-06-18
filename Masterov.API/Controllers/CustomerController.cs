@@ -1,26 +1,10 @@
 ﻿using AutoMapper;
-using Masterov.API.Extensions;
 using Masterov.API.Models.Customer;
-using Masterov.API.Models.FinishedProduct;
-using Masterov.API.Models.ProductionOrder;
-using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.AddCustomer.Command;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Customer.GetCustomerById.Query;
-using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
-using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct.Command;
-using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct;
-using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct.Command;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById.Query;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
-using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
-using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct.Command;
+using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,6 +18,23 @@ namespace Masterov.API.Controllers;
 [Route("api/customer")]
 public class CustomerController(IMapper mapper) : ControllerBase
 {
+    /// <summary>
+    /// Получить всех заказчиков
+    /// </summary>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчиках</returns>
+    [HttpGet("getCustomers")]
+    [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
+    [ProducesResponseType(410)]
+    public async Task<IActionResult> GetCustomers(
+        [FromServices] IGetCustomersUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customers = await useCase.Execute(cancellationToken);
+        return Ok(customers.Select(mapper.Map<CustomerRequest>));
+    }
+    
     /// <summary>
     /// Получить заказчика по Id
     /// </summary>
@@ -66,7 +67,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [ProducesResponseType(201, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddCustomer(
         [FromForm] AddCustomerRequest request,
         [FromServices] IAddCustomerUseCase useCase,
