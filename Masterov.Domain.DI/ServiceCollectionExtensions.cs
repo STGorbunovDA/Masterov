@@ -6,6 +6,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt;
@@ -50,6 +51,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductionOrdersByDescriptionUseCase, GetProductionOrdersByDescriptionUseCase>()
             .AddScoped<IGetProductionOrdersByStatusUseCase, GetProductionOrdersByStatusUseCase>()
             .AddScoped<IGetFinishedProductAtOrderUseCase, GetFinishedProductAtOrderUseCase>()
+            .AddScoped<IGetProductComponentAtOrderUseCase, GetProductComponentAtOrderUseCase>()
             .AddScoped<IGetProductionOrderByIdUseCase, GetProductionOrderByIdUseCase>();
         
         services

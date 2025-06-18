@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
+using Masterov.API.Models;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.ProductionOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder.Query;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder;
+using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
@@ -15,6 +18,7 @@ using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus.Query;
+using Masterov.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
@@ -27,7 +31,6 @@ namespace Masterov.API.Controllers;
 [Route("api/productionOrder")]
 public class ProductionOrderController(IMapper mapper) : ControllerBase
 {
-    // TODO получить все компоненты у текущего ордера, получить готовое мебельное изделие у ордера (изделие одно)
     // TODO Добавить ордер, Удалить, Обновить (при добавления ордера нужно учитывать какой Customer сделал заказ и автоматически регать ему доступ к сайту и личному кадинету)
     // TODO изменить статус заказа если InProgress тогда должна быть оплата или полностью или частичная
     // TODO если статус Completed заказа тогда должна записаться дата CompletedAt
@@ -168,5 +171,25 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     {
         var product = await useCase.Execute(new GetFinishedProductAtOrderQuery(request.OrderId), cancellationToken);
         return Ok(mapper.Map<FinishedProductRequest>(product));
+    }
+    
+    /// <summary>
+    /// Получить используемые компоненты для заказа по OrderId
+    /// </summary>
+    /// <param name="request">Id Ордера (заказа)</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Используемые компоненты</returns>
+    [HttpGet("getProductComponentAtOrder")]
+    [ProducesResponseType(200, Type = typeof(ProductComponentDomain[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetProductComponentAtOrder(
+        [FromQuery] GetProductComponentAtOrderRequest request,
+        [FromServices] IGetProductComponentAtOrderUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var productionComponents = await useCase.Execute(new GetProductComponentAtOrderQuery(request.OrderId), cancellationToken);
+        return Ok(mapper.Map<IEnumerable<ProductComponentRequest>>(productionComponents));
     }
 }

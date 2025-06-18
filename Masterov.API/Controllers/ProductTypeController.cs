@@ -124,7 +124,7 @@ public class ProductTypeController(IMapper mapper): ControllerBase
     /// <param name="useCase"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    [HttpPut("updateProductType")]
+    [HttpPatch("updateProductType")]
     [ProducesResponseType(200, Type = typeof(ProductTypeRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
