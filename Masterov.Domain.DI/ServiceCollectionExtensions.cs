@@ -3,6 +3,7 @@ using Masterov.Domain.Masterov.Customer.DeleteCustomer;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
+using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
@@ -87,6 +88,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetCustomersUseCase, GetCustomersUseCase>()
             .AddScoped<IGetCustomerByNameUseCase, GetCustomerByNameUseCase>()
             .AddScoped<IDeleteCustomerUseCase, DeleteCustomerUseCase>()
+            .AddScoped<IUpdateCustomerUseCase, UpdateCustomerUseCase>()
             .AddScoped<IGetCustomerByIdUseCase, GetCustomerByIdUseCase>();
             
         return services;

@@ -9,6 +9,8 @@ using Masterov.Domain.Masterov.Customer.GetCustomerById.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
+using Masterov.Domain.Masterov.Customer.UpdateCustomer;
+using Masterov.Domain.Masterov.Customer.UpdateCustomer.Command;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,7 +33,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomers")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
     [ProducesResponseType(410)]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomers(
         [FromServices] IGetCustomersUseCase useCase,
         CancellationToken cancellationToken)
@@ -123,5 +125,28 @@ public class CustomerController(IMapper mapper) : ControllerBase
     {
         await useCase.Execute(new DeleteCustomerCommand(customerId), cancellationToken);
         return NoContent();
+    }
+    
+    /// <summary>
+    /// Обновить заказчика по Id
+    /// </summary>
+    /// <param name="request">Данные для обновления заказчика</param>
+    /// <param name="useCase">Сценарий обновления заказчика</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат обновления заказчика</returns>
+    [HttpPatch("updateCustomer")]
+    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> UpdateCustomer(
+        [FromForm] UpdateCustomerRequest request,
+        [FromServices] IUpdateCustomerUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var updateCustomer = await useCase.Execute(
+            new UpdateCustomerCommand(request.CustomerId, request.Name, request.Email, request.Phone),
+            cancellationToken);
+        return Ok(mapper.Map<CustomerRequest>(updateCustomer));
     }
 }
