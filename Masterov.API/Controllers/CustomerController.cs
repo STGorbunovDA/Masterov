@@ -2,6 +2,8 @@
 using Masterov.API.Models.Customer;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.AddCustomer.Command;
+using Masterov.Domain.Masterov.Customer.DeleteCustomer;
+using Masterov.Domain.Masterov.Customer.DeleteCustomer.Command;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Customer.GetCustomerById.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName;
@@ -29,6 +31,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomers")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
     [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomers(
         [FromServices] IGetCustomersUseCase useCase,
         CancellationToken cancellationToken)
@@ -69,6 +72,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomerByName(
         [FromRoute] string customerName,
         [FromServices] IGetCustomerByNameUseCase useCase,
@@ -101,5 +105,23 @@ public class CustomerController(IMapper mapper) : ControllerBase
         return CreatedAtAction(nameof(GetCustomerById),
             new { customerId = customer.CustomerId },
             mapper.Map<CustomerRequest>(customer));
+    }
+    
+    /// <summary>
+    /// Удаление заказчика по Id.
+    /// </summary>
+    /// <param name="customerId">Идентификатор заказчика.</param>
+    /// <param name="useCase">Сценарий удаления заказчика.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Ответ с кодом 204, если файл был успешно удален.</returns>
+    [HttpDelete("deleteCustomer")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> DeleteCustomer(
+        Guid customerId,
+        [FromServices] IDeleteCustomerUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        await useCase.Execute(new DeleteCustomerCommand(customerId), cancellationToken);
+        return NoContent();
     }
 }
