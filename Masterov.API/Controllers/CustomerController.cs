@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+using Masterov.API.Extensions;
 using Masterov.API.Models.Customer;
+using Masterov.API.Models.FinishedProduct;
+using Masterov.API.Models.ProductionOrder;
+using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.AddCustomer.Command;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
@@ -8,9 +12,13 @@ using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Customer.GetCustomerById.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName.Query;
+using Masterov.Domain.Masterov.Customer.GetCustomerOrders;
+using Masterov.Domain.Masterov.Customer.GetCustomerOrders.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer.Command;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +41,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomers")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
     [ProducesResponseType(410)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomers(
         [FromServices] IGetCustomersUseCase useCase,
         CancellationToken cancellationToken)
@@ -138,7 +146,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateCustomer(
         [FromForm] UpdateCustomerRequest request,
         [FromServices] IUpdateCustomerUseCase useCase,
@@ -148,5 +156,27 @@ public class CustomerController(IMapper mapper) : ControllerBase
             new UpdateCustomerCommand(request.CustomerId, request.Name, request.Email, request.Phone),
             cancellationToken);
         return Ok(mapper.Map<CustomerRequest>(updateCustomer));
+    }
+    
+    /// <summary>
+    /// Получить список ордеров заказчика с возможностью фильтрации по Id
+    /// </summary>
+    /// <param name="request">Идентификатор заказчика</param>
+    /// <param name="getCustomerOrdersUseCase"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Результат получения списка ордеров заказчик</returns>
+    [HttpGet("GetCustomerOrders")]
+    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetCustomerOrders(
+        [FromQuery] GetCustomerOrdersRequest request,
+        [FromServices] IGetCustomerOrdersUseCase getCustomerOrdersUseCase,
+        CancellationToken cancellationToken)
+    {
+        var orders = await getCustomerOrdersUseCase.Execute(new GetCustomerOrdersQuery(request.CustomerId), cancellationToken);
+
+        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
     }
 }

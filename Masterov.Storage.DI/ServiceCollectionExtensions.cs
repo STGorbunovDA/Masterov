@@ -3,6 +3,7 @@ using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName;
+using Masterov.Domain.Masterov.Customer.GetCustomerOrders;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
@@ -96,6 +97,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetCustomersStorage, GetCustomersStorage>()
             .AddScoped<IGetCustomerByNameStorage, GetCustomerByNameStorage>()
             .AddScoped<IDeleteCustomerStorage, DeleteCustomerStorage>()
+            .AddScoped<IGetCustomerOrdersStorage, GetCustomerOrdersStorage>()
             .AddScoped<IUpdateCustomerStorage, UpdateCustomerStorage>()
             .AddScoped<IGetCustomerByIdStorage, GetCustomerByIdStorage>();
         
