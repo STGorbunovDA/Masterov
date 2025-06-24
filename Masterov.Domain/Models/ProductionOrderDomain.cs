@@ -9,5 +9,7 @@ public class ProductionOrderDomain
     public DateTime? CompletedAt { get; set; }
     public ProductionOrderStatus Status { get; set; }
     public string? Description { get; set; }
-    public List<ProductComponentDomain> Components { get; set; }
+    public CustomerDomain Customer { get; set; }
+    public IEnumerable<ProductComponentDomain> Components { get; set; }
+    public IEnumerable<PaymentDomain> Payments { get; set; }
 }

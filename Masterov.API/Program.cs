@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using AutoMapper;
 using FluentValidation;
 using Masterov.API.Extensions;
@@ -18,7 +19,11 @@ builder.Services.AddCors(policy => policy.AddPolicy("default", opt =>
 }));
 
 builder.Services.AddLogging();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCustomSwagger();

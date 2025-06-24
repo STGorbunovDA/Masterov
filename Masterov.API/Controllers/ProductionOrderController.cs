@@ -31,6 +31,9 @@ namespace Masterov.API.Controllers;
 [Route("api/productionOrder")]
 public class ProductionOrderController(IMapper mapper) : ControllerBase
 {
+    // TODO Получить Payments у заказа
+    // TODO Получить заказчика у ордера
+    // TODO Получить у ордера статус
     // TODO Добавить ордер, Удалить, Обновить (при добавления ордера нужно учитывать какой Customer сделал заказ и автоматически регать ему доступ к сайту и личному кадинету)
     // TODO изменить статус заказа если InProgress тогда должна быть оплата или полностью или частичная
     // TODO если статус Completed заказа тогда должна записаться дата CompletedAt

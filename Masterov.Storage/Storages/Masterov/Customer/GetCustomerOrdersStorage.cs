@@ -13,7 +13,13 @@ public class GetCustomerOrdersStorage (MasterovDbContext dbContext, IMapper mapp
     {
         var customer = await dbContext.Customers
             .Include(c => c.Orders)
-            .ThenInclude(o => o.Components)
+                .ThenInclude(o => o.Components)
+                    .ThenInclude(pc => pc.ProductType)
+            .Include(c => c.Orders)
+                .ThenInclude(o => o.Components)
+                    .ThenInclude(pc => pc.Warehouse)
+            .Include(c => c.Orders)
+                .ThenInclude(o => o.Payments)
             .FirstOrDefaultAsync(c => c.CustomerId == customerId, cancellationToken);
 
         return customer == null ? null : mapper.Map<IEnumerable<ProductionOrderDomain>>(customer.Orders);

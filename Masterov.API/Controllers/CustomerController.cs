@@ -166,10 +166,10 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns>Результат получения списка ордеров заказчик</returns>
     [HttpGet("GetCustomerOrders")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(200, Type = typeof(ProductionOrderRequestNoCustumer[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomerOrders(
         [FromQuery] GetCustomerOrdersRequest request,
         [FromServices] IGetCustomerOrdersUseCase getCustomerOrdersUseCase,
@@ -177,6 +177,6 @@ public class CustomerController(IMapper mapper) : ControllerBase
     {
         var orders = await getCustomerOrdersUseCase.Execute(new GetCustomerOrdersQuery(request.CustomerId), cancellationToken);
 
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
+        return Ok(orders?.Select(mapper.Map<ProductionOrderRequestNoCustumer>) ?? Array.Empty<ProductionOrderRequestNoCustumer>());
     }
 }

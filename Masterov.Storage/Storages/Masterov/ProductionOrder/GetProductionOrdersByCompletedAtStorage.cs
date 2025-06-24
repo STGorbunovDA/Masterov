@@ -18,6 +18,11 @@ public class GetProductionOrdersByCompletedAtStorage (MasterovDbContext dbContex
             .Where(order => order.CompletedAt >= startOfDay && order.CompletedAt < endOfDay)
             .Include(order => order.FinishedProduct)
             .Include(order => order.Components)
+            .ThenInclude(c => c.ProductType)
+            .Include(order => order.Components)
+            .ThenInclude(c => c.Warehouse)
+            .Include(o => o.Customer)
+            .Include(o => o.Payments)
             .ToArrayAsync(cancellationToken);
 
         return mapper.Map<IEnumerable<ProductionOrderDomain>>(orders);
