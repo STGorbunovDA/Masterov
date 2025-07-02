@@ -13,6 +13,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
+using Masterov.Domain.Masterov.Payment.GetPayments;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
@@ -37,6 +38,7 @@ using Masterov.Domain.Masterov.UserFolder.RegisterUser;
 using Masterov.Storage.Extension;
 using Masterov.Storage.Storages.Masterov.Customer;
 using Masterov.Storage.Storages.Masterov.FinishedProduct;
+using Masterov.Storage.Storages.Masterov.Payment;
 using Masterov.Storage.Storages.Masterov.ProductionOrder;
 using Masterov.Storage.Storages.Masterov.ProductType;
 using Masterov.Storage.Storages.UserFolder;
@@ -100,6 +102,11 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetCustomerOrdersStorage, GetCustomerOrdersStorage>()
             .AddScoped<IUpdateCustomerStorage, UpdateCustomerStorage>()
             .AddScoped<IGetCustomerByIdStorage, GetCustomerByIdStorage>();
+        
+        // payment
+        services
+            .AddScoped<IGetPaymentsStorage, GetPaymentsStorage>();
+        
         
         services.AddMemoryCache();
         

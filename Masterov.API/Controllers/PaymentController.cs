@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
+using Masterov.API.Extensions;
 using Masterov.API.Models.Customer;
+using Masterov.API.Models.FinishedProduct;
+using Masterov.API.Models.Payment;
 using Masterov.API.Models.ProductionOrder;
+using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.AddCustomer.Command;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
@@ -14,35 +18,38 @@ using Masterov.Domain.Masterov.Customer.GetCustomerOrders.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer.Command;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
+using Masterov.Domain.Masterov.Payment.GetPayments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
 
 /// <summary>
-/// Заказчик
+/// Платежи
 /// </summary>
 /// <param name="mapper"></param>
 [ApiController]
-[Route("api/customer")]
-public class CustomerController(IMapper mapper) : ControllerBase
+[Route("api/payment")]
+public class PaymentController(IMapper mapper) : ControllerBase
 {
     /// <summary>
-    /// Получить всех заказчиков
+    /// Получить все платежи
     /// </summary>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказчиках</returns>
-    [HttpGet("getCustomers")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
+    /// <returns>Информация о платежах</returns>
+    [HttpGet("gePayments")]
+    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetCustomers(
-        [FromServices] IGetCustomersUseCase useCase,
+    public async Task<IActionResult> GetPayments(
+        [FromServices] IGetPaymentsUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customers = await useCase.Execute(cancellationToken);
-        return Ok(customers.Select(mapper.Map<CustomerRequest>));
+        var payments = await useCase.Execute(cancellationToken);
+        return Ok(payments.Select(mapper.Map<PaymentRequest>));
     }
     
     /// <summary>
