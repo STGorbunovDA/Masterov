@@ -152,7 +152,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
         [FromServices] IGetProductionOrdersByStatusUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var orders = await useCase.Execute(new GetProductionOrdersByStatusQuery(StatusTypeHelper.FromExtension(request.Status)), cancellationToken);
+        var orders = await useCase.Execute(new GetProductionOrdersByStatusQuery(StatusTypeHelper.FromExtensionProductionOrderStatus(request.Status)), cancellationToken);
         return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
     }
     

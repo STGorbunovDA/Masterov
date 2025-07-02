@@ -189,7 +189,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
                 request.FinishedProductId, 
                 request.CreatedAt, 
                 request.CompletedAt,
-                request.Status != null ? StatusTypeHelper.FromExtension(request.Status) : ProductionOrderStatus.Unknown,
+                request.Status != null ? StatusTypeHelper.FromExtensionProductionOrderStatus(request.Status) : ProductionOrderStatus.Unknown,
                 request.Description
             ), 
             cancellationToken);

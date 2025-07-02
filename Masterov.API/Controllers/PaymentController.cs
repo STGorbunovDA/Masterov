@@ -23,6 +23,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPaymentById.Query;
 using Masterov.Domain.Masterov.Payment.GetPayments;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -76,25 +78,23 @@ public class PaymentController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить заказчика по имени
+    /// Получить список платежей по статусу
     /// </summary>
-    /// <param name="customerName">Имя заказчика</param>
+    /// <param name="request">Статус платежа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказчике</returns>
-    [HttpGet("GetCustomerByName/{customerName}")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    /// <returns>Информация о платежах</returns>
+    [HttpGet("getPaymentsByStatus")]
+    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetCustomerByName(
-        [FromRoute] string customerName,
-        [FromServices] IGetCustomerByNameUseCase useCase,
+    public async Task<IActionResult> GetPaymentsByStatus(
+        [FromQuery] GetPaymentsByStatusRequest request,
+        [FromServices] IGetPaymentsByStatusUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productType =
-            await useCase.Execute(new GetCustomerByNameQuery(customerName), cancellationToken);
-        return Ok(mapper.Map<CustomerRequest>(productType));
+        var payments = await useCase.Execute(new GetPaymentsByStatusQuery(StatusTypeHelper.FromExtensionPaymentMethod(request.Status)), cancellationToken);
+        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
     
     /// <summary>
