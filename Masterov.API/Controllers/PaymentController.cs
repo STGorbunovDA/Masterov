@@ -20,6 +20,8 @@ using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer.Command;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
+using Masterov.Domain.Masterov.Payment.GetPaymentById;
+using Masterov.Domain.Masterov.Payment.GetPaymentById.Query;
 using Masterov.Domain.Masterov.Payment.GetPayments;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,24 +55,24 @@ public class PaymentController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить заказчика по Id
+    /// Получить платеж по Id
     /// </summary>
-    /// <param name="customerId">Идентификатор заказчика</param>
+    /// <param name="paymentId">Идентификатор платежа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказчике</returns>
-    [HttpGet("getCustomerById/{customerId:guid}")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    /// <returns>Информация о платеже</returns>
+    [HttpGet("getPaymentById/{paymentId:guid}")]
+    [ProducesResponseType(200, Type = typeof(PaymentRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetCustomerById(
-        [FromRoute] Guid customerId,
-        [FromServices] IGetCustomerByIdUseCase useCase,
+    public async Task<IActionResult> GetPaymentById(
+        [FromRoute] Guid paymentId,
+        [FromServices] IGetPaymentByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer = await useCase.Execute(new GetCustomerByIdQuery(customerId), cancellationToken);
-        return Ok(mapper.Map<CustomerRequest>(customer));
+        var customer = await useCase.Execute(new GetPaymentByIdQuery(paymentId), cancellationToken);
+        return Ok(mapper.Map<PaymentRequest>(customer));
     }
     
     /// <summary>
@@ -114,7 +116,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     {
         var customer = await useCase.Execute(new AddCustomerCommand(request.Name, request.Email, request.Phone), cancellationToken);
     
-        return CreatedAtAction(nameof(GetCustomerById),
+        return CreatedAtAction(nameof(GetPaymentById),
             new { customerId = customer.CustomerId },
             mapper.Map<CustomerRequest>(customer));
     }

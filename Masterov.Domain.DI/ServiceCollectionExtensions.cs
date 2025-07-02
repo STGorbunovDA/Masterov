@@ -12,6 +12,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
+using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPayments;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder;
@@ -96,6 +97,7 @@ public static class ServiceCollectionExtensions
         
         //payment
         services
+            .AddScoped<IGetPaymentByIdUseCase, GetPaymentByIdUseCase>()
             .AddScoped<IGetPaymentsUseCase, GetPaymentsUseCase>();
             
         return services;
