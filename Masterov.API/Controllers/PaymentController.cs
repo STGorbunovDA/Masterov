@@ -23,6 +23,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPaymentById.Query;
 using Masterov.Domain.Masterov.Payment.GetPayments;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus.Query;
 using Microsoft.AspNetCore.Authorization;
@@ -88,6 +90,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPaymentsByStatus(
         [FromQuery] GetPaymentsByStatusRequest request,
         [FromServices] IGetPaymentsByStatusUseCase useCase,
@@ -96,6 +99,28 @@ public class PaymentController(IMapper mapper) : ControllerBase
         var payments = await useCase.Execute(new GetPaymentsByStatusQuery(StatusTypeHelper.FromExtensionPaymentMethod(request.Status)), cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
+    
+    /// <summary>
+    /// Получить платежи по дате оплаты
+    /// </summary>
+    /// <param name="request">Дата оплаты</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о платежах</returns>
+    [HttpGet("getPaymentsByPaymentDate")]
+    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetPaymentsByPaymentDate(
+        [FromQuery] GetPaymentsByPaymentDateRequest request,
+        [FromServices] IGetPaymentsByPaymentDateUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var payments = await useCase.Execute(new GetPaymentsByPaymentDateQuery(request.PaymentDate), cancellationToken);
+        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+    }
+    
     
     /// <summary>
     /// Добавить заказчика
