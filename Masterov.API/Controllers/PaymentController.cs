@@ -20,6 +20,8 @@ using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer.Command;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
+using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId;
+using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPaymentById.Query;
 using Masterov.Domain.Masterov.Payment.GetPayments;
@@ -77,8 +79,8 @@ public class PaymentController(IMapper mapper) : ControllerBase
         [FromServices] IGetPaymentByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer = await useCase.Execute(new GetPaymentByIdQuery(paymentId), cancellationToken);
-        return Ok(mapper.Map<PaymentRequest>(customer));
+        var paymentDomain = await useCase.Execute(new GetPaymentByIdQuery(paymentId), cancellationToken);
+        return Ok(mapper.Map<PaymentRequest>(paymentDomain));
     }
     
     /// <summary>
@@ -134,7 +136,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPaymentsByAmount(
         [FromQuery] GetPaymentsByAmountRequest request,
         [FromServices] IGetPaymentsByAmountUseCase useCase,
@@ -142,6 +144,26 @@ public class PaymentController(IMapper mapper) : ControllerBase
     {
         var payments = await useCase.Execute(new GetPaymentsByAmountQuery(request.Amount), cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+    }
+    
+    /// <summary>
+    /// Получить заказчика по Идентификатору платежа
+    /// </summary>
+    /// <param name="request">Идентификатор платежа</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчике</returns>
+    [HttpGet("getCustomerByPaymentId")]
+    [ProducesResponseType(200, Type = typeof(CustomerNewRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetCustomerByPaymentId(
+        [FromQuery] GetCustomerByPaymentIdRequest request,
+        [FromServices] IGetCustomerByPaymentIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customer = await useCase.Execute(new GetCustomerByPaymentIdQuery(request.PaymentId), cancellationToken);
+        return Ok(mapper.Map<CustomerNewRequest>(customer));
     }
     
     
