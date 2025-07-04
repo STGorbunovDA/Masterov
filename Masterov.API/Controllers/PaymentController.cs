@@ -31,6 +31,8 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus.Query;
+using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
+using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -164,6 +166,26 @@ public class PaymentController(IMapper mapper) : ControllerBase
     {
         var customer = await useCase.Execute(new GetCustomerByPaymentIdQuery(request.PaymentId), cancellationToken);
         return Ok(mapper.Map<CustomerNewRequest>(customer));
+    }
+    
+    /// <summary>
+    /// Получить ордер по Идентификатору платежа
+    /// </summary>
+    /// <param name="request">Идентификатор платежа</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о ордере</returns>
+    [HttpGet("getProductionOrderByPaymentId")]
+    [ProducesResponseType(200, Type = typeof(ProductionOrderRequestNoPayments))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetProductionOrderByPaymentId(
+        [FromQuery] GetProductionOrderByPaymentIdRequest request,
+        [FromServices] IGetProductionOrderByPaymentIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customer = await useCase.Execute(new GetProductionOrderByPaymentIdQuery(request.PaymentId), cancellationToken);
+        return Ok(mapper.Map<ProductionOrderRequestNoPayments>(customer));
     }
     
     

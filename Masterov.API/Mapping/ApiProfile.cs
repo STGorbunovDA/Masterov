@@ -28,10 +28,16 @@ internal class ApiProfile : Profile
             .ForMember(dest => dest.CustomerNoOrders, opt => opt.MapFrom(src => src.Customer))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
 
+        CreateMap<ProductionOrderDomain, ProductionOrderRequestNoPayments>()
+            .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
+            .ForMember(dest => dest.CustomerNoOrders, opt => opt.MapFrom(src => src.Customer))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
+        
         CreateMap<ProductionOrderDomain, ProductionOrderRequestNoCustumer>()
             .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
             .ForMember(dest => dest.PaymentsNoCustomer, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
+
         
         CreateMap<ProductionOrderDomain, ProductionOrderNoCustomerNoComponentsRequest>()
             .ForMember(dest => dest.PaymentsNoCustomer, opt => opt.MapFrom(src => src.Payments))
