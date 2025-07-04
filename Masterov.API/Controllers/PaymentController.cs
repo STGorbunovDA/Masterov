@@ -23,6 +23,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPaymentById.Query;
 using Masterov.Domain.Masterov.Payment.GetPayments;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
@@ -49,7 +51,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [HttpGet("gePayments")]
     [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
     [ProducesResponseType(410)]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPayments(
         [FromServices] IGetPaymentsUseCase useCase,
         CancellationToken cancellationToken)
@@ -111,13 +113,34 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPaymentsByPaymentDate(
         [FromQuery] GetPaymentsByPaymentDateRequest request,
         [FromServices] IGetPaymentsByPaymentDateUseCase useCase,
         CancellationToken cancellationToken)
     {
         var payments = await useCase.Execute(new GetPaymentsByPaymentDateQuery(request.PaymentDate), cancellationToken);
+        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+    }
+    
+    /// <summary>
+    /// Получить платежи по сумме оплаты
+    /// </summary>
+    /// <param name="request">Сумма оплаты</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о платежах</returns>
+    [HttpGet("getPaymentsByAmount")]
+    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetPaymentsByAmount(
+        [FromQuery] GetPaymentsByAmountRequest request,
+        [FromServices] IGetPaymentsByAmountUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var payments = await useCase.Execute(new GetPaymentsByAmountQuery(request.Amount), cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
     

@@ -14,6 +14,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPayments;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
@@ -91,6 +92,7 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<IAddCustomerUseCase, AddCustomerUseCase>()
             .AddScoped<IGetCustomersUseCase, GetCustomersUseCase>()
+            .AddScoped<IGetCustomersUseCase, GetCustomersUseCase>()
             .AddScoped<IGetCustomerByNameUseCase, GetCustomerByNameUseCase>()
             .AddScoped<IGetCustomerOrdersUseCase, GetCustomerOrdersUseCase>()
             .AddScoped<IDeleteCustomerUseCase, DeleteCustomerUseCase>()
@@ -100,6 +102,7 @@ public static class ServiceCollectionExtensions
         //payment
         services
             .AddScoped<IGetPaymentByIdUseCase, GetPaymentByIdUseCase>()
+            .AddScoped<IGetPaymentsByAmountUseCase, GetPaymentsByAmountUseCase>()
             .AddScoped<IGetPaymentsByPaymentDateUseCase, GetPaymentsByPaymentDateUseCase>()
             .AddScoped<IGetPaymentsByStatusUseCase, GetPaymentsByStatusUseCase>()
             .AddScoped<IGetPaymentsUseCase, GetPaymentsUseCase>();

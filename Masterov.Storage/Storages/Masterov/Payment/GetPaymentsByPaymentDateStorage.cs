@@ -13,11 +13,11 @@ public class GetPaymentsByPaymentDateStorage (MasterovDbContext dbContext, IMapp
         var startOfDay = paymentDate.Date;
         var endOfDay = startOfDay.AddDays(1);
 
-        var orders = await dbContext.OrderPayments
+        var payments = await dbContext.OrderPayments
             .Where(payDate => payDate.PaymentDate >= startOfDay && payDate.PaymentDate < endOfDay)
             .Include(o => o.Customer)
             .ToArrayAsync(cancellationToken);
 
-        return mapper.Map<IEnumerable<PaymentDomain>>(orders);
+        return mapper.Map<IEnumerable<PaymentDomain>>(payments);
     }
 }
