@@ -12,6 +12,7 @@ public class GetCustomerOrdersStorage (MasterovDbContext dbContext, IMapper mapp
         CancellationToken cancellationToken)
     {
         var customer = await dbContext.Customers
+            .AsNoTracking() 
             .Include(c => c.Orders)
                 .ThenInclude(o => o.Components)
                     .ThenInclude(pc => pc.ProductType)

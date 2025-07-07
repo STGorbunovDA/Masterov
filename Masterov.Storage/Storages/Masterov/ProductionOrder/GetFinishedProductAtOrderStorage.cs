@@ -17,6 +17,7 @@ internal class GetFinishedProductAtOrderStorage(MasterovDbContext dbContext, IMe
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
 
                 return await dbContext.ProductionOrders
+                    .AsNoTracking() 
                     .Where(o => o.OrderId == orderId)
                     .Select(o => o.FinishedProduct)
                     .ProjectTo<FinishedProductDomain>(mapper.ConfigurationProvider)

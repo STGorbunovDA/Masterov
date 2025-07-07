@@ -11,6 +11,7 @@ public class GetProductionOrdersByStatusStorage (MasterovDbContext dbContext, IM
     public async Task<IEnumerable<ProductionOrderDomain>?> GetProductionOrdersByStatus(ProductionOrderStatus status, CancellationToken cancellationToken)
     {
         var orders = await dbContext.ProductionOrders
+            .AsNoTracking() 
             .Where(order => order.Status == status)
             .Include(order => order.FinishedProduct)
             .Include(order => order.Components)

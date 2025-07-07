@@ -5,10 +5,14 @@ using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.AddCustomer.Command;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer.Command;
+using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
+using Masterov.Domain.Masterov.Customer.GetCustomerByEmail.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Customer.GetCustomerById.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName.Query;
+using Masterov.Domain.Masterov.Customer.GetCustomerByPhone;
+using Masterov.Domain.Masterov.Customer.GetCustomerByPhone.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomerOrders;
 using Masterov.Domain.Masterov.Customer.GetCustomerOrders.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
@@ -83,9 +87,51 @@ public class CustomerController(IMapper mapper) : ControllerBase
         [FromServices] IGetCustomerByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productType =
+        var customer =
             await useCase.Execute(new GetCustomerByNameQuery(customerName), cancellationToken);
-        return Ok(mapper.Map<CustomerRequest>(productType));
+        return Ok(mapper.Map<CustomerRequest>(customer));
+    }
+    
+    /// <summary>
+    /// Получить заказчика по телефону
+    /// </summary>
+    /// <param name="customerPhone">Телефон заказчика</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчике</returns>
+    [HttpGet("GetCustomerByPhone/{customerPhone}")]
+    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetCustomerByPhone(
+        [FromRoute] string customerPhone,
+        [FromServices] IGetCustomerByPhoneUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customer = await useCase.Execute(new GetCustomerByPhoneQuery(customerPhone), cancellationToken);
+        return Ok(mapper.Map<CustomerRequest>(customer));
+    }
+    
+    /// <summary>
+    /// Получить заказчика по почте
+    /// </summary>
+    /// <param name="customerEmail">Почта заказчика</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчике</returns>
+    [HttpGet("GetCustomerByEmail/{customerEmail}")]
+    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetCustomerByEmail(
+        [FromRoute] string customerEmail,
+        [FromServices] IGetCustomerByEmailUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customer = await useCase.Execute(new GetCustomerByEmailQuery(customerEmail), cancellationToken);
+        return Ok(mapper.Map<CustomerRequest>(customer));
     }
     
     /// <summary>

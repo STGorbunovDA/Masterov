@@ -16,6 +16,7 @@ internal class GetProductTypeByIdStorage(MasterovDbContext dbContext, IMemoryCac
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.ProductTypes
+                    .AsNoTracking() 
                     .Where(f => f.ProductTypeId == productTypeId)
                     .ProjectTo<ProductTypeDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);

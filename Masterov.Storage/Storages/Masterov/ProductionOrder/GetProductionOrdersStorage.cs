@@ -16,6 +16,7 @@ internal class GetProductionOrdersStorage (MasterovDbContext dbContext, IMemoryC
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.ProductionOrders
+                    .AsNoTracking() 
                     .ProjectTo<ProductionOrderDomain>(mapper.ConfigurationProvider)
                     .ToArrayAsync(cancellationToken);
             }))!;

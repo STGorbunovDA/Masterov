@@ -16,6 +16,7 @@ internal class GetCustomerByNameStorage(MasterovDbContext dbContext, IMemoryCach
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.Customers
+                    .AsNoTracking() 
                     .Where(f => f.Name.ToLower() == customerName.ToLower().Trim())
                     .ProjectTo<CustomerDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);

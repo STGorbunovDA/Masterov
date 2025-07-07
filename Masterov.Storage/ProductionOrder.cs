@@ -32,10 +32,5 @@ public class ProductionOrder
     public Customer Customer { get; set; }
 
     public ICollection<OrderPayment> Payments { get; set; } = new List<OrderPayment>();
-
-    [NotMapped]
-    public decimal TotalPaid => Payments.Sum(p => p.Amount);
-
-    [NotMapped]
-    public bool IsPaidEnough => TotalPaid >= FinishedProduct.Price;
+    
 }

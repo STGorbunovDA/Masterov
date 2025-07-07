@@ -26,6 +26,7 @@ internal class ApiProfile : Profile
             .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
             .ForMember(dest => dest.PaymentsNoCustomer, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.CustomerNoOrders, opt => opt.MapFrom(src => src.Customer))
+            .ForMember(dest => dest.FullPriceFinishedProduct, opt => opt.MapFrom(src => src.FullPriceFinishedProduct))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
 
         CreateMap<ProductionOrderDomain, ProductionOrderRequestNoPayments>()
@@ -58,12 +59,17 @@ internal class ApiProfile : Profile
         CreateMap<CustomerDomain, CustomerNewRequest>()
             .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders)); // Автоматически применит маппинг ProductionOrder
         
+        CreateMap<PaymentDomain, PaymentsNewCustomerRequest>()
+            .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.Name))
+            .ForMember(dest => dest.CustomerEmail, opt => opt.MapFrom(src => src.Customer.Email))
+            .ForMember(dest => dest.CustomerPhone, opt => opt.MapFrom(src => src.Customer.Phone));
+
+        
         // Остальные маппинги
         CreateMap<SupplierDomain, SupplierRequest>();
         CreateMap<SupplyDomain, SupplyRequest>();
         CreateMap<UserDomain, UserRequest>();
         
-        CreateMap<PaymentDomain, PaymentsNoCustomerRequest>();
         CreateMap<CustomerDomain, CustomerNoOrdersRequest>();
     }
 }

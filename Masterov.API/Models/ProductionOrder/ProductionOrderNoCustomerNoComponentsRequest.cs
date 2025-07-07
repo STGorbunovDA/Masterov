@@ -10,5 +10,5 @@ public class ProductionOrderNoCustomerNoComponentsRequest
     public DateTime? CompletedAt { get; set; }
     public ProductionOrderStatus Status { get; set; }
     public string? Description { get; set; }
-    public List<PaymentsNoCustomerRequest> PaymentsNoCustomer { get; set; }
+    public List<PaymentsNewCustomerRequest> PaymentsNoCustomer { get; set; }
 }

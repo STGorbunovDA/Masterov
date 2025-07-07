@@ -17,6 +17,7 @@ internal class GetProductComponentAtOrderStorage(MasterovDbContext dbContext, IM
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
 
                 return await dbContext.ProductComponents
+                    .AsNoTracking() 
                     .Where(pc => pc.OrderId == orderId)
                     .ProjectTo<ProductComponentDomain>(mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken);

@@ -20,6 +20,8 @@ using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer.Command;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
+using Masterov.Domain.Masterov.Payment.AddPayment;
+using Masterov.Domain.Masterov.Payment.AddPayment.Command;
 using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
@@ -27,12 +29,15 @@ using Masterov.Domain.Masterov.Payment.GetPaymentById.Query;
 using Masterov.Domain.Masterov.Payment.GetPayments;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount.Query;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus.Query;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId.Query;
+using Masterov.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -63,7 +68,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         var payments = await useCase.Execute(cancellationToken);
         return Ok(payments.Select(mapper.Map<PaymentRequest>));
     }
-    
+
     /// <summary>
     /// Получить платеж по Id
     /// </summary>
@@ -84,7 +89,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         var paymentDomain = await useCase.Execute(new GetPaymentByIdQuery(paymentId), cancellationToken);
         return Ok(mapper.Map<PaymentRequest>(paymentDomain));
     }
-    
+
     /// <summary>
     /// Получить список платежей по статусу
     /// </summary>
@@ -102,10 +107,13 @@ public class PaymentController(IMapper mapper) : ControllerBase
         [FromServices] IGetPaymentsByStatusUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var payments = await useCase.Execute(new GetPaymentsByStatusQuery(StatusTypeHelper.FromExtensionPaymentMethod(request.Status)), cancellationToken);
+        var payments =
+            await useCase.Execute(
+                new GetPaymentsByStatusQuery(StatusTypeHelper.FromExtensionPaymentMethod(request.Status)),
+                cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
-    
+
     /// <summary>
     /// Получить платежи по дате оплаты
     /// </summary>
@@ -126,7 +134,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         var payments = await useCase.Execute(new GetPaymentsByPaymentDateQuery(request.PaymentDate), cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
-    
+
     /// <summary>
     /// Получить платежи по сумме оплаты
     /// </summary>
@@ -147,7 +155,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         var payments = await useCase.Execute(new GetPaymentsByAmountQuery(request.Amount), cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
-    
+
     /// <summary>
     /// Получить заказчика по Идентификатору платежа
     /// </summary>
@@ -167,7 +175,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         var customer = await useCase.Execute(new GetCustomerByPaymentIdQuery(request.PaymentId), cancellationToken);
         return Ok(mapper.Map<CustomerNewRequest>(customer));
     }
-    
+
     /// <summary>
     /// Получить ордер по Идентификатору платежа
     /// </summary>
@@ -184,35 +192,59 @@ public class PaymentController(IMapper mapper) : ControllerBase
         [FromServices] IGetProductionOrderByPaymentIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer = await useCase.Execute(new GetProductionOrderByPaymentIdQuery(request.PaymentId), cancellationToken);
-        return Ok(mapper.Map<ProductionOrderRequestNoPayments>(customer));
+        var productOrderDomain =
+            await useCase.Execute(new GetProductionOrderByPaymentIdQuery(request.PaymentId), cancellationToken);
+        return Ok(mapper.Map<ProductionOrderRequestNoPayments>(productOrderDomain));
     }
     
-    
     /// <summary>
-    /// Добавить заказчика
+    /// Получить платежи по Идентификатору заказа
+    /// </summary>
+    /// <param name="request">Идентификатор заказа</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о ордере</returns>
+    [HttpGet("getPaymentsByOrderId")]
+    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetPaymentsByOrderId(
+        [FromQuery] GetPaymentsByOrderIdRequest request,
+        [FromServices] IGetPaymentsByOrderIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var payments =
+            await useCase.Execute(new GetPaymentsByOrderIdQuery(request.OrderId), cancellationToken);
+        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+    }
+    
+
+    /// <summary>
+    /// Добавить платеж
     /// </summary>
     /// <param name="request">Данные о заказчике</param>
     /// <param name="useCase">Сценарий добавления заказчика</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
-    [HttpPost("addCustomer")]
-    [ProducesResponseType(201, Type = typeof(CustomerRequest))]
+    [HttpPost("addPayment")]
+    [ProducesResponseType(201, Type = typeof(PaymentRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> AddCustomer(
-        [FromForm] AddCustomerRequest request,
-        [FromServices] IAddCustomerUseCase useCase,
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> AddPayment(
+        [FromForm] AddPaymentRequest request,
+        [FromServices] IAddPaymentUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer = await useCase.Execute(new AddCustomerCommand(request.Name, request.Email, request.Phone), cancellationToken);
-    
+        var payment = await useCase.Execute(
+            new AddPaymentCommand(request.OrderId, StatusTypeHelper.FromExtensionPaymentMethod(request.MethodPayment),
+                request.Amount, request.NameCustomer, request.EmailCustomer, request.PhoneCustomer), cancellationToken);
+
         return CreatedAtAction(nameof(GetPaymentById),
-            new { customerId = customer.CustomerId },
-            mapper.Map<CustomerRequest>(customer));
+            new { paymentId = payment.PaymentId },
+            mapper.Map<PaymentRequest>(payment));
     }
-    
+
     /// <summary>
     /// Удаление заказчика по Id.
     /// </summary>
@@ -230,7 +262,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         await useCase.Execute(new DeleteCustomerCommand(customerId), cancellationToken);
         return NoContent();
     }
-    
+
     /// <summary>
     /// Обновить заказчика по Id
     /// </summary>
@@ -253,7 +285,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
             cancellationToken);
         return Ok(mapper.Map<CustomerRequest>(updateCustomer));
     }
-    
+
     /// <summary>
     /// Получить список ордеров заказчика с возможностью фильтрации по Id
     /// </summary>
@@ -271,8 +303,10 @@ public class PaymentController(IMapper mapper) : ControllerBase
         [FromServices] IGetCustomerOrdersUseCase getCustomerOrdersUseCase,
         CancellationToken cancellationToken)
     {
-        var orders = await getCustomerOrdersUseCase.Execute(new GetCustomerOrdersQuery(request.CustomerId), cancellationToken);
+        var orders =
+            await getCustomerOrdersUseCase.Execute(new GetCustomerOrdersQuery(request.CustomerId), cancellationToken);
 
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequestNoCustumer>) ?? Array.Empty<ProductionOrderRequestNoCustumer>());
+        return Ok(orders?.Select(mapper.Map<ProductionOrderRequestNoCustumer>) ??
+                  Array.Empty<ProductionOrderRequestNoCustumer>());
     }
 }

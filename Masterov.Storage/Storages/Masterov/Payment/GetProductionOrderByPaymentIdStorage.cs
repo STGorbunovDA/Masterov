@@ -17,6 +17,7 @@ internal class GetProductionOrderByPaymentIdStorage(MasterovDbContext dbContext,
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
 
                 return await dbContext.OrderPayments
+                    .AsNoTracking() 
                     .Where(o => o.PaymentId == paymentId)
                     .Select(o => o.Order)
                     .ProjectTo<ProductionOrderDomain>(mapper.ConfigurationProvider)

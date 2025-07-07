@@ -1,8 +1,10 @@
 ﻿using System.Reflection;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
+using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName;
+using Masterov.Domain.Masterov.Customer.GetCustomerByPhone;
 using Masterov.Domain.Masterov.Customer.GetCustomerOrders;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer;
@@ -13,10 +15,12 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
+using Masterov.Domain.Masterov.Payment.AddPayment;
 using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPayments;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
@@ -28,6 +32,7 @@ using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus;
+using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.DeleteProductType;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
@@ -78,6 +83,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductionOrdersByStatusStorage, GetProductionOrdersByStatusStorage>()
             .AddScoped<IGetFinishedProductAtOrderStorage, GetFinishedProductAtOrderStorage>()
             .AddScoped<IGetProductComponentAtOrderStorage, GetProductComponentAtOrderStorage>()
+            .AddScoped<IUpdateProductionOrderStatusStorage, UpdateProductionOrderStatusStorage>()
             .AddScoped<IGetProductionOrderByIdStorage, GetProductionOrderByIdStorage>();
         
         //ProductType
@@ -105,6 +111,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetCustomersStorage, GetCustomersStorage>()
             .AddScoped<IGetCustomerByNameStorage, GetCustomerByNameStorage>()
             .AddScoped<IDeleteCustomerStorage, DeleteCustomerStorage>()
+            .AddScoped<IGetCustomerByPhoneStorage, GetCustomerByPhoneStorage>()
+            .AddScoped<IGetCustomerByEmailStorage, GetCustomerByEmailStorage>()
             .AddScoped<IGetCustomerOrdersStorage, GetCustomerOrdersStorage>()
             .AddScoped<IUpdateCustomerStorage, UpdateCustomerStorage>()
             .AddScoped<IGetCustomerByIdStorage, GetCustomerByIdStorage>();
@@ -114,8 +122,11 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetPaymentByIdStorage, GetPaymentByIdStorage>()
             .AddScoped<IGetPaymentsByAmountStorage, GetPaymentsByAmountStorage>()
             .AddScoped<IGetCustomerByPaymentIdStorage, GetCustomerByPaymentIdStorage>()
+            .AddScoped<IAddPaymentStorage, AddPaymentStorage>()
             .AddScoped<IGetProductionOrderByPaymentIdStorage, GetProductionOrderByPaymentIdStorage>()
             .AddScoped<IGetPaymentsByPaymentDateStorage, GetPaymentsByPaymentDateStorage>()
+            .AddScoped<IGetPaymentsByOrderIdStorage, GetPaymentsByOrderIdStorage>()
+            .AddScoped<IAddPaymentStorage, AddPaymentStorage>()
             .AddScoped<IGetPaymentsByStatusStorage, GetPaymentsByStatusStorage>()
             .AddScoped<IGetPaymentsStorage, GetPaymentsStorage>();
         

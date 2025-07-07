@@ -17,6 +17,7 @@ internal class GetProductTypeByNameStorage(MasterovDbContext dbContext, IMemoryC
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.ProductTypes
+                    .AsNoTracking() 
                     .Where(f => f.Name.ToLower() == productTypeName.ToLower().Trim())
                     .ProjectTo<ProductTypeDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);

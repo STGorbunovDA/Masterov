@@ -3,8 +3,9 @@
 public enum ProductionOrderStatus
 {
     Draft = 0,     // Черновик
-    InProgress = 1, // В работе
-    Completed = 2,  // Готово
-    Canceled = 3,    // Отменен
-    Unknown = 4, // 
+    Partial = 1, // В заявке (частичная оплата)
+    InProgress = 2, // В работе
+    Completed = 3,  // Готово
+    Canceled = 4,    // Отменен
+    Unknown = 5, // 
 }

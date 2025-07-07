@@ -12,4 +12,5 @@ public class ProductionOrderDomain
     public CustomerDomain Customer { get; set; }
     public IEnumerable<ProductComponentDomain> Components { get; set; }
     public IEnumerable<PaymentDomain> Payments { get; set; }
+    public decimal FullPriceFinishedProduct { get; set; }
 }

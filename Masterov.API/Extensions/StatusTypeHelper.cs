@@ -7,6 +7,7 @@ public static class StatusTypeHelper
     public static ProductionOrderStatus FromExtensionProductionOrderStatus(string extension) => extension.ToLower() switch
     {
         "draft" => ProductionOrderStatus.Draft,
+        "partial" => ProductionOrderStatus.Partial,
         "inprogress" => ProductionOrderStatus.InProgress,
         "completed" => ProductionOrderStatus.Completed,
         "canceled" => ProductionOrderStatus.Canceled,

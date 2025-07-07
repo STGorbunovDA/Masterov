@@ -16,6 +16,7 @@ internal class GetCustomersStorage (MasterovDbContext dbContext, IMemoryCache me
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.Customers
+                    .AsNoTracking() 
                     .ProjectTo<CustomerDomain>(mapper.ConfigurationProvider)
                     .ToArrayAsync(cancellationToken);
             }))!;

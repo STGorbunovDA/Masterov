@@ -46,6 +46,7 @@ public class GetFinishedProductOrdersStorage (MasterovDbContext dbContext, IMapp
         }
 
         var orders = await query
+            .AsNoTracking() 
             .Include(o => o.Components)
             .ThenInclude(c => c.ProductType)
             .Include(o => o.Components)

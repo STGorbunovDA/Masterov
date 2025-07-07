@@ -13,5 +13,6 @@ public class ProductionOrderRequest
     public string? Description { get; set; }
     public CustomerNoOrdersRequest CustomerNoOrders { get; set; }
     public List<ProductComponentRequest> Components { get; set; }
-    public List<PaymentsNoCustomerRequest> PaymentsNoCustomer { get; set; }
+    public List<PaymentsNewCustomerRequest> PaymentsNoCustomer { get; set; }
+    public decimal FullPriceFinishedProduct { get; set; }
 }

@@ -16,6 +16,7 @@ internal class GetUserByLoginStorage (MasterovDbContext dbContext, IMemoryCache 
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.Users
+                    .AsNoTracking() 
                     .Where(f => f.Login == login)
                     .ProjectTo<UserDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);

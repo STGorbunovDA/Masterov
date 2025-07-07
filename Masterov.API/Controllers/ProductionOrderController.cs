@@ -18,6 +18,8 @@ using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus.Query;
+using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus;
+using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus.Command;
 using Masterov.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -194,5 +196,30 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     {
         var productionComponents = await useCase.Execute(new GetProductComponentAtOrderQuery(request.OrderId), cancellationToken);
         return Ok(mapper.Map<IEnumerable<ProductComponentRequest>>(productionComponents));
+    }
+    
+    /// <summary>
+    /// Обновить у платежа статус
+    /// </summary>
+    /// <param name="request">Данные для обновления статуса заказа</param>
+    /// <param name="useCase">Сценарий обновления статуса заказа</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат выполнения</returns>
+    [HttpPost("updateProductionOrderStatus")]
+    [ProducesResponseType(201, Type = typeof(ProductionOrderRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> UpdateProductionOrderStatus(
+        [FromForm] UpdateProductionOrderStatusRequest request,
+        [FromServices] IUpdateProductionOrderStatusUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var productionOrder = await useCase.Execute(
+            new UpdateProductionOrderStatusCommand(request.OrderId, StatusTypeHelper.FromExtensionProductionOrderStatus(request.Status)), cancellationToken);
+
+        return CreatedAtAction(nameof(GetProductionOrderById),
+            new { orderId = productionOrder.OrderId},
+            mapper.Map<ProductionOrderRequest>(productionOrder));
     }
 }

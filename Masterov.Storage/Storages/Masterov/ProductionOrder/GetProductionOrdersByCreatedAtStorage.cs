@@ -14,6 +14,7 @@ public class GetProductionOrdersByCreatedAtStorage (MasterovDbContext dbContext,
         var endOfDay = startOfDay.AddDays(1);
 
         var orders = await dbContext.ProductionOrders
+            .AsNoTracking() 
             .Where(order => order.CreatedAt >= startOfDay && order.CreatedAt < endOfDay)
             .Include(order => order.FinishedProduct)
             .Include(order => order.Components)

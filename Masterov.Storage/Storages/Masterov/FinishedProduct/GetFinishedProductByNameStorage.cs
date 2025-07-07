@@ -16,6 +16,7 @@ internal class GetFinishedProductByNameStorage(MasterovDbContext dbContext, IMem
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.FinishedProducts
+                    .AsNoTracking() 
                     .Where(f => f.Name.ToLower() == finishedProductName.ToLower().Trim())
                     .ProjectTo<FinishedProductDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);

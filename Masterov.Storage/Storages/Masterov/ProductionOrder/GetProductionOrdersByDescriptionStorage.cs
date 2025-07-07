@@ -10,6 +10,7 @@ public class GetProductionOrdersByDescriptionStorage (MasterovDbContext dbContex
     public async Task<IEnumerable<ProductionOrderDomain>?> GetProductionOrdersByDescription(string description, CancellationToken cancellationToken)
     {
         var orders = await dbContext.ProductionOrders
+            .AsNoTracking() 
             .Where(order => order.Description != null && order.Description.Contains(description))
             .Include(order => order.FinishedProduct)
             .Include(order => order.Components)

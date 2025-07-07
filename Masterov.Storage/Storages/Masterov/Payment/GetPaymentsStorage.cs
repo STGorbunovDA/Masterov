@@ -16,6 +16,7 @@ internal class GetPaymentsStorage (MasterovDbContext dbContext, IMemoryCache mem
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.OrderPayments
+                    .AsNoTracking() 
                     .ProjectTo<PaymentDomain>(mapper.ConfigurationProvider)
                     .ToArrayAsync(cancellationToken);
             }))!;

@@ -16,6 +16,7 @@ internal class GetProductsTypeStorage (MasterovDbContext dbContext, IMemoryCache
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.ProductTypes
+                    .AsNoTracking() 
                     .ProjectTo<ProductTypeDomain>(mapper.ConfigurationProvider)
                     .ToArrayAsync(cancellationToken);
             }))!;

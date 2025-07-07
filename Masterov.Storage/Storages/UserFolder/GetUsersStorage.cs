@@ -18,6 +18,7 @@ internal class GetUsersStorage(MasterovDbContext dbContext, IMemoryCache memoryC
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.Users
+                    .AsNoTracking() 
                     .Where(user => user.Role != UserRole.SuperAdmin) 
                     .ProjectTo<UserDomain>(mapper.ConfigurationProvider)
                     .ToArrayAsync(cancellationToken);

@@ -16,6 +16,7 @@ internal class GetCustomerByIdStorage(MasterovDbContext dbContext, IMemoryCache 
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.Customers
+                    .AsNoTracking() 
                     .Where(f => f.CustomerId == customerId)
                     .ProjectTo<CustomerDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);

@@ -16,6 +16,7 @@ internal class GetFinishedProductsStorage (MasterovDbContext dbContext, IMemoryC
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.FinishedProducts
+                    .AsNoTracking() 
                     .ProjectTo<FinishedProductDomain>(mapper.ConfigurationProvider)
                     .ToArrayAsync(cancellationToken);
             }))!;

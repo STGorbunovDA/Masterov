@@ -15,6 +15,7 @@ public class GetProductionOrdersByCompletedAtStorage (MasterovDbContext dbContex
         var endOfDay = startOfDay.AddDays(1);
 
         var orders = await dbContext.ProductionOrders
+            .AsNoTracking() 
             .Where(order => order.CompletedAt >= startOfDay && order.CompletedAt < endOfDay)
             .Include(order => order.FinishedProduct)
             .Include(order => order.Components)
