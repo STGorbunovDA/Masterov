@@ -71,7 +71,7 @@ public class AddPaymentUseCase(
             customer = await getCustomerByNameStorage.GetCustomerByName(cmd.NameCustomer, ct);
 
         if (customer is null)
-            customer = await addCustomerStorage.AddCustomer(cmd.NameCustomer, cmd.EmailCustomer, cmd.PhoneCustomer, ct, orderId);
+            customer = await addCustomerStorage.AddCustomer(cmd.NameCustomer, cmd.EmailCustomer, cmd.PhoneCustomer, ct);
 
         return customer ?? throw new InvalidOperationException("Не удалось создать или найти заказчика для платежа");
     }

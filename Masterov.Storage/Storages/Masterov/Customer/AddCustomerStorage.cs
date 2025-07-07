@@ -20,22 +20,8 @@ internal class AddCustomerStorage(MasterovDbContext dbContext, IGuidFactory guid
             CustomerId = customerId,
             Name = name,
             Email = email,
-            Phone = phone,
-            Orders = new List<Storage.ProductionOrder>()
+            Phone = phone
         };
-
-        // Если указан orderId, связываем существующий заказ с клиентом
-        if (orderId.HasValue)
-        {
-            var existingOrder = await dbContext.ProductionOrders
-                .FirstOrDefaultAsync(o => o.OrderId == orderId.Value, cancellationToken);
-
-            if (existingOrder != null)
-            {
-                existingOrder.Customer = customer;
-                customer.Orders.Add(existingOrder);
-            }
-        }
 
         await dbContext.Customers.AddAsync(customer, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
