@@ -1,27 +1,12 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models.Customer;
-using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.Payment;
 using Masterov.API.Models.ProductionOrder;
-using Masterov.Domain.Extension;
-using Masterov.Domain.Masterov.Customer.AddCustomer;
-using Masterov.Domain.Masterov.Customer.AddCustomer.Command;
-using Masterov.Domain.Masterov.Customer.DeleteCustomer;
-using Masterov.Domain.Masterov.Customer.DeleteCustomer.Command;
-using Masterov.Domain.Masterov.Customer.GetCustomerById;
-using Masterov.Domain.Masterov.Customer.GetCustomerById.Query;
-using Masterov.Domain.Masterov.Customer.GetCustomerByName;
-using Masterov.Domain.Masterov.Customer.GetCustomerByName.Query;
-using Masterov.Domain.Masterov.Customer.GetCustomerOrders;
-using Masterov.Domain.Masterov.Customer.GetCustomerOrders.Query;
-using Masterov.Domain.Masterov.Customer.GetCustomers;
-using Masterov.Domain.Masterov.Customer.UpdateCustomer;
-using Masterov.Domain.Masterov.Customer.UpdateCustomer.Command;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
 using Masterov.Domain.Masterov.Payment.AddPayment;
 using Masterov.Domain.Masterov.Payment.AddPayment.Command;
+using Masterov.Domain.Masterov.Payment.DeletePayment;
+using Masterov.Domain.Masterov.Payment.DeletePayment.Command;
 using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
@@ -37,7 +22,8 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus.Query;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId.Query;
-using Masterov.Domain.Models;
+using Masterov.Domain.Masterov.Payment.UpdatePayment;
+using Masterov.Domain.Masterov.Payment.UpdatePayment.Command;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -109,7 +95,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     {
         var payments =
             await useCase.Execute(
-                new GetPaymentsByStatusQuery(StatusTypeHelper.FromExtensionPaymentMethod(request.Status)),
+                new GetPaymentsByStatusQuery(EnumTypeHelper.FromExtensionPaymentMethod(request.Status)),
                 cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
@@ -237,7 +223,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var payment = await useCase.Execute(
-            new AddPaymentCommand(request.OrderId, StatusTypeHelper.FromExtensionPaymentMethod(request.MethodPayment),
+            new AddPaymentCommand(request.OrderId, EnumTypeHelper.FromExtensionPaymentMethod(request.MethodPayment),
                 request.Amount, request.NameCustomer, request.EmailCustomer, request.PhoneCustomer), cancellationToken);
 
         return CreatedAtAction(nameof(GetPaymentById),
@@ -246,67 +232,44 @@ public class PaymentController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Удаление заказчика по Id.
+    /// Удаление платежа по Id.
     /// </summary>
-    /// <param name="customerId">Идентификатор заказчика.</param>
-    /// <param name="useCase">Сценарий удаления заказчика.</param>
+    /// <param name="paymentId">Идентификатор платжа.</param>
+    /// <param name="useCase">Сценарий удаления платежа.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Ответ с кодом 204, если файл был успешно удален.</returns>
-    [HttpDelete("deleteCustomer")]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> DeleteCustomer(
-        Guid customerId,
-        [FromServices] IDeleteCustomerUseCase useCase,
+    [HttpDelete("deletePayment")]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> DeletePayment(
+        Guid paymentId,
+        [FromServices] IDeletePaymentUseCase useCase,
         CancellationToken cancellationToken)
     {
-        await useCase.Execute(new DeleteCustomerCommand(customerId), cancellationToken);
+        await useCase.Execute(new DeletePaymentCommand(paymentId), cancellationToken);
         return NoContent();
     }
 
     /// <summary>
-    /// Обновить заказчика по Id
+    /// Обновить платеж
     /// </summary>
-    /// <param name="request">Данные для обновления заказчика</param>
+    /// <param name="request">Данные для обновления платежа</param>
     /// <param name="useCase">Сценарий обновления заказчика</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Результат обновления заказчика</returns>
-    [HttpPatch("updateCustomer")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    /// <returns>Результат обновления платежа</returns>
+    [HttpPatch("updatePayment")]
+    [ProducesResponseType(200, Type = typeof(PaymentRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> UpdateCustomer(
-        [FromForm] UpdateCustomerRequest request,
-        [FromServices] IUpdateCustomerUseCase useCase,
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> UpdatePayment(
+        [FromForm] UpdatePaymentRequest request,
+        [FromServices] IUpdatePaymentUseCase useCase,
         CancellationToken cancellationToken)
     {
         var updateCustomer = await useCase.Execute(
-            new UpdateCustomerCommand(request.CustomerId, request.Name, request.Email, request.Phone),
-            cancellationToken);
-        return Ok(mapper.Map<CustomerRequest>(updateCustomer));
-    }
-
-    /// <summary>
-    /// Получить список ордеров заказчика с возможностью фильтрации по Id
-    /// </summary>
-    /// <param name="request">Идентификатор заказчика</param>
-    /// <param name="getCustomerOrdersUseCase"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>Результат получения списка ордеров заказчик</returns>
-    [HttpGet("GetCustomerOrders")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequestNoCustumer[]))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetCustomerOrders(
-        [FromQuery] GetCustomerOrdersRequest request,
-        [FromServices] IGetCustomerOrdersUseCase getCustomerOrdersUseCase,
-        CancellationToken cancellationToken)
-    {
-        var orders =
-            await getCustomerOrdersUseCase.Execute(new GetCustomerOrdersQuery(request.CustomerId), cancellationToken);
-
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequestNoCustumer>) ??
-                  Array.Empty<ProductionOrderRequestNoCustumer>());
+            new UpdatePaymentCommand(request.PaymentId, request.OrderId, request.CustomerId, 
+                EnumTypeHelper.FromExtensionPaymentMethod(request.MethodPayment), 
+                request.Amount, request.PaymentDate), cancellationToken);
+        return Ok(mapper.Map<PaymentRequest>(updateCustomer));
     }
 }

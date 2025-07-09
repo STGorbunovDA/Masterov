@@ -16,7 +16,7 @@ public class UpdateProductionOrderStatusCommandValidator : AbstractValidator<Upd
             .IsInEnum()
             .WithErrorCode("InvalidStatus")
             .WithMessage("Status must be a valid ProductionOrderStatus value.")
-            .Must(payMethod => payMethod != ProductionOrderStatus.Unknown)
+            .Must(status => status != ProductionOrderStatus.Unknown)
             .WithErrorCode("InvalidStatusValue")
             .WithMessage("Status cannot be 'Unknown'.");
         

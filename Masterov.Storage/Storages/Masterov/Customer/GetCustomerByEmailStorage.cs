@@ -17,6 +17,15 @@ internal class GetCustomerByEmailStorage(MasterovDbContext dbContext, IMemoryCac
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.Customers
                     .AsNoTracking() 
+                        .Include(c => c.Orders)
+                            .ThenInclude(o => o.Payments)
+                            .ThenInclude(p => p.Customer)
+                        .Include(c => c.Orders)
+                            .ThenInclude(o => o.Components)
+                            .ThenInclude(pc => pc.ProductType)
+                        .Include(c => c.Orders)
+                            .ThenInclude(o => o.Components)
+                            .ThenInclude(pc => pc.Warehouse)
                     .Where(f => f.Email != null && f.Email.ToLower() == customerEmail.ToLower().Trim())
                     .ProjectTo<CustomerDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);

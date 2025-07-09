@@ -13,9 +13,9 @@ using Masterov.Domain.Masterov.Customer.GetCustomerByName;
 using Masterov.Domain.Masterov.Customer.GetCustomerByName.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomerByPhone;
 using Masterov.Domain.Masterov.Customer.GetCustomerByPhone.Query;
-using Masterov.Domain.Masterov.Customer.GetCustomerOrders;
-using Masterov.Domain.Masterov.Customer.GetCustomerOrders.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
+using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
+using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId.Query;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer.Command;
 using Microsoft.AspNetCore.Authorization;
@@ -200,23 +200,23 @@ public class CustomerController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить список ордеров заказчика с возможностью фильтрации по Id
+    /// Получить список ордеров заказчика
     /// </summary>
     /// <param name="request">Идентификатор заказчика</param>
-    /// <param name="getCustomerOrdersUseCase"></param>
+    /// <param name="getOrdersByCustomerIdUseCase"></param>
     /// <param name="cancellationToken"></param>
     /// <returns>Результат получения списка ордеров заказчик</returns>
-    [HttpGet("GetCustomerOrders")]
+    [HttpGet("GetOrdersByCustomerId")]
     [ProducesResponseType(200, Type = typeof(ProductionOrderRequestNoCustumer[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetCustomerOrders(
-        [FromQuery] GetCustomerOrdersRequest request,
-        [FromServices] IGetCustomerOrdersUseCase getCustomerOrdersUseCase,
+    public async Task<IActionResult> GetOrdersByCustomerId(
+        [FromQuery] GetOrdersByCustomerIdRequest request,
+        [FromServices] IGetOrdersByCustomerIdUseCase getOrdersByCustomerIdUseCase,
         CancellationToken cancellationToken)
     {
-        var orders = await getCustomerOrdersUseCase.Execute(new GetCustomerOrdersQuery(request.CustomerId), cancellationToken);
+        var orders = await getOrdersByCustomerIdUseCase.Execute(new GetOrdersByCustomerIdQuery(request.CustomerId), cancellationToken);
 
         return Ok(orders?.Select(mapper.Map<ProductionOrderRequestNoCustumer>) ?? Array.Empty<ProductionOrderRequestNoCustumer>());
     }

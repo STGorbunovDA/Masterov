@@ -33,7 +33,6 @@ namespace Masterov.API.Controllers;
 [Route("api/productionOrder")]
 public class ProductionOrderController(IMapper mapper) : ControllerBase
 {
-    // TODO Получить Payments у заказа
     // TODO Получить заказчика у ордера
     // TODO Получить у ордера статус
     // TODO Добавить ордер, Удалить, Обновить (при добавления ордера нужно учитывать какой Customer сделал заказ и автоматически регать ему доступ к сайту и личному кадинету)
@@ -154,7 +153,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
         [FromServices] IGetProductionOrdersByStatusUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var orders = await useCase.Execute(new GetProductionOrdersByStatusQuery(StatusTypeHelper.FromExtensionProductionOrderStatus(request.Status)), cancellationToken);
+        var orders = await useCase.Execute(new GetProductionOrdersByStatusQuery(EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status)), cancellationToken);
         return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
     }
     
@@ -199,7 +198,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Обновить у платежа статус
+    /// Обновить статус у ордера (заказа)
     /// </summary>
     /// <param name="request">Данные для обновления статуса заказа</param>
     /// <param name="useCase">Сценарий обновления статуса заказа</param>
@@ -216,7 +215,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var productionOrder = await useCase.Execute(
-            new UpdateProductionOrderStatusCommand(request.OrderId, StatusTypeHelper.FromExtensionProductionOrderStatus(request.Status)), cancellationToken);
+            new UpdateProductionOrderStatusCommand(request.OrderId, EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status)), cancellationToken);
 
         return CreatedAtAction(nameof(GetProductionOrderById),
             new { orderId = productionOrder.OrderId},

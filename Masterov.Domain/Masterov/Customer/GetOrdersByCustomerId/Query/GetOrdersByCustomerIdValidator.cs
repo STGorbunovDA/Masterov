@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Masterov.Domain.Masterov.Customer.GetCustomerOrders.Query;
+namespace Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId.Query;
 
-public class GetCustomerOrdersQueryValidator : AbstractValidator<GetCustomerOrdersQuery>
+public class GetOrdersByCustomerIdValidator : AbstractValidator<GetOrdersByCustomerIdQuery>
 {
-    public GetCustomerOrdersQueryValidator()
+    public GetOrdersByCustomerIdValidator()
     {
         RuleFor(q => q.CustomerId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)

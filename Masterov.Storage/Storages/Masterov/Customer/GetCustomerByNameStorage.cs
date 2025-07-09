@@ -17,6 +17,15 @@ internal class GetCustomerByNameStorage(MasterovDbContext dbContext, IMemoryCach
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.Customers
                     .AsNoTracking() 
+                        .Include(c => c.Orders)
+                            .ThenInclude(o => o.Payments)
+                            .ThenInclude(p => p.Customer)
+                        .Include(c => c.Orders)
+                            .ThenInclude(o => o.Components)
+                            .ThenInclude(pc => pc.ProductType)
+                        .Include(c => c.Orders)
+                            .ThenInclude(o => o.Components)
+                            .ThenInclude(pc => pc.Warehouse)
                     .Where(f => f.Name.ToLower() == customerName.ToLower().Trim())
                     .ProjectTo<CustomerDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);

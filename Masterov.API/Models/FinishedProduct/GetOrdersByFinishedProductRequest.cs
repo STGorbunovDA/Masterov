@@ -1,6 +1,6 @@
 ﻿namespace Masterov.API.Models.FinishedProduct;
 
-public class GetFinishedProductOrdersRequest
+public class GetOrdersByFinishedProductRequest
 {
     public Guid FinishedProductId { get; set; }
     public DateTime? CreatedAt { get; set; }

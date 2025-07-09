@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Masterov.Domain.Extension;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
-public class GetFinishedProductOrdersStorage (MasterovDbContext dbContext, IMapper mapper) : IGetFinishedProductOrdersStorage
+public class GetOrdersByFinishedProductStorage (MasterovDbContext dbContext, IMapper mapper) : IGetOrdersByFinishedProductStorage
 {
     public async Task<IEnumerable<ProductionOrderDomain>?> GetFinishedProductOrders(
         Guid finishedProductId,

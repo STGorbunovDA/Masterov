@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Extension;
 
-namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
+namespace Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct.Query;
 
-public class GetByDeceasedDescriptionDeceasedsValidator : AbstractValidator<GetFinishedProductOrdersQuery>
+public class GetOrdersByFinishedProductQueryValidator : AbstractValidator<GetOrdersByFinishedProductQuery>
 {
-    public GetByDeceasedDescriptionDeceasedsValidator()
+    public GetOrdersByFinishedProductQueryValidator()
     {
         RuleFor(q => q.FinishedProductId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)

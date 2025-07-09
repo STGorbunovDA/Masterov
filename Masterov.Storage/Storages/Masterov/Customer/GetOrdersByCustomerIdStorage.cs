@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using Masterov.Domain.Masterov.Customer.GetCustomerOrders;
+using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Masterov.Storage.Storages.Masterov.Customer;
 
-public class GetCustomerOrdersStorage (MasterovDbContext dbContext, IMapper mapper) : IGetCustomerOrdersStorage
+public class GetOrdersByCustomerIdStorage (MasterovDbContext dbContext, IMapper mapper) : IGetOrdersByCustomerIdStorage
 {
     public async Task<IEnumerable<ProductionOrderDomain>?> GetCustomerOrders(
         Guid customerId,
@@ -21,6 +21,7 @@ public class GetCustomerOrdersStorage (MasterovDbContext dbContext, IMapper mapp
                     .ThenInclude(pc => pc.Warehouse)
             .Include(c => c.Orders)
                 .ThenInclude(o => o.Payments)
+                .ThenInclude(p => p.Customer)
             .FirstOrDefaultAsync(c => c.CustomerId == customerId, cancellationToken);
 
         return customer == null ? null : mapper.Map<IEnumerable<ProductionOrderDomain>>(customer.Orders);

@@ -2,7 +2,7 @@
 
 namespace Masterov.API.Extensions;
 
-public static class StatusTypeHelper
+public static class EnumTypeHelper
 {
     public static ProductionOrderStatus FromExtensionProductionOrderStatus(string extension) => extension.ToLower() switch
     {

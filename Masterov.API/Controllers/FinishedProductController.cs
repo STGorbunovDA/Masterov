@@ -11,9 +11,9 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
+using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct;
+using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct.Query;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct.Command;
 using Microsoft.AspNetCore.Authorization;
@@ -171,25 +171,25 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// Получить список ордеров готового изделия с возможностью фильтрации по Id || даты создания || даты выполнения || Статуса || Описания
     /// </summary>
     /// <param name="request">Данные для получения ордеров готового мебельного изделия</param>
-    /// <param name="getFinishedProductOrdersUseCase"></param>
+    /// <param name="getOrdersByFinishedProductUseCase"></param>
     /// <param name="cancellationToken"></param>
     /// <returns>Результат получения списка ордеров готового мебельного изделия</returns>
-    [HttpGet("GetFinishedProductOrders")]
+    [HttpGet("GetOrdersByFinishedProduct")]
     [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetFinishedProductOrders(
-        [FromQuery] GetFinishedProductOrdersRequest request,
-        [FromServices] IGetFinishedProductOrdersUseCase getFinishedProductOrdersUseCase,
+    public async Task<IActionResult> GetOrdersByFinishedProduct(
+        [FromQuery] GetOrdersByFinishedProductRequest request,
+        [FromServices] IGetOrdersByFinishedProductUseCase getOrdersByFinishedProductUseCase,
         CancellationToken cancellationToken)
     {
-        var orders = await getFinishedProductOrdersUseCase.Execute(
-            new GetFinishedProductOrdersQuery(
+        var orders = await getOrdersByFinishedProductUseCase.Execute(
+            new GetOrdersByFinishedProductQuery(
                 request.FinishedProductId, 
                 request.CreatedAt, 
                 request.CompletedAt,
-                request.Status != null ? StatusTypeHelper.FromExtensionProductionOrderStatus(request.Status) : ProductionOrderStatus.Unknown,
+                request.Status != null ? EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status) : ProductionOrderStatus.Unknown,
                 request.Description
             ), 
             cancellationToken);
