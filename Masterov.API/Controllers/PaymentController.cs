@@ -46,7 +46,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [HttpGet("gePayments")]
     [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
     [ProducesResponseType(410)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPayments(
         [FromServices] IGetPaymentsUseCase useCase,
         CancellationToken cancellationToken)
@@ -66,7 +66,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(PaymentRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize]
     public async Task<IActionResult> GetPaymentById(
         [FromRoute] Guid paymentId,
         [FromServices] IGetPaymentByIdUseCase useCase,
@@ -153,6 +153,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(CustomerNewRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
+    [Authorize]
     public async Task<IActionResult> GetCustomerByPaymentId(
         [FromQuery] GetCustomerByPaymentIdRequest request,
         [FromServices] IGetCustomerByPaymentIdUseCase useCase,
@@ -173,6 +174,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(ProductionOrderRequestNoPayments))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
+    [Authorize]
     public async Task<IActionResult> GetProductionOrderByPaymentId(
         [FromQuery] GetProductionOrderByPaymentIdRequest request,
         [FromServices] IGetProductionOrderByPaymentIdUseCase useCase,
@@ -194,6 +196,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPaymentsByOrderId(
         [FromQuery] GetPaymentsByOrderIdRequest request,
         [FromServices] IGetPaymentsByOrderIdUseCase useCase,
@@ -216,7 +219,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(201, Type = typeof(PaymentRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddPayment(
         [FromForm] AddPaymentRequest request,
         [FromServices] IAddPaymentUseCase useCase,
@@ -239,7 +242,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Ответ с кодом 204, если файл был успешно удален.</returns>
     [HttpDelete("deletePayment")]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeletePayment(
         Guid paymentId,
         [FromServices] IDeletePaymentUseCase useCase,
@@ -260,7 +263,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(PaymentRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdatePayment(
         [FromForm] UpdatePaymentRequest request,
         [FromServices] IUpdatePaymentUseCase useCase,

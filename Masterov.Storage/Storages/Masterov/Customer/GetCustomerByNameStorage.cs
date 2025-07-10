@@ -12,10 +12,11 @@ internal class GetCustomerByNameStorage(MasterovDbContext dbContext, IMemoryCach
     public async Task<CustomerDomain?> GetCustomerByName(string customerName, CancellationToken cancellationToken)=>
         (await memoryCache.GetOrCreateAsync<CustomerDomain?>( 
             nameof(GetCustomerByName),
-            entry =>
+            async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
-                return dbContext.Customers
+                
+                var customer = await dbContext.Customers
                     .AsNoTracking() 
                         .Include(c => c.Orders)
                             .ThenInclude(o => o.Payments)
@@ -26,8 +27,9 @@ internal class GetCustomerByNameStorage(MasterovDbContext dbContext, IMemoryCach
                         .Include(c => c.Orders)
                             .ThenInclude(o => o.Components)
                             .ThenInclude(pc => pc.Warehouse)
-                    .Where(f => f.Name.ToLower() == customerName.ToLower().Trim())
-                    .ProjectTo<CustomerDomain>(mapper.ConfigurationProvider)
+                    .Where(f => f.Email != null && f.Name.ToLower() == customerName.ToLower().Trim())
                     .FirstOrDefaultAsync(cancellationToken);
+                
+                return mapper.Map<CustomerDomain>(customer);
             }))!;
 }

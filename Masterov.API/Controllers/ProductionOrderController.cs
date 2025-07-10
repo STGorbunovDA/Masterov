@@ -39,6 +39,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     // TODO изменить статус заказа если InProgress тогда должна быть оплата или полностью или частичная
     // TODO если статус Completed заказа тогда должна записаться дата CompletedAt
     // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно 
+    // TODO должна появится возможность в ProductionOrder поставить статус заказа в Canceled
     
     /// <summary>
     /// Получить все заказы

@@ -6,9 +6,7 @@ public class GetCustomersUseCase(IGetCustomersStorage storage) : IGetCustomersUs
 {
     public async Task<IEnumerable<CustomerDomain>> Execute(CancellationToken cancellationToken)
     {
-        var res =  await storage.GetCustomers(cancellationToken);
-
-        return res;
+        return await storage.GetCustomers(cancellationToken);
     }
       
 }

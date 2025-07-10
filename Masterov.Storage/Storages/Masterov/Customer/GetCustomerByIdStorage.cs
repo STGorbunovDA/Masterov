@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +11,12 @@ internal class GetCustomerByIdStorage(MasterovDbContext dbContext, IMemoryCache 
     public async Task<CustomerDomain?> GetCustomerById(Guid customerId, CancellationToken cancellationToken) =>
         (await memoryCache.GetOrCreateAsync<CustomerDomain?>( 
             nameof(GetCustomerById),
-            entry =>
+            async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
-                return dbContext.Customers
-                    .AsNoTracking() 
+
+                var customer = await dbContext.Customers
+                    .AsNoTracking()
                         .Include(c => c.Orders)
                             .ThenInclude(o => o.Payments)
                             .ThenInclude(p => p.Customer)
@@ -27,7 +27,8 @@ internal class GetCustomerByIdStorage(MasterovDbContext dbContext, IMemoryCache 
                             .ThenInclude(o => o.Components)
                             .ThenInclude(pc => pc.Warehouse)
                     .Where(f => f.CustomerId == customerId)
-                    .ProjectTo<CustomerDomain>(mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(cancellationToken);
+                    .FirstOrDefaultAsync( cancellationToken);
+                
+                return mapper.Map<CustomerDomain>(customer);
             }))!;
 }

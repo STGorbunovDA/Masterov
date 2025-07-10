@@ -22,13 +22,11 @@ public class AddPaymentUseCase(
     IGetProductionOrderByIdStorage getProductionOrderByIdStorage,
     IGetCustomerByPhoneStorage getCustomerByPhoneStorage,
     IGetCustomerByEmailStorage getCustomerByEmailStorage,
-    IGetCustomerByNameStorage getCustomerByNameStorage,
     IAddCustomerStorage addCustomerStorage,
     IUpdateProductionOrderStatusStorage updateProductionOrderStatusStorage,
     IGetFinishedProductAtOrderStorage getFinishedProductAtOrderStorage,
     IGetPaymentsByOrderIdStorage getPaymentsByOrderIdStorage,
-    IGetPaymentByIdStorage getPaymentByIdStorage,
-    IDeletePaymentStorage deletePaymentStorage) : IAddPaymentUseCase
+    IGetPaymentByIdStorage getPaymentByIdStorage) : IAddPaymentUseCase
 {
     public async Task<PaymentDomain?> Execute(AddPaymentCommand command, CancellationToken ct)
     {
@@ -70,10 +68,7 @@ public class AddPaymentUseCase(
 
         if (customer is null && cmd.EmailCustomer is not null)
             customer = await getCustomerByEmailStorage.GetCustomerByEmail(cmd.EmailCustomer, ct); // смотрим по почте
-
-        // if (customer is null) // TODO имена могут быть одинаковы при добавлении
-        //     customer = await getCustomerByNameStorage.GetCustomerByName(cmd.NameCustomer, ct); // смотрим по имени
-
+        
         if (customer is null)
             customer = await addCustomerStorage.AddCustomer(cmd.NameCustomer, cmd.EmailCustomer, cmd.PhoneCustomer, ct);
 

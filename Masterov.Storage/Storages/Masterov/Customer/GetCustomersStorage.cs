@@ -10,14 +10,19 @@ namespace Masterov.Storage.Storages.Masterov.Customer;
 internal class GetCustomersStorage (MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetCustomersStorage
 {
     public async Task<IEnumerable<CustomerDomain>> GetCustomers(CancellationToken cancellationToken) =>
-        (await memoryCache.GetOrCreateAsync<CustomerDomain[]>(
+        (await memoryCache.GetOrCreateAsync(
             nameof(GetCustomers),
-            entry =>
+            async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
-                return dbContext.Customers
-                    .AsNoTracking() 
-                    .ProjectTo<CustomerDomain>(mapper.ConfigurationProvider)
+
+                var customers = await dbContext.Customers
+                    .AsNoTracking()
+                    .Include(c => c.Orders)
+                        .ThenInclude(o => o.Payments)
+                            .ThenInclude(p => p.Customer)
                     .ToArrayAsync(cancellationToken);
+
+                return mapper.Map<CustomerDomain[]>(customers); 
             }))!;
 }
