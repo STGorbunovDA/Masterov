@@ -2,7 +2,7 @@
 
 namespace Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder;
 
-public interface IGetProductComponentAtOrderStorage
+public interface IGetProductComponentByOrderIdStorage
 {
     Task<IEnumerable<ProductComponentDomain?>> GetProductComponentAtOrder(Guid orderId, CancellationToken cancellationToken);
 }

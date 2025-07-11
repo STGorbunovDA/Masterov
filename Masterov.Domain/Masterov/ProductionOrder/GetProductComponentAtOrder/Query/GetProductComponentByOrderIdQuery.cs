@@ -1,3 +1,3 @@
 ﻿namespace Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder.Query;
 
-public record GetProductComponentAtOrderQuery(Guid OrderId);
+public record GetProductComponentByOrderIdQuery(Guid OrderId);

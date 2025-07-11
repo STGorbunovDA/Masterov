@@ -7,7 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Masterov.Storage.Storages.Masterov.ProductionOrder;
 
-internal class GetProductComponentAtOrderStorage(MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetProductComponentAtOrderStorage
+internal class GetProductComponentByOrderIdStorage(MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetProductComponentByOrderIdStorage
 {
     public async Task<IEnumerable<ProductComponentDomain?>> GetProductComponentAtOrder(Guid orderId, CancellationToken cancellationToken) =>
         await memoryCache.GetOrCreateAsync(

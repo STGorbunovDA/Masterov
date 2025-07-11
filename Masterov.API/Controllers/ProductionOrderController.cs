@@ -3,7 +3,10 @@ using Masterov.API.Extensions;
 using Masterov.API.Models;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
+using Masterov.API.Models.Payment;
 using Masterov.API.Models.ProductionOrder;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId;
 using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
@@ -179,22 +182,22 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить используемые компоненты для заказа по OrderId
+    /// Получить используемые компоненты заказа по OrderId
     /// </summary>
-    /// <param name="request">Id Ордера (заказа)</param>
-    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="idRequest">Id Ордера (заказа)</param>
+    /// <param name="idUseCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Используемые компоненты</returns>
-    [HttpGet("getProductComponentAtOrder")]
+    [HttpGet("getProductComponentByOrderId")]
     [ProducesResponseType(200, Type = typeof(ProductComponentDomain[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetProductComponentAtOrder(
-        [FromQuery] GetProductComponentAtOrderRequest request,
-        [FromServices] IGetProductComponentAtOrderUseCase useCase,
+    public async Task<IActionResult> GetProductComponentByOrderId(
+        [FromQuery] getProductComponentByOrderIdRequest idRequest,
+        [FromServices] IGetProductComponentByOrderIdUseCase idUseCase,
         CancellationToken cancellationToken)
     {
-        var productionComponents = await useCase.Execute(new GetProductComponentAtOrderQuery(request.OrderId), cancellationToken);
+        var productionComponents = await idUseCase.Execute(new GetProductComponentByOrderIdQuery(idRequest.OrderId), cancellationToken);
         return Ok(mapper.Map<IEnumerable<ProductComponentRequest>>(productionComponents));
     }
     
@@ -216,6 +219,28 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     {
             var customer = await useCase.Execute(new GetCustomerByOrderIdQuery(orderId), cancellationToken);
         return Ok(mapper.Map<CustomerNoOrdersRequest>(customer));
+    }
+    
+    /// <summary>
+    /// Получить платежи по Идентификатору заказа
+    /// </summary>
+    /// <param name="request">Идентификатор заказа</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о ордере</returns>
+    [HttpGet("getPaymentsByOrderId")]
+    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetPaymentsByOrderId(
+        [FromQuery] GetPaymentsByOrderIdRequest request,
+        [FromServices] IGetPaymentsByOrderIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var payments =
+            await useCase.Execute(new GetPaymentsByOrderIdQuery(request.OrderId), cancellationToken);
+        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
     
     

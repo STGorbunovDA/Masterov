@@ -86,7 +86,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductionOrdersByStatusStorage, GetProductionOrdersByStatusStorage>()
             .AddScoped<IGetFinishedProductAtOrderStorage, GetFinishedProductAtOrderStorage>()
             .AddScoped<IGetCustomerByOrderIdStorage, GetCustomerByOrderIdStorage>()
-            .AddScoped<IGetProductComponentAtOrderStorage, GetProductComponentAtOrderStorage>()
+            .AddScoped<IGetProductComponentByOrderIdStorage, GetProductComponentByOrderIdStorage>()
             .AddScoped<IUpdateProductionOrderStatusStorage, UpdateProductionOrderStatusStorage>()
             .AddScoped<IGetProductionOrderByOrderIdStorage, GetProductionOrderByOrderIdStorage>();
         

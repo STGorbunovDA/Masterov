@@ -1,6 +1,6 @@
 ﻿namespace Masterov.API.Models.ProductionOrder;
 
-public class GetProductComponentAtOrderRequest
+public class getProductComponentByOrderIdRequest
 {
     public Guid OrderId { get; set; }
 }

@@ -37,6 +37,8 @@ namespace Masterov.API.Controllers;
 [Route("api/payment")]
 public class PaymentController(IMapper mapper) : ControllerBase
 {
+    //TODO необходимо добавить в таблицу Payment UpdatePaymentDate и обновлять её когда платеж обновляется но это не точно
+    
     /// <summary>
     /// Получить все платежи
     /// </summary>
