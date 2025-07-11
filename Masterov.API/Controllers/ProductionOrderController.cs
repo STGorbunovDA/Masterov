@@ -36,13 +36,10 @@ namespace Masterov.API.Controllers;
 [Route("api/productionOrder")]
 public class ProductionOrderController(IMapper mapper) : ControllerBase
 {
-    // TODO Получить заказчика у ордера
-    // TODO Получить у ордера статус
     // TODO Добавить ордер, Удалить, Обновить (при добавления ордера нужно учитывать какой Customer сделал заказ и автоматически регать ему доступ к сайту и личному кадинету)
     // TODO изменить статус заказа если InProgress тогда должна быть оплата или полностью или частичная
     // TODO если статус Completed заказа тогда должна записаться дата CompletedAt
-    // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно 
-    // TODO должна появится возможность в ProductionOrder поставить статус заказа в Canceled
+    // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно
     
     /// <summary>
     /// Получить все заказы
@@ -68,16 +65,16 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказе (ордере)</returns>
-    [HttpGet("getProductionOrderById/{orderId:guid}")]
+    [HttpGet("getProductionOrderByOrderId/{orderId:guid}")]
     [ProducesResponseType(200, Type = typeof(ProductionOrderRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetProductionOrderById(
+    public async Task<IActionResult> GetProductionOrderByOrderId(
         [FromRoute] Guid orderId,
-        [FromServices] IGetProductionOrderByIdUseCase useCase,
+        [FromServices] IGetProductionOrderByOrdeIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var order = await useCase.Execute(new GetProductionOrderByIdQuery(orderId), cancellationToken);
+        var order = await useCase.Execute(new GetProductionOrderByOrderIdQuery(orderId), cancellationToken);
         return Ok(mapper.Map<ProductionOrderRequest>(order));
     }
     
@@ -221,6 +218,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
         return Ok(mapper.Map<CustomerNoOrdersRequest>(customer));
     }
     
+    
     /// <summary>
     /// Обновить статус у ордера (заказа)
     /// </summary>
@@ -241,7 +239,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
         var productionOrder = await useCase.Execute(
             new UpdateProductionOrderStatusCommand(request.OrderId, EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status)), cancellationToken);
 
-        return CreatedAtAction(nameof(GetProductionOrderById),
+        return CreatedAtAction(nameof(GetProductionOrderByOrderId),
             new { orderId = productionOrder.OrderId},
             mapper.Map<ProductionOrderRequest>(productionOrder));
     }

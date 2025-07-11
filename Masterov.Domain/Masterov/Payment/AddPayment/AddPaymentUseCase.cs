@@ -19,7 +19,7 @@ namespace Masterov.Domain.Masterov.Payment.AddPayment;
 public class AddPaymentUseCase(
     IValidator<AddPaymentCommand> validator,
     IAddPaymentStorage addPaymentStorage,
-    IGetProductionOrderByIdStorage getProductionOrderByIdStorage,
+    IGetProductionOrderByOrderIdStorage getProductionOrderByOrderIdStorage,
     IGetCustomerByPhoneStorage getCustomerByPhoneStorage,
     IGetCustomerByEmailStorage getCustomerByEmailStorage,
     IAddCustomerStorage addCustomerStorage,
@@ -53,7 +53,7 @@ public class AddPaymentUseCase(
     
     private async Task<ProductionOrderDomain> EnsureOrderExists(Guid orderId, CancellationToken ct)
     {
-        var order = await getProductionOrderByIdStorage.GetProductionOrderById(orderId, ct);
+        var order = await getProductionOrderByOrderIdStorage.GetProductionOrderById(orderId, ct);
         if (order is null)
             throw new NotFoundByIdException(orderId, "Ордер (заказ)");
         return order;

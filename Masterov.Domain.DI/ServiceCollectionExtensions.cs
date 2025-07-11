@@ -78,7 +78,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IUpdateProductionOrderStatusUseCase, UpdateProductionOrderStatusUseCase>()
             .AddScoped<IGetFinishedProductAtOrderUseCase, GetFinishedProductAtOrderUseCase>()
             .AddScoped<IGetProductComponentAtOrderUseCase, GetProductComponentAtOrderUseCase>()
-            .AddScoped<IGetProductionOrderByIdUseCase, GetProductionOrderByIdUseCase>();
+            .AddScoped<IGetProductionOrderByOrdeIdUseCase, GetProductionOrderByOrdeIdUseCase>();
         
         // ProductType
         services
