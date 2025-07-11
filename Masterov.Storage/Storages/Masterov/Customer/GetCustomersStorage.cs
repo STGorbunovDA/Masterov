@@ -18,9 +18,9 @@ internal class GetCustomersStorage (MasterovDbContext dbContext, IMemoryCache me
 
                 var customers = await dbContext.Customers
                     .AsNoTracking()
-                    .Include(c => c.Orders)
-                        .ThenInclude(o => o.Payments)
-                            .ThenInclude(p => p.Customer)
+                        .Include(c => c.Orders)
+                            .ThenInclude(o => o.Payments)
+                                .ThenInclude(p => p.Customer)
                     .ToArrayAsync(cancellationToken);
 
                 return mapper.Map<CustomerDomain[]>(customers); 

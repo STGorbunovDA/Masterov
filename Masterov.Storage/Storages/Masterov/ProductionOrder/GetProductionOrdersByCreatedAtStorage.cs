@@ -16,13 +16,13 @@ public class GetProductionOrdersByCreatedAtStorage (MasterovDbContext dbContext,
         var orders = await dbContext.ProductionOrders
             .AsNoTracking() 
             .Where(order => order.CreatedAt >= startOfDay && order.CreatedAt < endOfDay)
-            .Include(order => order.FinishedProduct)
-            .Include(order => order.Components)
-            .ThenInclude(c => c.ProductType)
-            .Include(order => order.Components)
-            .ThenInclude(c => c.Warehouse)
-            .Include(o => o.Customer)
-            .Include(o => o.Payments)
+                .Include(order => order.FinishedProduct)
+                .Include(order => order.Components)
+                    .ThenInclude(c => c.ProductType)
+                .Include(order => order.Components)
+                    .ThenInclude(c => c.Warehouse)
+                .Include(o => o.Customer)
+                .Include(o => o.Payments)
             .ToArrayAsync(cancellationToken);
 
         return mapper.Map<IEnumerable<ProductionOrderDomain>>(orders);

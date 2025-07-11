@@ -47,12 +47,12 @@ public class GetOrdersByFinishedProductStorage (MasterovDbContext dbContext, IMa
 
         var orders = await query
             .AsNoTracking() 
-            .Include(o => o.Components)
-            .ThenInclude(c => c.ProductType)
-            .Include(o => o.Components)
-            .ThenInclude(c => c.Warehouse)
-            .Include(o => o.Customer)
-            .Include(o => o.Payments)
+                .Include(o => o.Components)
+                    .ThenInclude(c => c.ProductType)
+                .Include(o => o.Components)
+                    .ThenInclude(c => c.Warehouse)
+                .Include(o => o.Customer)
+                .Include(o => o.Payments)
             .ToArrayAsync(cancellationToken);
 
         return orders.Select(mapper.Map<ProductionOrderDomain>);

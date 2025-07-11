@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models;
+using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.ProductionOrder;
+using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId;
+using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder;
@@ -199,6 +202,26 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
+    /// Получить заказчика по идентификатору заказа (ордера)
+    /// </summary>
+    /// <param name="orderId">Идентификатор ордера (заказа)</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчике</returns>
+    [HttpGet("getCustomerByOrderId/{orderId:guid}")]
+    [ProducesResponseType(200, Type = typeof(CustomerNoOrdersRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetCustomerByOrderId(
+        [FromRoute] Guid orderId,
+        [FromServices] IGetCustomerByOrderIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+            var customer = await useCase.Execute(new GetCustomerByOrderIdQuery(orderId), cancellationToken);
+        return Ok(mapper.Map<CustomerNoOrdersRequest>(customer));
+    }
+    
+    /// <summary>
     /// Обновить статус у ордера (заказа)
     /// </summary>
     /// <param name="request">Данные для обновления статуса заказа</param>
@@ -222,4 +245,6 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
             new { orderId = productionOrder.OrderId},
             mapper.Map<ProductionOrderRequest>(productionOrder));
     }
+    
+    
 }
