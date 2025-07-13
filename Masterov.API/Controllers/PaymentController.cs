@@ -242,7 +242,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="paymentId">Идентификатор платжа.</param>
     /// <param name="useCase">Сценарий удаления платежа.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Ответ с кодом 204, если файл был успешно удален.</returns>
+    /// <returns>Ответ с кодом 204, если платеж был успешно удален.</returns>
     [HttpDelete("deletePayment")]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeletePayment(

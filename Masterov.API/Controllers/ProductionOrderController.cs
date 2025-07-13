@@ -9,6 +9,8 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId.Query;
 using Masterov.Domain.Masterov.ProductionOrder.AddProductionOrder;
 using Masterov.Domain.Masterov.ProductionOrder.AddProductionOrder.Command;
+using Masterov.Domain.Masterov.ProductionOrder.DeleteProductionOrder;
+using Masterov.Domain.Masterov.ProductionOrder.DeleteProductionOrder.Command;
 using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId;
 using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
@@ -43,9 +45,13 @@ namespace Masterov.API.Controllers;
 public class ProductionOrderController(IMapper mapper) : ControllerBase
 {
     // TODO Удалить, Обновить (при добавления ордера нужно учитывать какой Customer сделал заказ и автоматически регать ему доступ к сайту и личному кадинету)
-    // TODO если статус Completed заказа тогда должна записаться дата CompletedAt
+
     // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно
 
+    // TODO нельзя удалить заказ если по нему были платежи
+    // TODO нельзя удалить заказ если по нему были использованны компоненты
+    // TODO поменять все OperationCanceledException на соответ. статус коды
+    
     /// <summary>
     /// Получить все заказы
     /// </summary>
@@ -302,5 +308,23 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
         return CreatedAtAction(nameof(GetProductionOrderByOrderId),
             new { orderId = productionOrder.OrderId },
             mapper.Map<ProductionOrderRequest>(productionOrder));
+    }
+    
+    /// <summary>
+    /// Удаление заказа по указанному Id.
+    /// </summary>
+    /// <param name="productionOrderId">Идентификатор заказа по Id.</param>
+    /// <param name="useCase">Сценарий удаления заказа.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Ответ с кодом 204, если заказ был успешно удален.</returns>
+    [HttpDelete("DeleteProductionOrder")]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> DeleteProductionOrder(
+        Guid productionOrderId,
+        [FromServices] IDeleteProductionOrderUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        await useCase.Execute(new DeleteProductionOrderCommand(productionOrderId), cancellationToken);
+        return NoContent();
     }
 }

@@ -131,7 +131,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <param name="finishedProductId">Идентификатор готового мебельного изделия для удаления.</param>
     /// <param name="useCase">Сценарий удаления готового мебольного изделия.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Ответ с кодом 204, если файл был успешно удален.</returns>
+    /// <returns>Ответ с кодом 204, если готовое мебельное изделие было успешно удалено.</returns>
     [HttpDelete("deleteFinishedProduct")]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteFinishedProduct(

@@ -164,7 +164,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="customerId">Идентификатор заказчика.</param>
     /// <param name="useCase">Сценарий удаления заказчика.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Ответ с кодом 204, если файл был успешно удален.</returns>
+    /// <returns>Ответ с кодом 204, если заказчик был успешно удален.</returns>
     [HttpDelete("deleteCustomer")]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteCustomer(
