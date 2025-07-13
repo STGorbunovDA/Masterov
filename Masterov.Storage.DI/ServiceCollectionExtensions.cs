@@ -26,6 +26,7 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
+using Masterov.Domain.Masterov.ProductionOrder.AddProductionOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId;
 using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder;
@@ -86,6 +87,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductionOrdersByStatusStorage, GetProductionOrdersByStatusStorage>()
             .AddScoped<IGetFinishedProductAtOrderStorage, GetFinishedProductAtOrderStorage>()
             .AddScoped<IGetCustomerByOrderIdStorage, GetCustomerByOrderIdStorage>()
+            .AddScoped<IAddProductionOrderStorage, AddProductionOrderStorage>()
             .AddScoped<IGetProductComponentByOrderIdStorage, GetProductComponentByOrderIdStorage>()
             .AddScoped<IUpdateProductionOrderStatusStorage, UpdateProductionOrderStatusStorage>()
             .AddScoped<IGetProductionOrderByOrderIdStorage, GetProductionOrderByOrderIdStorage>();
