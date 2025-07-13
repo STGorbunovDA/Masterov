@@ -15,6 +15,7 @@ public static class ProblemDetailsFactoryExtensions
             {
                 ErrorCode.StatusCode410 => StatusCodes.Status410Gone,
                 ErrorCode.StatusCode409 => StatusCodes.Status409Conflict,
+                ErrorCode.StatusCode422 => StatusCodes.Status422UnprocessableEntity,
                 _ => StatusCodes.Status500InternalServerError
             },
             domainException.Message);

@@ -25,12 +25,12 @@ public class DeleteProductionOrderUseCase(
         var payments = await getPaymentsByOrderIdStorage.GetPaymentsByOrderId(command.ProductionOrderId, cancellationToken);
 
         if (payments?.Any() == true)
-            throw new OperationCanceledException("Нельзя удалить ордер — у него есть оплата.");
+            throw new Conflict409Exception("Нельзя удалить ордер — у него есть оплата.");
         
         var productComponents = await getProductComponentByOrderIdStorage.GetProductComponentAtOrder(command.ProductionOrderId, cancellationToken);
 
         if (productComponents?.Any() == true)
-            throw new OperationCanceledException("Нельзя удалить ордер — у него есть используемые компоненты.");
+            throw new Conflict409Exception("Нельзя удалить ордер — у него есть используемые компоненты.");
 
         return await storage.DeleteProductionOrder(command.ProductionOrderId, cancellationToken);
     }

@@ -43,7 +43,7 @@ public class AddProductionOrderUseCase(
         }
         
         if(customerDomain is null)
-            throw new OperationCanceledException("Заказ не возможно добавить т.к. не указано Имя и (Почта или Номер)");
+            throw new Conflict422Exception("Заказ не возможно добавить т.к. не указано Имя и (Почта или Номер)");
 
 
         return await storage.AddProductionOrder(addProductionOrderCommand.FinishedProductId, customerDomain.CustomerId,
