@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +11,20 @@ internal class GetUserByLoginStorage (MasterovDbContext dbContext, IMemoryCache 
     public async Task<UserDomain?> GetUserByLogin(string login, CancellationToken cancellationToken) =>
         (await memoryCache.GetOrCreateAsync<UserDomain?>( 
             nameof(GetUserByLogin),
-            entry =>
+            async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
-                return dbContext.Users
-                    .AsNoTracking() 
+                var userEntity = await dbContext.Users
+                    .AsNoTracking()
                     .Where(f => f.Login == login)
-                    .ProjectTo<UserDomain>(mapper.ConfigurationProvider)
+                        .Include(u => u.Customer)
+                            .ThenInclude(c => c.Orders)
+                                .ThenInclude(o => o.Payments)
+                                    .ThenInclude(p => p.Customer)
                     .FirstOrDefaultAsync(cancellationToken);
+
+                return userEntity == null
+                    ? null
+                    : mapper.Map<UserDomain>(userEntity);
             }))!;
 }

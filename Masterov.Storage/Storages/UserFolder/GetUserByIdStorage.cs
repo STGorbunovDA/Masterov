@@ -12,13 +12,21 @@ internal class GetUserByIdStorage (MasterovDbContext dbContext, IMemoryCache mem
     public async Task<UserDomain?> GetUserById(Guid userId, CancellationToken cancellationToken) =>
         (await memoryCache.GetOrCreateAsync<UserDomain?>( 
             nameof(GetUserById),
-            entry =>
+            async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
-                return dbContext.Users
-                    .AsNoTracking() 
+                
+                var userEntity = await dbContext.Users
+                    .AsNoTracking()
                     .Where(f => f.UserId == userId)
-                    .ProjectTo<UserDomain>(mapper.ConfigurationProvider)
+                        .Include(u => u.Customer)
+                            .ThenInclude(c => c.Orders)
+                                .ThenInclude(o => o.Payments)
+                                    .ThenInclude(p => p.Customer)
                     .FirstOrDefaultAsync(cancellationToken);
+
+                return userEntity == null
+                    ? null
+                    : mapper.Map<UserDomain>(userEntity);
             }))!;
 }

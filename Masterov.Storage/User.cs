@@ -20,4 +20,8 @@ public class User
     [Required]
     [Column(TypeName = "varchar(100)")]
     public string PasswordHash { get; set; }
+    
+    
+    public Guid? CustomerId { get; set; }  // необязательная привязка
+    public Customer? Customer { get; set; }
 }

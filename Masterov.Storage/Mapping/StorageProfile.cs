@@ -29,6 +29,10 @@ internal class StorageProfile : Profile
         CreateMap<OrderPayment, PaymentDomain>()
             .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer));
         
+        CreateMap<User, UserDomain>()
+            .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer));
+
+        
         // ProductType mapping
         CreateMap<ProductType, ProductTypeDomain>();
             
@@ -41,6 +45,6 @@ internal class StorageProfile : Profile
         // Supply mapping (если нужно)
         CreateMap<Supply, SupplyDomain>();
         
-        CreateMap<User, UserDomain>();
+      
     }
 }

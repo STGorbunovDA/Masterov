@@ -64,12 +64,13 @@ internal class ApiProfile : Profile
             .ForMember(dest => dest.CustomerEmail, opt => opt.MapFrom(src => src.Customer.Email))
             .ForMember(dest => dest.CustomerPhone, opt => opt.MapFrom(src => src.Customer.Phone));
 
+        CreateMap<UserDomain, UserRequest>()
+            .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer));
+
         
         // Остальные маппинги
         CreateMap<SupplierDomain, SupplierRequest>();
         CreateMap<SupplyDomain, SupplyRequest>();
-        CreateMap<UserDomain, UserRequest>();
-        
         CreateMap<CustomerDomain, CustomerNoOrdersRequest>();
     }
 }

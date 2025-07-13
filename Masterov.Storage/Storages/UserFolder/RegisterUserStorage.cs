@@ -2,13 +2,14 @@
 using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.UserFolder.RegisterUser;
 using Masterov.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Masterov.Storage.Storages.UserFolder;
 
 internal class RegisterUserStorage (MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IRegisterUserStorage
 {
-    public async Task<UserDomain> RegisterUser(string login, string password, CancellationToken cancellationToken) =>
+    public async Task<UserDomain> RegisterUser(string login, string password, Guid? customerId, CancellationToken cancellationToken) =>
         (await memoryCache.GetOrCreateAsync<UserDomain>( 
             nameof(RegisterUser),
             async entry =>
@@ -20,12 +21,22 @@ internal class RegisterUserStorage (MasterovDbContext dbContext, IMemoryCache me
                     UserId = Guid.NewGuid(),
                     Login = login,
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
-                    Role = UserRole.RegularUser
+                    Role = UserRole.RegularUser,
+                    CustomerId = customerId
                 };
                 
                 await dbContext.Users.AddAsync(user, cancellationToken);
                 await dbContext.SaveChangesAsync(cancellationToken);
                 
-                return mapper.Map<UserDomain>(user);
+                var userDb = await dbContext.Users
+                    .AsNoTracking()
+                    .Where(t => t.UserId == user.UserId)
+                        .Include(c => c.Customer)
+                    .FirstOrDefaultAsync(cancellationToken);
+
+                if (userDb is null)
+                    throw new InvalidOperationException("Не удалось найти только что зарегистрированного пользователя.");
+
+                return mapper.Map<UserDomain>(userDb);
             }))!;
 }

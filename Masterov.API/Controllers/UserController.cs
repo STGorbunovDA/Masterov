@@ -20,6 +20,9 @@ namespace Masterov.API.Controllers;
 [Route("api/user")]
 public class UserController(IMapper mapper) : ControllerBase
 {
+    //TODO сделать изменение пароля
+    //TODO добавить метод изменение заказчика
+    
     /// <summary>
     /// Получить пользователя по логину.
     /// </summary>
