@@ -5,8 +5,6 @@ using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.Payment;
 using Masterov.API.Models.ProductionOrder;
-using Masterov.Domain.Masterov.Payment.AddPayment;
-using Masterov.Domain.Masterov.Payment.AddPayment.Command;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId.Query;
 using Masterov.Domain.Masterov.ProductionOrder.AddProductionOrder;
@@ -44,8 +42,7 @@ namespace Masterov.API.Controllers;
 [Route("api/productionOrder")]
 public class ProductionOrderController(IMapper mapper) : ControllerBase
 {
-    // TODO Добавить ордер, Удалить, Обновить (при добавления ордера нужно учитывать какой Customer сделал заказ и автоматически регать ему доступ к сайту и личному кадинету)
-    // TODO изменить статус заказа если InProgress тогда должна быть оплата или полностью или частичная
+    // TODO Удалить, Обновить (при добавления ордера нужно учитывать какой Customer сделал заказ и автоматически регать ему доступ к сайту и личному кадинету)
     // TODO если статус Completed заказа тогда должна записаться дата CompletedAt
     // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно
 

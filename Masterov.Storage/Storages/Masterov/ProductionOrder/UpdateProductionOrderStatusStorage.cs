@@ -15,6 +15,10 @@ internal class UpdateProductionOrderStatusStorage(MasterovDbContext dbContext, I
             throw new Exception("ProductionOrder not found");
         
         productionOrder.Status = status;
+
+        if (status == ProductionOrderStatus.Completed)
+            productionOrder.CompletedAt = DateTime.Now;
+        
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return mapper.Map<ProductionOrderDomain>(productionOrder);
