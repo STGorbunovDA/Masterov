@@ -1,6 +1,6 @@
 ﻿using Masterov.API.Models.Customer;
 
-namespace Masterov.API.Models.Auth;
+namespace Masterov.API.Models.User;
 
 public class UserRequest
 {

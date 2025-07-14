@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
-using Masterov.API.Models.Auth;
+using Masterov.API.Models.User;
 using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser.Command;
+using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
+using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser.Command;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUser.Command;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById;
@@ -23,7 +25,7 @@ namespace Masterov.API.Controllers;
 public class UserController(IMapper mapper) : ControllerBase
 {
     //TODO сделать изменение пароля
-    
+
     /// <summary>
     /// Получить пользователя по логину.
     /// </summary>
@@ -62,7 +64,7 @@ public class UserController(IMapper mapper) : ControllerBase
         var users = await useCase.Execute(cancellationToken);
         return Ok(users.Select(mapper.Map<UserRequest>));
     }
-    
+
     /// <summary>
     /// Получить пользователя по Id.
     /// </summary>
@@ -83,7 +85,7 @@ public class UserController(IMapper mapper) : ControllerBase
         var user = await getUserByIdUseCase.Execute(new GetUserByIdQuery(userId), cancellationToken);
         return Ok(mapper.Map<UserRequest>(user));
     }
-    
+
     /// <summary>
     /// Изменить роль для пользователя.
     /// </summary>
@@ -109,14 +111,14 @@ public class UserController(IMapper mapper) : ControllerBase
 
         // Создаем команду с преобразованной ролью
         var user = await changeRoleUserUseCase.Execute(
-            new ChangeRoleUserCommand(request.Name, userRole), 
+            new ChangeRoleUserCommand(request.Name, userRole),
             cancellationToken);
 
         return Ok(mapper.Map<UserRequest>(user));
     }
-    
+
     /// <summary>
-    /// Изменить заказчика для пользователя.
+    /// Изменить у пользователя ссыль на заказчика.
     /// </summary>
     /// <param name="request">Запрос с данными для изменения заказчика для пользователя.</param>
     /// <param name="changeCustomerFromUserUseCase">Сервис для изменения заказчика для пользователя.</param>
@@ -132,14 +134,37 @@ public class UserController(IMapper mapper) : ControllerBase
         [FromServices] IChangeCustomerFromUserUseCase changeCustomerFromUserUseCase,
         CancellationToken cancellationToken)
     {
-
         var user = await changeCustomerFromUserUseCase.Execute(
-            new ChangeCustomerFromUserCommand(request.UserId, request.CustomerId), 
+            new ChangeCustomerFromUserCommand(request.UserId, request.CustomerId),
             cancellationToken);
 
         return Ok(mapper.Map<UserRequest>(user));
     }
-    
+
+    /// <summary>
+    /// Изменить пароль у пользователя.
+    /// </summary>
+    /// <param name="request">Запрос с данными для изменения пароля у пользователя.</param>
+    /// <param name="changePasswordFromUserUseCase">Сервис для изменения пароля у пользователя.</param>
+    /// <param name="cancellationToken">Токен для отмены операции.</param>
+    /// <returns>Обновлённый пользователь с другим заказчиком или ошибка в случае неудачи.</returns>
+    [HttpPatch("changePasswordFromUser")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin")]
+    public async Task<IActionResult> ChangePasswordFromUser(
+        [FromBody] ChangePasswordFromUserRequest request,
+        [FromServices] IChangePasswordFromUserUseCase changePasswordFromUserUseCase,
+        CancellationToken cancellationToken)
+    {
+        var success = await changePasswordFromUserUseCase.Execute(
+            new ChangePasswordFromUserCommand(request.UserId, request.OldPassword, request.NewPassword),
+            cancellationToken);
+
+        return success ? Ok() : NotFound("Password not change");
+    }
+
     /// <summary>
     /// Удалить пользователя по Id.
     /// </summary>
@@ -160,7 +185,7 @@ public class UserController(IMapper mapper) : ControllerBase
         var result = await byIdUseCase.Execute(new DeleteUserByIdCommand(userId), cancellationToken);
         return Ok(result);
     }
-   
+
     /// <summary>
     /// Удалить пользователя по логину.
     /// </summary>

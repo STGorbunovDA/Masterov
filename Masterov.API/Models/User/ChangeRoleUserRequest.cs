@@ -1,4 +1,4 @@
-﻿namespace Masterov.API.Models.Auth;
+﻿namespace Masterov.API.Models.User;
 
 public class ChangeRoleUserRequest
 {

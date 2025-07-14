@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using AutoMapper;
 using Masterov.API.Models.Auth;
+using Masterov.API.Models.User;
 using Masterov.Domain.Masterov.UserFolder.LoginUser;
 using Masterov.Domain.Masterov.UserFolder.LoginUser.Query;
 using Masterov.Domain.Masterov.UserFolder.RegisterUser;
