@@ -48,6 +48,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
 
     // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно?
     
+    // TODO если пользователь зареганный то в AddProductionOrder клади CustomerId из User ну а если нет то по стандарту
     
     /// <summary>
     /// Получить все заказы
@@ -288,7 +289,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий обновления статуса заказа</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
-    [HttpPost("updateProductionOrderStatus")]
+    [HttpPatch("updateProductionOrderStatus")]
     [ProducesResponseType(201, Type = typeof(ProductionOrderRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]

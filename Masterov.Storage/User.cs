@@ -10,7 +10,7 @@ public class User
     public Guid UserId { get; set; }
 
     [Required]
-    [MaxLength(20)]
+    [MaxLength(100)]
     public string Login { get; set; }
     
     [Required]

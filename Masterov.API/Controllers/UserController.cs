@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Masterov.API.Models.Auth;
 using Masterov.Domain.Extension;
+using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
+using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser.Command;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUser.Command;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById;
@@ -21,7 +23,6 @@ namespace Masterov.API.Controllers;
 public class UserController(IMapper mapper) : ControllerBase
 {
     //TODO сделать изменение пароля
-    //TODO добавить метод изменение заказчика
     
     /// <summary>
     /// Получить пользователя по логину.
@@ -109,6 +110,31 @@ public class UserController(IMapper mapper) : ControllerBase
         // Создаем команду с преобразованной ролью
         var user = await changeRoleUserUseCase.Execute(
             new ChangeRoleUserCommand(request.Name, userRole), 
+            cancellationToken);
+
+        return Ok(mapper.Map<UserRequest>(user));
+    }
+    
+    /// <summary>
+    /// Изменить заказчика для пользователя.
+    /// </summary>
+    /// <param name="request">Запрос с данными для изменения заказчика для пользователя.</param>
+    /// <param name="changeCustomerFromUserUseCase">Сервис для изменения заказчика для пользователя.</param>
+    /// <param name="cancellationToken">Токен для отмены операции.</param>
+    /// <returns>Обновлённый пользователь с другим заказчиком или ошибка в случае неудачи.</returns>
+    [HttpPatch("changeCustomerFromUser")]
+    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin")]
+    public async Task<IActionResult> ChangeCustomerFromUser(
+        [FromBody] ChangeCustomerFromUserRequest request,
+        [FromServices] IChangeCustomerFromUserUseCase changeCustomerFromUserUseCase,
+        CancellationToken cancellationToken)
+    {
+
+        var user = await changeCustomerFromUserUseCase.Execute(
+            new ChangeCustomerFromUserCommand(request.UserId, request.CustomerId), 
             cancellationToken);
 
         return Ok(mapper.Map<UserRequest>(user));

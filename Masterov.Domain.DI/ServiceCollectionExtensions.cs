@@ -43,6 +43,7 @@ using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
 using Masterov.Domain.Masterov.ProductType.UpdateProductType;
+using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUser;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
@@ -101,6 +102,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetUserByIdUseCase, GetUserByIdUseCase>()
             .AddScoped<IDeleteUserByLoginUseCase, DeleteUserByLoginUseCase>()
             .AddScoped<IDeleteUserByIdUseCase, DeleteUserByIdUseCase>()
+            .AddScoped<IChangeCustomerFromUserUseCase, ChangeCustomerFromUserUseCase>()
             .AddScoped<IChangeRoleUserUseCase, ChangeRoleUserUseCase>()
             .AddScoped<IGetUsersUseCase, GetUsersUseCase>();
         
