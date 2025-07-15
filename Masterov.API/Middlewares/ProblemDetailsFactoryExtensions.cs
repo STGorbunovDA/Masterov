@@ -13,6 +13,7 @@ public static class ProblemDetailsFactoryExtensions
         factory.CreateProblemDetails(httpContext,
             domainException.ErrorCode switch
             {
+                ErrorCode.StatusCode401 => StatusCodes.Status401Unauthorized,
                 ErrorCode.StatusCode410 => StatusCodes.Status410Gone,
                 ErrorCode.StatusCode409 => StatusCodes.Status409Conflict,
                 ErrorCode.StatusCode422 => StatusCodes.Status422UnprocessableEntity,
