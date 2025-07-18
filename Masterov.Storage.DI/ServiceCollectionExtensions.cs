@@ -45,6 +45,7 @@ using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
 using Masterov.Domain.Masterov.ProductType.UpdateProductType;
+using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByName;
@@ -60,6 +61,7 @@ using Masterov.Storage.Storages.Masterov.FinishedProduct;
 using Masterov.Storage.Storages.Masterov.Payment;
 using Masterov.Storage.Storages.Masterov.ProductionOrder;
 using Masterov.Storage.Storages.Masterov.ProductType;
+using Masterov.Storage.Storages.Masterov.Supplier;
 using Masterov.Storage.Storages.UserFolder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -145,6 +147,10 @@ public static class ServiceCollectionExtensions
             .AddScoped<IUpdatePaymentStorage, UpdatePaymentStorage>()
             .AddScoped<IGetPaymentsByStatusStorage, GetPaymentsByStatusStorage>()
             .AddScoped<IGetPaymentsStorage, GetPaymentsStorage>();
+        
+        // Supplier
+        services
+            .AddScoped<IGetSuppliersStorage, GetSuppliersStorage>();
         
         
         services.AddMemoryCache();

@@ -7,8 +7,11 @@ using Masterov.API.Models.Payment;
 using Masterov.API.Models.ProductComponent;
 using Masterov.API.Models.ProductionOrder;
 using Masterov.API.Models.ProductType;
+using Masterov.API.Models.Supply;
 using Masterov.API.Models.User;
+using Masterov.API.Models.Warehouse;
 using Masterov.Domain.Models;
+using SupplierRequest = Masterov.API.Models.Supplier.SupplierRequest;
 
 internal class ApiProfile : Profile
 {

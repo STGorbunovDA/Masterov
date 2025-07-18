@@ -46,10 +46,7 @@ namespace Masterov.API.Controllers;
 [Route("api/productionOrder")]
 public class ProductionOrderController(IMapper mapper) : ControllerBase
 {
-    // TODO  Обновить (сделать ручки для ProductComponent и для Warehouse)
-
     // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно?
-
 
     /// <summary>
     /// Получить все заказы

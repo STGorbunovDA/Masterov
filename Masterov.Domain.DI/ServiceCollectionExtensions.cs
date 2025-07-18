@@ -44,6 +44,7 @@ using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
 using Masterov.Domain.Masterov.ProductType.UpdateProductType;
+using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById;
@@ -139,6 +140,10 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetPaymentsByStatusUseCase, GetPaymentsByStatusUseCase>()
             .AddScoped<IGetPaymentsByOrderIdUseCase, GetPaymentsByOrderIdUseCase>()
             .AddScoped<IGetPaymentsUseCase, GetPaymentsUseCase>();
+        
+        //Supplier
+        services
+            .AddScoped<IGetSuppliersUseCase, GetSuppliersUseCase>();
             
         return services;
     }

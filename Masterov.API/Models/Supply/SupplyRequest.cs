@@ -1,6 +1,8 @@
 ﻿using Masterov.API.Models.ProductType;
+using Masterov.API.Models.Supplier;
+using Masterov.API.Models.Warehouse;
 
-namespace Masterov.API.Models;
+namespace Masterov.API.Models.Supply;
 
 public class SupplyRequest
 {
