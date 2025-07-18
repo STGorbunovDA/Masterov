@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Masterov.API.Models.Supplier;
+using Masterov.Domain.Masterov.Supplier.GetSupplierById;
+using Masterov.Domain.Masterov.Supplier.GetSupplierById.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,4 +34,24 @@ public class SupplierController(IMapper mapper) : ControllerBase
         return Ok(suppliers.Select(mapper.Map<SupplierRequest>));
     }
     
+    /// <summary>
+    /// Получить поставщика по Id
+    /// </summary>
+    /// <param name="supplierId">Идентификатор поставщика</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчике</returns>
+    [HttpGet("getSupplierById/{supplierId:guid}")]
+    [ProducesResponseType(200, Type = typeof(SupplierRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSupplierById(
+        [FromRoute] Guid supplierId,
+        [FromServices] IGetSupplierByIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customer = await useCase.Execute(new GetSupplierByIdQuery(supplierId), cancellationToken);
+        return Ok(mapper.Map<SupplierRequest>(customer));
+    }
 }
