@@ -8,7 +8,7 @@ public class FinishedProduct
     [Key]
     public Guid FinishedProductId { get; set; } = Guid.NewGuid();
 
-    [Required, MaxLength(50)]
+    [Required, MaxLength(100)]
     public string Name { get; set; }
 
     [Column(TypeName = "decimal(18,2)")]

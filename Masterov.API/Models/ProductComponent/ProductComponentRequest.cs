@@ -1,6 +1,6 @@
 ﻿using Masterov.API.Models.ProductType;
 
-namespace Masterov.API.Models;
+namespace Masterov.API.Models.ProductComponent;
 
 public class ProductComponentRequest
 {

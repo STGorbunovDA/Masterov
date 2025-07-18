@@ -4,6 +4,7 @@ using Masterov.API.Models;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.Payment;
+using Masterov.API.Models.ProductComponent;
 using Masterov.API.Models.ProductionOrder;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId.Query;
@@ -28,6 +29,8 @@ using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus.Query;
+using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrder;
+using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrder.Command;
 using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus;
 using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus.Command;
 using Masterov.Domain.Models;
@@ -44,12 +47,11 @@ namespace Masterov.API.Controllers;
 [Route("api/productionOrder")]
 public class ProductionOrderController(IMapper mapper) : ControllerBase
 {
-    // TODO  Обновить (при добавления ордера нужно учитывать какой Customer сделал заказ и автоматически регать ему доступ к сайту и личному кадинету)
+    // TODO  Обновить (сделать ручки для ProductComponent и для Warehouse)
 
     // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно?
-    
-    // TODO если пользователь зареганный то в AddProductionOrder клади CustomerId из User ну а если нет то по стандарту
-    
+
+
     /// <summary>
     /// Получить все заказы
     /// </summary>
@@ -267,7 +269,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     [ProducesResponseType(201, Type = typeof(ProductionOrderRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddProductionOrder(
         [FromForm] AddProductionOrderRequest request,
         [FromServices] IAddProductionOrderUseCase useCase,
@@ -307,7 +309,34 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
             new { orderId = productionOrder.OrderId },
             mapper.Map<ProductionOrderRequest>(productionOrder));
     }
-    
+
+    /// <summary>
+    /// Обновить ордер (заказ)
+    /// </summary>
+    /// <param name="request">Данные для обновления заказа (ордера)</param>
+    /// <param name="useCase">Сценарий обновления заказа (ордера)</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат выполнения</returns>
+    [HttpPatch("updateProductionOrder")]
+    public async Task<IActionResult> UpdateProductionOrder(
+        [FromForm] UpdateProductionOrderRequest request,
+        [FromServices] IUpdateProductionOrderUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var productionOrder = await useCase.Execute(
+            new UpdateProductionOrderCommand(
+                request.OrderId, 
+                request.CreatedAt,
+                EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status), 
+                request.Description,
+                request.CustomerId),
+            cancellationToken);
+
+        return CreatedAtAction(nameof(GetProductionOrderByOrderId),
+            new { orderId = productionOrder.OrderId },
+            mapper.Map<ProductionOrderRequest>(productionOrder));
+    }
+
     /// <summary>
     /// Удаление заказа по указанному Id.
     /// </summary>

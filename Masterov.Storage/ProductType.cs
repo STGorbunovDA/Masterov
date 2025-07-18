@@ -7,7 +7,7 @@ public class ProductType
     [Key]
     public Guid ProductTypeId { get; set; } = Guid.NewGuid();
 
-    [Required, MaxLength(50)]
+    [Required, MaxLength(100)]
     public string Name { get; set; }
 
     [MaxLength(200)]

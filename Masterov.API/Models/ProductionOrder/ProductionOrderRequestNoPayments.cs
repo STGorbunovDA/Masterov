@@ -1,4 +1,5 @@
 ﻿using Masterov.API.Models.Customer;
+using Masterov.API.Models.ProductComponent;
 using Masterov.Domain.Extension;
 
 namespace Masterov.API.Models.ProductionOrder;

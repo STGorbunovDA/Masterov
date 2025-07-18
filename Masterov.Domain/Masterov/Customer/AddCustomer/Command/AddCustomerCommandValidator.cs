@@ -19,7 +19,7 @@ public class AddCustomerCommandValidator : AbstractValidator<AddCustomerCommand>
             RuleFor(c => c.Email)
                 .EmailAddress()
                 .WithErrorCode("InvalidEmail")
-                .WithMessage("Указан некорректный email.");
+                .WithMessage("Invalid email address is specified.");
         });
 
         // Валидация телефона (если указан)
@@ -28,14 +28,14 @@ public class AddCustomerCommandValidator : AbstractValidator<AddCustomerCommand>
             RuleFor(c => c.Phone)
                 .Matches(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$")
                 .WithErrorCode("InvalidPhone")
-                .WithMessage("Телефон должен содержать от 7 до 20 цифр.");
+                .WithMessage("The phone number must contain between 7 and 20 digits.");
         });
 
         // Обязательное условие: email ИЛИ телефон должны быть указаны
         RuleFor(c => c)
             .Must(c => !string.IsNullOrEmpty(c.Email) || !string.IsNullOrEmpty(c.Phone))
             .WithErrorCode("ContactRequired")
-            .WithMessage("Должен быть указан email или телефон для связи.");
+            .WithMessage("You must provide an email or phone number for communication.");
         
     }
 }

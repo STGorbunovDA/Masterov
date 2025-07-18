@@ -10,21 +10,21 @@ public class GetOrdersByFinishedProductQueryValidator : AbstractValidator<GetOrd
         RuleFor(q => q.FinishedProductId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
-            .WithMessage("ProductId must not be an empty GUID.");
+            .WithMessage("FinishedProductId must not be an empty GUID.");
         
         RuleFor(q => q.CreatedAt)
-            .LessThanOrEqualTo(DateTime.UtcNow) // Проверка, что дата не в будущем
-            .When(q => q.CreatedAt.HasValue) // Проверка выполняется только если дата указана
+            .LessThanOrEqualTo(DateTime.UtcNow)
+            .When(q => q.CreatedAt.HasValue)
             .WithErrorCode("InvalidDate")
             .WithMessage("CreatedAt date cannot be in the future.");
             
         RuleFor(q => q.CompletedAt).Cascade(CascadeMode.Stop) 
-            .LessThanOrEqualTo(DateTime.UtcNow) // Дата завершения не может быть в будущем
-            .When(q => q.CompletedAt.HasValue) // Проверка выполняется только если дата указана
+            .LessThanOrEqualTo(DateTime.UtcNow)
+            .When(q => q.CompletedAt.HasValue)
             .WithErrorCode("InvalidDate")
             .WithMessage("CompletedAt date cannot be in the future.")
-            .GreaterThanOrEqualTo(q => q.CreatedAt) // Дата завершения не может быть раньше даты создания
-            .When(q => q.CompletedAt.HasValue && q.CreatedAt.HasValue) // Проверка только если обе даты указаны
+            .GreaterThanOrEqualTo(q => q.CreatedAt)
+            .When(q => q.CompletedAt.HasValue && q.CreatedAt.HasValue)
             .WithErrorCode("InvalidDateRange")
             .WithMessage("CompletedAt date cannot be before CreatedAt date.");
             

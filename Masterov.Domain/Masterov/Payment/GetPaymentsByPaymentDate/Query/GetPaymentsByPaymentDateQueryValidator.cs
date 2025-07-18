@@ -7,7 +7,7 @@ public class GetPaymentsByPaymentDateQueryValidator : AbstractValidator<GetPayme
     public GetPaymentsByPaymentDateQueryValidator()
     {
         RuleFor(q => q.PaymentDate).Cascade(CascadeMode.Stop)
-            .LessThanOrEqualTo(DateTime.UtcNow) // Проверка, что дата не в будущем
+            .LessThanOrEqualTo(DateTime.UtcNow)
             .WithErrorCode("InvalidDate")
             .WithMessage("PaymentDate date cannot be in the future.");
     }

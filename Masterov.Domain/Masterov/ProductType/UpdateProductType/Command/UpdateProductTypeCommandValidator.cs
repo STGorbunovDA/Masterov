@@ -15,9 +15,9 @@ public class UpdateProductTypeCommandValidator : AbstractValidator<UpdateProduct
             .NotEmpty()
             .WithErrorCode("Empty")
             .WithMessage("The name should not be empty.")
-            .MaximumLength(50)
+            .MaximumLength(100)
             .WithErrorCode("TooLong")
-            .WithMessage("The maximum length of the name should not be more than 50");
+            .WithMessage("The maximum length of the name should not be more than 100");
         
         RuleFor(c => c.Description).Cascade(CascadeMode.Stop)
             .MaximumLength(200)

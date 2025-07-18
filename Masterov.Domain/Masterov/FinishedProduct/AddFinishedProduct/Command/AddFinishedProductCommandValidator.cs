@@ -11,9 +11,9 @@ public class AddFinishedProductCommandValidator : AbstractValidator<AddFinishedP
             .NotEmpty()
             .WithErrorCode("Empty")
             .WithMessage("The name should not be empty.")
-            .MaximumLength(50)
+            .MaximumLength(100)
             .WithErrorCode("TooLong")
-            .WithMessage("The maximum length of the name should not be more than 50");
+            .WithMessage("The maximum length of the name should not be more than 100");
         
         RuleFor(c => c.Price).Cascade(CascadeMode.Stop)
             .Cascade(CascadeMode.Stop)
@@ -53,8 +53,8 @@ public class AddFinishedProductCommandValidator : AbstractValidator<AddFinishedP
         RuleFor(x => x.Image).Cascade(CascadeMode.Stop)
             .Cascade(CascadeMode.Stop)
             .Must(content => content == null || (content.Length > 0 && content.Length <= 100 * 1024 * 1024))
-            .WithMessage("Если файл предоставлен, он не должен быть пустым и должен быть не больше 100 МБ.")
+            .WithMessage("If a file is provided, it must not be empty and must be no more than 100 MB.")
             .Must(content => content == null || DomainExtension.IsImage(content))
-            .WithMessage("Файл должен быть изображением.");
+            .WithMessage("The file must be an image.");
     }
 }

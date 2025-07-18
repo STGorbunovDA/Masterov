@@ -10,8 +10,8 @@ public class GetUserByLoginQueryValidator : AbstractValidator<GetUserByLoginQuer
             .NotEmpty()
             .WithErrorCode("Empty")
             .WithMessage("The login should not be empty.")
-            .MaximumLength(20)
+            .MaximumLength(100)
             .WithErrorCode("TooLong")
-            .WithMessage("The maximum length of the name should not be more than 20");
+            .WithMessage("The maximum length of the name should not be more than 100");
     }
 }

@@ -7,7 +7,7 @@ public class GetProductionOrdersByCreatedAtQueryValidator : AbstractValidator<Ge
     public GetProductionOrdersByCreatedAtQueryValidator()
     {
         RuleFor(q => q.CreatedAt).Cascade(CascadeMode.Stop)
-            .LessThanOrEqualTo(DateTime.UtcNow) // Проверка, что дата не в будущем
+            .LessThanOrEqualTo(DateTime.UtcNow)
             .WithErrorCode("InvalidDate")
             .WithMessage("CreatedAt date cannot be in the future.");
     }

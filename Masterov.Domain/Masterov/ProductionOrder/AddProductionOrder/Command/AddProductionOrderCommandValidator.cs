@@ -20,8 +20,7 @@ public class AddProductionOrderCommandValidator : AbstractValidator<AddProductio
             .Must(id => !id.HasValue || id.Value != Guid.Empty)
             .WithErrorCode("InvalidCustomerId")
             .WithMessage("CustomerId must not be an empty GUID if specified.");
-
-        // Валидация контактных данных и имени только если CustomerId не указан
+        
         When(c => !c.CustomerId.HasValue || c.CustomerId.Value == Guid.Empty, () =>
         {
             RuleFor(c => c.CustomerName)
@@ -37,19 +36,19 @@ public class AddProductionOrderCommandValidator : AbstractValidator<AddProductio
                 .EmailAddress()
                 .When(c => !string.IsNullOrEmpty(c.CustomerEmail))
                 .WithErrorCode("InvalidEmail")
-                .WithMessage("Указан некорректный email.");
+                .WithMessage("Invalid email address is specified.");
 
             RuleFor(c => c.CustomerPhone)
                 .Cascade(CascadeMode.Stop)
                 .Matches(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,20}$")
                 .When(c => !string.IsNullOrEmpty(c.CustomerPhone))
                 .WithErrorCode("InvalidPhone")
-                .WithMessage("Телефон должен содержать от 7 до 20 цифр.");
+                .WithMessage("The phone number must contain between 7 and 20 digits.");
 
             RuleFor(c => c)
                 .Must(c => !string.IsNullOrEmpty(c.CustomerEmail) || !string.IsNullOrEmpty(c.CustomerPhone))
                 .WithErrorCode("ContactRequired")
-                .WithMessage("Должен быть указан email или телефон для связи.");
+                .WithMessage("You must provide an email or phone number for communication.");
         });
     }
 }

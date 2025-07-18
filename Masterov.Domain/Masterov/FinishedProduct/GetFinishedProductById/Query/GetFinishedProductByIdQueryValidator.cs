@@ -9,6 +9,6 @@ public class GetFinishedProductByIdQueryValidator : AbstractValidator<GetFinishe
         RuleFor(q => q.FinishedProductId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
-            .WithMessage("ProductId must not be an empty GUID.");
+            .WithMessage("FinishedProductId must not be an empty GUID.");
     }
 }

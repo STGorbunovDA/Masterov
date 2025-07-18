@@ -10,15 +10,15 @@ public class GetLoginUserQueryValidator : AbstractValidator<GetLoginUserQuery>
             .NotEmpty()
             .WithErrorCode("Empty")
             .WithMessage("The login should not be empty.")
-            .MaximumLength(20)
+            .MaximumLength(100)
             .WithErrorCode("TooLong")
-            .WithMessage("The maximum length of the name should not be more than 20");
+            .WithMessage("The maximum length of the name should not be more than 100");
         
         RuleFor(c => c.Password).Cascade(CascadeMode.Stop)
             .NotEmpty()
             .WithErrorCode("Empty")
             .WithMessage("The password should not be empty.")
-            .MaximumLength(50)
+            .MaximumLength(100)
             .WithErrorCode("TooLong")
             .WithMessage("The maximum length of the name should not be more than 50");
     }

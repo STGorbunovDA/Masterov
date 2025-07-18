@@ -24,7 +24,7 @@ namespace Masterov.API.Controllers;
 [Route("api/user")]
 public class UserController(IMapper mapper) : ControllerBase
 {
-    //TODO сделать изменение пароля
+    //TODO сделать изменение роли по id
 
     /// <summary>
     /// Получить пользователя по логину.

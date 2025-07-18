@@ -4,6 +4,7 @@ using Masterov.API.Models.Auth;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.Payment;
+using Masterov.API.Models.ProductComponent;
 using Masterov.API.Models.ProductionOrder;
 using Masterov.API.Models.ProductType;
 using Masterov.API.Models.User;

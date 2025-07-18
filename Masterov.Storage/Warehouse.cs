@@ -6,7 +6,7 @@ public class Warehouse
 {
     [Key]
     public Guid WarehouseId { get; set; } = Guid.NewGuid();
-    [Required, MaxLength(50)]
+    [Required, MaxLength(100)]
     public string Name { get; set; }
 
     [ForeignKey(nameof(ProductType))]

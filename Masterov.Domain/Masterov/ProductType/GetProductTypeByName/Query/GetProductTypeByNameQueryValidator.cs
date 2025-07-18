@@ -10,8 +10,8 @@ public class GetProductTypeByNameQueryValidator : AbstractValidator<GetProductTy
             .NotEmpty()
             .WithErrorCode("Empty")
             .WithMessage("The productTypeName should not be empty.")
-            .MaximumLength(50)
+            .MaximumLength(100)
             .WithErrorCode("TooLong")
-            .WithMessage("The maximum length of the productTypeName should not be more than 50");
+            .WithMessage("The maximum length of the productTypeName should not be more than 100");
     }
 }

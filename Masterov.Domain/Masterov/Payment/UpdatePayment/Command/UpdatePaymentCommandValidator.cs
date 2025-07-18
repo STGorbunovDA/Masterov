@@ -40,7 +40,7 @@ public class UpdatePaymentCommandValidator : AbstractValidator<UpdatePaymentComm
             .WithMessage("Amount must have no more than 2 decimal places.");
         
         RuleFor(q => q.PaymentDate).Cascade(CascadeMode.Stop)
-            .LessThanOrEqualTo(DateTime.UtcNow) // Проверка, что дата не в будущем
+            .LessThanOrEqualTo(DateTime.UtcNow)
             .WithErrorCode("InvalidDate")
             .WithMessage("PaymentDate date cannot be in the future.");
         
