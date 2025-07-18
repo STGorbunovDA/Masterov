@@ -2,6 +2,8 @@
 using Masterov.API.Models.Supplier;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById.Query;
+using Masterov.Domain.Masterov.Supplier.GetSupplierByName;
+using Masterov.Domain.Masterov.Supplier.GetSupplierByName.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +18,8 @@ namespace Masterov.API.Controllers;
 [Route("api/supplier")]
 public class SupplierController(IMapper mapper) : ControllerBase
 {
+    // TODO при добавлении поставщика имя должно быть уникальным
+    
     /// <summary>
     /// Получить всех заказчиков
     /// </summary>
@@ -51,7 +55,29 @@ public class SupplierController(IMapper mapper) : ControllerBase
         [FromServices] IGetSupplierByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer = await useCase.Execute(new GetSupplierByIdQuery(supplierId), cancellationToken);
+        var supplier = await useCase.Execute(new GetSupplierByIdQuery(supplierId), cancellationToken);
+        return Ok(mapper.Map<SupplierRequest>(supplier));
+    }
+    
+    /// <summary>
+    /// Получить поставщика по имени
+    /// </summary>
+    /// <param name="supplierName">Имя поставщика</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставщике</returns>
+    [HttpGet("GetSupplierByName/{supplierName}")]
+    [ProducesResponseType(200, Type = typeof(SupplierRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSupplierByName(
+        [FromRoute] string supplierName,
+        [FromServices] IGetSupplierByNameUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customer =
+            await useCase.Execute(new GetSupplierByNameQuery(supplierName), cancellationToken);
         return Ok(mapper.Map<SupplierRequest>(customer));
     }
 }

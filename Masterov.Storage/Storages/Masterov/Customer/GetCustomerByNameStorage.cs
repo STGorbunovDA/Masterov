@@ -27,7 +27,7 @@ internal class GetCustomerByNameStorage(MasterovDbContext dbContext, IMemoryCach
                         .Include(c => c.Orders)
                             .ThenInclude(o => o.Components)
                             .ThenInclude(pc => pc.Warehouse)
-                    .Where(f => f.Email != null && f.Name.ToLower() == customerName.ToLower().Trim())
+                    .Where(f => f.Name.ToLower() == customerName.ToLower().Trim())
                     .FirstOrDefaultAsync(cancellationToken);
                 
                 return mapper.Map<CustomerDomain>(customer);
