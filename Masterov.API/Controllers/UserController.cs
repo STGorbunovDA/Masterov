@@ -5,8 +5,11 @@ using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser.Command;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser.Command;
-using Masterov.Domain.Masterov.UserFolder.ChangeRoleUser;
-using Masterov.Domain.Masterov.UserFolder.ChangeRoleUser.Command;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById.Command;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin.Command;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByName;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById.Command;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
@@ -87,20 +90,20 @@ public class UserController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Изменить роль для пользователя.
+    /// Изменить роль для пользователя по логину.
     /// </summary>
     /// <param name="request">Запрос с данными для изменения роли пользователя.</param>
-    /// <param name="changeRoleUserUseCase">Сервис для изменения роли пользователя.</param>
+    /// <param name="changeRoleUserByLoginUseCase">Сервис для изменения роли пользователя.</param>
     /// <param name="cancellationToken">Токен для отмены операции.</param>
     /// <returns>Обновлённый пользователь или ошибка в случае неудачи.</returns>
-    [HttpPatch("changeRoleUser")]
+    [HttpPatch("changeRoleUserByLogin")]
     [ProducesResponseType(200, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin")]
-    public async Task<IActionResult> ChangeRoleUserAsync(
-        [FromBody] ChangeRoleUserRequest request,
-        [FromServices] IChangeRoleUserUseCase changeRoleUserUseCase,
+    public async Task<IActionResult> ChangeRoleUserByLogin(
+        [FromBody] ChangeRoleUserByLoginRequest request,
+        [FromServices] IChangeRoleUserByLoginUseCase changeRoleUserByLoginUseCase,
         CancellationToken cancellationToken)
     {
         // Преобразуем строку роли в Enum UserRole
@@ -110,8 +113,39 @@ public class UserController(IMapper mapper) : ControllerBase
         }
 
         // Создаем команду с преобразованной ролью
-        var user = await changeRoleUserUseCase.Execute(
-            new ChangeRoleUserCommand(request.Name, userRole),
+        var user = await changeRoleUserByLoginUseCase.Execute(
+            new ChangeRoleUserByLoginCommand(request.Name, userRole),
+            cancellationToken);
+
+        return Ok(mapper.Map<UserRequest>(user));
+    }
+    
+    /// <summary>
+    /// Изменить роль для пользователя по id.
+    /// </summary>
+    /// <param name="byIdRequest">Запрос с данными для изменения роли пользователя.</param>
+    /// <param name="changeRoleUserByIdUseCase">Сервис для изменения роли пользователя.</param>
+    /// <param name="cancellationToken">Токен для отмены операции.</param>
+    /// <returns>Обновлённый пользователь или ошибка в случае неудачи.</returns>
+    [HttpPatch("changeRoleUserById")]
+    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin")]
+    public async Task<IActionResult> ChangeRoleUserById(
+        [FromBody] ChangeRoleUserByIdRequest byIdRequest,
+        [FromServices] IChangeRoleUserByIdUseCase changeRoleUserByIdUseCase,
+        CancellationToken cancellationToken)
+    {
+        // Преобразуем строку роли в Enum UserRole
+        if (!Enum.TryParse<UserRole>(byIdRequest.Role, true, out var userRole))
+        {
+            return BadRequest("Неверная роль пользователя.");
+        }
+
+        // Создаем команду с преобразованной ролью
+        var user = await changeRoleUserByIdUseCase.Execute(
+            new ChangeRoleUserByIdCommand(byIdRequest.UserId, userRole),
             cancellationToken);
 
         return Ok(mapper.Map<UserRequest>(user));

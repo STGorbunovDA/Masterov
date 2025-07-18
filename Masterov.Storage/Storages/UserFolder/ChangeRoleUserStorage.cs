@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Masterov.Domain.Extension;
-using Masterov.Domain.Masterov.UserFolder.ChangeRoleUser;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByName;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 

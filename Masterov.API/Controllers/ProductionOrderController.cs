@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
-using Masterov.API.Models;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.Payment;

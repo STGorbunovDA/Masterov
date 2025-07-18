@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Masterov.Domain.Masterov.UserFolder.ChangeRoleUser.Command;
+namespace Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin.Command;
 
-public class ChangeRoleUserCommandValidator : AbstractValidator<ChangeRoleUserCommand>
+public class ChangeRoleUserByLoginCommandValidator : AbstractValidator<ChangeRoleUserByLoginCommand>
 {
-    public ChangeRoleUserCommandValidator()
+    public ChangeRoleUserByLoginCommandValidator()
     {
         RuleFor(c => c.Login).Cascade(CascadeMode.Stop)
             .NotEmpty()

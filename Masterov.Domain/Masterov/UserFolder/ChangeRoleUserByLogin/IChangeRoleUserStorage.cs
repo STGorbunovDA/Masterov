@@ -1,7 +1,7 @@
 ﻿using Masterov.Domain.Extension;
 using Masterov.Domain.Models;
 
-namespace Masterov.Domain.Masterov.UserFolder.ChangeRoleUser;
+namespace Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByName;
 
 public interface IChangeRoleUserStorage
 {
