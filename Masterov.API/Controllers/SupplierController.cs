@@ -4,6 +4,8 @@ using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByName;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByName.Query;
+using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
+using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -79,5 +81,26 @@ public class SupplierController(IMapper mapper) : ControllerBase
         var customer =
             await useCase.Execute(new GetSupplierByNameQuery(supplierName), cancellationToken);
         return Ok(mapper.Map<SupplierRequest>(customer));
+    }
+    
+    /// <summary>
+    /// Получить потавщика по телефону
+    /// </summary>
+    /// <param name="supplierPhone">Телефон поставщика</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставщике</returns>
+    [HttpGet("GetSupplierByPhone/{supplierPhone}")]
+    [ProducesResponseType(200, Type = typeof(SupplierRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSupplierByPhone(
+        [FromRoute] string supplierPhone,
+        [FromServices] IGetSupplierByPhoneUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplier = await useCase.Execute(new GetSupplierByPhoneQuery(supplierPhone), cancellationToken);
+        return Ok(mapper.Map<SupplierRequest>(supplier));
     }
 }

@@ -13,7 +13,7 @@ public class GetCustomerByPhoneUseCase(IValidator<GetCustomerByPhoneQuery> valid
         var customerExists = await storage.GetCustomerByPhone(getCustomerByPhoneQuery.Phone, cancellationToken);
         
         if (customerExists is null)
-            throw new NotFoundByNameException(getCustomerByPhoneQuery.Phone, "Заказчик");
+            throw new NotFoundByPhoneException(getCustomerByPhoneQuery.Phone);
         
         return customerExists;
     }
