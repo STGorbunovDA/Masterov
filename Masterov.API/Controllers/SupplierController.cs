@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Masterov.API.Models.Supplier;
+using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress;
+using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByName;
@@ -78,9 +80,9 @@ public class SupplierController(IMapper mapper) : ControllerBase
         [FromServices] IGetSupplierByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer =
+        var supplier =
             await useCase.Execute(new GetSupplierByNameQuery(supplierName), cancellationToken);
-        return Ok(mapper.Map<SupplierRequest>(customer));
+        return Ok(mapper.Map<SupplierRequest>(supplier));
     }
     
     /// <summary>
@@ -101,6 +103,27 @@ public class SupplierController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplier = await useCase.Execute(new GetSupplierByPhoneQuery(supplierPhone), cancellationToken);
+        return Ok(mapper.Map<SupplierRequest>(supplier));
+    }
+    
+    /// <summary>
+    /// Получить потавщика по адресу
+    /// </summary>
+    /// <param name="supplierAddress">адрес поставщика</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставщике</returns>
+    [HttpGet("GetSupplierByAdress/{supplierAddress}")]
+    [ProducesResponseType(200, Type = typeof(SupplierRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSupplierByAddress(
+        [FromRoute] string supplierAddress,
+        [FromServices] IGetSupplierByAddressUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplier = await useCase.Execute(new GetSupplierByAddressQuery(supplierAddress), cancellationToken);
         return Ok(mapper.Map<SupplierRequest>(supplier));
     }
 }
