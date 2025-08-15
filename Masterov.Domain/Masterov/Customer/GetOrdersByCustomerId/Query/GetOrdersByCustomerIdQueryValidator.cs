@@ -2,9 +2,9 @@
 
 namespace Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId.Query;
 
-public class GetOrdersByCustomerIdValidator : AbstractValidator<GetOrdersByCustomerIdQuery>
+public class GetOrdersByCustomerIdQueryValidator : AbstractValidator<GetOrdersByCustomerIdQuery>
 {
-    public GetOrdersByCustomerIdValidator()
+    public GetOrdersByCustomerIdQueryValidator()
     {
         RuleFor(q => q.CustomerId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)

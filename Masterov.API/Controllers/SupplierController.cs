@@ -1,5 +1,12 @@
 ﻿using AutoMapper;
+using Masterov.API.Models.Customer;
+using Masterov.API.Models.ProductionOrder;
 using Masterov.API.Models.Supplier;
+using Masterov.API.Models.Supply;
+using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
+using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId.Query;
+using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
+using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById;
@@ -25,7 +32,7 @@ public class SupplierController(IMapper mapper) : ControllerBase
     // TODO при добавлении поставщика имя должно быть уникальным
     
     /// <summary>
-    /// Получить всех заказчиков
+    /// Получить всех поставщиков
     /// </summary>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -126,4 +133,26 @@ public class SupplierController(IMapper mapper) : ControllerBase
         var supplier = await useCase.Execute(new GetSupplierByAddressQuery(supplierAddress), cancellationToken);
         return Ok(mapper.Map<SupplierRequest>(supplier));
     }
+    
+    /// <summary>
+    /// Получить список поставок поставщика
+    /// </summary>
+    /// <param name="request">Идентификатор поставщика</param>
+    /// <param name="getNewSuppliesBySupplierIdUseCase"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Результат получения списка поставок поставщика</returns>
+    [HttpGet("GetNewSuppliesBySupplierId")]
+    [ProducesResponseType(200, Type = typeof(SupplyNewRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetNewSuppliesBySupplierId(
+        [FromQuery] GetSuppliesBySupplierIdRequest request,
+        [FromServices] IGetNewSuppliesBySupplierIdUseCase getNewSuppliesBySupplierIdUseCase,
+        CancellationToken cancellationToken)
+    {
+        var supplies = await getNewSuppliesBySupplierIdUseCase.Execute(new GetNewSuppliesBySupplierIdQuery(request.SupplierId), cancellationToken);
+        return Ok(supplies?.Select(mapper.Map<SupplyNewRequest>) ?? Array.Empty<SupplyNewRequest>());
+    }
+    
 }

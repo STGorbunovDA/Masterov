@@ -45,11 +45,13 @@ using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
 using Masterov.Domain.Masterov.ProductType.UpdateProductType;
+using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByName;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
+using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByName;
@@ -66,6 +68,7 @@ using Masterov.Storage.Storages.Masterov.Payment;
 using Masterov.Storage.Storages.Masterov.ProductionOrder;
 using Masterov.Storage.Storages.Masterov.ProductType;
 using Masterov.Storage.Storages.Masterov.Supplier;
+using Masterov.Storage.Storages.Masterov.Supply;
 using Masterov.Storage.Storages.UserFolder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -158,7 +161,12 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetSupplierByNameStorage, GetSupplierByNameStorage>()
             .AddScoped<IGetSupplierByAddressStorage, GetSupplierByAddressStorage>()
             .AddScoped<IGetSupplierByPhoneStorage, GetSupplierByPhoneStorage>()
+            .AddScoped<IGetNewSuppliesBySupplierIdStorage, GetNewSuppliesBySupplierIdStorage>()
             .AddScoped<IGetSupplierByIdStorage, GetSupplierByIdStorage>();
+        
+        // Supply
+        services
+            .AddScoped<IGetSupplyByIdStorage, GetSupplyByIdStorage>();
         
         
         services.AddMemoryCache();

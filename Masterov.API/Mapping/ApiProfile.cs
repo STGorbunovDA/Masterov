@@ -7,6 +7,7 @@ using Masterov.API.Models.Payment;
 using Masterov.API.Models.ProductComponent;
 using Masterov.API.Models.ProductionOrder;
 using Masterov.API.Models.ProductType;
+using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.API.Models.User;
 using Masterov.API.Models.Warehouse;
@@ -76,6 +77,13 @@ internal class ApiProfile : Profile
         // Остальные маппинги
         CreateMap<SupplierDomain, SupplierRequest>();
         CreateMap<SupplyDomain, SupplyRequest>();
+        CreateMap<SupplierDomain, SupplierRequestNoSupply>();
+        
+        CreateMap<SupplyDomain, SupplyNewRequest>()
+            .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
+            .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType))
+            .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));
+        
         CreateMap<CustomerDomain, CustomerNoOrdersRequest>();
     }
 }
