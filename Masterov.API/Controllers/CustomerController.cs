@@ -217,7 +217,6 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var orders = await getOrdersByCustomerIdUseCase.Execute(new GetOrdersByCustomerIdQuery(request.CustomerId), cancellationToken);
-
         return Ok(orders?.Select(mapper.Map<ProductionOrderRequestNoCustumer>) ?? Array.Empty<ProductionOrderRequestNoCustumer>());
     }
 }

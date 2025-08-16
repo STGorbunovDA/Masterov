@@ -10,7 +10,7 @@ namespace Masterov.Storage.Storages.Masterov.Customer;
 internal class AddCustomerStorage(MasterovDbContext dbContext, IGuidFactory guidFactory, IMapper mapper) : IAddCustomerStorage
 {
     public async Task<CustomerDomain> AddCustomer(string name, string? email, string? phone, 
-        CancellationToken cancellationToken, Guid? orderId = null)
+        CancellationToken cancellationToken)
     {
         var customerId = guidFactory.Create();
 

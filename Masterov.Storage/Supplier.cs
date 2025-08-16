@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
+namespace Masterov.Storage;
+
 public class Supplier
 {
     [Key]

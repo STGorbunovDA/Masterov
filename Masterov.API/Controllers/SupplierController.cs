@@ -5,6 +5,8 @@ using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId.Query;
+using Masterov.Domain.Masterov.Supplier.AddSupplier;
+using Masterov.Domain.Masterov.Supplier.AddSupplier.Command;
 using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
 using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress;
@@ -145,7 +147,7 @@ public class SupplierController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(SupplyNewRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetNewSuppliesBySupplierId(
         [FromQuery] GetSuppliesBySupplierIdRequest request,
         [FromServices] IGetNewSuppliesBySupplierIdUseCase getNewSuppliesBySupplierIdUseCase,
@@ -153,6 +155,30 @@ public class SupplierController(IMapper mapper) : ControllerBase
     {
         var supplies = await getNewSuppliesBySupplierIdUseCase.Execute(new GetNewSuppliesBySupplierIdQuery(request.SupplierId), cancellationToken);
         return Ok(supplies?.Select(mapper.Map<SupplyNewRequest>) ?? Array.Empty<SupplyNewRequest>());
+    }
+    
+    /// <summary>
+    /// Добавить потавщика
+    /// </summary>
+    /// <param name="request">Данные о поставщике</param>
+    /// <param name="useCase">Сценарий добавления поставщика</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат выполнения</returns>
+    [HttpPost("addSupplier")]
+    [ProducesResponseType(201, Type = typeof(SupplierRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> AddSupplier(
+        [FromForm] AddSupplierRequest request,
+        [FromServices] IAddSupplierUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplier = await useCase.Execute(new AddSupplierCommand(request.Name, request.Address, request.Phone), cancellationToken);
+    
+        return CreatedAtAction(nameof(GetSupplierById),
+            new { supplierId = supplier.SupplierId },
+            mapper.Map<SupplierRequest>(supplier));
     }
     
 }
