@@ -18,6 +18,9 @@ internal class GetSuppliersStorage (MasterovDbContext dbContext, IMemoryCache me
                 var customers = await dbContext.Suppliers
                     .AsNoTracking()
                         .Include(c => c.Supplies)
+                            .ThenInclude(p => p.ProductType)
+                        .Include(c => c.Supplies)
+                            .ThenInclude(p => p.Warehouse)
                     .ToArrayAsync(cancellationToken);
 
                 return mapper.Map<SupplierDomain[]>(customers); 

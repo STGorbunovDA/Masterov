@@ -18,6 +18,9 @@ internal class GetSupplierByNameStorage(MasterovDbContext dbContext, IMemoryCach
                 var supplier = await dbContext.Suppliers
                     .AsNoTracking()
                         .Include(c => c.Supplies)
+                            .ThenInclude(p => p.ProductType)
+                        .Include(c => c.Supplies)
+                            .ThenInclude(p => p.Warehouse)
                     .Where(f => f.Name.ToLower() == supplierName.ToLower().Trim())
                     .FirstOrDefaultAsync( cancellationToken);
                 

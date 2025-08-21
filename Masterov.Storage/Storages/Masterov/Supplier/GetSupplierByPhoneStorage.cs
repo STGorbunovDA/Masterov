@@ -17,7 +17,10 @@ internal class GetSupplierByPhoneStorage(MasterovDbContext dbContext, IMemoryCac
                 
                 var supplier = await dbContext.Suppliers
                     .AsNoTracking()
-                    .Include(c => c.Supplies)
+                        .Include(c => c.Supplies)
+                            .ThenInclude(p => p.ProductType)
+                        .Include(c => c.Supplies)
+                            .ThenInclude(p => p.Warehouse)
                         .Where(f => f.Phone != null && f.Phone.ToLower() == supplierPhone.ToLower().Trim())
                     .FirstOrDefaultAsync(cancellationToken);
                 

@@ -7,6 +7,8 @@ using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId.Query;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
 using Masterov.Domain.Masterov.Supplier.AddSupplier.Command;
+using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
+using Masterov.Domain.Masterov.Supplier.DeleteSupplier.Command;
 using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
 using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress;
@@ -181,4 +183,21 @@ public class SupplierController(IMapper mapper) : ControllerBase
             mapper.Map<SupplierRequest>(supplier));
     }
     
+    /// <summary>
+    /// Удаление поставщика по Id.
+    /// </summary>
+    /// <param name="supplierId">Идентификатор поставщика.</param>
+    /// <param name="useCase">Сценарий удаления поставщика.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Ответ с кодом 204, если поставщик был успешно удален.</returns>
+    [HttpDelete("deleteSupplier")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> DeleteSupplier(
+        Guid supplierId,
+        [FromServices] IDeleteSupplierUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        await useCase.Execute(new DeleteSupplierCommand(supplierId), cancellationToken);
+        return NoContent();
+    }
 }
