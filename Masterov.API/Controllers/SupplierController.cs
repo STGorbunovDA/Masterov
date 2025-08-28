@@ -20,6 +20,8 @@ using Masterov.Domain.Masterov.Supplier.GetSupplierByName.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
+using Masterov.Domain.Masterov.Supplier.UpdateSupplier;
+using Masterov.Domain.Masterov.Supplier.UpdateSupplier.Command;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -199,5 +201,28 @@ public class SupplierController(IMapper mapper) : ControllerBase
     {
         await useCase.Execute(new DeleteSupplierCommand(supplierId), cancellationToken);
         return NoContent();
+    }
+    
+    /// <summary>
+    /// Обновить поставщика по Id
+    /// </summary>
+    /// <param name="request">Данные для обновления поставщика</param>
+    /// <param name="useCase">Сценарий обновления поставщика</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат обновления</returns>
+    [HttpPatch("updateSupplier")]
+    [ProducesResponseType(200, Type = typeof(SupplierRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> UpdateSupplier(
+        [FromForm] UpdateSupplierRequest request,
+        [FromServices] IUpdateSupplierUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var updateSupplier = await useCase.Execute(
+            new UpdateSupplierCommand(request.SupplierId, request.Name, request.Address, request.Phone),
+            cancellationToken);
+        return Ok(mapper.Map<SupplierRequest>(updateSupplier));
     }
 }
