@@ -1,10 +1,6 @@
-﻿
-
-using AutoMapper;
-using Masterov.API.Models.Supplier;
+﻿using AutoMapper;
 using Masterov.API.Models.Supply;
-using Masterov.Domain.Masterov.Supplier.GetSupplierById;
-using Masterov.Domain.Masterov.Supplier.GetSupplierById.Query;
+using Masterov.Domain.Masterov.Supply.GetSupplies;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetSupplyById.Query;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +16,24 @@ namespace Masterov.API.Controllers;
 [Route("api/supply")]
 public class SupplyController(IMapper mapper) : ControllerBase
 {
+    /// <summary>
+    /// Получить всех поставщиков
+    /// </summary>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчиках</returns>
+    [HttpGet("getSupplies")]
+    [ProducesResponseType(200, Type = typeof(SupplyNewRequest[]))]
+    [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSupplies(
+        [FromServices] IGetSuppliesUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplies = await useCase.Execute(cancellationToken);
+        return Ok(supplies.Select(mapper.Map<SupplyNewRequest>));
+    }
+    
     /// <summary>
     /// Получить поставку по Id
     /// </summary>
