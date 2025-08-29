@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Masterov.API.Models.Supply;
 using Masterov.Domain.Masterov.Supply.GetSupplies;
+using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity;
+using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetSupplyById.Query;
 using Microsoft.AspNetCore.Authorization;
@@ -17,11 +19,11 @@ namespace Masterov.API.Controllers;
 public class SupplyController(IMapper mapper) : ControllerBase
 {
     /// <summary>
-    /// Получить всех поставщиков
+    /// Получить все поставки
     /// </summary>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказчиках</returns>
+    /// <returns>Информация о поставках</returns>
     [HttpGet("getSupplies")]
     [ProducesResponseType(200, Type = typeof(SupplyNewRequest[]))]
     [ProducesResponseType(410)]
@@ -53,5 +55,26 @@ public class SupplyController(IMapper mapper) : ControllerBase
     {
         var supply = await useCase.Execute(new GetSupplyByIdQuery(supplyId), cancellationToken);
         return Ok(mapper.Map<SupplyNewRequest>(supply));
+    }
+    
+    /// <summary>
+    /// Получить все поставки по количеству запчастей
+    /// </summary>
+    /// <param name="request">Количество поставленных запчастей</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставках</returns>
+    [HttpGet("getSuppliesByQuantity")]
+    [ProducesResponseType(200, Type = typeof(SupplyNewRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSuppliesByQuantity(
+        [FromQuery] SuppliesByQuantityRequest request,
+        [FromServices] IGetSuppliesByQuantityUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplies = await useCase.Execute(new GetSuppliesByQuantityQuery(request.Quantity), cancellationToken);
+        return Ok(supplies.Select(mapper.Map<SupplyNewRequest>));
     }
 }
