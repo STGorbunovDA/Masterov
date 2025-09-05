@@ -11,10 +11,10 @@ internal class GetSuppliesByPriceSupplyStorage(MasterovDbContext dbContext, IMap
     {
         var supplies = await dbContext.Supplies
             .AsNoTracking() 
+            .Where(p => p.PriceSupply == priceSupply)
                 .Include(c => c.ProductType)
                 .Include(c => c.Warehouse)
                 .Include(c => c.Supplier)
-            .Where(p => p.PriceSupply == priceSupply)
             .ToArrayAsync(cancellationToken);
 
         return mapper.Map<IEnumerable<SupplyDomain>>(supplies);

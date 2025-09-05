@@ -5,6 +5,8 @@ using Masterov.Domain.Masterov.Supply.GetSuppliesByPriceSupply;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByPriceSupply.Query;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity.Query;
+using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
+using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetSupplyById.Query;
 using Microsoft.AspNetCore.Authorization;
@@ -81,7 +83,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить поставки по сумме оплаты
+    /// Получить поставки по цене
     /// </summary>
     /// <param name="request">Сумма оплаты</param>
     /// <param name="useCase">Сценарий использования</param>
@@ -98,6 +100,27 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var payments = await useCase.Execute(new GetSuppliesByAmountPriceSupply(request.PriceSupply), cancellationToken);
+        return Ok(payments?.Select(mapper.Map<SupplyNewRequest>) ?? Array.Empty<SupplyNewRequest>());
+    }
+    
+    /// <summary>
+    /// Получить поставки по дате
+    /// </summary>
+    /// <param name="request">Дата поставки</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставках</returns>
+    [HttpGet("getSuppliesBySupplyDate")]
+    [ProducesResponseType(200, Type = typeof(SupplyNewRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSuppliesBySupplyDate(
+        [FromQuery] GetSuppliesBySupplyDateRequest request,
+        [FromServices] IGetSuppliesBySupplyDateUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var payments = await useCase.Execute(new GetSuppliesBySupplyDateQuery(request.SupplyDate), cancellationToken);
         return Ok(payments?.Select(mapper.Map<SupplyNewRequest>) ?? Array.Empty<SupplyNewRequest>());
     }
 }
