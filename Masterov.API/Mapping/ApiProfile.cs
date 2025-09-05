@@ -76,6 +76,7 @@ internal class ApiProfile : Profile
         
         // Остальные маппинги
         CreateMap<SupplierDomain, SupplierRequest>();
+        CreateMap<SupplierDomain, SupplierNewRequest>();
         CreateMap<SupplyDomain, SupplyRequest>();
         CreateMap<SupplierDomain, SupplierRequestNoSupply>();
         

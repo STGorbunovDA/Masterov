@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
+using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
+using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplies;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByPriceSupply;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByPriceSupply.Query;
@@ -122,5 +125,26 @@ public class SupplyController(IMapper mapper) : ControllerBase
     {
         var payments = await useCase.Execute(new GetSuppliesBySupplyDateQuery(request.SupplyDate), cancellationToken);
         return Ok(payments?.Select(mapper.Map<SupplyNewRequest>) ?? Array.Empty<SupplyNewRequest>());
+    }
+    
+    /// <summary>
+    /// Получить поставщика по идентификатору поставки
+    /// </summary>
+    /// <param name="request">Идентификатор поставки</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставках</returns>
+    [HttpGet("GetSupplierBySupplyId")]
+    [ProducesResponseType(200, Type = typeof(SupplierNewRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSupplierBySupplyId(
+        [FromQuery] GetSupplierBySupplyIdRequest request,
+        [FromServices] IGetSupplierBySupplyIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplier = await useCase.Execute(new GetSupplierBySupplyIdQuery(request.SupplyId), cancellationToken);
+        return Ok(mapper.Map<SupplierNewRequest>(supplier));
     }
 }

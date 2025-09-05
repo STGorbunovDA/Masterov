@@ -11,9 +11,9 @@ public class GetCustomerByPaymentIdUseCase(IValidator<GetCustomerByPaymentIdQuer
     public async Task<CustomerDomain?> Execute(GetCustomerByPaymentIdQuery getCustomerByPaymentIdQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getCustomerByPaymentIdQuery, cancellationToken);
-        var productionOrderExists = await getPaymentByIdStorage.GetPaymentById(getCustomerByPaymentIdQuery.PaymentId, cancellationToken);
+        var paymentExists = await getPaymentByIdStorage.GetPaymentById(getCustomerByPaymentIdQuery.PaymentId, cancellationToken);
         
-        if (productionOrderExists is null)
+        if (paymentExists is null)
             throw new NotFoundByIdException(getCustomerByPaymentIdQuery.PaymentId, "Платеж");
         
         return await storage.GetCustomerByPaymentId(getCustomerByPaymentIdQuery.PaymentId, cancellationToken);
