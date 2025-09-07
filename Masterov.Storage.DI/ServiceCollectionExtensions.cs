@@ -54,6 +54,7 @@ using Masterov.Domain.Masterov.Supplier.GetSupplierByName;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Masterov.Domain.Masterov.Supplier.UpdateSupplier;
+using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplies;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByPriceSupply;
@@ -181,6 +182,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetSuppliesStorage, GetSuppliesStorage>()
             .AddScoped<IGetSupplierBySupplyIdStorage, GetSupplierBySupplyIdStorage>()
             .AddScoped<IGetSuppliesBySupplyDateStorage, GetSuppliesBySupplyDateStorage>()
+            .AddScoped<IGetProductTypeBySupplyIdStorage, GetProductTypeBySupplyIdStorage>()
             .AddScoped<IGetSuppliesByPriceSupplyStorage, GetSuppliesByPriceSupplyStorage>()
             .AddScoped<IGetSuppliesByQuantityStorage, GetSuppliesByQuantityStorage>();
         
