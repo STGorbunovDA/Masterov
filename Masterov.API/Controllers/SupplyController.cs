@@ -2,6 +2,7 @@
 using Masterov.API.Models.ProductType;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
+using Masterov.API.Models.Warehouse;
 using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
@@ -15,6 +16,8 @@ using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
 using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetSupplyById.Query;
+using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
+using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -136,7 +139,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="request">Идентификатор поставки</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о поставках</returns>
+    /// <returns>Информация о поставщике</returns>
     [HttpGet("GetSupplierBySupplyId")]
     [ProducesResponseType(200, Type = typeof(SupplierNewRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -157,7 +160,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="request">Идентификатор поставки</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о поставках</returns>
+    /// <returns>Информация о типе продука</returns>
     [HttpGet("GetProductTypeBySupplyId")]
     [ProducesResponseType(200, Type = typeof(ProductTypeRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -170,5 +173,26 @@ public class SupplyController(IMapper mapper) : ControllerBase
     {
         var supplier = await useCase.Execute(new GetProductTypeBySupplyIdQuery(request.SupplyId), cancellationToken);
         return Ok(mapper.Map<ProductTypeRequest>(supplier));
+    }
+    
+    /// <summary>
+    /// Получить склад по идентификатору поставки
+    /// </summary>
+    /// <param name="request">Идентификатор поставки</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о складе</returns>
+    [HttpGet("GetWarehouseBySupplyId")]
+    [ProducesResponseType(200, Type = typeof(ProductTypeRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetWarehouseBySupplyId(
+        [FromQuery] GetWarehouseBySupplyIdRequest request,
+        [FromServices] IGetWarehouseBySupplyIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplier = await useCase.Execute(new GetWarehouseBySupplyIdQuery(request.SupplyId), cancellationToken);
+        return Ok(mapper.Map<WarehouseRequest>(supplier));
     }
 }
