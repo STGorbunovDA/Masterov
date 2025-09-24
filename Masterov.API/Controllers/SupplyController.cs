@@ -23,6 +23,8 @@ using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetSupplyById.Query;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId.Query;
+using Masterov.Domain.Masterov.Supply.UpdateSupply;
+using Masterov.Domain.Masterov.Supply.UpdateSupply.Command;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -241,5 +243,28 @@ public class SupplyController(IMapper mapper) : ControllerBase
     {
         await useCase.Execute(new DeleteSupplyCommand(supplyId), cancellationToken);
         return NoContent();
+    }
+    
+    /// <summary>
+    /// Обновить поставку по Id
+    /// </summary>
+    /// <param name="request">Данные для обновления поставки</param>
+    /// <param name="useCase">Сценарий обновления поставки</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат обновления</returns>
+    [HttpPatch("updateSupply")]
+    [ProducesResponseType(200, Type = typeof(SupplyNewRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> UpdateSupply(
+        [FromForm] UpdateSupplyRequest request,
+        [FromServices] IUpdateSupplyUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var updateSupply = await useCase.Execute(
+            new UpdateSupplyCommand(request.SupplyId, request.SupplierId, request.ProductTypeId, request.WarehouseId, request.Quantity, request.PriceSupply),
+            cancellationToken);
+        return Ok(mapper.Map<SupplyNewRequest>(updateSupply));
     }
 }

@@ -63,6 +63,7 @@ using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity;
 using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
+using Masterov.Domain.Masterov.Supply.UpdateSupply;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById;
@@ -182,6 +183,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetSupplierBySupplyIdUseCase, GetSupplierBySupplyIdUseCase>()
             .AddScoped<IAddSupplyUseCase, AddSupplyUseCase>()
             .AddScoped<IGetSuppliesBySupplyDateUseCase, GetSuppliesBySupplyDateUseCase>()
+            .AddScoped<IUpdateSupplyUseCase, UpdateSupplyUseCase>()
             .AddScoped<IDeleteSupplyUseCase, DeleteSupplyUseCase>()
             .AddScoped<IGetSuppliesUseCase, GetSuppliesUseCase>();
 
