@@ -6,6 +6,8 @@ using Masterov.API.Models.Warehouse;
 using Masterov.Domain.Masterov.Supplier.AddSupplier.Command;
 using Masterov.Domain.Masterov.Supply.AddSupply;
 using Masterov.Domain.Masterov.Supply.AddSupply.Command;
+using Masterov.Domain.Masterov.Supply.DeleteSupply;
+using Masterov.Domain.Masterov.Supply.DeleteSupply.Command;
 using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
@@ -221,5 +223,23 @@ public class SupplyController(IMapper mapper) : ControllerBase
         return CreatedAtAction(nameof(GetSupplyById),
             new { supplyId = supply.SupplyId },
             mapper.Map<SupplyNewRequest>(supply));
+    }
+    
+    /// <summary>
+    /// Удаление поставки по Id.
+    /// </summary>
+    /// <param name="supplyId">Идентификатор поставки.</param>
+    /// <param name="useCase">Сценарий удаления поставки.</param>
+    /// <param name="cancellationToken">Токен отмены операции.</param>
+    /// <returns>Ответ с кодом 204, если поставка бала успешно удалена.</returns>
+    [HttpDelete("deleteSupply")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> DeleteSupply(
+        Guid supplyId,
+        [FromServices] IDeleteSupplyUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        await useCase.Execute(new DeleteSupplyCommand(supplyId), cancellationToken);
+        return NoContent();
     }
 }
