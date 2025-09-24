@@ -3,6 +3,9 @@ using Masterov.API.Models.ProductType;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.API.Models.Warehouse;
+using Masterov.Domain.Masterov.Supplier.AddSupplier.Command;
+using Masterov.Domain.Masterov.Supply.AddSupply;
+using Masterov.Domain.Masterov.Supply.AddSupply.Command;
 using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
@@ -183,7 +186,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о складе</returns>
     [HttpGet("GetWarehouseBySupplyId")]
-    [ProducesResponseType(200, Type = typeof(ProductTypeRequest))]
+    [ProducesResponseType(200, Type = typeof(WarehouseRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -194,5 +197,29 @@ public class SupplyController(IMapper mapper) : ControllerBase
     {
         var supplier = await useCase.Execute(new GetWarehouseBySupplyIdQuery(request.SupplyId), cancellationToken);
         return Ok(mapper.Map<WarehouseRequest>(supplier));
+    }
+    
+    /// <summary>
+    /// Добавить поставку
+    /// </summary>
+    /// <param name="request">Данные о поставке</param>
+    /// <param name="useCase">Сценарий добавления поставки</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат выполнения</returns>
+    [HttpPost("addSupply")]
+    [ProducesResponseType(201, Type = typeof(SupplyNewRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> AddSupply(
+        [FromForm] AddSupplyRequest request,
+        [FromServices] IAddSupplyUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supply = await useCase.Execute(new AddSupplyCommand(request.SupplierId, request.ProductTypeId, request.WarehouseId, request.Quantity, request.PriceSupply), cancellationToken);
+    
+        return CreatedAtAction(nameof(GetSupplyById),
+            new { supplyId = supply.SupplyId },
+            mapper.Map<SupplyNewRequest>(supply));
     }
 }

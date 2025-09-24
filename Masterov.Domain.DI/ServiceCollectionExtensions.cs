@@ -53,6 +53,7 @@ using Masterov.Domain.Masterov.Supplier.GetSupplierByName;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Masterov.Domain.Masterov.Supplier.UpdateSupplier;
+using Masterov.Domain.Masterov.Supply.AddSupply;
 using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplies;
@@ -73,6 +74,7 @@ using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUsers;
 using Masterov.Domain.Masterov.UserFolder.LoginUser;
 using Masterov.Domain.Masterov.UserFolder.RegisterUser;
+using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Masterov.Domain.DI;
@@ -177,8 +179,12 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetWarehouseBySupplyIdUseCase, GetWarehouseBySupplyIdUseCase>()
             .AddScoped<IGetProductTypeBySupplyIdUseCase, GetProductTypeBySupplyIdUseCase>()
             .AddScoped<IGetSupplierBySupplyIdUseCase, GetSupplierBySupplyIdUseCase>()
+            .AddScoped<IAddSupplyUseCase, AddSupplyUseCase>()
             .AddScoped<IGetSuppliesBySupplyDateUseCase, GetSuppliesBySupplyDateUseCase>()
             .AddScoped<IGetSuppliesUseCase, GetSuppliesUseCase>();
+
+        services
+            .AddScoped<IGetWarehouseByIdUseCase, GetWarehouseByIdUseCase>();
             
         return services;
     }

@@ -8,6 +8,6 @@ public class GetSuppliesByPriceSupplyQueryValidator : AbstractValidator<GetSuppl
     {
         RuleFor(q => q.PriceSupply).Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(0)
-            .WithMessage("The amount cannot be negative.");
+            .WithMessage("The PriceSupply cannot be negative.");
     }
 }

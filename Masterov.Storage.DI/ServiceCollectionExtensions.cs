@@ -54,6 +54,7 @@ using Masterov.Domain.Masterov.Supplier.GetSupplierByName;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Masterov.Domain.Masterov.Supplier.UpdateSupplier;
+using Masterov.Domain.Masterov.Supply.AddSupply;
 using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplies;
@@ -71,6 +72,7 @@ using Masterov.Domain.Masterov.UserFolder.GetUserById;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUsers;
 using Masterov.Domain.Masterov.UserFolder.RegisterUser;
+using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Storage.Extension;
 using Masterov.Storage.Storages.Masterov.Customer;
 using Masterov.Storage.Storages.Masterov.FinishedProduct;
@@ -79,6 +81,7 @@ using Masterov.Storage.Storages.Masterov.ProductionOrder;
 using Masterov.Storage.Storages.Masterov.ProductType;
 using Masterov.Storage.Storages.Masterov.Supplier;
 using Masterov.Storage.Storages.Masterov.Supply;
+using Masterov.Storage.Storages.Masterov.Warehouse;
 using Masterov.Storage.Storages.UserFolder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -185,9 +188,12 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetSuppliesBySupplyDateStorage, GetSuppliesBySupplyDateStorage>()
             .AddScoped<IGetWarehouseBySupplyIdStorage, GetWarehouseBySupplyIdStorage>()
             .AddScoped<IGetProductTypeBySupplyIdStorage, GetProductTypeBySupplyIdStorage>()
+            .AddScoped<IAddSupplyStorage, AddSupplyStorage>()
             .AddScoped<IGetSuppliesByPriceSupplyStorage, GetSuppliesByPriceSupplyStorage>()
             .AddScoped<IGetSuppliesByQuantityStorage, GetSuppliesByQuantityStorage>();
-        
+
+        services
+            .AddScoped<IGetWarehouseByIdStorage, GetWarehouseByIdStorage>();
         
         services.AddMemoryCache();
         
