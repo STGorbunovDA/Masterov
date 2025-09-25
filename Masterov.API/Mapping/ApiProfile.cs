@@ -20,12 +20,13 @@ internal class ApiProfile : Profile
     {
         // 1. Сначала маппинг простых зависимостей (ProductType и Warehouse)
         CreateMap<ProductTypeDomain, ProductTypeRequest>();
+        CreateMap<WarehouseDomain, WarehouseNewRequest>();
         CreateMap<WarehouseDomain, WarehouseRequest>();
 
         // 2. Затем маппинг ProductComponent с указанием зависимостей
         CreateMap<ProductComponentDomain, ProductComponentRequest>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType)) // AutoMapper сам применит маппинг ProductType
-            .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
+            .ForMember(dest => dest.WarehouseNew, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
 
         // 3. Маппинг ProductionOrder с преобразованием коллекций
         CreateMap<ProductionOrderDomain, ProductionOrderRequest>()
@@ -77,13 +78,16 @@ internal class ApiProfile : Profile
         // Остальные маппинги
         CreateMap<SupplierDomain, SupplierRequest>();
         CreateMap<SupplierDomain, SupplierNewRequest>();
-        CreateMap<SupplyDomain, SupplyRequest>();
+        CreateMap<SupplyDomain, SupplyRequest>()
+            .ForMember(dest => dest.WarehouseNew, opt => opt.MapFrom(src => src.Warehouse))
+            .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
+            .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType));
         CreateMap<SupplierDomain, SupplierRequestNoSupply>();
         
         CreateMap<SupplyDomain, SupplyNewRequest>()
             .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType))
-            .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));
+            .ForMember(dest => dest.WarehouseNew, opt => opt.MapFrom(src => src.Warehouse));
         
         CreateMap<CustomerDomain, CustomerNoOrdersRequest>();
     }

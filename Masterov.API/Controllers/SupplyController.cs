@@ -3,7 +3,6 @@ using Masterov.API.Models.ProductType;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.API.Models.Warehouse;
-using Masterov.Domain.Masterov.Supplier.AddSupplier.Command;
 using Masterov.Domain.Masterov.Supply.AddSupply;
 using Masterov.Domain.Masterov.Supply.AddSupply.Command;
 using Masterov.Domain.Masterov.Supply.DeleteSupply;
@@ -190,7 +189,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о складе</returns>
     [HttpGet("GetWarehouseBySupplyId")]
-    [ProducesResponseType(200, Type = typeof(WarehouseRequest))]
+    [ProducesResponseType(200, Type = typeof(WarehouseNewRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -200,7 +199,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplier = await useCase.Execute(new GetWarehouseBySupplyIdQuery(request.SupplyId), cancellationToken);
-        return Ok(mapper.Map<WarehouseRequest>(supplier));
+        return Ok(mapper.Map<WarehouseNewRequest>(supplier));
     }
     
     /// <summary>

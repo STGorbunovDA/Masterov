@@ -1,13 +1,12 @@
 ﻿using Masterov.API.Models.ProductType;
-using Masterov.API.Models.Supply;
 
 namespace Masterov.API.Models.Warehouse;
 
-public class WarehouseRequest
+public class WarehouseNewRequest
 {
     public Guid WarehouseId { get; set; }
     public string Name { get; set; }
-    public ProductTypeRequest ProductType { get; set; }
     public int Quantity { get; set; }
     public decimal LastPurchasePrice { get; set; }
+    public ProductTypeRequest ProductType { get; set; }
 }

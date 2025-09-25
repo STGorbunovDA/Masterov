@@ -18,7 +18,8 @@ internal class GetSupplyByIdStorage(MasterovDbContext dbContext, IMemoryCache me
                 var supply = await dbContext.Supplies
                     .AsNoTracking()
                         .Include(c => c.ProductType)
-                        .Include(c => c.Warehouse)
+                        .Include(o => o.Warehouse) 
+                            .ThenInclude(w => w.ProductType)
                         .Include(c => c.Supplier)
                     .Where(f => f.SupplyId == supplyId)
                     .FirstOrDefaultAsync( cancellationToken);

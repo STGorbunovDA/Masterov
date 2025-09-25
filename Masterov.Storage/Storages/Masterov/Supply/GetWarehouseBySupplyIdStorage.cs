@@ -19,7 +19,9 @@ internal class GetWarehouseBySupplyIdStorage(MasterovDbContext dbContext, IMemor
                 return await dbContext.Supplies
                     .AsNoTracking() 
                     .Where(o => o.SupplyId == supplyId)
-                        .Select(o => o.Warehouse)
+                        .Include(o => o.Warehouse) 
+                            .ThenInclude(w => w.ProductType)
+                    .Select(o => o.Warehouse)
                     .ProjectTo<WarehouseDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);
             });

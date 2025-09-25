@@ -7,6 +7,6 @@ public class ProductComponentRequest
 {
     public Guid ProductComponentId { get; set; }
     public ProductTypeRequest ProductType { get; set; }
-    public WarehouseRequest Warehouse { get; set; }
+    public WarehouseNewRequest WarehouseNew { get; set; }
     public int Quantity { get; set; }
 }
