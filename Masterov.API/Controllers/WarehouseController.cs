@@ -2,6 +2,8 @@
 using Masterov.API.Models.Warehouse;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById.Query;
+using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
+using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse.Command;
@@ -78,5 +80,26 @@ public class WarehouseController(IMapper mapper) : ControllerBase
             new UpdateWarehouseCommand(request.WarehouseId, request.ProductTypeId, request.Name, request.Quantity, request.Price),
             cancellationToken);
         return Ok(mapper.Map<WarehouseRequest>(updateWarehouse));
+    }
+    
+    /// <summary>
+    /// Получить склад по имени
+    /// </summary>
+    /// <param name="nameWarehouse">Название склада</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о складе</returns>
+    [HttpGet("getWarehouseByName/{nameWarehouse}")]
+    [ProducesResponseType(200, Type = typeof(WarehouseRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetWarehouseByName(
+        [FromRoute] string nameWarehouse,
+        [FromServices] IGetWarehouseByNameUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var warehouses =
+            await useCase.Execute(new GetWarehouseByNameQuery(nameWarehouse), cancellationToken);
+        return Ok(warehouses.Select(mapper.Map<WarehouseRequest>));
     }
 }

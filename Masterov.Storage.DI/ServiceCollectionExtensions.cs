@@ -75,6 +75,7 @@ using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUsers;
 using Masterov.Domain.Masterov.UserFolder.RegisterUser;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
+using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Masterov.Storage.Extension;
@@ -201,6 +202,7 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<IGetWarehouseByIdStorage, GetWarehouseByIdStorage>()
             .AddScoped<IUpdateWarehouseStorage, UpdateWarehouseStorage>()
+            .AddScoped<IGetWarehouseByNameStorage, GetWarehouseByNameStorage>()
             .AddScoped<IGetWarehousesStorage, GetWarehousesStorage>();
         
         services.AddMemoryCache();

@@ -77,6 +77,7 @@ using Masterov.Domain.Masterov.UserFolder.GetUsers;
 using Masterov.Domain.Masterov.UserFolder.LoginUser;
 using Masterov.Domain.Masterov.UserFolder.RegisterUser;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
+using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Microsoft.Extensions.DependencyInjection;
@@ -192,6 +193,7 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<IGetWarehouseByIdUseCase, GetWarehouseByIdUseCase>()
             .AddScoped<IUpdateWarehouseUseCase, UpdateWarehouseUseCase>()
+            .AddScoped<IGetWarehouseByNameUseCase, GetWarehouseByNameUseCase>()
             .AddScoped<IGetWarehousesUseCase, GetWarehousesUseCase>();
             
         return services;
