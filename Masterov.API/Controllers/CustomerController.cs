@@ -28,7 +28,7 @@ namespace Masterov.API.Controllers;
 /// </summary>
 /// <param name="mapper"></param>
 [ApiController]
-[Route("api/customer")]
+[Route("api/customers")]
 public class CustomerController(IMapper mapper) : ControllerBase
 {
     /// <summary>
@@ -38,7 +38,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчиках</returns>
     [HttpGet("getCustomers")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerRequest>))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomers(
