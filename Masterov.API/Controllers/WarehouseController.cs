@@ -1,5 +1,9 @@
 ﻿using AutoMapper;
+using Masterov.API.Models.Supplier;
+using Masterov.API.Models.Supply;
 using Masterov.API.Models.Warehouse;
+using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId;
+using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
@@ -101,5 +105,26 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         var warehouses =
             await useCase.Execute(new GetWarehouseByNameQuery(nameWarehouse), cancellationToken);
         return Ok(warehouses.Select(mapper.Map<WarehouseRequest>));
+    }
+    
+    /// <summary>
+    /// Получить поставки по идентификатору склада
+    /// </summary>
+    /// <param name="request">Идентификатор склада</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставках</returns>
+    [HttpGet("getSuppliesByWarehouseId")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNewRequestNoWarehouse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSuppliesByWarehouseId(
+        [FromQuery] GetSuppliesByWarehouseIdRequest request,
+        [FromServices] IGetSuppliesByWarehouseIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplies = await useCase.Execute(new GetSuppliesByWarehouseIdQuery(request.WarehouseId), cancellationToken);
+        return Ok(mapper.Map<IEnumerable<SupplyNewRequestNoWarehouse>>(supplies));
     }
 }

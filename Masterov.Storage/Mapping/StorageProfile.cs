@@ -38,7 +38,6 @@ internal class StorageProfile : Profile
             
         // Warehouse mapping
         CreateMap<Warehouse, WarehouseDomain>();
-            
         // Supplier mapping (если нужно)
         CreateMap<Supplier, SupplierDomain>();
             

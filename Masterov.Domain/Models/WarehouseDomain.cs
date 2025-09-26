@@ -7,4 +7,5 @@ public class WarehouseDomain
     public ProductTypeDomain ProductType { get; set; }
     public int Quantity { get; set; }
     public decimal Price { get; set; }
+    public IEnumerable<SupplyDomain> Supplies { get; set; }
 }

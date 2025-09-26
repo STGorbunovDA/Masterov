@@ -88,6 +88,10 @@ internal class ApiProfile : Profile
             .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType))
             .ForMember(dest => dest.WarehouseNew, opt => opt.MapFrom(src => src.Warehouse));
+
+        CreateMap<SupplyDomain, SupplyNewRequestNoWarehouse>()
+            .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
+            .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType));
         
         CreateMap<CustomerDomain, CustomerNoOrdersRequest>();
     }
