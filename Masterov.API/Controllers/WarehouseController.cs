@@ -3,6 +3,8 @@ using Masterov.API.Models.Warehouse;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
+using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
+using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse.Command;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -53,5 +55,28 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     {
         var warehouse = await useCase.Execute(new GetWarehouseByIdQuery(warehouseId), cancellationToken);
         return Ok(mapper.Map<WarehouseRequest>(warehouse));
+    }
+    
+    /// <summary>
+    /// Обновить склад по Id
+    /// </summary>
+    /// <param name="request">Данные для обновления склада</param>
+    /// <param name="useCase">Сценарий обновления скалад</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат обновления</returns>
+    [HttpPatch("updateWarehouse")]
+    [ProducesResponseType(200, Type = typeof(WarehouseRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> UpdateWarehouse(
+        [FromForm] UpdateWarehouseRequest request,
+        [FromServices] IUpdateWarehouseUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var updateWarehouse = await useCase.Execute(
+            new UpdateWarehouseCommand(request.WarehouseId, request.ProductTypeId, request.Name, request.Quantity, request.Price),
+            cancellationToken);
+        return Ok(mapper.Map<WarehouseRequest>(updateWarehouse));
     }
 }

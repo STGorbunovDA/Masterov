@@ -5,6 +5,7 @@ using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.UpdateSupply.Command;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
+using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.Supply.UpdateSupply;

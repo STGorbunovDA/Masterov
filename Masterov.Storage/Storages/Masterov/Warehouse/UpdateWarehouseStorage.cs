@@ -1,0 +1,33 @@
+﻿using AutoMapper;
+using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
+using Masterov.Domain.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace Masterov.Storage.Storages.Masterov.Warehouse;
+
+internal class UpdateWarehouseStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateWarehouseStorage
+{
+    public async Task<WarehouseDomain> UpdateWarehouse(Guid warehouseId, Guid productTypeId, string name, int quantity, decimal price,
+        CancellationToken cancellationToken)
+    {
+        var warehouseExists = await dbContext.Set<Storage.Warehouse>().FindAsync([warehouseId], cancellationToken);
+        
+        if (warehouseExists == null)
+            throw new Exception("warehouse not found");
+        
+        warehouseExists.ProductTypeId = productTypeId;
+        warehouseExists.Name = name;
+        warehouseExists.Quantity = quantity;
+        warehouseExists.Price = price;
+        
+        await dbContext.SaveChangesAsync(cancellationToken);
+        
+        var warehouse = await dbContext.Warehouses
+            .AsNoTracking()
+                .Include(c => c.ProductType)
+            .Where(f => f.WarehouseId == warehouseId)
+            .FirstOrDefaultAsync( cancellationToken);
+
+        return mapper.Map<WarehouseDomain>(warehouse);
+    }
+}

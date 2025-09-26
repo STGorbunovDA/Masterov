@@ -1,10 +1,10 @@
-﻿namespace Masterov.Domain.Models;
+﻿namespace Masterov.API.Models.Warehouse;
 
-public class WarehouseDomain
+public class UpdateWarehouseRequest
 {
     public Guid WarehouseId { get; set; }
+    public Guid ProductTypeId { get; set; }
     public string Name { get; set; }
-    public ProductTypeDomain ProductType { get; set; }
     public int Quantity { get; set; }
     public decimal Price { get; set; }
 }

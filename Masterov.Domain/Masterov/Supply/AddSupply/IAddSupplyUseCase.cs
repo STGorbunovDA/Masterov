@@ -5,5 +5,5 @@ namespace Masterov.Domain.Masterov.Supply.AddSupply;
 
 public interface IAddSupplyUseCase
 {
-    Task<SupplyDomain> Execute(AddSupplyCommand addSupplyCommand, CancellationToken cancellationToken);
+    Task<SupplyDomain?> Execute(AddSupplyCommand addSupplyCommand, CancellationToken cancellationToken);
 }

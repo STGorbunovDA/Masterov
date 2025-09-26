@@ -7,6 +7,6 @@ public class WarehouseNewRequest
     public Guid WarehouseId { get; set; }
     public string Name { get; set; }
     public int Quantity { get; set; }
-    public decimal LastPurchasePrice { get; set; }
+    public decimal Price { get; set; }
     public ProductTypeRequest ProductType { get; set; }
 }

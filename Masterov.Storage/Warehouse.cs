@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Masterov.Storage;
+
+namespace Masterov.Storage;
 
 public class Warehouse
 {
@@ -17,7 +18,7 @@ public class Warehouse
     public int Quantity { get; set; }
 
     [Column(TypeName = "decimal(18,2)")]
-    public decimal LastPurchasePrice { get; set; }
+    public decimal Price { get; set; }
 
     public ICollection<Supply> Supplies { get; set; } = new List<Supply>();
 }

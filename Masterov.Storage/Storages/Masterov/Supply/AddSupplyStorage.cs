@@ -15,7 +15,7 @@ internal class AddSupplyStorage(MasterovDbContext dbContext, IGuidFactory guidFa
     {
         var supplyId = guidFactory.Create();
         
-        // Создаем нового клиента
+        // Создаем нового поставку
         var supply = new Storage.Supply
         {
             SupplyId = supplyId,
