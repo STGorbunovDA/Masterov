@@ -205,7 +205,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий обновления заказчика</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления заказчика</returns>
-    [HttpPatch("updateCustomer/{customerId:guid}")] // ✅ Добавить customerId в route
+    [HttpPatch("updateCustomer/{customerId:guid}")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]

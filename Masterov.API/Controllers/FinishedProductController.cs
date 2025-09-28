@@ -26,7 +26,7 @@ namespace Masterov.API.Controllers;
 /// </summary>
 /// <param name="mapper"></param>
 [ApiController]
-[Route("api/finishedProduct")]
+[Route("api/finishedProducts")]
 public class FinishedProductController(IMapper mapper) : ControllerBase
 {
     /// <summary>
@@ -37,13 +37,13 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <returns>Информация о всех готовых мебельных изделий</returns>
     [HttpGet("getFinishedProducts")]
     [ProducesResponseType(200, Type = typeof(FinishedProductRequest[]))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(410, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProducts(
         [FromServices] IGetFinishedProductsUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var files = await useCase.Execute(cancellationToken);
-        return Ok(files.Select(mapper.Map<FinishedProductRequest>));
+        var finishedProducts = await useCase.Execute(cancellationToken);
+        return Ok(finishedProducts.Select(mapper.Map<FinishedProductRequest>));
     }
 
     /// <summary>

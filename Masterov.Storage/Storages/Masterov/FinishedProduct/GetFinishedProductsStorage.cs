@@ -3,21 +3,14 @@ using AutoMapper.QueryableExtensions;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
-internal class GetFinishedProductsStorage (MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetFinishedProductsStorage
+internal class GetFinishedProductsStorage (MasterovDbContext dbContext, IMapper mapper) : IGetFinishedProductsStorage
 {
     public async Task<IEnumerable<FinishedProductDomain>> GetFinishedProducts(CancellationToken cancellationToken) =>
-        (await memoryCache.GetOrCreateAsync<FinishedProductDomain[]>(
-            nameof(GetFinishedProducts),
-            entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
-                return dbContext.FinishedProducts
-                    .AsNoTracking() 
-                    .ProjectTo<FinishedProductDomain>(mapper.ConfigurationProvider)
-                    .ToArrayAsync(cancellationToken);
-            }))!;
+        await dbContext.FinishedProducts
+            .AsNoTracking() 
+            .ProjectTo<FinishedProductDomain>(mapper.ConfigurationProvider)
+            .ToArrayAsync(cancellationToken);
 }
