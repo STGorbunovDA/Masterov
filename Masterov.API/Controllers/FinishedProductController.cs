@@ -56,7 +56,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     [HttpGet("getFinishedProductById/{finishedProductId:guid}")]
     [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProductById(
         [FromRoute] Guid finishedProductId,
         [FromServices] IGetFinishedProductByIdUseCase useCase,

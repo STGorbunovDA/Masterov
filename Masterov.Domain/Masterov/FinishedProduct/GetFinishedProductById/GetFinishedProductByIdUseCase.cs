@@ -13,7 +13,7 @@ public class GetFinishedProductByIdUseCase(IValidator<GetFinishedProductByIdQuer
         var finishedProductExists = await storage.GetFinishedProductById(getFinishedProductByIdQuery.FinishedProductId, cancellationToken);
         
         if (finishedProductExists is null)
-            throw new NotFoundByIdException(getFinishedProductByIdQuery.FinishedProductId, "Изделие");
+            throw new NotFoundByIdException(getFinishedProductByIdQuery.FinishedProductId, "Готовое мебельное изделие");
         
         return finishedProductExists;
     }
