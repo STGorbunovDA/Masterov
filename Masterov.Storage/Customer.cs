@@ -15,6 +15,8 @@ public class Customer
 
     [MaxLength(20)]
     public string? Phone { get; set; }
+    
+    public DateTime? UpdatedAt  { get; set; }
 
     public ICollection<ProductionOrder> Orders { get; set; } = new List<ProductionOrder>();
 }

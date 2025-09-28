@@ -15,7 +15,7 @@ internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper
             throw new Exception("FinishedProduct not found");
         
         finishedProductExists.Name = name;
-        finishedProductExists.UploadedAt = DateTime.UtcNow;
+        finishedProductExists.UpdatedAt = DateTime.UtcNow;
         finishedProductExists.Price = price ?? finishedProductExists.Price;
         finishedProductExists.Width = width ?? finishedProductExists.Width;
         finishedProductExists.Height = height ?? finishedProductExists.Height;

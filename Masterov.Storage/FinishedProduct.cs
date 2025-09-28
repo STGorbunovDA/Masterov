@@ -17,7 +17,7 @@ public class FinishedProduct
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public DateTime? UploadedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     [Range(0, 30000)]
     public int Width { get; set; }
