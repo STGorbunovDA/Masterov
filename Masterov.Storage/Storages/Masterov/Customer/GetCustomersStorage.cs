@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +14,11 @@ internal class GetCustomersStorage(
 {
     public async Task<IEnumerable<CustomerDomain>> GetCustomers(CancellationToken cancellationToken)
     {
-        const int cacheSeconds = 5;
         const string cacheKey = "GetCustomers_Cache";
 
         return (await memoryCache.GetOrCreateAsync(cacheKey, async entry =>
         {
-            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(cacheSeconds);
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(CacheSettings.CacheSeconds);
 
             var customers = await dbContext.Customers
                 .AsNoTracking()
