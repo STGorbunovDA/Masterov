@@ -18,18 +18,23 @@ public class AddCustomerUseCase(
     {
         await validator.ValidateAndThrowAsync(addCustomerCommand, cancellationToken);
         
-        CustomerDomain? customer = null;
-
-        if (addCustomerCommand.Phone is not null)
-            customer = await getCustomerByPhoneStorage.GetCustomerByPhone(addCustomerCommand.Phone, cancellationToken);
-        else if (customer is null && addCustomerCommand.Email is not null)
-            customer = await getCustomerByEmailStorage.GetCustomerByEmail(addCustomerCommand.Email, cancellationToken);
-
-        if (customer is not null)
-            if (customer is { Email: not null, Phone: not null })
-                throw new CustomerExistsException(customer.Name, customer.Email, customer.Phone);
+        if (!string.IsNullOrWhiteSpace(addCustomerCommand.Email))
+        {
+            var customerByEmail = await getCustomerByEmailStorage.GetCustomerByEmail(
+                addCustomerCommand.Email, cancellationToken);
+            if (customerByEmail is not null)
+                throw new CustomerExistsException(customerByEmail.Name, customerByEmail.Email, customerByEmail.Phone);
+        }
+    
+        if (!string.IsNullOrWhiteSpace(addCustomerCommand.Phone))
+        {
+            var customerByPhone = await getCustomerByPhoneStorage.GetCustomerByPhone(
+                addCustomerCommand.Phone, cancellationToken);
+            if (customerByPhone is not null)
+                throw new CustomerExistsException(customerByPhone.Name, customerByPhone.Email, customerByPhone.Phone);
+        }
 
         return await addCustomerStorage.AddCustomer(addCustomerCommand.Name,
-            addCustomerCommand?.Email, addCustomerCommand?.Phone, cancellationToken);
+            addCustomerCommand?.Phone, addCustomerCommand?.Email, cancellationToken);
     }
 }

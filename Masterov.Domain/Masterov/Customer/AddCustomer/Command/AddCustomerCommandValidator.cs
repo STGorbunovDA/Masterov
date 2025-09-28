@@ -14,6 +14,15 @@ public class AddCustomerCommandValidator : AbstractValidator<AddCustomerCommand>
             .WithErrorCode("TooLong")
             .WithMessage("The maximum length of the name should not be more than 100");
         
+        // Валидация телефона (если указан)
+        When(c => !string.IsNullOrEmpty(c.Phone), () =>
+        {
+            RuleFor(c => c.Phone)
+                .Matches(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$")
+                .WithErrorCode("InvalidPhone")
+                .WithMessage("The phone number must contain between 7 and 10 digits.");
+        });
+        
         When(c => !string.IsNullOrEmpty(c.Email), () =>
         {
             RuleFor(c => c.Email)
@@ -21,16 +30,7 @@ public class AddCustomerCommandValidator : AbstractValidator<AddCustomerCommand>
                 .WithErrorCode("InvalidEmail")
                 .WithMessage("Invalid email address is specified.");
         });
-
-        // Валидация телефона (если указан)
-        When(c => !string.IsNullOrEmpty(c.Phone), () =>
-        {
-            RuleFor(c => c.Phone)
-                .Matches(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$")
-                .WithErrorCode("InvalidPhone")
-                .WithMessage("The phone number must contain between 7 and 20 digits.");
-        });
-
+        
         // Обязательное условие: email ИЛИ телефон должны быть указаны
         RuleFor(c => c)
             .Must(c => !string.IsNullOrEmpty(c.Email) || !string.IsNullOrEmpty(c.Phone))

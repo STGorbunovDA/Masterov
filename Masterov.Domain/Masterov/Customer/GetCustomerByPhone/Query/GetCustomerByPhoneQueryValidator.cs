@@ -9,6 +9,6 @@ public class GetCustomerByPhoneQueryValidator : AbstractValidator<GetCustomerByP
         RuleFor(c => c.Phone)
             .Matches(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$")
             .WithErrorCode("InvalidPhone")
-            .WithMessage("The phone number must contain from 7 to 20 digits.");
+            .WithMessage("The phone number must contain from 7 to 10 digits.");
     }
 }

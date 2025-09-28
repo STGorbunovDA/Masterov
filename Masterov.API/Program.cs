@@ -2,6 +2,7 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 using AutoMapper;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Masterov.API.Extensions;
 using Masterov.API.Middlewares;
 using Masterov.Domain.DI;
@@ -19,15 +20,23 @@ builder.Services.AddCors(policy => policy.AddPolicy("default", opt =>
 }));
 
 builder.Services.AddLogging();
+
+builder.Services.AddFluentValidationAutoValidation(config =>
+{
+    config.DisableDataAnnotationsValidation = true;
+});
+builder.Services.AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<FinishedProductDomain>();
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCustomSwagger();
-builder.Services.AddValidatorsFromAssemblyContaining<FinishedProductDomain>();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 
 builder.Services
@@ -39,17 +48,20 @@ builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.GetExecutingAss
 builder.Logging.AddConsole();
 
 var app = builder.Build();
+
+var environment = app.Environment;
+Console.WriteLine($"Environment: {environment.EnvironmentName}");
+
 var mapper = app.Services.GetRequiredService<IMapper>();
 mapper.ConfigurationProvider.AssertConfigurationIsValid();
 
+app.UseCors("default");
+app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
-
-app.UseCors("default");
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.Run();

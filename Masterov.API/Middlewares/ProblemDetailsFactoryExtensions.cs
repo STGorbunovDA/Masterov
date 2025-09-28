@@ -14,12 +14,13 @@ public static class ProblemDetailsFactoryExtensions
             domainException.ErrorCode switch
             {
                 ErrorCode.StatusCode401 => StatusCodes.Status401Unauthorized,
+                ErrorCode.StatusCode404 => StatusCodes.Status404NotFound,
                 ErrorCode.StatusCode410 => StatusCodes.Status410Gone,
                 ErrorCode.StatusCode409 => StatusCodes.Status409Conflict,
                 ErrorCode.StatusCode422 => StatusCodes.Status422UnprocessableEntity,
                 _ => StatusCodes.Status500InternalServerError
             },
-            domainException.Message);
+            detail: domainException.Message);
     
     public static ProblemDetails CreateFrom(this ProblemDetailsFactory factory, HttpContext httpContext,
         ValidationException validationException)
@@ -27,7 +28,8 @@ public static class ProblemDetailsFactoryExtensions
         var modelStateDictionary = new ModelStateDictionary();
         foreach (var error in validationException.Errors)
         {
-            modelStateDictionary.AddModelError(error.PropertyName, error.ErrorCode);
+            var combinedMessage = $"{error.ErrorCode}: {error.ErrorMessage}";
+            modelStateDictionary.AddModelError(error.PropertyName, combinedMessage);
         }
 
         return factory.CreateValidationProblemDetails(httpContext,

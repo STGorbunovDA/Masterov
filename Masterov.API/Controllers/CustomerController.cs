@@ -39,7 +39,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <returns>Информация о заказчиках</returns>
     [HttpGet("getCustomers")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerRequest>))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(410, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomers(
         [FromServices] IGetCustomersUseCase useCase,
@@ -59,7 +59,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomerById/{customerId:guid}")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomerById(
         [FromRoute] Guid customerId,
@@ -80,7 +80,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomerByName")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomerByName(
         [FromQuery] GetCustomerByNameRequest request,
@@ -101,7 +101,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomerByPhone")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomerByPhone(
         [FromQuery] GetCustomerByPhoneRequest request,
@@ -122,7 +122,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet($"getCustomerByEmail")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomerByEmail(
         [FromQuery] GetCustomerByEmailRequest request,
@@ -143,7 +143,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getOrdersByCustomerId")]
     [ProducesResponseType(200, Type = typeof(ProductionOrderRequestNoCustumer[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(410, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetOrdersByCustomerId(
         [FromQuery] GetOrdersByCustomerIdRequest request,
@@ -164,10 +164,10 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpPost("addCustomer")]
     [ProducesResponseType(201, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddCustomer(
-        [FromForm] AddCustomerRequest request,
+        [FromBody] AddCustomerRequest request,
         [FromServices] IAddCustomerUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -179,13 +179,14 @@ public class CustomerController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Удаление заказчика по Id.
+    /// Удаление заказчика по Id
     /// </summary>
-    /// <param name="customerId">Идентификатор заказчика.</param>
-    /// <param name="useCase">Сценарий удаления заказчика.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Ответ с кодом 204, если заказчик был успешно удален.</returns>
-    [HttpDelete("deleteCustomer")]
+    /// <param name="customerId">Идентификатор заказчика</param>
+    /// <param name="useCase">Сценарий удаления заказчика</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <returns>Ответ с кодом 204, если заказчик был успешно удален</returns>
+    [HttpDelete("deleteCustomer/{customerId:guid}")]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteCustomer(
         Guid customerId,
@@ -199,22 +200,24 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Обновить заказчика по Id
     /// </summary>
+    /// <param name="customerId">Идентификатор заказчика</param>
     /// <param name="request">Данные для обновления заказчика</param>
     /// <param name="useCase">Сценарий обновления заказчика</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления заказчика</returns>
-    [HttpPatch("updateCustomer")]
+    [HttpPatch("updateCustomer/{customerId:guid}")] // ✅ Добавить customerId в route
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateCustomer(
+        [FromRoute] Guid customerId,
         [FromForm] UpdateCustomerRequest request,
         [FromServices] IUpdateCustomerUseCase useCase,
         CancellationToken cancellationToken)
     {
         var updateCustomer = await useCase.Execute(
-            new UpdateCustomerCommand(request.CustomerId, request.Name, request.Email, request.Phone),
+            new UpdateCustomerCommand(customerId, request.Name, request.Email, request.Phone),
             cancellationToken);
         return Ok(mapper.Map<CustomerRequest>(updateCustomer));
     }

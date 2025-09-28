@@ -2,5 +2,5 @@
 
 public interface IDeleteCustomerStorage
 {
-    Task<bool> DeleteCustomer(Guid CustomerId, CancellationToken cancellationToken);
+    Task<bool> DeleteCustomer(Guid сustomerId, CancellationToken cancellationToken);
 }
