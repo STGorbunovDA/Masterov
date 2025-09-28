@@ -20,6 +20,6 @@ public class GetOrdersByCustomerIdUseCase(IValidator<GetOrdersByCustomerIdQuery>
         if (customerExists is null)
             throw new NotFoundByIdException(getOrdersByCustomerIdQuery.CustomerId, "Заказчик");
 
-        return await storage.GetCustomerOrders(getOrdersByCustomerIdQuery.CustomerId, cancellationToken);
+        return await storage.GetOrdersByCustomerId(getOrdersByCustomerIdQuery.CustomerId, cancellationToken);
     }
 }

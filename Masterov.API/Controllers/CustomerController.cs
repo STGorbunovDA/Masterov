@@ -73,65 +73,85 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Получить заказчика по имени
     /// </summary>
-    /// <param name="customerName">Имя заказчика</param>
+    /// <param name="request">Имя заказчика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчике</returns>
-    [HttpGet("GetCustomerByName/{customerName}")]
+    [HttpGet("getCustomerByName")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomerByName(
-        [FromRoute] string customerName,
+        [FromQuery] GetCustomerByNameRequest request,
         [FromServices] IGetCustomerByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer =
-            await useCase.Execute(new GetCustomerByNameQuery(customerName), cancellationToken);
+        var customer = await useCase.Execute(new GetCustomerByNameQuery(request.Name), cancellationToken);
         return Ok(mapper.Map<CustomerRequest>(customer));
     }
     
     /// <summary>
     /// Получить заказчика по телефону
     /// </summary>
-    /// <param name="customerPhone">Телефон заказчика</param>
+    /// <param name="request">Телефон заказчика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчике</returns>
-    [HttpGet("GetCustomerByPhone/{customerPhone}")]
+    [HttpGet("getCustomerByPhone")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomerByPhone(
-        [FromRoute] string customerPhone,
+        [FromQuery] GetCustomerByPhoneRequest request,
         [FromServices] IGetCustomerByPhoneUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer = await useCase.Execute(new GetCustomerByPhoneQuery(customerPhone), cancellationToken);
+        var customer = await useCase.Execute(new GetCustomerByPhoneQuery(request.Phone), cancellationToken);
         return Ok(mapper.Map<CustomerRequest>(customer));
     }
     
     /// <summary>
     /// Получить заказчика по почте
     /// </summary>
-    /// <param name="customerEmail">Почта заказчика</param>
+    /// <param name="request">Почта заказчика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчике</returns>
-    [HttpGet("GetCustomerByEmail/{customerEmail}")]
+    [HttpGet($"getCustomerByEmail")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomerByEmail(
-        [FromRoute] string customerEmail,
+        [FromQuery] GetCustomerByEmailRequest request,
         [FromServices] IGetCustomerByEmailUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer = await useCase.Execute(new GetCustomerByEmailQuery(customerEmail), cancellationToken);
+        var customer = await useCase.Execute(new GetCustomerByEmailQuery(request.Email), cancellationToken);
         return Ok(mapper.Map<CustomerRequest>(customer));
+    }
+    
+    /// <summary>
+    /// Получить список ордеров заказчика
+    /// </summary>
+    /// <param name="request">Идентификатор заказчика</param>
+    /// <param name="getOrdersByCustomerIdUseCase"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Результат получения списка ордеров заказчика</returns>
+    [HttpGet("getOrdersByCustomerId")]
+    [ProducesResponseType(200, Type = typeof(ProductionOrderRequestNoCustumer[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetOrdersByCustomerId(
+        [FromQuery] GetOrdersByCustomerIdRequest request,
+        [FromServices] IGetOrdersByCustomerIdUseCase getOrdersByCustomerIdUseCase,
+        CancellationToken cancellationToken)
+    {
+        var orders = await getOrdersByCustomerIdUseCase.Execute(new GetOrdersByCustomerIdQuery(request.CustomerId), cancellationToken);
+        return Ok(orders?.Select(mapper.Map<ProductionOrderRequestNoCustumer>) ?? Array.Empty<ProductionOrderRequestNoCustumer>());
     }
     
     /// <summary>
@@ -199,24 +219,4 @@ public class CustomerController(IMapper mapper) : ControllerBase
         return Ok(mapper.Map<CustomerRequest>(updateCustomer));
     }
     
-    /// <summary>
-    /// Получить список ордеров заказчика
-    /// </summary>
-    /// <param name="request">Идентификатор заказчика</param>
-    /// <param name="getOrdersByCustomerIdUseCase"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>Результат получения списка ордеров заказчик</returns>
-    [HttpGet("GetOrdersByCustomerId")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequestNoCustumer[]))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetOrdersByCustomerId(
-        [FromQuery] GetOrdersByCustomerIdRequest request,
-        [FromServices] IGetOrdersByCustomerIdUseCase getOrdersByCustomerIdUseCase,
-        CancellationToken cancellationToken)
-    {
-        var orders = await getOrdersByCustomerIdUseCase.Execute(new GetOrdersByCustomerIdQuery(request.CustomerId), cancellationToken);
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequestNoCustumer>) ?? Array.Empty<ProductionOrderRequestNoCustumer>());
-    }
 }
