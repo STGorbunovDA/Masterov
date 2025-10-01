@@ -76,15 +76,44 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     [HttpGet("getFinishedProductByName/{finishedProductName}")]
     [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProductByName(
         [FromRoute] string finishedProductName,
         [FromServices] IGetFinishedProductByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productType =
-            await useCase.Execute(new GetFinishedProductByNameQuery(finishedProductName), cancellationToken);
+        var productType = await useCase.Execute(new GetFinishedProductByNameQuery(finishedProductName), cancellationToken);
         return Ok(mapper.Map<FinishedProductRequest>(productType));
+    }
+    
+    /// <summary>
+    /// Получить список ордеров готового изделия с возможностью фильтрации по Id || даты создания || даты выполнения || Статуса || Описания
+    /// </summary>
+    /// <param name="request">Данные для получения ордеров готового мебельного изделия</param>
+    /// <param name="getOrdersByFinishedProductUseCase"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Результат получения списка ордеров готового мебельного изделия</returns>
+    [HttpGet("GetOrdersByFinishedProduct")]
+    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(410)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetOrdersByFinishedProduct(
+        [FromQuery] GetOrdersByFinishedProductRequest request,
+        [FromServices] IGetOrdersByFinishedProductUseCase getOrdersByFinishedProductUseCase,
+        CancellationToken cancellationToken)
+    {
+        var orders = await getOrdersByFinishedProductUseCase.Execute(
+            new GetOrdersByFinishedProductQuery(
+                request.FinishedProductId, 
+                request.CreatedAt, 
+                request.CompletedAt,
+                request.Status != null ? EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status) : ProductionOrderStatus.Unknown,
+                request.Description
+            ), 
+            cancellationToken);
+
+        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
     }
 
     /// <summary>
@@ -167,33 +196,5 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         return Ok(mapper.Map<FinishedProductRequest>(updateFinishedProduct));
     }
 
-    /// <summary>
-    /// Получить список ордеров готового изделия с возможностью фильтрации по Id || даты создания || даты выполнения || Статуса || Описания
-    /// </summary>
-    /// <param name="request">Данные для получения ордеров готового мебельного изделия</param>
-    /// <param name="getOrdersByFinishedProductUseCase"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns>Результат получения списка ордеров готового мебельного изделия</returns>
-    [HttpGet("GetOrdersByFinishedProduct")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetOrdersByFinishedProduct(
-        [FromQuery] GetOrdersByFinishedProductRequest request,
-        [FromServices] IGetOrdersByFinishedProductUseCase getOrdersByFinishedProductUseCase,
-        CancellationToken cancellationToken)
-    {
-        var orders = await getOrdersByFinishedProductUseCase.Execute(
-            new GetOrdersByFinishedProductQuery(
-                request.FinishedProductId, 
-                request.CreatedAt, 
-                request.CompletedAt,
-                request.Status != null ? EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status) : ProductionOrderStatus.Unknown,
-                request.Description
-            ), 
-            cancellationToken);
-
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
-    }
+    
 }
