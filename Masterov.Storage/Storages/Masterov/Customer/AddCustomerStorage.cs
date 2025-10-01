@@ -17,6 +17,7 @@ internal class AddCustomerStorage(MasterovDbContext dbContext, IGuidFactory guid
         var customer = new Storage.Customer
         {
             CustomerId = customerId,
+            CreatedAt = DateTime.Now,
             Name = name,
             Phone = phone,
             Email = email

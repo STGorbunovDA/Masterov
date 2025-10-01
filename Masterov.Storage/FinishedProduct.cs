@@ -15,7 +15,7 @@ public class FinishedProduct
     public decimal Price { get; set; }
 
     [Required]
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
 
     public DateTime? UpdatedAt { get; set; }
 
