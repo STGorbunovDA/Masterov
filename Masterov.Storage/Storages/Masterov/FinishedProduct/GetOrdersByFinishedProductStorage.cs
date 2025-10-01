@@ -22,21 +22,15 @@ public class GetOrdersByFinishedProductStorage (MasterovDbContext dbContext, IMa
 
         // Фильтрация по дате создания (если указана)
         if (createdAt.HasValue)
-        {
             query = query.Where(o => o.CreatedAt.Date == createdAt.Value.Date);
-        }
 
         // Фильтрация по дате завершения (если указана)
         if (completedAt.HasValue)
-        {
             query = query.Where(o => o.CompletedAt.HasValue && o.CompletedAt.Value.Date == completedAt.Value.Date);
-        }
 
         // Фильтрация по статусу (если явно задан, отличному от Draft)
         if (status != ProductionOrderStatus.Draft)
-        {
             query = query.Where(o => o.Status == status);
-        }
 
         // Фильтрация по описанию (если указано)
         if (!string.IsNullOrWhiteSpace(description))

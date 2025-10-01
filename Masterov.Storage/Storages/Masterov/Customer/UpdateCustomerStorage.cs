@@ -16,7 +16,7 @@ internal class UpdateCustomerStorage(MasterovDbContext dbContext, IMapper mapper
         customerExists.Name = name;
         customerExists.Email = email;
         customerExists.Phone = phone;
-        customerExists.UpdatedAt = DateTime.UtcNow;
+        customerExists.UpdatedAt = DateTime.Now;
         
         await dbContext.SaveChangesAsync(cancellationToken);
 

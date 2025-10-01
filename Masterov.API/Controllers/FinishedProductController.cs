@@ -90,20 +90,20 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// Получить список ордеров готового изделия с возможностью фильтрации по Id || даты создания || даты выполнения || Статуса || Описания
     /// </summary>
     /// <param name="request">Данные для получения ордеров готового мебельного изделия</param>
-    /// <param name="getOrdersByFinishedProductUseCase"></param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат получения списка ордеров готового мебельного изделия</returns>
-    [HttpGet("GetOrdersByFinishedProduct")]
+    [HttpGet("getOrdersByFinishedProduct")]
     [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetOrdersByFinishedProduct(
         [FromQuery] GetOrdersByFinishedProductRequest request,
-        [FromServices] IGetOrdersByFinishedProductUseCase getOrdersByFinishedProductUseCase,
+        [FromServices] IGetOrdersByFinishedProductUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var orders = await getOrdersByFinishedProductUseCase.Execute(
+        var orders = await useCase.Execute(
             new GetOrdersByFinishedProductQuery(
                 request.FinishedProductId, 
                 request.CreatedAt, 
@@ -126,7 +126,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     [HttpPost("addFinishedProduct")]
     [ProducesResponseType(201, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddFinishedProduct(
         [FromForm] AddFinishedProductRequest request,
@@ -155,13 +155,16 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Удаление готового мебельного изделия по указанному Id.
+    /// Удаление готового мебельного изделия по указанному Id
     /// </summary>
-    /// <param name="finishedProductId">Идентификатор готового мебельного изделия для удаления.</param>
-    /// <param name="useCase">Сценарий удаления готового мебольного изделия.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Ответ с кодом 204, если готовое мебельное изделие было успешно удалено.</returns>
+    /// <param name="finishedProductId">Идентификатор готового мебельного изделия для удаления</param>
+    /// <param name="useCase">Сценарий удаления готового мебольного изделия</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <returns>Ответ с кодом 204, если готовое мебельное изделие было успешно удалено</returns>
     [HttpDelete("deleteFinishedProduct")]
+    [ProducesResponseType(204, Type = typeof(bool))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteFinishedProduct(
         Guid finishedProductId,
@@ -195,6 +198,4 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
             cancellationToken);
         return Ok(mapper.Map<FinishedProductRequest>(updateFinishedProduct));
     }
-
-    
 }

@@ -29,8 +29,6 @@ public class UpdateFinishedProductCommandValidator : AbstractValidator<UpdateFin
             .Must(price => price == null || DomainExtension.HasValidPrecisionAndScale(price.Value, 18, 2))
             .WithErrorCode("InvalidFormat")
             .WithMessage("The price should have maximum 2 decimal places and no more than 18 digits total.");
-
-
         
         When(c => c.Width.HasValue, () =>
         {
