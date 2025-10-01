@@ -14,6 +14,8 @@ using Masterov.Domain.Masterov.Customer.GetCustomerByName.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomerByPhone;
 using Masterov.Domain.Masterov.Customer.GetCustomerByPhone.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
+using Masterov.Domain.Masterov.Customer.GetCustomersByCreatedAt;
+using Masterov.Domain.Masterov.Customer.GetCustomersByCreatedAt.Query;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId.Query;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer;
@@ -131,6 +133,26 @@ public class CustomerController(IMapper mapper) : ControllerBase
     {
         var customer = await useCase.Execute(new GetCustomerByEmailQuery(request.Email), cancellationToken);
         return Ok(mapper.Map<CustomerRequest>(customer));
+    }
+    
+    /// <summary>
+    /// Получить заказчиков по дате создания
+    /// </summary>
+    /// <param name="request">Дата создания заказчиков</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчиках (ордерах)</returns>
+    [HttpGet("getCustomersByCreatedAt")]
+    [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetCustomersByCreatedAt(
+        [FromQuery] GetCustomersByCreatedAtRequest request,
+        [FromServices] IGetCustomersByCreatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customers = await useCase.Execute(new GetCustomersByCreatedAtQuery(request.CreatedAt), cancellationToken);
+        return Ok(customers?.Select(mapper.Map<CustomerRequest>) ?? Array.Empty<CustomerRequest>());
     }
     
     /// <summary>

@@ -6,6 +6,7 @@ using FluentValidation.AspNetCore;
 using Masterov.API.Extensions;
 using Masterov.API.Middlewares;
 using Masterov.Domain.DI;
+using Masterov.Domain.Extension;
 using Masterov.Domain.Models;
 using Masterov.Storage.DI;
 
@@ -32,6 +33,8 @@ builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        options.JsonSerializerOptions.Converters.Add(new JsonDateTimeConverter());
+        options.JsonSerializerOptions.Converters.Add(new JsonNullableDateTimeConverter());
     });
 
 builder.Services.AddEndpointsApiExplorer();
