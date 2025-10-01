@@ -2,5 +2,5 @@
 
 public class GetCustomersByCreatedAtRequest
 {
-    public DateTime CreatedAt { get; set; }
+    public string CreatedAt { get; set; }
 }

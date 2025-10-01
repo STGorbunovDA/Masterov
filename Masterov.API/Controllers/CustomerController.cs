@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Masterov.API.Extensions;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.ProductionOrder;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
@@ -151,7 +152,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         [FromServices] IGetCustomersByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customers = await useCase.Execute(new GetCustomersByCreatedAtQuery(request.CreatedAt), cancellationToken);
+        var customers = await useCase.Execute(new GetCustomersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
         return Ok(customers?.Select(mapper.Map<CustomerRequest>) ?? Array.Empty<CustomerRequest>());
     }
     
