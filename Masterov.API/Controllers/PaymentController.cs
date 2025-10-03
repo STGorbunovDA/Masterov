@@ -34,7 +34,7 @@ namespace Masterov.API.Controllers;
 /// </summary>
 /// <param name="mapper"></param>
 [ApiController]
-[Route("api/payment")]
+[Route("api/payments")]
 public class PaymentController(IMapper mapper) : ControllerBase
 {
     /// <summary>
@@ -43,9 +43,9 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах</returns>
-    [HttpGet("gePayments")]
-    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
-    [ProducesResponseType(410)]
+    [HttpGet("getPayments")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
+    [ProducesResponseType(410, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPayments(
         [FromServices] IGetPaymentsUseCase useCase,

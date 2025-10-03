@@ -10,7 +10,7 @@ internal class GetPaymentsByAmountStorage(MasterovDbContext dbContext, IMemoryCa
 {
     public async Task<IEnumerable<PaymentDomain?>> GetPaymentsByAmount(decimal amount, CancellationToken cancellationToken)
     {
-        var payments = await dbContext.OrderPayments
+        var payments = await dbContext.Payments
             .AsNoTracking() 
             .Where(p => p.Amount == amount)
             .Include(o => o.Customer)

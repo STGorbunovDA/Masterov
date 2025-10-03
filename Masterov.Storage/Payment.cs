@@ -4,7 +4,7 @@ using Masterov.Domain.Extension;
 
 namespace Masterov.Storage;
 
-public class OrderPayment
+public class Payment
 {
     [Key]
     public Guid PaymentId { get; set; } = Guid.NewGuid();

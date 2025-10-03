@@ -15,7 +15,7 @@ internal class GetPaymentByIdStorage(MasterovDbContext dbContext, IMemoryCache m
             entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
-                return dbContext.OrderPayments
+                return dbContext.Payments
                     .AsNoTracking() 
                     .Where(f => f.PaymentId == customerId)
                     .ProjectTo<PaymentDomain>(mapper.ConfigurationProvider)

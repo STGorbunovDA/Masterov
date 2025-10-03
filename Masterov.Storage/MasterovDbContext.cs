@@ -10,7 +10,7 @@ public class MasterovDbContext : DbContext
     public DbSet<ProductComponent> ProductComponents { get; set; }
     public DbSet<ProductionOrder> ProductionOrders { get; set; }
     public DbSet<Customer> Customers { get; set; }
-    public DbSet<OrderPayment> OrderPayments { get; set; }
+    public DbSet<Payment> Payments { get; set; }
     public DbSet<ProductType> ProductTypes { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<Supply> Supplies { get; set; }

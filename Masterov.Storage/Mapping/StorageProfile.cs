@@ -26,7 +26,7 @@ internal class StorageProfile : Profile
         CreateMap<Customer, CustomerDomain>()
             .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders));
         
-        CreateMap<OrderPayment, PaymentDomain>()
+        CreateMap<Payment, PaymentDomain>()
             .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer));
         
         CreateMap<User, UserDomain>()

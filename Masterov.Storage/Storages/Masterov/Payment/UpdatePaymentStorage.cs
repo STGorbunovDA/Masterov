@@ -10,7 +10,7 @@ internal class UpdatePaymentStorage(MasterovDbContext dbContext, IMapper mapper)
     public async Task<PaymentDomain> UpdatePayment(Guid paymentId, Guid orderId, Guid customerId, 
         PaymentMethod methodPayment, decimal amount, DateTime paymentDate, CancellationToken cancellationToken)
     {
-        var paymentExists = await dbContext.Set<Storage.OrderPayment>().FindAsync([paymentId], cancellationToken);
+        var paymentExists = await dbContext.Set<Storage.Payment>().FindAsync([paymentId], cancellationToken);
         
         if (paymentExists == null)
             throw new Exception("payment not found");

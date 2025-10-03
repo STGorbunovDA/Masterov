@@ -13,7 +13,7 @@ public class GetPaymentsByPaymentDateStorage (MasterovDbContext dbContext, IMapp
         var startOfDay = paymentDate.Date;
         var endOfDay = startOfDay.AddDays(1);
 
-        var payments = await dbContext.OrderPayments
+        var payments = await dbContext.Payments
             .AsNoTracking() 
             .Where(payDate => payDate.PaymentDate >= startOfDay && payDate.PaymentDate < endOfDay)
             .Include(o => o.Customer)

@@ -31,6 +31,6 @@ public class ProductionOrder
     public Guid CustomerId { get; set; }
     public Customer Customer { get; set; }
 
-    public ICollection<OrderPayment> Payments { get; set; } = new List<OrderPayment>();
+    public ICollection<Payment> Payments { get; set; } = new List<Payment>();
     
 }

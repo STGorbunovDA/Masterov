@@ -6,12 +6,12 @@ internal class DeletePaymentStorage(MasterovDbContext dbContext) : IDeletePaymen
 {
     public async Task<bool> DeletePayment(Guid paymentId, CancellationToken cancellationToken)
     {
-        var payment = await dbContext.Set<Storage.OrderPayment>().FindAsync(new object[] { paymentId }, cancellationToken);
+        var payment = await dbContext.Set<Storage.Payment>().FindAsync(new object[] { paymentId }, cancellationToken);
         
         if (payment == null)
             return false;
         
-        dbContext.Set<Storage.OrderPayment>().Remove(payment);
+        dbContext.Set<Storage.Payment>().Remove(payment);
         await dbContext.SaveChangesAsync(cancellationToken);
         
         return true;

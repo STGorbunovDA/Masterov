@@ -10,7 +10,7 @@ public class GetPaymentsByOrderIdStorage (MasterovDbContext dbContext, IMemoryCa
 {
     public async Task<IEnumerable<PaymentDomain>?> GetPaymentsByOrderId(Guid orderId, CancellationToken cancellationToken)
     {
-        var payments = await dbContext.OrderPayments
+        var payments = await dbContext.Payments
             .AsNoTracking()
             .Include(p => p.Customer)
             .Where(p => p.OrderId == orderId)

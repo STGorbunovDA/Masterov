@@ -14,7 +14,7 @@ internal class AddPaymentStorage(MasterovDbContext dbContext, IGuidFactory guidF
     {
         var paymentId = guidFactory.Create();
 
-        var payment = new Storage.OrderPayment()
+        var payment = new Storage.Payment()
         {
             PaymentId = paymentId,
             CustomerId = customerId,
@@ -24,10 +24,10 @@ internal class AddPaymentStorage(MasterovDbContext dbContext, IGuidFactory guidF
             PaymentDate = DateTime.UtcNow
         };
         
-        await dbContext.OrderPayments.AddAsync(payment, cancellationToken);
+        await dbContext.Payments.AddAsync(payment, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return await dbContext.OrderPayments
+        return await dbContext.Payments
             .Where(t => t.PaymentId == paymentId)
             .ProjectTo<PaymentDomain>(mapper.ConfigurationProvider)
             .FirstAsync(cancellationToken);

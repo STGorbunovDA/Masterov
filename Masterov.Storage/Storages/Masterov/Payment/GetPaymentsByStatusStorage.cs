@@ -10,7 +10,7 @@ public class GetPaymentsByStatusStorage (MasterovDbContext dbContext, IMapper ma
 {
     public async Task<IEnumerable<PaymentDomain>?> GetPaymentsByStatus(PaymentMethod paymentMethod, CancellationToken cancellationToken)
     {
-        var orders = await dbContext.OrderPayments
+        var orders = await dbContext.Payments
             .Where(payMethod => payMethod.MethodPayment == paymentMethod)
             .Include(o => o.Customer)
             .ToArrayAsync(cancellationToken);
