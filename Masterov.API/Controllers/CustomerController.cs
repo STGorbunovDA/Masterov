@@ -17,6 +17,8 @@ using Masterov.Domain.Masterov.Customer.GetCustomerByPhone.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Masterov.Domain.Masterov.Customer.GetCustomersByCreatedAt;
 using Masterov.Domain.Masterov.Customer.GetCustomersByCreatedAt.Query;
+using Masterov.Domain.Masterov.Customer.GetCustomersByUpdatedAt;
+using Masterov.Domain.Masterov.Customer.GetCustomersByUpdatedAt.Query;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId.Query;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer;
@@ -153,6 +155,26 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customers = await useCase.Execute(new GetCustomersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(customers?.Select(mapper.Map<CustomerRequest>) ?? Array.Empty<CustomerRequest>());
+    }
+    
+    /// <summary>
+    /// Получить заказчиков по дате обновления
+    /// </summary>
+    /// <param name="request">Дата обновления заказчиков</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчиках (ордерах)</returns>
+    [HttpGet("getCustomersByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetCustomersByUpdatedAt(
+        [FromQuery] GetCustomersByUpdatedAtRequest request,
+        [FromServices] IGetCustomersByUpdatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customers = await useCase.Execute(new GetCustomersByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(customers?.Select(mapper.Map<CustomerRequest>) ?? Array.Empty<CustomerRequest>());
     }
     

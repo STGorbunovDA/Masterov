@@ -7,6 +7,7 @@ using Masterov.Domain.Masterov.Customer.GetCustomerByName;
 using Masterov.Domain.Masterov.Customer.GetCustomerByPhone;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Masterov.Domain.Masterov.Customer.GetCustomersByCreatedAt;
+using Masterov.Domain.Masterov.Customer.GetCustomersByUpdatedAt;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
@@ -159,6 +160,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetOrdersByCustomerIdStorage, GetOrdersByCustomerIdStorage>()
             .AddScoped<IUpdateCustomerStorage, UpdateCustomerStorage>()
             .AddScoped<IGetCustomersByCreatedAtStorage, GetCustomersByCreatedAtStorage>()
+            .AddScoped<IGetCustomersByUpdatedAtStorage, GetCustomersByUpdatedAtStorage>()
             .AddScoped<IGetCustomerByIdStorage, GetCustomerByIdStorage>();
         
         // payment
