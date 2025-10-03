@@ -148,7 +148,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomersByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetCustomersByCreatedAt(
         [FromQuery] GetCustomersByCreatedAtRequest request,
         [FromServices] IGetCustomersByCreatedAtUseCase useCase,
@@ -168,7 +168,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomersByUpdatedAt")]
     [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetCustomersByUpdatedAt(
         [FromQuery] GetCustomersByUpdatedAtRequest request,
         [FromServices] IGetCustomersByUpdatedAtUseCase useCase,

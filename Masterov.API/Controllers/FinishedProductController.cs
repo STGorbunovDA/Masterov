@@ -12,6 +12,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct.Query;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
@@ -84,6 +86,26 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     {
         var productType = await useCase.Execute(new GetFinishedProductByNameQuery(finishedProductName), cancellationToken);
         return Ok(mapper.Map<FinishedProductRequest>(productType));
+    }
+    
+    /// <summary>
+    /// Получить готовое мебельное изделие по дате создания
+    /// </summary>
+    /// <param name="request">Дата создания готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о готовых мебельных изделиях</returns>
+    [HttpGet("getFinishedProductsByCreatedAt")]
+    [ProducesResponseType(200, Type = typeof(FinishedProductRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetFinishedProductsByCreatedAt(
+        [FromQuery] GetFinishedProductsByCreatedAtRequest request,
+        [FromServices] IGetFinishedProductsByCreatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customers = await useCase.Execute(new GetFinishedProductsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(customers?.Select(mapper.Map<FinishedProductRequest>) ?? Array.Empty<FinishedProductRequest>());
     }
     
     /// <summary>
@@ -188,7 +210,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     [HttpPatch("updateFinishedProduct/{finishedProductId:guid}")]
     [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateFinishedProduct(
         [FromRoute] Guid finishedProductId,
