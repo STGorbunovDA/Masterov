@@ -26,5 +26,5 @@ public class Supply
     [Column(TypeName = "decimal(18,2)")]
     public decimal PriceSupply { get; set; }
 
-    public DateTime SupplyDate { get; set; } = DateTime.UtcNow;
+    public DateTime SupplyDate { get; set; } = DateTime.Now;
 }

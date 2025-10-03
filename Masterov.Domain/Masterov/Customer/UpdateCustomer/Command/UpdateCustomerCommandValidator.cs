@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Masterov.Domain.Extension;
 
 namespace Masterov.Domain.Masterov.Customer.UpdateCustomer.Command;
 
@@ -38,7 +39,7 @@ public class UpdateCustomerCommandValidator : AbstractValidator<UpdateCustomerCo
 
         // Валидация даты создания (CreatedAt)
         RuleFor(c => c.CreatedAt)
-            .Must(BeValidPastOrPresentDate)
+            .Must(DomainExtension.BeValidPastOrPresentDate)
             .When(c => c.CreatedAt.HasValue)
             .WithErrorCode("InvalidCreatedAt")
             .WithMessage("Creation date cannot be in the future.");
@@ -49,10 +50,5 @@ public class UpdateCustomerCommandValidator : AbstractValidator<UpdateCustomerCo
             .Must(c => !string.IsNullOrEmpty(c.Email) || !string.IsNullOrEmpty(c.Phone))
             .WithErrorCode("ContactRequired")
             .WithMessage("You must provide an email or phone number for communication.");
-    }
-
-    private bool BeValidPastOrPresentDate(DateTime? date)
-    {
-        return !date.HasValue || date.Value <= DateTime.Now;
     }
 }

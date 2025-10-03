@@ -19,6 +19,9 @@ public class UpdateFinishedProductUseCase(IValidator<UpdateFinishedProductComman
         if (finishedProductExists is null)
             throw new NotFoundByIdException(updateFinishedProductCommand.FinishedProductId, "Готовое мебельное изделие");
         
-        return await updateFinishedProductStorage.UpdateFinishedProduct(updateFinishedProductCommand.FinishedProductId, updateFinishedProductCommand.Name, updateFinishedProductCommand.Price, updateFinishedProductCommand.Width, updateFinishedProductCommand.Height, updateFinishedProductCommand.Depth, updateFinishedProductCommand.Image, cancellationToken);
+        return await updateFinishedProductStorage.UpdateFinishedProduct(updateFinishedProductCommand.FinishedProductId, 
+            updateFinishedProductCommand.Name, updateFinishedProductCommand.Price, updateFinishedProductCommand.Width, 
+            updateFinishedProductCommand.Height, updateFinishedProductCommand.Depth, updateFinishedProductCommand.Image, 
+            updateFinishedProductCommand.CreatedAt, cancellationToken);
     }
 }

@@ -22,7 +22,8 @@ internal class AddFinishedProductStorage(MasterovDbContext dbContext, IGuidFacto
             Width = width ?? 0,
             Height = height ?? 0,
             Depth = depth ?? 0,
-            Image = image
+            Image = image,
+            CreatedAt = DateTime.Now
         };
         
         await dbContext.FinishedProducts.AddAsync(finishedProduct, cancellationToken);

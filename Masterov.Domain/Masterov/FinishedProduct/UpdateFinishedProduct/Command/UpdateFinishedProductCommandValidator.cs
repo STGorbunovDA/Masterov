@@ -60,5 +60,12 @@ public class UpdateFinishedProductCommandValidator : AbstractValidator<UpdateFin
             .WithMessage("If a file is provided, it must not be empty and must be no more than 100 MB.")
             .Must(content => content == null || DomainExtension.IsImage(content))
             .WithMessage("The file must be an image.");
+        
+        // Валидация даты создания (CreatedAt)
+        RuleFor(c => c.CreatedAt)
+            .Must(DomainExtension.BeValidPastOrPresentDate)
+            .When(c => c.CreatedAt.HasValue)
+            .WithErrorCode("InvalidCreatedAt")
+            .WithMessage("Creation date cannot be in the future.");
     }
 }

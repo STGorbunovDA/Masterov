@@ -89,23 +89,25 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Получить список ордеров готового изделия с возможностью фильтрации по Id || даты создания || даты выполнения || Статуса || Описания
     /// </summary>
+    /// <param name="finishedProductId">Идентификатор готового мебельного изделия</param>
     /// <param name="request">Данные для получения ордеров готового мебельного изделия</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат получения списка ордеров готового мебельного изделия</returns>
-    [HttpGet("getOrdersByFinishedProduct")]
+    [HttpGet("getOrdersByFinishedProduct/{finishedProductId:guid}")]
     [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetOrdersByFinishedProduct(
+        [FromRoute] Guid finishedProductId,
         [FromQuery] GetOrdersByFinishedProductRequest request,
         [FromServices] IGetOrdersByFinishedProductUseCase useCase,
         CancellationToken cancellationToken)
     {
         var orders = await useCase.Execute(
             new GetOrdersByFinishedProductQuery(
-                request.FinishedProductId, 
+                finishedProductId, 
                 request.CreatedAt, 
                 request.CompletedAt,
                 request.Status != null ? EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status) : ProductionOrderStatus.Unknown,
@@ -157,11 +159,11 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Удаление готового мебельного изделия по указанному Id
     /// </summary>
-    /// <param name="finishedProductId">Идентификатор готового мебельного изделия для удаления</param>
-    /// <param name="useCase">Сценарий удаления готового мебольного изделия</param>
+    /// <param name="finishedProductId">Идентификатор готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий удаления</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     /// <returns>Ответ с кодом 204, если готовое мебельное изделие было успешно удалено</returns>
-    [HttpDelete("deleteFinishedProduct")]
+    [HttpDelete("deleteFinishedProduct/{finishedProductId:guid}")]
     [ProducesResponseType(204, Type = typeof(bool))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
@@ -178,23 +180,26 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Обновить готовое мебельное изделие по Id
     /// </summary>
+    /// <param name="finishedProductId">Идентификатор готового мебельного изделия</param>
     /// <param name="request">Данные для обновления готового мебельного изделия</param>
     /// <param name="useCase">Сценарий обновления готового мебельного изделия</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления</returns>
-    [HttpPatch("updateFinishedProduct")]
+    [HttpPatch("updateFinishedProduct/{finishedProductId:guid}")]
     [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateFinishedProduct(
+        [FromRoute] Guid finishedProductId,
         [FromForm] UpdateFinishedProductRequest request,
         [FromServices] IUpdateFinishedProductUseCase useCase,
         CancellationToken cancellationToken)
     {
         var updateFinishedProduct = await useCase.Execute(
-            new UpdateFinishedProductCommand(request.FinishedProductId, request.Name, request.Price, request.Width,
-                request.Height, request.Depth, request.Image == null ? null : await request.Image.ToByteArrayAsync()),
+            new UpdateFinishedProductCommand(finishedProductId, request.Name, request.Price, request.Width,
+                request.Height, request.Depth, request.Image == null ? null : await request.Image.ToByteArrayAsync(), 
+                request.CreatedAt?.ToDateTime()),
             cancellationToken);
         return Ok(mapper.Map<FinishedProductRequest>(updateFinishedProduct));
     }

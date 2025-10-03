@@ -53,4 +53,9 @@ internal static class DomainExtension
 
         return true;
     }
+    
+    internal static bool BeValidPastOrPresentDate(DateTime? date)
+    {
+        return !date.HasValue || date.Value <= DateTime.Now;
+    }
 }
