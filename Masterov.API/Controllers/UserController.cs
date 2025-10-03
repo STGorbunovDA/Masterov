@@ -24,34 +24,34 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
 
-[Route("api/user")]
+[Route("api/users")]
 public class UserController(IMapper mapper) : ControllerBase
 {
     //TODO сделать изменение роли по id
 
     /// <summary>
-    /// Получить пользователя по логину.
+    /// Получить пользователя по логину
     /// </summary>
-    /// <param name="login">Логин пользователя.</param>
-    /// <param name="getUserByLoginUseCase">Сценарий для получения пользователя по логину.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Данные пользователя.</returns>
-    [HttpGet("getUserByLogin/{login}")]
+    /// <param name="request">Логин пользователя</param>
+    /// <param name="getUserByLoginUseCase">Сценарий получения пользователя по логину</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <returns>Данные пользователя</returns>
+    [HttpGet("getUserLogin")]
     [ProducesResponseType(200, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin")]
-    public async Task<IActionResult> GetUserByLoginAsync(
-        string login,
+    public async Task<IActionResult> GetUserByLogin(
+        [FromQuery] GetUserByLoginRequest request,
         [FromServices] IGetUserByLoginUseCase getUserByLoginUseCase,
         CancellationToken cancellationToken)
     {
-        var user = await getUserByLoginUseCase.Execute(new GetUserByLoginQuery(login), cancellationToken);
+        var user = await getUserByLoginUseCase.Execute(new GetUserByLoginQuery(request.Login), cancellationToken);
         return Ok(mapper.Map<UserRequest>(user));
     }
 
     /// <summary>
-    /// Получить список всех пользователей.
+    /// Получить список всех пользователей
     /// </summary>
     /// <param name="useCase"></param>
     /// <param name="cancellationToken">Токен для отмены операции.</param>

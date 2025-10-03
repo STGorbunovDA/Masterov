@@ -11,7 +11,7 @@ public class User
 
     [Required]
     [MaxLength(100)]
-    public string Email { get; set; }
+    public string Login { get; set; }
     
     [Required]
     [Column(TypeName = "varchar(20)")]

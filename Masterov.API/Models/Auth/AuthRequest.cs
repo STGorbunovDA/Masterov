@@ -1,7 +1,7 @@
 ﻿namespace Masterov.API.Models.Auth;
 
 
-public class AuthUserRequest
+public class AuthRequest
 {
     public string Email { get; set; }
     public string Password { get; set; }

@@ -25,8 +25,8 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
     [ProducesResponseType(201, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(409)]
-    public async Task<IActionResult> RegisterUserAsync(
-        [FromBody] AuthUserRequest request,
+    public async Task<IActionResult> RegisterUser(
+        [FromBody] AuthRequest request,
         [FromServices] IRegisterUserUseCase userUseCase,
         CancellationToken cancellationToken)
     {
@@ -41,12 +41,12 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
     [HttpPost("login")]
     [ProducesResponseType(200, Type = typeof(LoginResponse))]
     [ProducesResponseType(401)]
-    public async Task<IActionResult> LoginUserAsync(
-        [FromBody] AuthUserRequest request,
+    public async Task<IActionResult> LoginUser(
+        [FromBody] LoginRequest request,
         [FromServices] ILoginUserUseCase userUseCase,
         CancellationToken cancellationToken)
     {
-        var user = await userUseCase.Execute(new GetLoginUserQuery(request.Email, request.Password), cancellationToken);
+        var user = await userUseCase.Execute(new GetLoginUserQuery(request.Login, request.Password), cancellationToken);
     
         var token = jwtService.GenerateToken(user);
         

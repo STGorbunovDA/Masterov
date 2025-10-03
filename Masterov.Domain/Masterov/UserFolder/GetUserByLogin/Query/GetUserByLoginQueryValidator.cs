@@ -8,10 +8,10 @@ public class GetUserByLoginQueryValidator : AbstractValidator<GetUserByLoginQuer
     {
         RuleFor(c => c.Login).Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .WithErrorCode("Empty")
-            .WithMessage("The login should not be empty.")
+                .WithErrorCode("Required")
+                .WithMessage("Login is required.")
             .MaximumLength(100)
-            .WithErrorCode("TooLong")
-            .WithMessage("The maximum length of the name should not be more than 100");
+                .WithErrorCode("TooLong")
+                .WithMessage("The maximum length of the login should not be more than 100");
     }
 }
