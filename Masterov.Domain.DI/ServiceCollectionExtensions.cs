@@ -18,6 +18,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
+using Masterov.Domain.Masterov.JwtService;
 using Masterov.Domain.Masterov.Payment.AddPayment;
 using Masterov.Domain.Masterov.Payment.DeletePayment;
 using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId;
@@ -142,7 +143,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IChangeCustomerFromUserUseCase, ChangeCustomerFromUserUseCase>()
             .AddScoped<IChangeRoleUserByLoginUseCase, ChangeRoleUserByLoginUseCase>()
             .AddScoped<IChangeRoleUserByIdUseCase, ChangeRoleUserByIdUseCase>()
-            .AddScoped<IGetUsersUseCase, GetUsersUseCase>();
+            .AddScoped<IGetUsersUseCase, GetUsersUseCase>()
+            .AddScoped<IJwtService, JwtService>();;
         
         //customer
         services

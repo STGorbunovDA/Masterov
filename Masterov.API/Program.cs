@@ -7,6 +7,7 @@ using Masterov.API.Extensions;
 using Masterov.API.Middlewares;
 using Masterov.Domain.DI;
 using Masterov.Domain.Extension;
+using Masterov.Domain.Masterov.JwtService.Config;
 using Masterov.Domain.Models;
 using Masterov.Storage.DI;
 
@@ -47,7 +48,7 @@ builder.Services
     .AddDomain();
 
 builder.Services.AddAutoMapper(config => config.AddMaps(Assembly.GetExecutingAssembly()));
-
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 builder.Logging.AddConsole();
 
 var app = builder.Build();
