@@ -36,10 +36,23 @@ public class UpdateCustomerCommandValidator : AbstractValidator<UpdateCustomerCo
                 .WithMessage("The phone number must contain between 7 and 20 digits.");
         });
 
+        // Валидация даты создания (CreatedAt)
+        RuleFor(c => c.CreatedAt)
+            .Must(BeValidPastOrPresentDate)
+            .When(c => c.CreatedAt.HasValue)
+            .WithErrorCode("InvalidCreatedAt")
+            .WithMessage("Creation date cannot be in the future.");
+
+        
         // Обязательное условие: email ИЛИ телефон должны быть указаны
         RuleFor(c => c)
             .Must(c => !string.IsNullOrEmpty(c.Email) || !string.IsNullOrEmpty(c.Phone))
             .WithErrorCode("ContactRequired")
             .WithMessage("You must provide an email or phone number for communication.");
+    }
+
+    private bool BeValidPastOrPresentDate(DateTime? date)
+    {
+        return !date.HasValue || date.Value <= DateTime.Now;
     }
 }

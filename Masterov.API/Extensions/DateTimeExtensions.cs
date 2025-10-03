@@ -8,10 +8,10 @@ namespace Masterov.API.Extensions
         /// Преобразует строку в DateTime по формату dd.MM.yyyy.
         /// Если строка некорректна — выбрасывает исключение FormatException.
         /// </summary>
-        public static DateTime ToDateTime(this string dateString)
+        public static DateTime? ToDateTime(this string? dateString)
         {
             if (string.IsNullOrWhiteSpace(dateString))
-                throw new ArgumentNullException(nameof(dateString), "Дата не может быть пустой");
+                return null;
 
             if (DateTime.TryParseExact(dateString, "dd.MM.yyyy",
                     CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))

@@ -6,7 +6,7 @@ namespace Masterov.Storage.Storages.Masterov.Customer;
 
 internal class UpdateCustomerStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateCustomerStorage
 {
-    public async Task<CustomerDomain> UpdateCustomer(Guid customerId, string name, string? email, string? phone, CancellationToken cancellationToken)
+    public async Task<CustomerDomain> UpdateCustomer(Guid customerId, string name, string? email, string? phone, DateTime? createdAt, CancellationToken cancellationToken)
     {
         var customerExists = await dbContext.Set<Storage.Customer>().FindAsync([customerId], cancellationToken);
         
@@ -16,6 +16,8 @@ internal class UpdateCustomerStorage(MasterovDbContext dbContext, IMapper mapper
         customerExists.Name = name;
         customerExists.Email = email;
         customerExists.Phone = phone;
+        if (createdAt.HasValue)
+            customerExists.CreatedAt = createdAt.Value.Date;
         customerExists.UpdatedAt = DateTime.Now;
         
         await dbContext.SaveChangesAsync(cancellationToken);

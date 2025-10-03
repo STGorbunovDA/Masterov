@@ -38,6 +38,6 @@ public class UpdateCustomerUseCase(IValidator<UpdateCustomerCommand> validator,
                 throw new Conflict409Exception($"Заказчик с телефоном '{updateCustomerCommand.Phone}' уже существует.");
         }
         
-        return await updateCustomerStorage.UpdateCustomer(updateCustomerCommand.CustomerId, updateCustomerCommand.Name, updateCustomerCommand.Email, updateCustomerCommand.Phone, cancellationToken);
+        return await updateCustomerStorage.UpdateCustomer(updateCustomerCommand.CustomerId, updateCustomerCommand.Name, updateCustomerCommand.Email, updateCustomerCommand.Phone, updateCustomerCommand.CreatedAt, cancellationToken);
     }
 }

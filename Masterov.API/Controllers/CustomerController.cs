@@ -264,7 +264,8 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var updateCustomer = await useCase.Execute(
-            new UpdateCustomerCommand(customerId, request.Name, request.Email, request.Phone),
+            new UpdateCustomerCommand(customerId, request.Name, request.Email, request.Phone, 
+                request.CreatedAt?.ToDateTime()),
             cancellationToken);
         return Ok(mapper.Map<CustomerRequest>(updateCustomer));
     }

@@ -7,9 +7,12 @@ namespace Masterov.Storage.Storages.Masterov.Customer;
 
 public class GetCustomersByCreatedAtStorage (MasterovDbContext dbContext, IMapper mapper) : IGetCustomersByCreatedAtStorage
 {
-    public async Task<IEnumerable<CustomerDomain>?> GetCustomersByCreatedAt(DateTime createdAt, CancellationToken cancellationToken)
+    public async Task<IEnumerable<CustomerDomain>?> GetCustomersByCreatedAt(DateTime? createdAt, CancellationToken cancellationToken)
     {
-        var startOfDay = createdAt.Date;
+        if (!createdAt.HasValue)
+            return null;
+        
+        var startOfDay = createdAt.Value.Date;
         var endOfDay = startOfDay.AddDays(1);
 
         var customers = await dbContext.Customers
