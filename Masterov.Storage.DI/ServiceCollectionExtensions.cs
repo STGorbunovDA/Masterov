@@ -16,6 +16,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Masterov.Payment.AddPayment;
@@ -110,6 +111,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IDeleteFinishedProductStorage, DeleteFinishedProductStorage>()
             .AddScoped<IUpdateFinishedProductStorage, UpdateFinishedProductStorage>()
             .AddScoped<IGetFinishedProductsByCreatedAtStorage, GetFinishedProductsByCreatedAtStorage>()
+            .AddScoped<IGetFinishedProductsByUpdatedAtStorage, GetFinishedProductsByUpdatedAtStorage>()
             .AddScoped<IGetOrdersByFinishedProductStorage, GetOrdersByFinishedProductStorage>()
             .AddScoped<IGuidFactory, GuidFactory>()
             .AddDbContextPool<MasterovDbContext>(options => options.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString)));

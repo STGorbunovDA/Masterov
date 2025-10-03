@@ -14,6 +14,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct.Query;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
@@ -104,8 +106,28 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         [FromServices] IGetFinishedProductsByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customers = await useCase.Execute(new GetFinishedProductsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
-        return Ok(customers?.Select(mapper.Map<FinishedProductRequest>) ?? Array.Empty<FinishedProductRequest>());
+        var products = await useCase.Execute(new GetFinishedProductsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(products?.Select(mapper.Map<FinishedProductRequest>) ?? Array.Empty<FinishedProductRequest>());
+    }
+    
+    /// <summary>
+    /// Получить готовое мебельное изделие по дате обновления
+    /// </summary>
+    /// <param name="request">Дата обновления готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о готовых мебельных изделиях</returns>
+    [HttpGet("getFinishedProductsByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(FinishedProductRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetFinishedProductsByUpdatedAt(
+        [FromQuery] GetFinishedProductsByUpdatedAtRequest request,
+        [FromServices] IGetFinishedProductsByUpdatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var products = await useCase.Execute(new GetFinishedProductsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
+        return Ok(products?.Select(mapper.Map<FinishedProductRequest>) ?? Array.Empty<FinishedProductRequest>());
     }
     
     /// <summary>
