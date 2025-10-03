@@ -10,7 +10,7 @@ internal class DeleteUserByLoginStorage(MasterovDbContext dbContext) : IDeleteUs
     public async Task<bool> DeleteUser(string login, CancellationToken cancellationToken)
     {
         var user = await dbContext.Set<User>()
-            .FirstOrDefaultAsync(u => u.Login == login, cancellationToken);
+            .FirstOrDefaultAsync(u => u.Email == login, cancellationToken);
         
         if (user == null || user.Role == UserRole.SuperAdmin)
             return false;

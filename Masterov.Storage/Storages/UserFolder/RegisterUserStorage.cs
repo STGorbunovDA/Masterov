@@ -19,7 +19,7 @@ internal class RegisterUserStorage (MasterovDbContext dbContext, IMemoryCache me
                 var user = new User
                 {
                     UserId = Guid.NewGuid(),
-                    Login = login,
+                    Email = login,
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
                     Role = UserRole.RegularUser,
                     CustomerId = customerId

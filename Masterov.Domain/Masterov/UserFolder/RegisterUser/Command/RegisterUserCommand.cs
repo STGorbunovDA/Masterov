@@ -1,3 +1,3 @@
 ﻿namespace Masterov.Domain.Masterov.UserFolder.RegisterUser.Command;
 
-public record RegisterUserCommand(string Login, string Password);
+public record RegisterUserCommand(string Email, string Password, string Phone);

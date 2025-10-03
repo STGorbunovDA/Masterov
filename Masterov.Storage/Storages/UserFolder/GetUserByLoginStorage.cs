@@ -16,7 +16,7 @@ internal class GetUserByLoginStorage (MasterovDbContext dbContext, IMemoryCache 
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 var userEntity = await dbContext.Users
                     .AsNoTracking()
-                    .Where(f => f.Login == login)
+                    .Where(f => f.Email == login)
                         .Include(u => u.Customer)
                             .ThenInclude(c => c.Orders)
                                 .ThenInclude(o => o.Payments)

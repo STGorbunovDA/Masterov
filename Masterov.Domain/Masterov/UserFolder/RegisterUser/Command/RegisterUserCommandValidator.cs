@@ -6,7 +6,7 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
 {
     public RegisterUserCommandValidator()
     {
-        RuleFor(c => c.Login).Cascade(CascadeMode.Stop)
+        RuleFor(c => c.Email).Cascade(CascadeMode.Stop)
             .NotEmpty()
             .WithErrorCode("Empty")
             .WithMessage("The login should not be empty.")
@@ -24,5 +24,10 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
             .MaximumLength(100)
             .WithErrorCode("TooLong")
             .WithMessage("The maximum length of the name should not be more than 100");
+        
+        RuleFor(c => c.Phone)
+            .Matches(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$")
+            .WithErrorCode("InvalidPhone")
+            .WithMessage("The phone number must contain from 7 to 10 digits.");
     }
 }

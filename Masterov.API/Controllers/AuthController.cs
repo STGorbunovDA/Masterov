@@ -30,7 +30,7 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
         [FromServices] IRegisterUserUseCase userUseCase,
         CancellationToken cancellationToken)
     {
-        var user = await userUseCase.Execute(new RegisterUserCommand(request.LoginEmail, request.Password),
+        var user = await userUseCase.Execute(new RegisterUserCommand(request.Email, request.Password, request.Phone),
             cancellationToken);
         return Ok(mapper.Map<UserRequest>(user));
     }
@@ -46,7 +46,7 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
         [FromServices] ILoginUserUseCase userUseCase,
         CancellationToken cancellationToken)
     {
-        var user = await userUseCase.Execute(new GetLoginUserQuery(request.LoginEmail, request.Password), cancellationToken);
+        var user = await userUseCase.Execute(new GetLoginUserQuery(request.Email, request.Password), cancellationToken);
     
         var token = jwtService.GenerateToken(user);
         
