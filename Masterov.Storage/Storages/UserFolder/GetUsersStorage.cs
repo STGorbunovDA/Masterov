@@ -13,11 +13,11 @@ internal class GetUsersStorage(MasterovDbContext dbContext, IMapper mapper)
     {
         var users = await dbContext.Users
             .AsNoTracking()
+            .Where(user => user.Role != UserRole.SuperAdmin)
                 .Include(u => u.Customer)
                     .ThenInclude(c => c.Orders)
                     .ThenInclude(o => o.Payments)
                     .ThenInclude(p => p.Customer)
-            .Where(user => user.Role != UserRole.SuperAdmin)
             .ToListAsync(cancellationToken);
 
         var mappedUsers = mapper.Map<UserDomain[]>(users);

@@ -14,6 +14,7 @@ internal class GetCustomerByEmailStorage(MasterovDbContext dbContext, IMapper ma
             
         var customer = await dbContext.Customers
             .AsNoTracking() 
+            .Where(f => f.Email != null && f.Email.Trim().ToLower() == normalizedEmail)
                 .Include(c => c.Orders)
                     .ThenInclude(o => o.Payments)
                 .Include(c => c.Orders)
@@ -22,7 +23,6 @@ internal class GetCustomerByEmailStorage(MasterovDbContext dbContext, IMapper ma
                 .Include(c => c.Orders)
                     .ThenInclude(o => o.Components)
                     .ThenInclude(pc => pc.Warehouse)
-            .Where(f => f.Email != null && f.Email.Trim().ToLower() == normalizedEmail)
             .FirstOrDefaultAsync(cancellationToken);
             
         return mapper.Map<CustomerDomain?>(customer);

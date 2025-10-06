@@ -13,6 +13,7 @@ internal class GetCustomerByNameStorage(MasterovDbContext dbContext, IMapper map
         
         var customer = await dbContext.Customers
             .AsNoTracking() 
+            .Where(f => f.Name.ToLower() == normalizedName)
                 .Include(c => c.Orders)
                     .ThenInclude(o => o.Payments)
                     .ThenInclude(p => p.Customer)
@@ -22,7 +23,6 @@ internal class GetCustomerByNameStorage(MasterovDbContext dbContext, IMapper map
                 .Include(c => c.Orders)
                     .ThenInclude(o => o.Components)
                     .ThenInclude(pc => pc.Warehouse)
-            .Where(f => f.Name.ToLower() == normalizedName)
             .FirstOrDefaultAsync(cancellationToken);
             
         return mapper.Map<CustomerDomain>(customer);

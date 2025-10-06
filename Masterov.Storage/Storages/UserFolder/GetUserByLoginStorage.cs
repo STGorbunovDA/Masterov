@@ -11,11 +11,11 @@ internal class GetUserByLoginStorage (MasterovDbContext dbContext, IMapper mappe
     {
         var userEntity = await dbContext.Users
             .AsNoTracking()
+            .Where(f => f.Login == login)
                 .Include(u => u.Customer)
                     .ThenInclude(c => c.Orders)
                     .ThenInclude(o => o.Payments)
                     .ThenInclude(p => p.Customer)
-            .Where(f => f.Login == login)
             .FirstOrDefaultAsync(cancellationToken);
 
         return userEntity == null

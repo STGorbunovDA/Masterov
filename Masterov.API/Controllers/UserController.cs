@@ -77,7 +77,7 @@ public class UserController(IMapper mapper) : ControllerBase
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
-    public async Task<IActionResult> GetUserByIdAsync(
+    public async Task<IActionResult> GetUserById(
         Guid userId,
         [FromServices] IGetUserByIdUseCase getUserByIdUseCase,
         CancellationToken cancellationToken)

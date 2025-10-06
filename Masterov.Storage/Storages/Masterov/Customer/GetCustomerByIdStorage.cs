@@ -11,6 +11,7 @@ internal class GetCustomerByIdStorage(MasterovDbContext dbContext, IMapper mappe
     {
         var customer = await dbContext.Customers
             .AsNoTracking()
+            .Where(f => f.CustomerId == customerId)
                 .Include(c => c.Orders)
                     .ThenInclude(o => o.Payments)
                     .ThenInclude(p => p.Customer)
@@ -20,7 +21,6 @@ internal class GetCustomerByIdStorage(MasterovDbContext dbContext, IMapper mappe
                 .Include(c => c.Orders)
                     .ThenInclude(o => o.Components)
                     .ThenInclude(pc => pc.Warehouse)
-            .Where(f => f.CustomerId == customerId)
             .FirstOrDefaultAsync(cancellationToken);
             
         return mapper.Map<CustomerDomain>(customer);

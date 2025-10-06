@@ -22,6 +22,6 @@ public class User
     public string PasswordHash { get; set; }
     
     
-    public Guid? CustomerId { get; set; }  // необязательная привязка
+    public Guid? CustomerId { get; set; }
     public Customer? Customer { get; set; }
 }

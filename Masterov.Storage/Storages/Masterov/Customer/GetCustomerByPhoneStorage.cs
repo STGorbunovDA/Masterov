@@ -13,6 +13,7 @@ internal class GetCustomerByPhoneStorage(MasterovDbContext dbContext, IMapper ma
         
         var customer = await dbContext.Customers
             .AsNoTracking() 
+            .Where(f => f.Phone != null && f.Phone.Trim().ToLower() == normalizedPhone)
                 .Include(c => c.Orders)
                     .ThenInclude(o => o.Payments)
                     .ThenInclude(p => p.Customer)
@@ -22,7 +23,6 @@ internal class GetCustomerByPhoneStorage(MasterovDbContext dbContext, IMapper ma
                 .Include(c => c.Orders)
                     .ThenInclude(o => o.Components)
                     .ThenInclude(pc => pc.Warehouse)
-            .Where(f => f.Phone != null && f.Phone.Trim().ToLower() == normalizedPhone)
             .FirstOrDefaultAsync(cancellationToken);
             
         return mapper.Map<CustomerDomain>(customer);
