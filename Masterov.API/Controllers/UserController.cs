@@ -27,6 +27,24 @@ namespace Masterov.API.Controllers;
 public class UserController(IMapper mapper) : ControllerBase
 {
     /// <summary>
+    /// Получить список всех пользователей
+    /// </summary>
+    /// <param name="useCase"></param>
+    /// <param name="cancellationToken">Токен для отмены операции</param>
+    /// <returns>Список пользователей</returns>
+    [HttpGet("getUsers")]
+    [ProducesResponseType(200, Type = typeof(UserRequest[]))]
+    [ProducesResponseType(410, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin")]
+    public async Task<IActionResult> GetUsers(
+        [FromServices] IGetUsersUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var users = await useCase.Execute(cancellationToken);
+        return Ok(users.Select(mapper.Map<UserRequest>));
+    }
+    
+    /// <summary>
     /// Получить пользователя по логину
     /// </summary>
     /// <param name="request">Логин пользователя</param>
@@ -36,7 +54,7 @@ public class UserController(IMapper mapper) : ControllerBase
     [HttpGet("getUserByLogin")]
     [ProducesResponseType(200, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUserByLogin(
         [FromQuery] GetUserByLoginRequest request,
@@ -48,34 +66,16 @@ public class UserController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить список всех пользователей
+    /// Получить пользователя по Id
     /// </summary>
-    /// <param name="useCase"></param>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="getUserByIdUseCase">Сценарий получения пользователя по Id</param>
     /// <param name="cancellationToken">Токен для отмены операции</param>
-    /// <returns>Список пользователей</returns>
-    [HttpGet("getUsers")]
-    [ProducesResponseType(200, Type = typeof(UserRequest[]))]
-    [ProducesResponseType(410)]
-    [Authorize(Roles = "SuperAdmin, Admin")]
-    public async Task<IActionResult> GetUsers(
-        [FromServices] IGetUsersUseCase useCase,
-        CancellationToken cancellationToken)
-    {
-        var users = await useCase.Execute(cancellationToken);
-        return Ok(users.Select(mapper.Map<UserRequest>));
-    }
-
-    /// <summary>
-    /// Получить пользователя по Id.
-    /// </summary>
-    /// <param name="userId">Идентификатор пользователя.</param>
-    /// <param name="getUserByIdUseCase">Сервис для получения пользователя по ID.</param>
-    /// <param name="cancellationToken">Токен для отмены операции.</param>
-    /// <returns>Пользователь, если найден, или ошибка, если не найден.</returns>
+    /// <returns>Данные пользователя</returns>
     [HttpGet("getUserById/{userId:guid}")]
     [ProducesResponseType(200, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUserByIdAsync(
         Guid userId,
