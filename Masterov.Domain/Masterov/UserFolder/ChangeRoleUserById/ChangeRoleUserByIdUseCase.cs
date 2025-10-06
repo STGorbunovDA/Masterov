@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById.Command;
-using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByName;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUserById;
 using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById;
 
 public class ChangeRoleUserByIdUseCase(IValidator<ChangeRoleUserByIdCommand> validator, 
-    IChangeRoleUserStorage changeRoleUserStorage,
+    IChangeRoleUserByIdStorage changeRoleUserByIdStorage,
     IGetUserByIdStorage getUserByIdStorage) : IChangeRoleUserByIdUseCase
 {
     public async Task<UserDomain> Execute(ChangeRoleUserByIdCommand changeRoleUserByIdCommand, CancellationToken cancellationToken)
@@ -20,6 +20,6 @@ public class ChangeRoleUserByIdUseCase(IValidator<ChangeRoleUserByIdCommand> val
         if (userExists is null)
             throw new NotFoundByIdException(changeRoleUserByIdCommand.UserId, "Пользователь");
 
-        return await changeRoleUserStorage.ChangeRoleUser(userExists.UserId, changeRoleUserByIdCommand.Role, cancellationToken);
+        return await changeRoleUserByIdStorage.ChangeRoleUserById(userExists.UserId, changeRoleUserByIdCommand.Role, cancellationToken);
     }
 }

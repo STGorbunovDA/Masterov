@@ -44,7 +44,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <returns>Информация о заказчиках</returns>
     [HttpGet("getCustomers")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerRequest>))]
-    [ProducesResponseType(410, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomers(
         [FromServices] IGetCustomersUseCase useCase,
@@ -188,7 +188,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getOrdersByCustomerId")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<ProductionOrderRequestNoCustumer>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetOrdersByCustomerId(
         [FromQuery] GetOrdersByCustomerIdRequest request,
@@ -269,5 +269,4 @@ public class CustomerController(IMapper mapper) : ControllerBase
             cancellationToken);
         return Ok(mapper.Map<CustomerRequest>(updateCustomer));
     }
-    
 }

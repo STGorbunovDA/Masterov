@@ -41,7 +41,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <returns>Информация о всех готовых мебельных изделий</returns>
     [HttpGet("getFinishedProducts")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductRequest>))]
-    [ProducesResponseType(410, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProducts(
         [FromServices] IGetFinishedProductsUseCase useCase,
         CancellationToken cancellationToken)

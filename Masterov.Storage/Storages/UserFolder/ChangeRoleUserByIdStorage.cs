@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using Masterov.Domain.Extension;
-using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByName;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Masterov.Storage.Storages.UserFolder;
 
-public class ChangeRoleUserStorage (MasterovDbContext dbContext, IMapper mapper) : IChangeRoleUserStorage
+public class ChangeRoleUserByIdStorage (MasterovDbContext dbContext, IMapper mapper) : IChangeRoleUserByIdStorage
 {
-    public async Task<UserDomain> ChangeRoleUser(Guid userId, UserRole role, CancellationToken cancellationToken)
+    public async Task<UserDomain> ChangeRoleUserById(Guid userId, UserRole role, CancellationToken cancellationToken)
     {
         var user = await dbContext.Users
             .Where(f => f.UserId == userId).FirstOrDefaultAsync(cancellationToken);
@@ -16,7 +16,8 @@ public class ChangeRoleUserStorage (MasterovDbContext dbContext, IMapper mapper)
         if (user == null)
             throw new Exception("user not found");
 
-        user.Role = role;
+        if(role != UserRole.SuperAdmin)
+            user.Role = role;
         
         await dbContext.SaveChangesAsync(cancellationToken);
         

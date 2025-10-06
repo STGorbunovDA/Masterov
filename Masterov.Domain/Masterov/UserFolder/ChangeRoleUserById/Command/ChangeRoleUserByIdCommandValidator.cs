@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Masterov.Domain.Extension;
 
 namespace Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById.Command;
 
@@ -11,8 +12,12 @@ public class ChangeRoleUserByIdCommandValidator : AbstractValidator<ChangeRoleUs
             .WithErrorCode("InvalidId")
             .WithMessage("UserId must not be an empty GUID.");
         
-        RuleFor(command => command.Role).Cascade(CascadeMode.Stop)
+        RuleFor(q => q.Role).Cascade(CascadeMode.Stop)
             .IsInEnum()
-            .WithMessage("The specified role is invalid.");
+            .WithErrorCode("InvalidRole")
+            .WithMessage("Role must be a valid value")
+            .Must(role => role != UserRole.Unknown)
+            .WithErrorCode("InvalidRoleValue")
+            .WithMessage("Role cannot be 'Unknown'");
     }
 }

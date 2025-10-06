@@ -1,13 +1,15 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
+using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin.Command;
-using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByName;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin;
 
-public class ChangeRoleUserByLoginUseCase(IValidator<ChangeRoleUserByLoginCommand> validator, IChangeRoleUserStorage changeRoleUserStorage, IGetUserByLoginStorage getUserByLoginStorage) : IChangeRoleUserByLoginUseCase
+public class ChangeRoleUserByLoginUseCase(IValidator<ChangeRoleUserByLoginCommand> validator, 
+    IChangeRoleUserByIdStorage changeRoleUserByIdStorage, 
+    IGetUserByLoginStorage getUserByLoginStorage) : IChangeRoleUserByLoginUseCase
 {
     public async Task<UserDomain> Execute(ChangeRoleUserByLoginCommand changeRoleUserByLoginCommand, CancellationToken cancellationToken)
     {
@@ -18,6 +20,6 @@ public class ChangeRoleUserByLoginUseCase(IValidator<ChangeRoleUserByLoginComman
         if(userExists is null)
             throw new NotFoundByLoginException(changeRoleUserByLoginCommand.Login);
 
-        return await changeRoleUserStorage.ChangeRoleUser(userExists.UserId, changeRoleUserByLoginCommand.Role, cancellationToken);
+        return await changeRoleUserByIdStorage.ChangeRoleUserById(userExists.UserId, changeRoleUserByLoginCommand.Role, cancellationToken);
     }
 }

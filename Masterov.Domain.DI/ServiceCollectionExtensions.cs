@@ -74,7 +74,6 @@ using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin;
-using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByName;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUserById;

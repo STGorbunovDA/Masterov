@@ -1,10 +1,9 @@
-﻿using AutoMapper;
-using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
+﻿using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
 using Microsoft.EntityFrameworkCore;
 
 namespace Masterov.Storage.Storages.UserFolder;
 
-public class ChangePasswordFromUserStorage (MasterovDbContext dbContext, IMapper mapper) : IChangePasswordFromUserStorage
+public class ChangePasswordFromUserStorage (MasterovDbContext dbContext) : IChangePasswordFromUserStorage
 {
     public async Task<bool> ChangePasswordFromUser(Guid userId, string newPassword, CancellationToken cancellationToken)
     {

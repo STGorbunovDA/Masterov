@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
-using Masterov.API.Models.Customer;
 using Masterov.API.Models.User;
-using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.UserFolder.ChangeAccountLoginDateUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser.Command;
@@ -32,7 +30,6 @@ using Masterov.Domain.Masterov.UserFolder.GetUsersByUpdatedAt;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByUpdatedAt.Query;
 using Masterov.Domain.Masterov.UserFolder.UpdateUser;
 using Masterov.Domain.Masterov.UserFolder.UpdateUser.Command;
-using Masterov.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,7 +46,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <returns>Список пользователей</returns>
     [HttpGet("getUsers")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
-    [ProducesResponseType(410, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUsers(
         [FromServices] IGetUsersUseCase useCase,
@@ -201,7 +198,7 @@ public class UserController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> UpdateUser(
         [FromRoute] Guid userId,
-        [FromForm] UpdateUserRequest request,
+        [FromBody] UpdateUserRequest request,
         [FromServices] IUpdateUserUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -233,7 +230,7 @@ public class UserController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> ChangeAccountLoginDateUserById(
         [FromRoute] Guid userId,
-        [FromBody] ChangeAccountLoginDateUserByIdRequest request,
+        [FromQuery] ChangeAccountLoginDateUserByIdRequest request,
         [FromServices] IChangeAccountLoginDateUserByIdUseCase changeAccountLoginDateUserByIdUseCase,
         CancellationToken cancellationToken)
     {
@@ -244,62 +241,52 @@ public class UserController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Изменить роль для пользователя по логину.
+    /// Изменить роль для пользователя по логину
     /// </summary>
-    /// <param name="request">Запрос с данными для изменения роли пользователя.</param>
-    /// <param name="changeRoleUserByLoginUseCase">Сервис для изменения роли пользователя.</param>
-    /// <param name="cancellationToken">Токен для отмены операции.</param>
-    /// <returns>Обновлённый пользователь или ошибка в случае неудачи.</returns>
+    /// <param name="request">Запрос с данными для изменения роли пользователя</param>
+    /// <param name="changeRoleUserByLoginUseCase">Сценарий для изменения роли пользователя</param>
+    /// <param name="cancellationToken">Токен для отмены операции</param>
+    /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changeRoleUserByLogin")]
     [ProducesResponseType(200, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> ChangeRoleUserByLogin(
-        [FromBody] ChangeRoleUserByLoginRequest request,
+        [FromQuery] ChangeRoleUserByLoginRequest request,
         [FromServices] IChangeRoleUserByLoginUseCase changeRoleUserByLoginUseCase,
         CancellationToken cancellationToken)
     {
-        // Преобразуем строку роли в Enum UserRole
-        if (!Enum.TryParse<UserRole>(request.Role, true, out var userRole))
-        {
-            return BadRequest("Неверная роль пользователя.");
-        }
-
-        // Создаем команду с преобразованной ролью
         var user = await changeRoleUserByLoginUseCase.Execute(
-            new ChangeRoleUserByLoginCommand(request.Name, userRole),
+            new ChangeRoleUserByLoginCommand(request.Name, 
+                EnumTypeHelper.FromExtensionRoleMethod(request.Role)),
             cancellationToken);
 
         return Ok(mapper.Map<UserRequest>(user));
     }
     
     /// <summary>
-    /// Изменить роль для пользователя по id.
+    /// Изменить роль для пользователя по id
     /// </summary>
-    /// <param name="byIdRequest">Запрос с данными для изменения роли пользователя.</param>
-    /// <param name="changeRoleUserByIdUseCase">Сервис для изменения роли пользователя.</param>
-    /// <param name="cancellationToken">Токен для отмены операции.</param>
-    /// <returns>Обновлённый пользователь или ошибка в случае неудачи.</returns>
-    [HttpPatch("changeRoleUserById")]
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="request">Запрос с данными для изменения роли пользователя</param>
+    /// <param name="changeRoleUserByIdUseCase">Сценарий для изменения роли пользователя</param>
+    /// <param name="cancellationToken">Токен для отмены операции</param>
+    /// <returns>Результат обновления пользователя</returns>
+    [HttpPatch("changeRoleUserById/{userId:guid}")]
     [ProducesResponseType(200, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> ChangeRoleUserById(
-        [FromBody] ChangeRoleUserByIdRequest byIdRequest,
+        [FromRoute] Guid userId,
+        [FromQuery] ChangeRoleUserByIdRequest request,
         [FromServices] IChangeRoleUserByIdUseCase changeRoleUserByIdUseCase,
         CancellationToken cancellationToken)
     {
-        // Преобразуем строку роли в Enum UserRole
-        if (!Enum.TryParse<UserRole>(byIdRequest.Role, true, out var userRole))
-        {
-            return BadRequest("Неверная роль пользователя.");
-        }
-
-        // Создаем команду с преобразованной ролью
         var user = await changeRoleUserByIdUseCase.Execute(
-            new ChangeRoleUserByIdCommand(byIdRequest.UserId, userRole),
+            new ChangeRoleUserByIdCommand(userId, 
+                EnumTypeHelper.FromExtensionRoleMethod(request.Role)),
             cancellationToken);
 
         return Ok(mapper.Map<UserRequest>(user));
@@ -308,22 +295,24 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Изменить у пользователя ссыль на заказчика.
     /// </summary>
-    /// <param name="request">Запрос с данными для изменения заказчика для пользователя.</param>
-    /// <param name="changeCustomerFromUserUseCase">Сервис для изменения заказчика для пользователя.</param>
-    /// <param name="cancellationToken">Токен для отмены операции.</param>
-    /// <returns>Обновлённый пользователь с другим заказчиком или ошибка в случае неудачи.</returns>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="request">Запрос с данными для изменения заказчика для пользователя</param>
+    /// <param name="changeCustomerFromUserUseCase">Сценарий изменения заказчика для пользователя</param>
+    /// <param name="cancellationToken">Токен для отмены операции</param>
+    /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changeCustomerFromUser")]
     [ProducesResponseType(200, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> ChangeCustomerFromUser(
-        [FromBody] ChangeCustomerFromUserRequest request,
+        [FromRoute] Guid userId,
+        [FromQuery] ChangeCustomerFromUserRequest request,
         [FromServices] IChangeCustomerFromUserUseCase changeCustomerFromUserUseCase,
         CancellationToken cancellationToken)
     {
         var user = await changeCustomerFromUserUseCase.Execute(
-            new ChangeCustomerFromUserCommand(request.UserId, request.CustomerId),
+            new ChangeCustomerFromUserCommand(userId, request.CustomerId),
             cancellationToken);
 
         return Ok(mapper.Map<UserRequest>(user));
@@ -332,41 +321,43 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Изменить пароль у пользователя.
     /// </summary>
-    /// <param name="request">Запрос с данными для изменения пароля у пользователя.</param>
-    /// <param name="changePasswordFromUserUseCase">Сервис для изменения пароля у пользователя.</param>
-    /// <param name="cancellationToken">Токен для отмены операции.</param>
-    /// <returns>Обновлённый пользователь с другим заказчиком или ошибка в случае неудачи.</returns>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="request">Запрос с данными для изменения пароля у пользователя</param>
+    /// <param name="changePasswordFromUserUseCase">Сервис для изменения пароля у пользователя</param>
+    /// <param name="cancellationToken">Токен для отмены операции</param>
+    /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changePasswordFromUser")]
-    [ProducesResponseType(200)]
+    [ProducesResponseType(200, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> ChangePasswordFromUser(
+        [FromRoute] Guid userId,
         [FromBody] ChangePasswordFromUserRequest request,
         [FromServices] IChangePasswordFromUserUseCase changePasswordFromUserUseCase,
         CancellationToken cancellationToken)
     {
         var success = await changePasswordFromUserUseCase.Execute(
-            new ChangePasswordFromUserCommand(request.UserId, request.OldPassword, request.NewPassword),
+            new ChangePasswordFromUserCommand(userId, request.OldPassword, request.NewPassword),
             cancellationToken);
 
         return success ? Ok() : NotFound("Password not change");
     }
 
     /// <summary>
-    /// Удалить пользователя по Id.
+    /// Удалить пользователя по Id
     /// </summary>
-    /// <param name="userId">Идентификатор пользователя для удаления.</param>
-    /// <param name="byIdUseCase">Сервис для удаления пользователя по Id.</param>
-    /// <param name="cancellationToken">Токен для отмены операции.</param>
-    /// <returns>Статус операции удаления пользователя.</returns>
+    /// <param name="userId">Идентификатор пользователя для удаления</param>
+    /// <param name="byIdUseCase">Сервис для удаления пользователя по Id</param>
+    /// <param name="cancellationToken">Токен для отмены операции</param>
+    /// <returns>Статус операции удаления пользователя</returns>
     [HttpDelete("deleteUserById/{userId:guid}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(204, Type = typeof(bool))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
-    public async Task<IActionResult> DeleteUserByIdAsync(
-        Guid userId,
+    public async Task<IActionResult> DeleteUserById(
+        [FromRoute] Guid userId,
         [FromServices] IDeleteUserByIdUseCase byIdUseCase,
         CancellationToken cancellationToken)
     {
@@ -384,7 +375,7 @@ public class UserController(IMapper mapper) : ControllerBase
     [HttpDelete("deleteUserByLogin/{login}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> DeleteUserByLoginAsync(
         string login,

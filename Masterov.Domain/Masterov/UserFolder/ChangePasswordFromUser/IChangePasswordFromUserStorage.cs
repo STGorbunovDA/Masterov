@@ -1,6 +1,4 @@
-﻿using Masterov.Domain.Models;
-
-namespace Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
+﻿namespace Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
 
 public interface IChangePasswordFromUserStorage
 {

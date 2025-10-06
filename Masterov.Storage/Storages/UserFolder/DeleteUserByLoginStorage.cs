@@ -1,6 +1,5 @@
 ﻿using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
-using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Masterov.Storage.Storages.UserFolder;

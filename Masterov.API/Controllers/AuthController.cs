@@ -24,7 +24,7 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
     [HttpPost("register")]
     [ProducesResponseType(201, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(409)]
+    [ProducesResponseType(409, Type = typeof(string))]
     public async Task<IActionResult> RegisterUser(
         [FromBody] AuthRequest request,
         [FromServices] IRegisterUserUseCase userUseCase,
@@ -40,7 +40,7 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
     /// </summary>
     [HttpPost("login")]
     [ProducesResponseType(200, Type = typeof(LoginResponse))]
-    [ProducesResponseType(401)]
+    [ProducesResponseType(401, Type = typeof(string))]
     public async Task<IActionResult> LoginUser(
         [FromBody] LoginRequest request,
         [FromServices] ILoginUserUseCase userUseCase,

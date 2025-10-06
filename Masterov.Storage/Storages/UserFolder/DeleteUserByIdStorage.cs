@@ -1,6 +1,5 @@
 ﻿using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById;
-using Masterov.Domain.Models;
 
 namespace Masterov.Storage.Storages.UserFolder;
 

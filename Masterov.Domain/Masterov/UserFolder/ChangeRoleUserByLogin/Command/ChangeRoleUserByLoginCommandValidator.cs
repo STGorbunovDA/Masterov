@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Masterov.Domain.Extension;
 
 namespace Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin.Command;
 
@@ -14,8 +15,12 @@ public class ChangeRoleUserByLoginCommandValidator : AbstractValidator<ChangeRol
             .WithErrorCode("TooLong")
             .WithMessage("The maximum length of the name should not be more than 100");
         
-        RuleFor(command => command.Role).Cascade(CascadeMode.Stop)
+        RuleFor(q => q.Role).Cascade(CascadeMode.Stop)
             .IsInEnum()
-            .WithMessage("The specified role is invalid.");
+            .WithErrorCode("InvalidRole")
+            .WithMessage("Role must be a valid value")
+            .Must(role => role != UserRole.Unknown)
+            .WithErrorCode("InvalidRoleValue")
+            .WithMessage("Role cannot be 'Unknown'");
     }
 }
