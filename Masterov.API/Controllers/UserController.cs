@@ -28,6 +28,8 @@ using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole.Query;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByUpdatedAt;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByUpdatedAt.Query;
 using Masterov.Domain.Masterov.UserFolder.UpdateUser;
 using Masterov.Domain.Masterov.UserFolder.UpdateUser.Command;
 using Masterov.Domain.Models;
@@ -159,6 +161,27 @@ public class UserController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var users = await useCase.Execute(new GetUsersByAccountLoginDateQuery(request.AccountLoginDate.ToDateTime()), cancellationToken);
+        return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
+    }
+    
+    /// <summary>
+    /// Получить пользователей по дате обновления
+    /// </summary>
+    /// <param name="request">Дата обновления для пользователей</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о пользователях</returns>
+    [HttpGet("getUsersByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin")]
+    public async Task<IActionResult> GetUsersByUpdatedAt(
+        [FromQuery] GetUsersByUpdatedAtRequest request,
+        [FromServices] IGetUsersByUpdatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var users = await useCase.Execute(new GetUsersByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
     }
     
