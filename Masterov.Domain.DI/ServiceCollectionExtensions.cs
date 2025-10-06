@@ -69,6 +69,7 @@ using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
 using Masterov.Domain.Masterov.Supply.UpdateSupply;
+using Masterov.Domain.Masterov.UserFolder.ChangeAccountLoginDateUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById;
@@ -83,6 +84,7 @@ using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole;
 using Masterov.Domain.Masterov.UserFolder.LoginUser;
 using Masterov.Domain.Masterov.UserFolder.RegisterUser;
+using Masterov.Domain.Masterov.UserFolder.UpdateUser;
 using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
@@ -142,9 +144,11 @@ public static class ServiceCollectionExtensions
             .AddScoped<IDeleteUserByLoginUseCase, DeleteUserByLoginUseCase>()
             .AddScoped<IDeleteUserByIdUseCase, DeleteUserByIdUseCase>()
             .AddScoped<IChangePasswordFromUserUseCase, ChangePasswordFromUserUseCase>()
+            .AddScoped<IChangeAccountLoginDateUserByIdUseCase, ChangeAccountLoginDateUserByIdUseCase>()
             .AddScoped<IChangeCustomerFromUserUseCase, ChangeCustomerFromUserUseCase>()
             .AddScoped<IGetUsersByRoleUseCase, GetUsersByRoleUseCase>()
             .AddScoped<IGetUsersByCreatedAtUseCase, GetUsersByCreatedAtUseCase>()
+            .AddScoped<IUpdateUserUseCase, UpdateUserUseCase>()
             .AddScoped<IChangeRoleUserByLoginUseCase, ChangeRoleUserByLoginUseCase>()
             .AddScoped<IChangeRoleUserByIdUseCase, ChangeRoleUserByIdUseCase>()
             .AddScoped<IGetUsersUseCase, GetUsersUseCase>()

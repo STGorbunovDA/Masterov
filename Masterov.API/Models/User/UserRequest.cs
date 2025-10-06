@@ -8,5 +8,7 @@ public class UserRequest
     public string Login { get; set; }
     public string Role { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime? AccountLoginDate { get; set; }
+    public DateTime? UpdatedAt  { get; set; }
     public CustomerRequest? Customer { get; set; }
 }

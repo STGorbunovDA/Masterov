@@ -9,10 +9,10 @@ public class GetUsersByRoleQueryValidator : AbstractValidator<GetUsersByRoleQuer
     {
         RuleFor(q => q.role).Cascade(CascadeMode.Stop)
             .IsInEnum()
-            .WithErrorCode("InvalidStatus")
+            .WithErrorCode("InvalidRole")
             .WithMessage("Role must be a valid value")
             .Must(role => role != UserRole.Unknown)
-            .WithErrorCode("InvalidStatusValue")
+            .WithErrorCode("InvalidRoleValue")
             .WithMessage("Role cannot be 'Unknown'");
     }
 }

@@ -3,6 +3,7 @@ using Masterov.API.Extensions;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.User;
 using Masterov.Domain.Extension;
+using Masterov.Domain.Masterov.UserFolder.ChangeAccountLoginDateUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser.Command;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
@@ -11,6 +12,7 @@ using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById.Command;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin.Command;
+using Masterov.Domain.Masterov.UserFolder.ChangeUpdatedAtUserById.Command;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById.Command;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
@@ -24,6 +26,9 @@ using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole.Query;
+using Masterov.Domain.Masterov.UserFolder.UpdateUser;
+using Masterov.Domain.Masterov.UserFolder.UpdateUser.Command;
+using Masterov.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -126,6 +131,7 @@ public class UserController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUsersByCreatedAt(
         [FromQuery] GetUsersByCreatedAtRequest request,
         [FromServices] IGetUsersByCreatedAtUseCase useCase,
@@ -133,6 +139,64 @@ public class UserController(IMapper mapper) : ControllerBase
     {
         var customers = await useCase.Execute(new GetUsersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
         return Ok(customers?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
+    }
+    
+    /// <summary>
+    /// Обновить пользователя по Id
+    /// </summary>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="request">Данные для обновления пользователя</param>
+    /// <param name="useCase">Сценарий обновления пользователя</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат обновления пользователя</returns>
+    [HttpPatch("updateUser/{userId:guid}")]
+    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(401, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin")]
+    public async Task<IActionResult> UpdateUser(
+        [FromRoute] Guid userId,
+        [FromForm] UpdateUserRequest request,
+        [FromServices] IUpdateUserUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var updateUser = await useCase.Execute(
+            new UpdateUserCommand(
+                userId, 
+                request.Login, 
+                EnumTypeHelper.FromExtensionRoleMethod(request.Role),
+                request.NewPassword, 
+                request.OldPassword, 
+                request.CreatedAt?.ToDateTime(),
+                request.CustomerId),
+            cancellationToken);
+        return Ok(mapper.Map<UserRequest>(updateUser));
+    }
+    
+    /// <summary>
+    /// Изменить дату входа пользователя по Id.
+    /// </summary>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="request">Новая дата входа для пользователя</param>
+    /// <param name="changeAccountLoginDateUserByIdUseCase">Сценарий обновления даты входа для пользователя</param>
+    /// <param name="cancellationToken">Токен для отмены операции</param>
+    /// <returns>Результат обновления пользователя</returns>
+    [HttpPatch("changeAccountLoginDateUserById")]
+    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin")]
+    public async Task<IActionResult> ChangeAccountLoginDateUserById(
+        [FromRoute] Guid userId,
+        [FromBody] ChangeAccountLoginDateUserByIdRequest request,
+        [FromServices] IChangeAccountLoginDateUserByIdUseCase changeAccountLoginDateUserByIdUseCase,
+        CancellationToken cancellationToken)
+    {
+        var user = await changeAccountLoginDateUserByIdUseCase.Execute(
+            new ChangeAccountLoginDateUserByIdCommand(userId, request.AccountLoginDate.ToDateTime()), cancellationToken);
+
+        return Ok(mapper.Map<UserRequest>(user));
     }
 
     /// <summary>

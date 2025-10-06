@@ -16,14 +16,14 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
             .EmailAddress()
             .WithErrorCode("InvalidEmail")
             .WithMessage("The login must be a valid email address.");
-        
-        RuleFor(c => c.Password).Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .WithErrorCode("Empty")
-            .WithMessage("The password should not be empty.")
+
+        RuleFor(x => x.Password)
+            .MinimumLength(6)
+            .WithMessage("The new password must contain at least 6 characters.")
             .MaximumLength(100)
-            .WithErrorCode("TooLong")
-            .WithMessage("The maximum length of the name should not be more than 100");
+            .WithMessage("The new password cannot exceed 100 characters.")
+            .Matches(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{6,}$")
+            .WithMessage("The password must contain one uppercase letter, one lowercase letter and one digit");
         
         RuleFor(c => c.Phone)
             .Matches(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$")

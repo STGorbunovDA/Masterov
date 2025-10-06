@@ -23,6 +23,8 @@ public class User
     
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? AccountLoginDate { get; set; }
+    public DateTime? UpdatedAt  { get; set; }
     
     public Guid? CustomerId { get; set; }
     public Customer? Customer { get; set; }
