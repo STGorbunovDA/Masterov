@@ -22,6 +22,8 @@ using Masterov.Domain.Masterov.UserFolder.GetUserById.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUsers;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByAccountLoginDate;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByAccountLoginDate.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole;
@@ -114,8 +116,6 @@ public class UserController(IMapper mapper) : ControllerBase
         [FromServices] IGetUsersByRoleUseCase getUsersByRoleUseCase,
         CancellationToken cancellationToken)
     {
-        var x = new GetUsersByRoleQuery(EnumTypeHelper.FromExtensionRoleMethod(request.Role));
-        
         var users = await getUsersByRoleUseCase.Execute(new GetUsersByRoleQuery(EnumTypeHelper.FromExtensionRoleMethod(request.Role)), cancellationToken);
         return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
     }
@@ -137,8 +137,29 @@ public class UserController(IMapper mapper) : ControllerBase
         [FromServices] IGetUsersByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customers = await useCase.Execute(new GetUsersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
-        return Ok(customers?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
+        var users = await useCase.Execute(new GetUsersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
+    }
+    
+    /// <summary>
+    /// Получить пользователей по дате входа
+    /// </summary>
+    /// <param name="request">Дата входа пользователей</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о пользователях</returns>
+    [HttpGet("getUsersByAccountLoginDate")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin")]
+    public async Task<IActionResult> GetUsersByAccountLoginDate(
+        [FromQuery] GetUsersByAccountLoginDateRequest request,
+        [FromServices] IGetUsersByAccountLoginDateUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var users = await useCase.Execute(new GetUsersByAccountLoginDateQuery(request.AccountLoginDate.ToDateTime()), cancellationToken);
+        return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
     }
     
     /// <summary>

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Masterov.Storage.Storages.UserFolder;
 
-public class GetUsersByCreatedAtStorage (MasterovDbContext dbContext, IMapper mapper) : IGetUsersByCreatedAtStorage
+internal class GetUsersByCreatedAtStorage (MasterovDbContext dbContext, IMapper mapper) : IGetUsersByCreatedAtStorage
 {
     public async Task<IEnumerable<UserDomain>?> GetUsersByCreatedAt(DateTime? createdAt, CancellationToken cancellationToken)
     {
@@ -15,12 +15,12 @@ public class GetUsersByCreatedAtStorage (MasterovDbContext dbContext, IMapper ma
         var startOfDay = createdAt.Value.Date;
         var endOfDay = startOfDay.AddDays(1);
 
-        var customers = await dbContext.Users
+        var users = await dbContext.Users
             .AsNoTracking() 
             .Where(order => order.CreatedAt >= startOfDay && order.CreatedAt < endOfDay)
                 .Include(c => c.Customer)
             .ToArrayAsync(cancellationToken);
 
-        return mapper.Map<IEnumerable<UserDomain>>(customers);
+        return mapper.Map<IEnumerable<UserDomain>>(users);
     }
 }

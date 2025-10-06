@@ -78,6 +78,7 @@ using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUserById;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUsers;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByAccountLoginDate;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole;
 using Masterov.Domain.Masterov.UserFolder.RegisterUser;
@@ -120,7 +121,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGuidFactory, GuidFactory>()
             .AddDbContextPool<MasterovDbContext>(options => options.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString)));
 
-        //ProductionOrder
+        // ProductionOrder
         services
             .AddScoped<IGetProductionOrdersStorage, GetProductionOrdersStorage>()
             .AddScoped<IGetProductionOrdersByCreatedAtStorage, GetProductionOrdersByCreatedAtStorage>()
@@ -136,7 +137,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IUpdateProductionOrderStorage, UpdateProductionOrderStorage>()
             .AddScoped<IGetProductionOrderByOrderIdStorage, GetProductionOrderByOrderIdStorage>();
         
-        //ProductType
+        // ProductType
         services
             .AddScoped<IUpdateProductTypeStorage, UpdateProductTypeStorage>()
             .AddScoped<IDeleteProductTypeStorage, DeleteProductTypeStorage>()
@@ -145,7 +146,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductsTypeStorage, GetProductsTypeStorage>()
             .AddScoped<IGetProductTypeByIdStorage, GetProductTypeByIdStorage>();
 
-        //users
+        // User
         services
             .AddScoped<IRegisterUserStorage, RegisterUserStorage>()
             .AddScoped<IGetUserByLoginStorage, GetUserByLoginStorage>()
@@ -156,12 +157,13 @@ public static class ServiceCollectionExtensions
             .AddScoped<IChangePasswordFromUserStorage, ChangePasswordFromUserStorage>()
             .AddScoped<IGetUsersByRoleStorage, GetUsersByRoleStorage>()
             .AddScoped<IChangeAccountLoginDateUserByIdStorage, ChangeAccountLoginDateUserByIdStorage>()
+            .AddScoped<IGetUsersByAccountLoginDateStorage, GetUsersByAccountLoginDateStorage>()
             .AddScoped<IGetUsersByCreatedAtStorage, GetUsersByCreatedAtStorage>()
             .AddScoped<IUpdateUserStorage, UpdateUserStorage>()
             .AddScoped<IChangeRoleUserStorage, ChangeRoleUserStorage>()
             .AddScoped<IGetUsersStorage, GetUsersStorage>();
         
-        //customer
+        // Customer
         services
             .AddScoped<IAddCustomerStorage, AddCustomerStorage>()
             .AddScoped<IGetCustomersStorage, GetCustomersStorage>()
@@ -175,7 +177,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetCustomersByUpdatedAtStorage, GetCustomersByUpdatedAtStorage>()
             .AddScoped<IGetCustomerByIdStorage, GetCustomerByIdStorage>();
         
-        // payment
+        // Payment
         services
             .AddScoped<IGetPaymentByIdStorage, GetPaymentByIdStorage>()
             .AddScoped<IGetPaymentsByAmountStorage, GetPaymentsByAmountStorage>()
@@ -215,7 +217,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetSuppliesByPriceSupplyStorage, GetSuppliesByPriceSupplyStorage>()
             .AddScoped<IUpdateSupplyStorage, UpdateSupplyStorage>()
             .AddScoped<IGetSuppliesByQuantityStorage, GetSuppliesByQuantityStorage>();
-
+        
+        // Warehouse
         services
             .AddScoped<IGetWarehouseByIdStorage, GetWarehouseByIdStorage>()
             .AddScoped<IUpdateWarehouseStorage, UpdateWarehouseStorage>()

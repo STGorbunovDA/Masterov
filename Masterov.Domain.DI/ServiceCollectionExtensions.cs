@@ -80,6 +80,7 @@ using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUserById;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUsers;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByAccountLoginDate;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole;
 using Masterov.Domain.Masterov.UserFolder.LoginUser;
@@ -98,7 +99,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDomain(this IServiceCollection services)
     {
-        //FinishedProduct
+        // FinishedProduct
         services
             .AddScoped<IGetFinishedProductByIdUseCase, GetFinishedProductByIdUseCase>()
             .AddScoped<IGetFinishedProductByNameUseCase, GetFinishedProductByNameUseCase>()
@@ -110,7 +111,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetOrdersByFinishedProductUseCase, GetOrdersByFinishedProductUseCase>()
             .AddScoped<IGetFinishedProductsUseCase, GetFinishedProductsUseCase>();
 
-        //ProductionOrder
+        // ProductionOrder
         services
             .AddScoped<IGetProductionOrdersUseCase, GetProductionOrdersUseCase>()
             .AddScoped<IGetProductionOrdersByCreatedAtUseCase, GetProductionOrdersByCreatedAtUseCase>()
@@ -135,7 +136,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductTypeByIdUseCase, GetProductTypeByIdUseCase>()
             .AddScoped<IGetProductsTypeUseCase, GetProductsTypeUseCase>();
         
-        //users
+        // User
         services
             .AddScoped<IRegisterUserUseCase, RegisterUserUseCase>()
             .AddScoped<ILoginUserUseCase, LoginUserUseCase>()
@@ -147,6 +148,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IChangeAccountLoginDateUserByIdUseCase, ChangeAccountLoginDateUserByIdUseCase>()
             .AddScoped<IChangeCustomerFromUserUseCase, ChangeCustomerFromUserUseCase>()
             .AddScoped<IGetUsersByRoleUseCase, GetUsersByRoleUseCase>()
+            .AddScoped<IGetUsersByAccountLoginDateUseCase, GetUsersByAccountLoginDateUseCase>()
             .AddScoped<IGetUsersByCreatedAtUseCase, GetUsersByCreatedAtUseCase>()
             .AddScoped<IUpdateUserUseCase, UpdateUserUseCase>()
             .AddScoped<IChangeRoleUserByLoginUseCase, ChangeRoleUserByLoginUseCase>()
@@ -154,7 +156,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetUsersUseCase, GetUsersUseCase>()
             .AddScoped<IJwtService, JwtService>();;
         
-        //customer
+        // Customer
         services
             .AddScoped<IAddCustomerUseCase, AddCustomerUseCase>()
             .AddScoped<IGetCustomersUseCase, GetCustomersUseCase>()
@@ -169,7 +171,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IUpdateCustomerUseCase, UpdateCustomerUseCase>()
             .AddScoped<IGetCustomerByIdUseCase, GetCustomerByIdUseCase>();
         
-        //payment
+        // Payment
         services
             .AddScoped<IGetPaymentByIdUseCase, GetPaymentByIdUseCase>()
             .AddScoped<IGetPaymentsByAmountUseCase, GetPaymentsByAmountUseCase>()
@@ -183,7 +185,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetPaymentsByOrderIdUseCase, GetPaymentsByOrderIdUseCase>()
             .AddScoped<IGetPaymentsUseCase, GetPaymentsUseCase>();
         
-        //Supplier
+        // Supplier
         services
             .AddScoped<IGetSuppliersUseCase, GetSuppliersUseCase>()
             .AddScoped<IGetSupplierByNameUseCase, GetSupplierByNameUseCase>()
@@ -195,7 +197,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IAddSupplierUseCase, AddSupplierUseCase>()
             .AddScoped<IGetSupplierByIdUseCase, GetSupplierByIdUseCase>();
         
-        //Supply
+        // Supply
         services
             .AddScoped<IGetSupplyByIdUseCase, GetSupplyByIdUseCase>()
             .AddScoped<IGetSuppliesByQuantityUseCase, GetSuppliesByQuantityUseCase>()
@@ -209,6 +211,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IDeleteSupplyUseCase, DeleteSupplyUseCase>()
             .AddScoped<IGetSuppliesUseCase, GetSuppliesUseCase>();
 
+        // Warehouse
         services
             .AddScoped<IGetWarehouseByIdUseCase, GetWarehouseByIdUseCase>()
             .AddScoped<IUpdateWarehouseUseCase, UpdateWarehouseUseCase>()
