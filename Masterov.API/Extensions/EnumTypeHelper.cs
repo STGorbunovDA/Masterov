@@ -18,7 +18,16 @@ public static class EnumTypeHelper
     {
         "card" => PaymentMethod.Card,
         "cash" => PaymentMethod.Cash,
-        "bankTransfer" => PaymentMethod.BankTransfer,
+        "banktransfer" => PaymentMethod.BankTransfer,
         _ => PaymentMethod.Unknown
+    };
+    
+    public static UserRole FromExtensionRoleMethod(string extension) => extension.ToLower() switch
+    {
+        "superadmin" => UserRole.SuperAdmin,
+        "admin" => UserRole.Admin,
+        "manager" => UserRole.Manager,
+        "regularuser" => UserRole.RegularUser,
+        _ => UserRole.Unknown
     };
 }

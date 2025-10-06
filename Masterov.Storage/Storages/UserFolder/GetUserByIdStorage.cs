@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.UserFolder.GetUserById;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,9 @@ internal class GetUserByIdStorage (MasterovDbContext dbContext, IMapper mapper) 
                         .ThenInclude(o => o.Payments)
                         .ThenInclude(p => p.Customer)
             .FirstOrDefaultAsync(cancellationToken);
+
+        if (userEntity is { Role: UserRole.SuperAdmin })
+            return null;
 
         return userEntity == null
             ? null

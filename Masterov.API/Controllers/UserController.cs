@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Masterov.API.Extensions;
 using Masterov.API.Models.User;
 using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
@@ -18,6 +19,8 @@ using Masterov.Domain.Masterov.UserFolder.GetUserById.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUsers;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByRole;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByRole.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +36,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Список пользователей</returns>
     [HttpGet("getUsers")]
-    [ProducesResponseType(200, Type = typeof(UserRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
     [ProducesResponseType(410, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUsers(
@@ -84,6 +87,29 @@ public class UserController(IMapper mapper) : ControllerBase
     {
         var user = await getUserByIdUseCase.Execute(new GetUserByIdQuery(userId), cancellationToken);
         return Ok(mapper.Map<UserRequest>(user));
+    }
+    
+    /// <summary>
+    /// Получить пользователей по роли
+    /// </summary>
+    /// <param name="request">Роль пользователей</param>
+    /// <param name="getUsersByRoleUseCase">Сценарий получения пользователей по роли</param>
+    /// <param name="cancellationToken">Токен для отмены операции</param>
+    /// <returns>Данные пользователей</returns>
+    [HttpGet("getUsersByRole")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin")]
+    public async Task<IActionResult> GetUsersByRole(
+        [FromQuery] GetUsersByRoleRequest request,
+        [FromServices] IGetUsersByRoleUseCase getUsersByRoleUseCase,
+        CancellationToken cancellationToken)
+    {
+        var x = new GetUsersByRoleQuery(EnumTypeHelper.FromExtensionRoleMethod(request.Role));
+        
+        var users = await getUsersByRoleUseCase.Execute(new GetUsersByRoleQuery(EnumTypeHelper.FromExtensionRoleMethod(request.Role)), cancellationToken);
+        return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
     }
 
     /// <summary>
