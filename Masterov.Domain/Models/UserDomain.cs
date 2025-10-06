@@ -6,6 +6,7 @@ public class UserDomain
     public string Login { get; set; }
     public string Role { get; set; }
     public string PasswordHash { get; set; }
+    public DateTime CreatedAt { get; set; }
     
     public CustomerDomain? Customer { get; set; }
 }

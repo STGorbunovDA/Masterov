@@ -22,6 +22,7 @@ internal class RegisterUserStorage (MasterovDbContext dbContext, IMemoryCache me
                     Login = login,
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
                     Role = UserRole.RegularUser,
+                    CreatedAt = DateTime.Now,
                     CustomerId = customerId
                 };
                 

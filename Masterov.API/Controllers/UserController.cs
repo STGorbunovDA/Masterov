@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
+using Masterov.API.Models.Customer;
 using Masterov.API.Models.User;
 using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
@@ -19,6 +20,8 @@ using Masterov.Domain.Masterov.UserFolder.GetUserById.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUsers;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt.Query;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole.Query;
 using Microsoft.AspNetCore.Authorization;
@@ -110,6 +113,26 @@ public class UserController(IMapper mapper) : ControllerBase
         
         var users = await getUsersByRoleUseCase.Execute(new GetUsersByRoleQuery(EnumTypeHelper.FromExtensionRoleMethod(request.Role)), cancellationToken);
         return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
+    }
+    
+    /// <summary>
+    /// Получить пользователей по дате регистрации
+    /// </summary>
+    /// <param name="request">Дата регистрации пользователей</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о пользователях</returns>
+    [HttpGet("getUsersByCreatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetUsersByCreatedAt(
+        [FromQuery] GetUsersByCreatedAtRequest request,
+        [FromServices] IGetUsersByCreatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customers = await useCase.Execute(new GetUsersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(customers?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
     }
 
     /// <summary>

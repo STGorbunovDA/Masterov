@@ -40,7 +40,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о всех готовых мебельных изделий</returns>
     [HttpGet("getFinishedProducts")]
-    [ProducesResponseType(200, Type = typeof(FinishedProductRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductRequest>))]
     [ProducesResponseType(410, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProducts(
         [FromServices] IGetFinishedProductsUseCase useCase,
@@ -98,7 +98,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о готовых мебельных изделиях</returns>
     [HttpGet("getFinishedProductsByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(FinishedProductRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProductsByCreatedAt(
@@ -118,7 +118,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о готовых мебельных изделиях</returns>
     [HttpGet("getFinishedProductsByUpdatedAt")]
-    [ProducesResponseType(200, Type = typeof(FinishedProductRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProductsByUpdatedAt(
@@ -139,7 +139,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат получения списка ордеров готового мебельного изделия</returns>
     [HttpGet("getOrdersByFinishedProduct/{finishedProductId:guid}")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]

@@ -19,9 +19,6 @@ internal class GetUserByIdStorage (MasterovDbContext dbContext, IMapper mapper) 
                         .ThenInclude(p => p.Customer)
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (userEntity is { Role: UserRole.SuperAdmin })
-            return null;
-
         return userEntity == null
             ? null
             : mapper.Map<UserDomain>(userEntity);

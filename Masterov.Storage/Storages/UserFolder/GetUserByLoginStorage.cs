@@ -18,9 +18,6 @@ internal class GetUserByLoginStorage (MasterovDbContext dbContext, IMapper mappe
                     .ThenInclude(o => o.Payments)
                     .ThenInclude(p => p.Customer)
             .FirstOrDefaultAsync(cancellationToken);
-        
-        if (userEntity is { Role: UserRole.SuperAdmin })
-            return null;
 
         return userEntity == null
             ? null

@@ -21,6 +21,8 @@ public class User
     [Column(TypeName = "varchar(100)")]
     public string PasswordHash { get; set; }
     
+    [Required]
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
     
     public Guid? CustomerId { get; set; }
     public Customer? Customer { get; set; }

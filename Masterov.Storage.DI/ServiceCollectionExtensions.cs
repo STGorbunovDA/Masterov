@@ -77,6 +77,7 @@ using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUserById;
 using Masterov.Domain.Masterov.UserFolder.GetUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.GetUsers;
+using Masterov.Domain.Masterov.UserFolder.GetUsersByCreatedAt;
 using Masterov.Domain.Masterov.UserFolder.GetUsersByRole;
 using Masterov.Domain.Masterov.UserFolder.RegisterUser;
 using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId;
@@ -152,6 +153,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IChangeCustomerFromUserStorage, ChangeCustomerFromUserStorage>()
             .AddScoped<IChangePasswordFromUserStorage, ChangePasswordFromUserStorage>()
             .AddScoped<IGetUsersByRoleStorage, GetUsersByRoleStorage>()
+            .AddScoped<IGetUsersByCreatedAtStorage, GetUsersByCreatedAtStorage>()
             .AddScoped<IChangeRoleUserStorage, ChangeRoleUserStorage>()
             .AddScoped<IGetUsersStorage, GetUsersStorage>();
         

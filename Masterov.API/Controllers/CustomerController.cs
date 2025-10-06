@@ -144,9 +144,9 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="request">Дата создания заказчиков</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказчиках (ордерах)</returns>
+    /// <returns>Информация о заказчиках</returns>
     [HttpGet("getCustomersByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetCustomersByCreatedAt(
@@ -164,9 +164,9 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="request">Дата обновления заказчиков</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказчиках (ордерах)</returns>
+    /// <returns>Информация о заказчиках</returns>
     [HttpGet("getCustomersByUpdatedAt")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetCustomersByUpdatedAt(
@@ -186,7 +186,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns>Результат получения списка ордеров заказчика</returns>
     [HttpGet("getOrdersByCustomerId")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequestNoCustumer[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductionOrderRequestNoCustumer>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
