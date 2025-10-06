@@ -9,7 +9,6 @@ using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserById.Command;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin;
 using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByLogin.Command;
-using Masterov.Domain.Masterov.UserFolder.ChangeRoleUserByName;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserById.Command;
 using Masterov.Domain.Masterov.UserFolder.DeleteUserByLogin;
@@ -27,8 +26,6 @@ namespace Masterov.API.Controllers;
 [Route("api/users")]
 public class UserController(IMapper mapper) : ControllerBase
 {
-    //TODO сделать изменение роли по id
-
     /// <summary>
     /// Получить пользователя по логину
     /// </summary>
@@ -36,7 +33,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="getUserByLoginUseCase">Сценарий получения пользователя по логину</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     /// <returns>Данные пользователя</returns>
-    [HttpGet("getUserLogin")]
+    [HttpGet("getUserByLogin")]
     [ProducesResponseType(200, Type = typeof(UserRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
@@ -54,13 +51,13 @@ public class UserController(IMapper mapper) : ControllerBase
     /// Получить список всех пользователей
     /// </summary>
     /// <param name="useCase"></param>
-    /// <param name="cancellationToken">Токен для отмены операции.</param>
-    /// <returns>Список пользователей.</returns>
-    [HttpGet(Name = nameof(GetUsersAsync))]
+    /// <param name="cancellationToken">Токен для отмены операции</param>
+    /// <returns>Список пользователей</returns>
+    [HttpGet("getUsers")]
     [ProducesResponseType(200, Type = typeof(UserRequest[]))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin")]
-    public async Task<IActionResult> GetUsersAsync(
+    public async Task<IActionResult> GetUsers(
         [FromServices] IGetUsersUseCase useCase,
         CancellationToken cancellationToken)
     {
