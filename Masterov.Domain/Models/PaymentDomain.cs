@@ -8,5 +8,5 @@ public class PaymentDomain
     public CustomerDomain Customer { get; set; }
     public PaymentMethod MethodPayment { get; set; }
     public decimal Amount { get; set; }
-    public DateTime PaymentDate { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

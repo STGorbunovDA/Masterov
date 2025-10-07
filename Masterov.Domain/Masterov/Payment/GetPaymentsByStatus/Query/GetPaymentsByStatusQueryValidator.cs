@@ -10,9 +10,9 @@ public class GetPaymentsByStatusQueryValidator : AbstractValidator<GetPaymentsBy
         RuleFor(q => q.PaymentMethod).Cascade(CascadeMode.Stop)
             .IsInEnum()
             .WithErrorCode("InvalidStatus")
-            .WithMessage("Status must be a valid PaymentMethod value.")
+            .WithMessage("Status must be a valid PaymentMethod value")
             .Must(paymentMethod => paymentMethod != PaymentMethod.Unknown)
-            .WithErrorCode("InvalidStatusValue")
-            .WithMessage("Status cannot be 'Unknown'.");
+            .WithErrorCode("InvalidStatusPaymentValue")
+            .WithMessage("Status cannot be 'Unknown'");
     }
 }

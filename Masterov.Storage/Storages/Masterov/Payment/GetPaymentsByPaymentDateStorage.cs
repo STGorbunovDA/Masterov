@@ -15,7 +15,7 @@ public class GetPaymentsByPaymentDateStorage (MasterovDbContext dbContext, IMapp
 
         var payments = await dbContext.Payments
             .AsNoTracking() 
-            .Where(payDate => payDate.PaymentDate >= startOfDay && payDate.PaymentDate < endOfDay)
+            .Where(payDate => payDate.CreatedAt >= startOfDay && payDate.CreatedAt < endOfDay)
             .Include(o => o.Customer)
             .ToArrayAsync(cancellationToken);
 

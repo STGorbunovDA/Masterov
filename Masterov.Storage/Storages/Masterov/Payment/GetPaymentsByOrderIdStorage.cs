@@ -14,7 +14,7 @@ public class GetPaymentsByOrderIdStorage (MasterovDbContext dbContext, IMemoryCa
             .AsNoTracking()
             .Include(p => p.Customer)
             .Where(p => p.OrderId == orderId)
-            .OrderByDescending(p => p.PaymentDate)
+            .OrderByDescending(p => p.CreatedAt)
             .ToListAsync(cancellationToken);
 
         if (payments.Count == 0)

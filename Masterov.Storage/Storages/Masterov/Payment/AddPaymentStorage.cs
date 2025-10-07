@@ -21,7 +21,7 @@ internal class AddPaymentStorage(MasterovDbContext dbContext, IGuidFactory guidF
             MethodPayment = paymentMethod,
             Amount = amount,
             OrderId = orderId,
-            PaymentDate = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow
         };
         
         await dbContext.Payments.AddAsync(payment, cancellationToken);

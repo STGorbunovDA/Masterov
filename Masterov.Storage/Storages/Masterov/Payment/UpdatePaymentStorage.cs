@@ -19,7 +19,8 @@ internal class UpdatePaymentStorage(MasterovDbContext dbContext, IMapper mapper)
         paymentExists.CustomerId = customerId;
         paymentExists.MethodPayment = methodPayment;
         paymentExists.Amount = amount;
-        paymentExists.PaymentDate = paymentDate;
+        paymentExists.CreatedAt = paymentDate;
+        paymentExists.UpdatedAt = DateTime.Now;
         
         await dbContext.SaveChangesAsync(cancellationToken);
 

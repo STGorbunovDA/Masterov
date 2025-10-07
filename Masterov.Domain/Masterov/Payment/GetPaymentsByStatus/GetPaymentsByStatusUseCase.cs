@@ -4,12 +4,9 @@ using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 
-public class GetPaymentsByStatusUseCase(IValidator<GetPaymentsByStatusQuery> validator,
-    IGetPaymentsByStatusStorage storage) 
-    : IGetPaymentsByStatusUseCase
+public class GetPaymentsByStatusUseCase(IValidator<GetPaymentsByStatusQuery> validator, IGetPaymentsByStatusStorage storage) : IGetPaymentsByStatusUseCase
 {
-    public async Task<IEnumerable<PaymentDomain>?> Execute(GetPaymentsByStatusQuery getPaymentsByStatusQuery,
-        CancellationToken cancellationToken)
+    public async Task<IEnumerable<PaymentDomain>?> Execute(GetPaymentsByStatusQuery getPaymentsByStatusQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getPaymentsByStatusQuery, cancellationToken);
         

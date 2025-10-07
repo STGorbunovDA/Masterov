@@ -26,5 +26,6 @@ public class Payment
     public decimal Amount { get; set; }
 
     [Required]
-    public DateTime PaymentDate { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? UpdatedAt  { get; set; }
 }

@@ -2,5 +2,5 @@
 
 public class GetPaymentsByStatusRequest
 {
-    public string Status { get; set; }
+    public string StatusPayment { get; set; }
 }

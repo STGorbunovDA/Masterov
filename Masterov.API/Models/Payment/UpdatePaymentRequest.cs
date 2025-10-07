@@ -7,5 +7,5 @@ public class UpdatePaymentRequest
     public Guid CustomerId { get; set; }
     public string MethodPayment { get; set; }
     public decimal Amount { get; set; }
-    public DateTime PaymentDate { get; set; } 
+    public DateTime CreatedAt { get; set; } 
 }

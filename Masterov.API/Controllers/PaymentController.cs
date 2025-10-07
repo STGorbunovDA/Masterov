@@ -84,9 +84,9 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах</returns>
     [HttpGet("getPaymentsByStatus")]
-    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPaymentsByStatus(
         [FromQuery] GetPaymentsByStatusRequest request,
@@ -95,7 +95,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     {
         var payments =
             await useCase.Execute(
-                new GetPaymentsByStatusQuery(EnumTypeHelper.FromExtensionPaymentMethod(request.Status)),
+                new GetPaymentsByStatusQuery(EnumTypeHelper.FromExtensionPaymentMethod(request.StatusPayment)),
                 cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
@@ -113,11 +113,11 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPaymentsByPaymentDate(
-        [FromQuery] GetPaymentsByPaymentDateRequest request,
+        [FromQuery] GetPaymentsByCreatedAtRequest request,
         [FromServices] IGetPaymentsByPaymentDateUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var payments = await useCase.Execute(new GetPaymentsByPaymentDateQuery(request.PaymentDate), cancellationToken);
+        var payments = await useCase.Execute(new GetPaymentsByPaymentDateQuery(request.CreatedAt), cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
 
@@ -272,7 +272,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         var updateCustomer = await useCase.Execute(
             new UpdatePaymentCommand(request.PaymentId, request.OrderId, request.CustomerId, 
                 EnumTypeHelper.FromExtensionPaymentMethod(request.MethodPayment), 
-                request.Amount, request.PaymentDate), cancellationToken);
+                request.Amount, request.CreatedAt), cancellationToken);
         return Ok(mapper.Map<PaymentRequest>(updateCustomer));
     }
 }

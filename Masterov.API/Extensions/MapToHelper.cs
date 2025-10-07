@@ -42,7 +42,7 @@ public static class MapToHelper
             },
             MethodPayment = p.MethodPayment,
             Amount = p.Amount,
-            PaymentDate = p.PaymentDate
+            CreatedAt = p.CreatedAt
         }).ToList();
     }
     
