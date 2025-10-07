@@ -25,8 +25,8 @@ using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPayments;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByCreatedAt;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
-using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
@@ -187,7 +187,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetCustomerByPaymentIdStorage, GetCustomerByPaymentIdStorage>()
             .AddScoped<IAddPaymentStorage, AddPaymentStorage>()
             .AddScoped<IGetProductionOrderByPaymentIdStorage, GetProductionOrderByPaymentIdStorage>()
-            .AddScoped<IGetPaymentsByPaymentDateStorage, GetPaymentsByPaymentDateStorage>()
+            .AddScoped<IGetPaymentsByCreatedAtStorage, GetPaymentsByCreatedAtStorage>()
             .AddScoped<IGetPaymentsByOrderIdStorage, GetPaymentsByOrderIdStorage>()
             .AddScoped<IDeletePaymentStorage, DeletePaymentStorage>()
             .AddScoped<IAddPaymentStorage, AddPaymentStorage>()

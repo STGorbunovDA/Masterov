@@ -14,10 +14,10 @@ using Masterov.Domain.Masterov.Payment.GetPaymentById.Query;
 using Masterov.Domain.Masterov.Payment.GetPayments;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount.Query;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByCreatedAt;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByCreatedAt.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId.Query;
-using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate;
-using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus.Query;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
@@ -107,17 +107,17 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах</returns>
-    [HttpGet("getPaymentsByPaymentDate")]
+    [HttpGet("getPaymentsByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetPaymentsByPaymentDate(
+    public async Task<IActionResult> GetPaymentsByCreatedAt(
         [FromQuery] GetPaymentsByCreatedAtRequest request,
-        [FromServices] IGetPaymentsByPaymentDateUseCase useCase,
+        [FromServices] IGetPaymentsByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var payments = await useCase.Execute(new GetPaymentsByPaymentDateQuery(request.CreatedAt), cancellationToken);
+        var payments = await useCase.Execute(new GetPaymentsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
 

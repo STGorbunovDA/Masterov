@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Masterov.Domain.Masterov.Payment.GetPaymentsByPaymentDate;
 using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;

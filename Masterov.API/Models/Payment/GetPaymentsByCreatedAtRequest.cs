@@ -2,5 +2,5 @@
 
 public class GetPaymentsByCreatedAtRequest
 {
-    public DateTime CreatedAt { get; set; }
+    public string CreatedAt { get; set; }
 }
