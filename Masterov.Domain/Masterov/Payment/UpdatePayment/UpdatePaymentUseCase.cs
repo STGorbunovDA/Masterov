@@ -1,18 +1,18 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
+using Masterov.Domain.Masterov.Order.GetOrderById;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.Service;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.Payment.UpdatePayment.Command;
-using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Models;
 
 public class UpdatePaymentUseCase(
     IValidator<UpdatePaymentCommand> validator,
     IUpdatePaymentStorage updatePaymentStorage,
     IGetPaymentByIdStorage getPaymentByIdStorage,
-    IGetProductionOrderByOrderIdStorage getOrderByOrderIdStorage,
+    IGetOrderByOrderIdStorage getGetOrderByOrderIdStorage,
     IGetCustomerByIdStorage getCustomerByIdStorage,
     IOrderPaymentStatusService orderPaymentStatusService)
     : IUpdatePaymentUseCase
@@ -24,7 +24,7 @@ public class UpdatePaymentUseCase(
         var paymentExists = await getPaymentByIdStorage.GetPaymentById(updatePaymentCommand.PaymentId, cancellationToken)
                             ?? throw new NotFoundByIdException(updatePaymentCommand.PaymentId, "Платеж");
 
-        var order = await getOrderByOrderIdStorage.GetProductionOrderById(updatePaymentCommand.OrderId, cancellationToken)
+        var order = await getGetOrderByOrderIdStorage.GetOrderByOrderId(updatePaymentCommand.OrderId, cancellationToken)
                     ?? throw new NotFoundByIdException(updatePaymentCommand.OrderId, "Заказ");
 
         var customer = await getCustomerByIdStorage.GetCustomerById(updatePaymentCommand.CustomerId, cancellationToken)
@@ -40,7 +40,7 @@ public class UpdatePaymentUseCase(
             cancellationToken);
 
         // 🔄 после обновления платежа пересчитываем статус заказа
-        await orderPaymentStatusService.UpdateOrderStatusAsync(order.OrderId, cancellationToken);
+        await orderPaymentStatusService.UpdateOrderStatus(order.OrderId, cancellationToken);
 
         return await getPaymentByIdStorage.GetPaymentById(paymentUpdate.PaymentId, cancellationToken);
     }

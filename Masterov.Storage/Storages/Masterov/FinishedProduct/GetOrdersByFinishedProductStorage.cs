@@ -12,11 +12,11 @@ public class GetOrdersByFinishedProductStorage (MasterovDbContext dbContext, IMa
         Guid finishedProductId,
         DateTime? createdAt,
         DateTime? completedAt,
-        ProductionOrderStatus status,
+        OrderStatus status,
         string? description,
         CancellationToken cancellationToken)
     {
-        var query = dbContext.ProductionOrders
+        var query = dbContext.Orders
             .Where(o => o.FinishedProductId == finishedProductId)
             .AsQueryable();
 
@@ -29,7 +29,7 @@ public class GetOrdersByFinishedProductStorage (MasterovDbContext dbContext, IMa
             query = query.Where(o => o.CompletedAt.HasValue && o.CompletedAt.Value.Date == completedAt.Value.Date);
 
         // Фильтрация по статусу (если явно задан, отличному от Draft)
-        if (status != ProductionOrderStatus.Draft)
+        if (status != OrderStatus.Draft)
             query = query.Where(o => o.Status == status);
 
         // Фильтрация по описанию (если указано)

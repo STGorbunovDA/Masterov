@@ -16,6 +16,7 @@ namespace Masterov.API.Controllers;
 /// <param name="mapper"></param>
 /// <param name="jwtService"></param>
 [Route("api/auth")]
+[ApiController]
 public class AuthController(IMapper mapper, IJwtService jwtService) : ControllerBase
 {
     /// <summary>
@@ -32,7 +33,7 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
     {
         var user = await userUseCase.Execute(new RegisterUserCommand(request.Email, request.Password, request.Phone),
             cancellationToken);
-        return Ok(mapper.Map<UserRequest>(user));
+        return CreatedAtAction(nameof(RegisterUser), mapper.Map<UserRequest>(user));
     }
 
     /// <summary>
@@ -47,7 +48,7 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
         CancellationToken cancellationToken)
     {
         var user = await userUseCase.Execute(new GetLoginUserQuery(request.Login, request.Password), cancellationToken);
-    
+        
         var token = jwtService.GenerateToken(user);
         
         var response = new LoginResponse

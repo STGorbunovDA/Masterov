@@ -27,7 +27,7 @@ public class DeletePaymentUseCase(
         var result = await storage.DeletePayment(deletePaymentCommand.PaymentId, cancellationToken);
 
         // 🔄 после удаления платежа обновляем статус заказа
-        await orderPaymentStatusService.UpdateOrderStatusAsync(order.OrderId, cancellationToken);
+        await orderPaymentStatusService.UpdateOrderStatus(order.OrderId, cancellationToken);
 
         return result;
     }

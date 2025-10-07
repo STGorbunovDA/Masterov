@@ -30,5 +30,5 @@ public class FinishedProduct
 
     public byte[]? Image { get; set; }
 
-    public ICollection<ProductionOrder> Orders { get; set; } = new List<ProductionOrder>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
 }

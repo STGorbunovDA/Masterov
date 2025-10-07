@@ -1,18 +1,17 @@
 ﻿using Masterov.Domain.Extension;
+using Masterov.Domain.Masterov.Order.GetFinishedProductByOrderId;
+using Masterov.Domain.Masterov.Order.UpdateOrderStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
-using Masterov.Domain.Masterov.Payment.Service;
-using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductByOrderId;
-using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus;
 
-namespace Masterov.Domain.Masterov.Payment.Services;
+namespace Masterov.Domain.Masterov.Payment.Service;
 
 public class OrderPaymentStatusService(
     IGetFinishedProductByOrderIdStorage getFinishedProductByOrderIdStorage,
     IGetPaymentsByOrderIdStorage getPaymentsByOrderIdStorage,
-    IUpdateProductionOrderStatusStorage updateProductionOrderStatusStorage)
+    IUpdateOrderStatusStorage updateOrderStatusStorage)
     : IOrderPaymentStatusService
 {
-    public async Task UpdateOrderStatusAsync(Guid orderId, CancellationToken cancellationToken)
+    public async Task UpdateOrderStatus(Guid orderId, CancellationToken cancellationToken)
     {
         var finishedProduct = await getFinishedProductByOrderIdStorage.GetFinishedProductByOrderId(orderId, cancellationToken);
         var productPrice = finishedProduct?.Price ?? 0;
@@ -25,18 +24,18 @@ public class OrderPaymentStatusService(
 
         var newStatus = GetTargetStatus(productPrice, totalPaid);
 
-        var updatedOrder = await updateProductionOrderStatusStorage.UpdateProductionOrderStatus(orderId, newStatus, cancellationToken);
+        var updatedOrder = await updateOrderStatusStorage.UpdateOrderStatus(orderId, newStatus, cancellationToken);
         if (updatedOrder is null)
             throw new InvalidOperationException("Не удалось обновить статус заказа после оплаты");
     }
 
-    private static ProductionOrderStatus GetTargetStatus(decimal productPrice, decimal totalPaid)
+    private static OrderStatus GetTargetStatus(decimal productPrice, decimal totalPaid)
     {
         if (totalPaid == 0)
-            return ProductionOrderStatus.Draft;
+            return OrderStatus.Draft;
 
         return productPrice <= totalPaid
-            ? ProductionOrderStatus.InProgress
-            : ProductionOrderStatus.Partial;
+            ? OrderStatus.InProgress
+            : OrderStatus.Partial;
     }
 }

@@ -38,7 +38,7 @@ public class GetOrdersByFinishedProductQueryValidator : AbstractValidator<GetOrd
             .IsInEnum()
             .WithErrorCode("InvalidStatus")
             .WithMessage("Status must be a valid ProductionOrderStatus value.")
-            .Must(status => status != ProductionOrderStatus.Unknown)
+            .Must(status => status != OrderStatus.Unknown)
             .WithErrorCode("InvalidStatusValue")
             .WithMessage("Status cannot be 'Unknown'.");
         

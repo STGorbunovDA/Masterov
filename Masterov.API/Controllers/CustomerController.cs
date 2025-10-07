@@ -259,7 +259,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateCustomer(
         [FromRoute] Guid customerId,
-        [FromForm] UpdateCustomerRequest request,
+        [FromBody] UpdateCustomerRequest request,
         [FromServices] IUpdateCustomerUseCase useCase,
         CancellationToken cancellationToken)
     {

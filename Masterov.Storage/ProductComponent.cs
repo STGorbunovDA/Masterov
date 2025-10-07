@@ -10,7 +10,7 @@ public class ProductComponent
 
     [Required, ForeignKey(nameof(Order))]
     public Guid OrderId { get; set; }
-    public ProductionOrder Order { get; set; }
+    public Order Order { get; set; }
 
     [Required, ForeignKey(nameof(ProductType))]
     public Guid ProductTypeId { get; set; }

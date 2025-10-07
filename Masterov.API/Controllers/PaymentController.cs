@@ -18,8 +18,6 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByCreatedAt;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByCreatedAt.Query;
-using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
-using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
@@ -280,7 +278,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdatePayment(
         [FromRoute] Guid paymentId,
-        [FromForm] UpdatePaymentRequest request,
+        [FromBody] UpdatePaymentRequest request,
         [FromServices] IUpdatePaymentUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -288,6 +286,16 @@ public class PaymentController(IMapper mapper) : ControllerBase
             new UpdatePaymentCommand(paymentId, request.OrderId, request.CustomerId, 
                 EnumTypeHelper.FromExtensionPaymentMethod(request.MethodPayment), 
                 request.Amount, request.CreatedAt.ToDateTime()), cancellationToken);
+        
+        if (updateCustomer is null)
+        {
+            return NotFound(new ProblemDetails
+            {
+                Title = "Платеж не найден",
+                Detail = "Не удалось обновить информацию о платеже."
+            });
+        }
+        
         return Ok(mapper.Map<PaymentRequest>(updateCustomer));
     }
 }

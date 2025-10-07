@@ -24,8 +24,10 @@ public class LoginUserUseCase(
         if (!BCrypt.Net.BCrypt.Verify(getLoginUserQuery.Password, userExists.PasswordHash))
             throw new UserInvalidPasswordException();
 
-        var userUpdateAccountLoginDate = await changeAccountLoginDateUserByIdStorage.ChangeAccountLoginDateUserById(userExists.UserId, DateTime.Now, cancellationToken);
-        
+        var userUpdateAccountLoginDate =
+            await changeAccountLoginDateUserByIdStorage.ChangeAccountLoginDateUserById(userExists.UserId, DateTime.Now,
+                cancellationToken);
+
         if (userUpdateAccountLoginDate is null)
             throw new UserUpdateException();
 

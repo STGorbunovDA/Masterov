@@ -1,3 +1,0 @@
-﻿namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt.Query;
-
-public record GetProductionOrdersByCompletedAtQuery(DateTime CompletedAt);

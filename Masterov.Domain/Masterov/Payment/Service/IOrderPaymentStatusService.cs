@@ -2,5 +2,5 @@
 
 public interface IOrderPaymentStatusService
 {
-    Task UpdateOrderStatusAsync(Guid orderId, CancellationToken cancellationToken);
+    Task UpdateOrderStatus(Guid orderId, CancellationToken cancellationToken);
 }

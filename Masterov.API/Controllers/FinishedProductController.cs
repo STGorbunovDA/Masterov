@@ -33,6 +33,8 @@ namespace Masterov.API.Controllers;
 [Route("api/finishedProducts")]
 public class FinishedProductController(IMapper mapper) : ControllerBase
 {
+    //TODO Добавь метод получения готовых изделий без ордеров
+    
     /// <summary>
     /// Получить все готовые мебельные изделия
     /// </summary>
@@ -154,7 +156,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
                 finishedProductId, 
                 request.CreatedAt, 
                 request.CompletedAt,
-                request.Status != null ? EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status) : ProductionOrderStatus.Unknown,
+                request.Status != null ? EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status) : OrderStatus.Unknown,
                 request.Description
             ), 
             cancellationToken);

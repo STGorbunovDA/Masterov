@@ -4,14 +4,14 @@ namespace Masterov.API.Extensions;
 
 public static class EnumTypeHelper
 {
-    public static ProductionOrderStatus FromExtensionProductionOrderStatus(string extension) => extension.ToLower() switch
+    public static OrderStatus FromExtensionProductionOrderStatus(string extension) => extension.ToLower() switch
     {
-        "draft" => ProductionOrderStatus.Draft,
-        "partial" => ProductionOrderStatus.Partial,
-        "inprogress" => ProductionOrderStatus.InProgress,
-        "completed" => ProductionOrderStatus.Completed,
-        "canceled" => ProductionOrderStatus.Canceled,
-        _ => ProductionOrderStatus.Unknown
+        "draft" => OrderStatus.Draft,
+        "partial" => OrderStatus.Partial,
+        "inprogress" => OrderStatus.InProgress,
+        "completed" => OrderStatus.Completed,
+        "canceled" => OrderStatus.Canceled,
+        _ => OrderStatus.Unknown
     };
     
     public static PaymentMethod FromExtensionPaymentMethod(string extension) => extension.ToLower() switch

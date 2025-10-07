@@ -1,17 +1,17 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
+using Masterov.Domain.Masterov.Order.GetOrderById;
 using Masterov.Domain.Masterov.Payment.AddPayment;
 using Masterov.Domain.Masterov.Payment.AddPayment.Command;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.Service;
-using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Models;
 
 public class AddPaymentUseCase(
     IValidator<AddPaymentCommand> validator,
     IAddPaymentStorage addPaymentStorage,
-    IGetProductionOrderByOrderIdStorage getOrderByOrderIdStorage,
+    IGetOrderByOrderIdStorage getGetOrderByOrderIdStorage,
     IGetCustomerByIdStorage getCustomerByIdStorage,
     IGetPaymentByIdStorage getPaymentByIdStorage,
     IOrderPaymentStatusService orderPaymentStatusService)
@@ -21,7 +21,7 @@ public class AddPaymentUseCase(
     {
         await validator.ValidateAndThrowAsync(addPaymentCommand, cancellationToken);
 
-        var order = await getOrderByOrderIdStorage.GetProductionOrderById(addPaymentCommand.OrderId, cancellationToken)
+        var order = await getGetOrderByOrderIdStorage.GetOrderByOrderId(addPaymentCommand.OrderId, cancellationToken)
                     ?? throw new NotFoundByIdException(addPaymentCommand.OrderId, "Заказ");
 
         var customer = await getCustomerByIdStorage.GetCustomerById(addPaymentCommand.CustomerId, cancellationToken)
@@ -34,7 +34,7 @@ public class AddPaymentUseCase(
             customer.CustomerId,
             cancellationToken);
 
-        await orderPaymentStatusService.UpdateOrderStatusAsync(order.OrderId, cancellationToken);
+        await orderPaymentStatusService.UpdateOrderStatus(order.OrderId, cancellationToken);
 
         return await getPaymentByIdStorage.GetPaymentById(payment.PaymentId, cancellationToken);
     }

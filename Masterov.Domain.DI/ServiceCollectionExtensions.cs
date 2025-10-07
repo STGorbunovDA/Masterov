@@ -19,6 +19,19 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Masterov.JwtService;
+using Masterov.Domain.Masterov.Order.AddOrder;
+using Masterov.Domain.Masterov.Order.DeleteOrder;
+using Masterov.Domain.Masterov.Order.GetCustomerByOrderId;
+using Masterov.Domain.Masterov.Order.GetFinishedProductByOrderId;
+using Masterov.Domain.Masterov.Order.GetOrderById;
+using Masterov.Domain.Masterov.Order.GetOrders;
+using Masterov.Domain.Masterov.Order.GetOrdersByCompletedAt;
+using Masterov.Domain.Masterov.Order.GetOrdersByCreatedAt;
+using Masterov.Domain.Masterov.Order.GetOrdersByDescription;
+using Masterov.Domain.Masterov.Order.GetOrdersByStatus;
+using Masterov.Domain.Masterov.Order.GetProductComponentByOrderId;
+using Masterov.Domain.Masterov.Order.UpdateOrder;
+using Masterov.Domain.Masterov.Order.UpdateOrderStatus;
 using Masterov.Domain.Masterov.Payment.AddPayment;
 using Masterov.Domain.Masterov.Payment.DeletePayment;
 using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId;
@@ -31,21 +44,7 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
 using Masterov.Domain.Masterov.Payment.Service;
-using Masterov.Domain.Masterov.Payment.Services;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
-using Masterov.Domain.Masterov.ProductionOrder.AddProductionOrder;
-using Masterov.Domain.Masterov.ProductionOrder.DeleteProductionOrder;
-using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId;
-using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductByOrderId;
-using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder;
-using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
-using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
-using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCompletedAt;
-using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedAt;
-using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescription;
-using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus;
-using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrder;
-using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.DeleteProductType;
 using Masterov.Domain.Masterov.ProductType.GetProductsType;
@@ -116,19 +115,19 @@ public static class ServiceCollectionExtensions
 
         // ProductionOrder
         services
-            .AddScoped<IGetProductionOrdersUseCase, GetProductionOrdersUseCase>()
-            .AddScoped<IGetProductionOrdersByCreatedAtUseCase, GetProductionOrdersByCreatedAtUseCase>()
-            .AddScoped<IGetProductionOrdersByCompletedAtUseCase, GetProductionOrdersByCompletedAtUseCase>()
-            .AddScoped<IGetProductionOrdersByDescriptionUseCase, GetProductionOrdersByDescriptionUseCase>()
+            .AddScoped<IGetOrdersUseCase, GetOrdersUseCase>()
+            .AddScoped<IGetOrdersByCreatedAtUseCase, GetOrdersByCreatedAtUseCase>()
+            .AddScoped<IGetOrdersByCompletedAtUseCase, GetOrdersByCompletedAtUseCase>()
+            .AddScoped<IGetOrdersByDescriptionUseCase, GetOrdersByDescriptionUseCase>()
             .AddScoped<IGetCustomerByOrderIdUseCase, GetCustomerByOrderIdUseCase>()
-            .AddScoped<IGetProductionOrdersByStatusUseCase, GetProductionOrdersByStatusUseCase>()
-            .AddScoped<IAddProductionOrderUseCase, AddProductionOrderUseCase>()
-            .AddScoped<IDeleteProductionOrderUseCase, DeleteProductionOrderUseCase>()
-            .AddScoped<IUpdateProductionOrderStatusUseCase, UpdateProductionOrderStatusUseCase>()
+            .AddScoped<IGetOrdersByStatusUseCase, GetOrdersByStatusUseCase>()
+            .AddScoped<IAddOrderUseCase, AddOrderUseCase>()
+            .AddScoped<IDeleteOrderUseCase, DeleteOrderUseCase>()
+            .AddScoped<IUpdateOrderStatusUseCase, UpdateOrderStatusUseCase>()
             .AddScoped<IGetFinishedProductByOrderIdUseCase, GetFinishedProductByOrderIdUseCase>()
-            .AddScoped<IUpdateProductionOrderUseCase, UpdateProductionOrderUseCase>()
+            .AddScoped<IUpdateOrderUseCase, UpdateOrderUseCase>()
             .AddScoped<IGetProductComponentByOrderIdUseCase, GetProductComponentByOrderIdUseCase>()
-            .AddScoped<IGetProductionOrderByOrdeIdUseCase, GetProductionOrderByOrdeIdUseCase>();
+            .AddScoped<IGetOrderByOrdeIdUseCase, GetOrderByOrdeIdUseCase>();
         
         // ProductType
         services

@@ -11,7 +11,7 @@ public class Payment
 
     [Required, ForeignKey(nameof(Order))]
     public Guid OrderId { get; set; }
-    public ProductionOrder Order { get; set; }
+    public Order Order { get; set; }
 
     [Required, ForeignKey(nameof(Customer))]
     public Guid CustomerId { get; set; }

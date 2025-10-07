@@ -89,6 +89,41 @@ namespace Masterov.Storage.Migrations
                     b.ToTable("FinishedProducts");
                 });
 
+            modelBuilder.Entity("Masterov.Storage.Order", b =>
+                {
+                    b.Property<Guid>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("CompletedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("varchar(200)");
+
+                    b.Property<Guid>("FinishedProductId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("FinishedProductId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("Masterov.Storage.Payment", b =>
                 {
                     b.Property<Guid>("PaymentId")
@@ -171,41 +206,6 @@ namespace Masterov.Storage.Migrations
                     b.HasKey("ProductTypeId");
 
                     b.ToTable("ProductTypes");
-                });
-
-            modelBuilder.Entity("Masterov.Storage.ProductionOrder", b =>
-                {
-                    b.Property<Guid>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<Guid>("FinishedProductId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
-
-                    b.HasKey("OrderId");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("FinishedProductId");
-
-                    b.ToTable("ProductionOrders");
                 });
 
             modelBuilder.Entity("Masterov.Storage.Supplier", b =>
@@ -333,6 +333,25 @@ namespace Masterov.Storage.Migrations
                     b.ToTable("Warehouses");
                 });
 
+            modelBuilder.Entity("Masterov.Storage.Order", b =>
+                {
+                    b.HasOne("Masterov.Storage.Customer", "Customer")
+                        .WithMany("Orders")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Masterov.Storage.FinishedProduct", "FinishedProduct")
+                        .WithMany("Orders")
+                        .HasForeignKey("FinishedProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("FinishedProduct");
+                });
+
             modelBuilder.Entity("Masterov.Storage.Payment", b =>
                 {
                     b.HasOne("Masterov.Storage.Customer", "Customer")
@@ -341,7 +360,7 @@ namespace Masterov.Storage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masterov.Storage.ProductionOrder", "Order")
+                    b.HasOne("Masterov.Storage.Order", "Order")
                         .WithMany("Payments")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -354,7 +373,7 @@ namespace Masterov.Storage.Migrations
 
             modelBuilder.Entity("Masterov.Storage.ProductComponent", b =>
                 {
-                    b.HasOne("Masterov.Storage.ProductionOrder", "Order")
+                    b.HasOne("Masterov.Storage.Order", "Order")
                         .WithMany("Components")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -377,25 +396,6 @@ namespace Masterov.Storage.Migrations
                     b.Navigation("ProductType");
 
                     b.Navigation("Warehouse");
-                });
-
-            modelBuilder.Entity("Masterov.Storage.ProductionOrder", b =>
-                {
-                    b.HasOne("Masterov.Storage.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Masterov.Storage.FinishedProduct", "FinishedProduct")
-                        .WithMany("Orders")
-                        .HasForeignKey("FinishedProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("FinishedProduct");
                 });
 
             modelBuilder.Entity("Masterov.Storage.Supply", b =>
@@ -455,18 +455,18 @@ namespace Masterov.Storage.Migrations
                     b.Navigation("Orders");
                 });
 
+            modelBuilder.Entity("Masterov.Storage.Order", b =>
+                {
+                    b.Navigation("Components");
+
+                    b.Navigation("Payments");
+                });
+
             modelBuilder.Entity("Masterov.Storage.ProductType", b =>
                 {
                     b.Navigation("ProductComponents");
 
                     b.Navigation("Supplies");
-                });
-
-            modelBuilder.Entity("Masterov.Storage.ProductionOrder", b =>
-                {
-                    b.Navigation("Components");
-
-                    b.Navigation("Payments");
                 });
 
             modelBuilder.Entity("Masterov.Storage.Supplier", b =>
