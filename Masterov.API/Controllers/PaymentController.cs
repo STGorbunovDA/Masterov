@@ -152,9 +152,9 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах</returns>
     [HttpGet("getPaymentsByAmount")]
-    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPaymentsByAmount(
         [FromQuery] GetPaymentsByAmountRequest request,

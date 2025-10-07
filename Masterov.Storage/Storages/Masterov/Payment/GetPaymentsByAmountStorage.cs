@@ -2,11 +2,10 @@
 using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Masterov.Storage.Storages.Masterov.Payment;
 
-internal class GetPaymentsByAmountStorage(MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetPaymentsByAmountStorage
+internal class GetPaymentsByAmountStorage(MasterovDbContext dbContext, IMapper mapper) : IGetPaymentsByAmountStorage
 {
     public async Task<IEnumerable<PaymentDomain?>> GetPaymentsByAmount(decimal amount, CancellationToken cancellationToken)
     {
@@ -14,6 +13,7 @@ internal class GetPaymentsByAmountStorage(MasterovDbContext dbContext, IMemoryCa
             .AsNoTracking() 
             .Where(p => p.Amount == amount)
             .Include(o => o.Customer)
+                .ThenInclude(o => o.Orders)
             .ToArrayAsync(cancellationToken);
 
         return mapper.Map<IEnumerable<PaymentDomain>>(payments);

@@ -10,11 +10,11 @@ public class GetPaymentsByAmountUseCase(IValidator<GetPaymentsByAmountQuery> val
     public async Task<IEnumerable<PaymentDomain?>> Execute(GetPaymentsByAmountQuery getPaymentsByAmountQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getPaymentsByAmountQuery, cancellationToken);
-        var paymentExists = await storage.GetPaymentsByAmount(getPaymentsByAmountQuery.Amount, cancellationToken);
+        var paymentsExists = await storage.GetPaymentsByAmount(getPaymentsByAmountQuery.Amount, cancellationToken);
         
-        if (paymentExists is null)
-            throw new NotFoundByAmountException(getPaymentsByAmountQuery.Amount, "Платеж");
+        if (paymentsExists is null)
+            throw new NotFoundByAmountException(getPaymentsByAmountQuery.Amount, "Платежы");
         
-        return paymentExists;
+        return paymentsExists;
     }
 }
