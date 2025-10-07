@@ -12,8 +12,6 @@ public class GetPaymentsByCreatedAtUseCase(IValidator<GetPaymentsByCreatedAtQuer
     {
         await validator.ValidateAndThrowAsync(getPaymentsByCreatedAtQuery, cancellationToken);
         
-        var x = storage.GetPaymentsByCreatedAt(getPaymentsByCreatedAtQuery.CreatedAt, cancellationToken).Result;
-        
         return await storage.GetPaymentsByCreatedAt(getPaymentsByCreatedAtQuery.CreatedAt, cancellationToken);
     }
 }

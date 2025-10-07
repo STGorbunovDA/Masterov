@@ -20,6 +20,8 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus.Query;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt.Query;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId.Query;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
@@ -108,7 +110,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах</returns>
     [HttpGet("getPaymentsByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -118,6 +120,27 @@ public class PaymentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var payments = await useCase.Execute(new GetPaymentsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+    }
+    
+    /// <summary>
+    /// Получить платежи по дате обновления платежа
+    /// </summary>
+    /// <param name="request">Дата обновления платежа</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о платежах</returns>
+    [HttpGet("getPaymentsByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetPaymentsByUpdatedAt(
+        [FromQuery] GetPaymentsByUpdatedAtRequest request,
+        [FromServices] IGetPaymentsByUpdatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var payments = await useCase.Execute(new GetPaymentsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
     }
 

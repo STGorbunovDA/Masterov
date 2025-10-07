@@ -28,6 +28,7 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByCreatedAt;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
+using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
 using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.ProductionOrder.AddProductionOrder;
@@ -181,6 +182,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IUpdatePaymentUseCase, UpdatePaymentUseCase>()
             .AddScoped<IGetPaymentsByCreatedAtUseCase, GetPaymentsByCreatedAtUseCase>()
             .AddScoped<IDeletePaymentUseCase, DeletePaymentUseCase>()
+            .AddScoped<IGetPaymentsByUpdatedAtUseCase, GetPaymentsByUpdatedAtUseCase>()
             .AddScoped<IAddPaymentUseCase, AddPaymentUseCase>()
             .AddScoped<IGetPaymentsByStatusUseCase, GetPaymentsByStatusUseCase>()
             .AddScoped<IGetPaymentsByOrderIdUseCase, GetPaymentsByOrderIdUseCase>()
