@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models.Customer;
-using Masterov.API.Models.ProductionOrder;
+using Masterov.API.Models.Order;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.AddCustomer.Command;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
@@ -186,7 +186,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns>Результат получения списка ордеров заказчика</returns>
     [HttpGet("getOrdersByCustomerId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductionOrderRequestNoCustumer>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderRequestNoCustumer>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -196,7 +196,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var orders = await getOrdersByCustomerIdUseCase.Execute(new GetOrdersByCustomerIdQuery(request.CustomerId), cancellationToken);
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequestNoCustumer>) ?? Array.Empty<ProductionOrderRequestNoCustumer>());
+        return Ok(orders?.Select(mapper.Map<OrderRequestNoCustumer>) ?? Array.Empty<OrderRequestNoCustumer>());
     }
     
     /// <summary>

@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByComplete
 
 public interface IGetProductionOrdersByCompletedAtStorage
 {
-    Task<IEnumerable<ProductionOrderDomain>?> GetProductionOrdersByCompletedAt(DateTime completedAt, CancellationToken cancellationToken);
+    Task<IEnumerable<OrderDomain>?> GetProductionOrdersByCompletedAt(DateTime completedAt, CancellationToken cancellationToken);
 }

@@ -8,7 +8,7 @@ public class GetProductionOrdersByStatusUseCase(IValidator<GetProductionOrdersBy
     IGetProductionOrdersByStatusStorage storage) 
     : IGetProductionOrdersByStatusUseCase
 {
-    public async Task<IEnumerable<ProductionOrderDomain>?> Execute(GetProductionOrdersByStatusQuery productionOrdersByStatusQuery,
+    public async Task<IEnumerable<OrderDomain>?> Execute(GetProductionOrdersByStatusQuery productionOrdersByStatusQuery,
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(productionOrdersByStatusQuery, cancellationToken);

@@ -16,7 +16,7 @@ public class AddProductionOrderUseCase(
     IGetFinishedProductByIdStorage getFinishedProductByIdStorage
     ) : IAddProductionOrderUseCase
 {
-    public async Task<ProductionOrderDomain> Execute(AddProductionOrderCommand addProductionOrderCommand,
+    public async Task<OrderDomain> Execute(AddProductionOrderCommand addProductionOrderCommand,
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(addProductionOrderCommand, cancellationToken); // валидация

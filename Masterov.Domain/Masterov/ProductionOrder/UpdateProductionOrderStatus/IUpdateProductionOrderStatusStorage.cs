@@ -5,5 +5,5 @@ namespace Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus;
 
 public interface IUpdateProductionOrderStatusStorage
 {
-    Task<ProductionOrderDomain> UpdateProductionOrderStatus(Guid orderId, ProductionOrderStatus status, CancellationToken cancellationToken);
+    Task<OrderDomain> UpdateProductionOrderStatus(Guid orderId, ProductionOrderStatus status, CancellationToken cancellationToken);
 }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Masterov.API.Models.Customer;
-using Masterov.API.Models.ProductionOrder;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;

@@ -1,15 +1,11 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Extension;
-using Masterov.Domain.Masterov.Customer.AddCustomer;
-using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
-using Masterov.Domain.Masterov.Customer.GetCustomerByName;
-using Masterov.Domain.Masterov.Customer.GetCustomerByPhone;
+using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Payment.AddPayment.Command;
-using Masterov.Domain.Masterov.Payment.DeletePayment;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
-using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
+using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductByOrderId;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus;
 using Masterov.Domain.Models;
@@ -19,63 +15,42 @@ namespace Masterov.Domain.Masterov.Payment.AddPayment;
 public class AddPaymentUseCase(
     IValidator<AddPaymentCommand> validator,
     IAddPaymentStorage addPaymentStorage,
-    IGetProductionOrderByOrderIdStorage getProductionOrderByOrderIdStorage,
-    IGetCustomerByPhoneStorage getCustomerByPhoneStorage,
-    IGetCustomerByEmailStorage getCustomerByEmailStorage,
-    IAddCustomerStorage addCustomerStorage,
-    IUpdateProductionOrderStatusStorage updateProductionOrderStatusStorage,
-    IGetFinishedProductAtOrderStorage getFinishedProductAtOrderStorage,
+    IGetProductionOrderByOrderIdStorage getOrderByOrderIdStorage,
+    IGetCustomerByIdStorage getCustomerByIdStorage,
+    IGetFinishedProductByOrderIdStorage getFinishedProductByOrderIdStorage,
     IGetPaymentsByOrderIdStorage getPaymentsByOrderIdStorage,
+    IUpdateProductionOrderStatusStorage updateProductionOrderStatusStorage,
     IGetPaymentByIdStorage getPaymentByIdStorage) : IAddPaymentUseCase
 {
-    public async Task<PaymentDomain?> Execute(AddPaymentCommand command, CancellationToken ct)
+    public async Task<PaymentDomain?> Execute(AddPaymentCommand addPaymentCommand, CancellationToken cancellationToken)
     {
-        await validator.ValidateAndThrowAsync(command, ct); // валидация
+        await validator.ValidateAndThrowAsync(addPaymentCommand, cancellationToken);
         
-        var order = await EnsureOrderExists(command.OrderId, ct); // проверка наличия заказа
-
-        var customer = await GetOrCreateCustomer(command, ct); // получаем заказчика
-
-        var payment = await addPaymentStorage.AddPayment(command.OrderId,
-            command.PaymentMethod, command.Amount, customer.CustomerId, ct); // добавляем платеж
-
-        var finishProduct = await getFinishedProductAtOrderStorage.GetFinishedProductAtOrder(command.OrderId, ct); // получаем готовый продукт 
-
-        var payments = await getPaymentsByOrderIdStorage.GetPaymentsByOrderId(command.OrderId, ct); // получаем все платежи по ордеру (заказу)
-        var totalPaid = payments?.Sum(p => p.Amount) ?? 0; // получаем общую сумму по платежам
-
-        // метод изменения статуса заказа путем сравнения цены готового мебельного изделия с ценой всех платежей
-        await UpdateOrderStatusIfNeeded(order.OrderId, finishProduct?.Price ?? 0, totalPaid, ct);
+        var order = await getOrderByOrderIdStorage.GetProductionOrderById(addPaymentCommand.OrderId, cancellationToken);
         
-        return await getPaymentByIdStorage.GetPaymentById(payment.PaymentId, ct);
-    }
-    
-    
-    private async Task<ProductionOrderDomain> EnsureOrderExists(Guid orderId, CancellationToken ct)
-    {
-        var order = await getProductionOrderByOrderIdStorage.GetProductionOrderById(orderId, ct);
         if (order is null)
-            throw new NotFoundByIdException(orderId, "Ордер (заказ)");
-        return order;
-    }
-
-    private async Task<CustomerDomain> GetOrCreateCustomer(AddPaymentCommand cmd, CancellationToken ct)
-    {
-        CustomerDomain? customer = null;
-
-        if (cmd.PhoneCustomer is not null)
-            customer = await getCustomerByPhoneStorage.GetCustomerByPhone(cmd.PhoneCustomer, ct); // смотрим по номеру телефона
-
-        if (customer is null && cmd.EmailCustomer is not null)
-            customer = await getCustomerByEmailStorage.GetCustomerByEmail(cmd.EmailCustomer, ct); // смотрим по почте
+            throw new NotFoundByIdException(addPaymentCommand.OrderId, "Заказ");
+        
+        var customer = await getCustomerByIdStorage.GetCustomerById(addPaymentCommand.CustomerId, cancellationToken);
         
         if (customer is null)
-            customer = await addCustomerStorage.AddCustomer(cmd.NameCustomer, cmd.EmailCustomer, cmd.PhoneCustomer, ct);
+            throw new NotFoundByIdException(addPaymentCommand.CustomerId, "Заказчик");
 
-        return customer ?? throw new InvalidOperationException("Не удалось создать или найти заказчика для платежа");
+        var payment = await addPaymentStorage.AddPayment(addPaymentCommand.OrderId,
+            addPaymentCommand.PaymentMethod, addPaymentCommand.Amount, customer.CustomerId, cancellationToken);
+        
+        var finishProduct = await getFinishedProductByOrderIdStorage.GetFinishedProductByOrderId(addPaymentCommand.OrderId, cancellationToken); 
+
+        var payments = await getPaymentsByOrderIdStorage.GetPaymentsByOrderId(addPaymentCommand.OrderId, cancellationToken);
+        var totalPaid = payments?.Sum(p => p.Amount) ?? 0;
+
+        // метод изменения статуса заказа путем сравнения цены готового мебельного изделия с ценой всех платежей
+        await UpdateOrderStatusIfNeeded(order.OrderId, finishProduct?.Price ?? 0, totalPaid, cancellationToken);
+        
+        return await getPaymentByIdStorage.GetPaymentById(payment.PaymentId, cancellationToken);
     }
-
-    private async Task UpdateOrderStatusIfNeeded(Guid orderId, decimal productPrice, decimal paidTotal, CancellationToken ct)
+    
+    private async Task UpdateOrderStatusIfNeeded(Guid orderId, decimal productPrice, decimal paidTotal, CancellationToken cancellationToken)
     {
         if (productPrice <= 0) // если цены готового мебельного изделия нет
             return;
@@ -85,10 +60,12 @@ public class AddPaymentUseCase(
         var status = productPrice <= paidTotal 
             ? ProductionOrderStatus.InProgress
             : ProductionOrderStatus.Partial;
-
-        var updatedOrder = await updateProductionOrderStatusStorage.UpdateProductionOrderStatus(orderId, status, ct); // метод изменения статуса
-
+        
+        var updatedOrder = await updateProductionOrderStatusStorage.UpdateProductionOrderStatus(orderId, status, cancellationToken); // метод изменения статуса
+        
         if (updatedOrder is null)
             throw new InvalidOperationException("Не удалось обновить статус заказа после оплаты");
+        
     }
+    
 }

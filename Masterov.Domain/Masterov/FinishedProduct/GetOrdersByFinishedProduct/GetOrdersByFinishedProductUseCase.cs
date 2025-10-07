@@ -10,7 +10,7 @@ public class GetOrdersByFinishedProductUseCase(IValidator<GetOrdersByFinishedPro
     IGetOrdersByFinishedProductStorage storage, IGetFinishedProductByIdStorage getFinishedProductByIdStorage) 
     : IGetOrdersByFinishedProductUseCase
 {
-    public async Task<IEnumerable<ProductionOrderDomain>?> Execute(GetOrdersByFinishedProductQuery getOrdersByFinishedProductQuery,
+    public async Task<IEnumerable<OrderDomain>?> Execute(GetOrdersByFinishedProductQuery getOrdersByFinishedProductQuery,
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getOrdersByFinishedProductQuery, cancellationToken);

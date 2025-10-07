@@ -9,7 +9,7 @@ namespace Masterov.Storage.Storages.Masterov.ProductionOrder;
 
 internal class AddProductionOrderStorage(MasterovDbContext dbContext, IGuidFactory guidFactory, IMapper mapper) : IAddProductionOrderStorage
 {
-    public async Task<ProductionOrderDomain> AddProductionOrder(Guid finishedProductId, Guid customerId, string? description,
+    public async Task<OrderDomain> AddProductionOrder(Guid finishedProductId, Guid customerId, string? description,
         CancellationToken cancellationToken)
     {
         var finishedProductExists = await dbContext.FinishedProducts
@@ -47,6 +47,6 @@ internal class AddProductionOrderStorage(MasterovDbContext dbContext, IGuidFacto
             .Include(c => c.Customer)
             .FirstOrDefaultAsync(cancellationToken);
         
-        return mapper.Map<ProductionOrderDomain>(orderDb);
+        return mapper.Map<OrderDomain>(orderDb);
     }
 }

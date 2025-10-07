@@ -3,9 +3,9 @@ using Masterov.API.Models;
 using Masterov.API.Models.Auth;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
+using Masterov.API.Models.Order;
 using Masterov.API.Models.Payment;
 using Masterov.API.Models.ProductComponent;
-using Masterov.API.Models.ProductionOrder;
 using Masterov.API.Models.ProductType;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
@@ -29,29 +29,29 @@ internal class ApiProfile : Profile
             .ForMember(dest => dest.WarehouseNew, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
 
         // 3. Маппинг ProductionOrder с преобразованием коллекций
-        CreateMap<ProductionOrderDomain, ProductionOrderRequest>()
+        CreateMap<OrderDomain, OrderRequest>()
             .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
             .ForMember(dest => dest.PaymentsNoCustomer, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.CustomerNoOrders, opt => opt.MapFrom(src => src.Customer))
             .ForMember(dest => dest.FullPriceFinishedProduct, opt => opt.MapFrom(src => src.FullPriceFinishedProduct))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
 
-        CreateMap<ProductionOrderDomain, ProductionOrderRequestNoPayments>()
+        CreateMap<OrderDomain, OrderRequestNoPayments>()
             .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
             .ForMember(dest => dest.CustomerNoOrders, opt => opt.MapFrom(src => src.Customer))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
         
-        CreateMap<ProductionOrderDomain, ProductionOrderRequestNoCustumer>()
+        CreateMap<OrderDomain, OrderRequestNoCustumer>()
             .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
             .ForMember(dest => dest.PaymentsNoCustomer, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
 
         
-        CreateMap<ProductionOrderDomain, ProductionOrderNoCustomerNoComponentsRequest>()
+        CreateMap<OrderDomain, OrderNoCustomerNoComponentsRequest>()
             .ForMember(dest => dest.PaymentsNoCustomer, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
         
-        CreateMap<ProductionOrderDomain, ProductionOrderNoCustomerNoComponentsNoPaymentsRequest>()
+        CreateMap<OrderDomain, OrderNoCustomerNoComponentsNoPaymentsRequest>()
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
         
         // 4. Маппинг FinishedProduct (если нужен)

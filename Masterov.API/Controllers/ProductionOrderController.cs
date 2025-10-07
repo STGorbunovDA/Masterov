@@ -2,9 +2,9 @@
 using Masterov.API.Extensions;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
+using Masterov.API.Models.Order;
 using Masterov.API.Models.Payment;
 using Masterov.API.Models.ProductComponent;
-using Masterov.API.Models.ProductionOrder;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId.Query;
 using Masterov.Domain.Masterov.ProductionOrder.AddProductionOrder;
@@ -13,8 +13,8 @@ using Masterov.Domain.Masterov.ProductionOrder.DeleteProductionOrder;
 using Masterov.Domain.Masterov.ProductionOrder.DeleteProductionOrder.Command;
 using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId;
 using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId.Query;
-using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
-using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder.Query;
+using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductByOrderId;
+using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductByOrderId.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder.Query;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
@@ -55,14 +55,14 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о всех заказах (ордерах)</returns>
     [HttpGet("getProductionOrders")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(200, Type = typeof(OrderRequest[]))]
     [ProducesResponseType(410)]
     public async Task<IActionResult> GetProductionOrders(
         [FromServices] IGetProductionOrdersUseCase useCase,
         CancellationToken cancellationToken)
     {
         var files = await useCase.Execute(cancellationToken);
-        return Ok(files.Select(mapper.Map<ProductionOrderRequest>));
+        return Ok(files.Select(mapper.Map<OrderRequest>));
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказе (ордере)</returns>
     [HttpGet("getProductionOrderByOrderId/{orderId:guid}")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest))]
+    [ProducesResponseType(200, Type = typeof(OrderRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetProductionOrderByOrderId(
@@ -82,7 +82,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var order = await useCase.Execute(new GetProductionOrderByOrderIdQuery(orderId), cancellationToken);
-        return Ok(mapper.Map<ProductionOrderRequest>(order));
+        return Ok(mapper.Map<OrderRequest>(order));
     }
 
     /// <summary>
@@ -93,17 +93,17 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказах (ордерах)</returns>
     [HttpGet("getProductionOrdersByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(200, Type = typeof(OrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetProductionOrdersByCreatedAt(
-        [FromQuery] GetProductionOrderByCreatedAtRequest request,
+        [FromQuery] GetOrderByCreatedAtRequest request,
         [FromServices] IGetProductionOrdersByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
         var orders =
             await useCase.Execute(new GetProductionOrdersByCreatedAtQuery(request.CreatedAt), cancellationToken);
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
+        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
     }
 
     /// <summary>
@@ -114,17 +114,17 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказах (ордерах)</returns>
     [HttpGet("getProductionOrdersByCompletedAt")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(200, Type = typeof(OrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetProductionOrdersByCompletedAt(
-        [FromQuery] GetProductionOrderByCompletedAtRequest request,
+        [FromQuery] GetOrderByCompletedAtRequest request,
         [FromServices] IGetProductionOrdersByCompletedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
         var orders = await useCase.Execute(new GetProductionOrdersByCompletedAtQuery(request.CompletedAt),
             cancellationToken);
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
+        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
     }
 
     /// <summary>
@@ -135,17 +135,17 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказах (ордерах)</returns>
     [HttpGet("getProductionOrdersByDescription")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(200, Type = typeof(OrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetProductionOrdersByDescription(
-        [FromQuery] GetProductionOrderByDescriptionRequest request,
+        [FromQuery] GetOrderByDescriptionRequest request,
         [FromServices] IGetProductionOrdersByDescriptionUseCase useCase,
         CancellationToken cancellationToken)
     {
         var orders = await useCase.Execute(new GetProductionOrdersByDescriptionQuery(request.Description),
             cancellationToken);
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
+        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
     }
 
     /// <summary>
@@ -156,11 +156,11 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказах (ордерах)</returns>
     [HttpGet("getProductionOrdersByStatus")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequest[]))]
+    [ProducesResponseType(200, Type = typeof(OrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetProductionOrdersByStatus(
-        [FromQuery] GetProductionOrderByStatusRequest request,
+        [FromQuery] GetOrderByStatusRequest request,
         [FromServices] IGetProductionOrdersByStatusUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -168,7 +168,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
             await useCase.Execute(
                 new GetProductionOrdersByStatusQuery(EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status)),
                 cancellationToken);
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
+        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
     }
 
     /// <summary>
@@ -178,16 +178,16 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Готовое мебельное изделие</returns>
-    [HttpGet("getFinishedProductAtOrder")]
+    [HttpGet("getFinishedProductByOrderId")]
     [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetFinishedProductAtOrder(
-        [FromQuery] GetFinishedProductAtOrderRequest request,
-        [FromServices] IGetFinishedProductAtOrderUseCase useCase,
+    public async Task<IActionResult> GetFinishedProductByOrderId(
+        [FromQuery] GetFinishedProductByOrderIdRequest request,
+        [FromServices] IGetFinishedProductByOrderIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var product = await useCase.Execute(new GetFinishedProductAtOrderQuery(request.OrderId), cancellationToken);
+        var product = await useCase.Execute(new GetFinishedProductByOrderIdQuery(request.OrderId), cancellationToken);
         return Ok(mapper.Map<FinishedProductRequest>(product));
     }
 
@@ -262,12 +262,12 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
     [HttpPost("addProductionOrder")]
-    [ProducesResponseType(201, Type = typeof(ProductionOrderRequest))]
+    [ProducesResponseType(201, Type = typeof(OrderRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddProductionOrder(
-        [FromForm] AddProductionOrderRequest request,
+        [FromForm] AddOrderRequest request,
         [FromServices] IAddProductionOrderUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -277,7 +277,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
 
         return CreatedAtAction(nameof(GetProductionOrderByOrderId),
             new { orderId = productionOrder.OrderId },
-            mapper.Map<ProductionOrderRequest>(productionOrder));
+            mapper.Map<OrderRequest>(productionOrder));
     }
 
     /// <summary>
@@ -288,12 +288,12 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
     [HttpPatch("updateProductionOrderStatus")]
-    [ProducesResponseType(201, Type = typeof(ProductionOrderRequest))]
+    [ProducesResponseType(201, Type = typeof(OrderRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateProductionOrderStatus(
-        [FromForm] UpdateProductionOrderStatusRequest request,
+        [FromForm] UpdateOrderStatusRequest request,
         [FromServices] IUpdateProductionOrderStatusUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -303,7 +303,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
 
         return CreatedAtAction(nameof(GetProductionOrderByOrderId),
             new { orderId = productionOrder.OrderId },
-            mapper.Map<ProductionOrderRequest>(productionOrder));
+            mapper.Map<OrderRequest>(productionOrder));
     }
 
     /// <summary>
@@ -315,7 +315,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
     /// <returns>Результат выполнения</returns>
     [HttpPatch("updateProductionOrder")]
     public async Task<IActionResult> UpdateProductionOrder(
-        [FromForm] UpdateProductionOrderRequest request,
+        [FromForm] UpdateOrderRequest request,
         [FromServices] IUpdateProductionOrderUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -330,7 +330,7 @@ public class ProductionOrderController(IMapper mapper) : ControllerBase
 
         return CreatedAtAction(nameof(GetProductionOrderByOrderId),
             new { orderId = productionOrder.OrderId },
-            mapper.Map<ProductionOrderRequest>(productionOrder));
+            mapper.Map<OrderRequest>(productionOrder));
     }
 
     /// <summary>

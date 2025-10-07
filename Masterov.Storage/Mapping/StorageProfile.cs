@@ -12,7 +12,7 @@ internal class StorageProfile : Profile
             .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders));
             
         // ProductionOrder mapping
-        CreateMap<ProductionOrder, ProductionOrderDomain>()
+        CreateMap<ProductionOrder, OrderDomain>()
             .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
             .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.FullPriceFinishedProduct, opt => opt.MapFrom(src => src.FinishedProduct.Price));

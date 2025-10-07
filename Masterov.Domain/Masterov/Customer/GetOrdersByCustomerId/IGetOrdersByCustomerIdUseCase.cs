@@ -5,5 +5,5 @@ namespace Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
 
 public interface IGetOrdersByCustomerIdUseCase
 {
-    Task<IEnumerable<ProductionOrderDomain>?> Execute(GetOrdersByCustomerIdQuery getOrdersByCustomerIdQuery, CancellationToken cancellationToken);
+    Task<IEnumerable<OrderDomain>?> Execute(GetOrdersByCustomerIdQuery getOrdersByCustomerIdQuery, CancellationToken cancellationToken);
 }

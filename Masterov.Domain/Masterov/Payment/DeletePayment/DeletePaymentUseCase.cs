@@ -2,10 +2,10 @@
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.Payment.DeletePayment.Command;
+using Masterov.Domain.Masterov.Payment.GetOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
-using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
-using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
+using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductByOrderId;
 using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus;
 
 namespace Masterov.Domain.Masterov.Payment.DeletePayment;
@@ -14,8 +14,8 @@ public class DeletePaymentUseCase(
     IValidator<DeletePaymentCommand> validator,
     IDeletePaymentStorage storage,
     IGetPaymentByIdStorage getPaymentByIdStorage,
-    IGetProductionOrderByPaymentIdStorage getProductionOrderByPaymentIdStorage,
-    IGetFinishedProductAtOrderStorage getFinishedProductAtOrderStorage,
+    IGetOrderByPaymentIdStorage getOrderByPaymentIdStorage,
+    IGetFinishedProductByOrderIdStorage getFinishedProductByOrderIdStorage,
     IGetPaymentsByOrderIdStorage getPaymentsByOrderIdStorage,
     IUpdateProductionOrderStatusStorage updateProductionOrderStatusStorage
 ) : IDeletePaymentUseCase
@@ -27,8 +27,8 @@ public class DeletePaymentUseCase(
         var payment = await getPaymentByIdStorage.GetPaymentById(deletePaymentCommand.PaymentId, cancellationToken)
                       ?? throw new NotFoundByIdException(deletePaymentCommand.PaymentId, "Платеж");
         
-        var order = await getProductionOrderByPaymentIdStorage.GetProductionOrderByPaymentId(payment.PaymentId, cancellationToken)
-                    ?? throw new InvalidOperationException("Платеж не привязан к заказу (ордеру)");
+        var order = await getOrderByPaymentIdStorage.GetOrderByPaymentId(payment.PaymentId, cancellationToken)
+                    ?? throw new InvalidOperationException("Платеж не привязан к заказу");
         
         await UpdateOrderStatusIfNeeded(order.OrderId, deletePaymentCommand.PaymentId, cancellationToken);
 
@@ -37,7 +37,7 @@ public class DeletePaymentUseCase(
 
     private async Task UpdateOrderStatusIfNeeded(Guid orderId, Guid paymentId, CancellationToken ct)
     {
-        var finishedProduct = await getFinishedProductAtOrderStorage.GetFinishedProductAtOrder(orderId, ct);
+        var finishedProduct = await getFinishedProductByOrderIdStorage.GetFinishedProductByOrderId(orderId, ct);
         var productPrice = finishedProduct?.Price ?? 0;
 
         if (productPrice <= 0)

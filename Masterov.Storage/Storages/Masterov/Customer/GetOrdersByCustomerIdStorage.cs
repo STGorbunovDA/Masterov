@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.Customer;
 
 public class GetOrdersByCustomerIdStorage (MasterovDbContext dbContext, IMapper mapper) : IGetOrdersByCustomerIdStorage
 {
-    public async Task<IEnumerable<ProductionOrderDomain>?> GetOrdersByCustomerId(Guid customerId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OrderDomain>?> GetOrdersByCustomerId(Guid customerId, CancellationToken cancellationToken)
     {
         var customer = await dbContext.Customers
             .AsNoTracking() 
@@ -22,6 +22,6 @@ public class GetOrdersByCustomerIdStorage (MasterovDbContext dbContext, IMapper 
                     .ThenInclude(p => p.Customer)
             .FirstOrDefaultAsync(c => c.CustomerId == customerId, cancellationToken);
 
-        return customer == null ? null : mapper.Map<IEnumerable<ProductionOrderDomain>>(customer.Orders);
+        return customer == null ? null : mapper.Map<IEnumerable<OrderDomain>>(customer.Orders);
     }
 }

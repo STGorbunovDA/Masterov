@@ -8,7 +8,7 @@ public class GetProductionOrdersByCompletedAtUseCase(IValidator<GetProductionOrd
     IGetProductionOrdersByCompletedAtStorage storage) 
     : IGetProductionOrdersByCompletedAtUseCase
 {
-    public async Task<IEnumerable<ProductionOrderDomain>?> Execute(GetProductionOrdersByCompletedAtQuery getProductionOrdersByCompletedAtQuery,
+    public async Task<IEnumerable<OrderDomain>?> Execute(GetProductionOrdersByCompletedAtQuery getProductionOrdersByCompletedAtQuery,
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getProductionOrdersByCompletedAtQuery, cancellationToken);

@@ -5,5 +5,5 @@ namespace Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrder;
 
 public interface IUpdateProductionOrderUseCase
 {
-    Task<ProductionOrderDomain> Execute(UpdateProductionOrderCommand command, CancellationToken cancellationToken);
+    Task<OrderDomain> Execute(UpdateProductionOrderCommand command, CancellationToken cancellationToken);
 }

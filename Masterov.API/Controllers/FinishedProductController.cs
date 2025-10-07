@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models.FinishedProduct;
-using Masterov.API.Models.ProductionOrder;
+using Masterov.API.Models.Order;
 using Masterov.Domain.Extension;
 using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct.Command;
@@ -159,7 +159,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
             ), 
             cancellationToken);
 
-        return Ok(orders?.Select(mapper.Map<ProductionOrderRequest>) ?? Array.Empty<ProductionOrderRequest>());
+        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
     }
 
     /// <summary>

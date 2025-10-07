@@ -8,7 +8,7 @@ namespace Masterov.Storage.Storages.Masterov.ProductionOrder;
 
 public class GetProductionOrdersByStatusStorage (MasterovDbContext dbContext, IMapper mapper) : IGetProductionOrdersByStatusStorage
 {
-    public async Task<IEnumerable<ProductionOrderDomain>?> GetProductionOrdersByStatus(ProductionOrderStatus status, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OrderDomain>?> GetProductionOrdersByStatus(ProductionOrderStatus status, CancellationToken cancellationToken)
     {
         var orders = await dbContext.ProductionOrders
             .AsNoTracking() 
@@ -22,6 +22,6 @@ public class GetProductionOrdersByStatusStorage (MasterovDbContext dbContext, IM
                 .Include(o => o.Payments)
             .ToArrayAsync(cancellationToken);
 
-        return mapper.Map<IEnumerable<ProductionOrderDomain>>(orders);
+        return mapper.Map<IEnumerable<OrderDomain>>(orders);
     }
 }

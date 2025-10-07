@@ -8,7 +8,7 @@ namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
 public class GetOrdersByFinishedProductStorage (MasterovDbContext dbContext, IMapper mapper) : IGetOrdersByFinishedProductStorage
 {
-    public async Task<IEnumerable<ProductionOrderDomain>?> GetFinishedProductOrders(
+    public async Task<IEnumerable<OrderDomain>?> GetFinishedProductOrders(
         Guid finishedProductId,
         DateTime? createdAt,
         DateTime? completedAt,
@@ -49,6 +49,6 @@ public class GetOrdersByFinishedProductStorage (MasterovDbContext dbContext, IMa
                 .Include(o => o.Payments)
             .ToArrayAsync(cancellationToken);
 
-        return orders.Select(mapper.Map<ProductionOrderDomain>);
+        return orders.Select(mapper.Map<OrderDomain>);
     }
 }

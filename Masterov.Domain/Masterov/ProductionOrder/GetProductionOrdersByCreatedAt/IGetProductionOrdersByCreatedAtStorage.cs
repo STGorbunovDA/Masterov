@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByCreatedA
 
 public interface IGetProductionOrdersByCreatedAtStorage
 {
-    Task<IEnumerable<ProductionOrderDomain>?> GetProductionOrdersByCreatedAt(DateTime createdAt, CancellationToken cancellationToken);
+    Task<IEnumerable<OrderDomain>?> GetProductionOrdersByCreatedAt(DateTime createdAt, CancellationToken cancellationToken);
 }

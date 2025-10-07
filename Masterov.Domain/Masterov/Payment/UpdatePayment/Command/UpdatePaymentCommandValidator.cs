@@ -24,11 +24,11 @@ public class UpdatePaymentCommandValidator : AbstractValidator<UpdatePaymentComm
         
         RuleFor(q => q.MethodPayment).Cascade(CascadeMode.Stop)
             .IsInEnum()
-            .WithErrorCode("InvalidStatus")
+            .WithErrorCode("InvalidMethodPayment")
             .WithMessage("Status must be a valid PaymentMethod value.")
             .Must(paymentMethod => paymentMethod != PaymentMethod.Unknown)
-            .WithErrorCode("InvalidStatusValue")
-            .WithMessage("Status cannot be 'Unknown'.");
+            .WithErrorCode("InvalidMethodPaymentValue")
+            .WithMessage("MethodPayment cannot be 'Unknown'.");
         
         RuleFor(c => c.Amount)
             .Cascade(CascadeMode.Stop)
@@ -39,10 +39,10 @@ public class UpdatePaymentCommandValidator : AbstractValidator<UpdatePaymentComm
             .WithErrorCode("InvalidPrecision")
             .WithMessage("Amount must have no more than 2 decimal places.");
         
-        RuleFor(q => q.PaymentDate).Cascade(CascadeMode.Stop)
-            .LessThanOrEqualTo(DateTime.UtcNow)
+        RuleFor(q => q.CreatedAt).Cascade(CascadeMode.Stop)
+            .LessThanOrEqualTo(DateTime.Now)
             .WithErrorCode("InvalidDate")
-            .WithMessage("PaymentDate date cannot be in the future.");
+            .WithMessage("CreatedAt date cannot be in the future.");
         
     }
 }

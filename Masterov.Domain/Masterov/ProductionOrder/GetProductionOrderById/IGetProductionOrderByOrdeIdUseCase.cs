@@ -5,5 +5,5 @@ namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 
 public interface IGetProductionOrderByOrdeIdUseCase
 {
-    Task<ProductionOrderDomain?> Execute(GetProductionOrderByOrderIdQuery getProductionOrderByOrderIdQuery, CancellationToken cancellationToken);
+    Task<OrderDomain?> Execute(GetProductionOrderByOrderIdQuery getProductionOrderByOrderIdQuery, CancellationToken cancellationToken);
 }

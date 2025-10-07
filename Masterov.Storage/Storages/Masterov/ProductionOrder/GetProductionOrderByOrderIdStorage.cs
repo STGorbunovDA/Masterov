@@ -9,8 +9,8 @@ namespace Masterov.Storage.Storages.Masterov.ProductionOrder;
 
 internal class GetProductionOrderByOrderIdStorage(MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetProductionOrderByOrderIdStorage
 {
-    public async Task<ProductionOrderDomain?> GetProductionOrderById(Guid orderId, CancellationToken cancellationToken) =>
-        (await memoryCache.GetOrCreateAsync<ProductionOrderDomain?>( 
+    public async Task<OrderDomain?> GetProductionOrderById(Guid orderId, CancellationToken cancellationToken) =>
+        (await memoryCache.GetOrCreateAsync<OrderDomain?>( 
             nameof(GetProductionOrderById),
             entry =>
             {
@@ -18,7 +18,7 @@ internal class GetProductionOrderByOrderIdStorage(MasterovDbContext dbContext, I
                 return dbContext.ProductionOrders
                     .AsNoTracking() 
                     .Where(f => f.OrderId == orderId)
-                    .ProjectTo<ProductionOrderDomain>(mapper.ConfigurationProvider)
+                    .ProjectTo<OrderDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);
             }))!;
 }

@@ -7,7 +7,7 @@ namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 
 public class GetProductionOrderByOrdeIdUseCase(IValidator<GetProductionOrderByOrderIdQuery> validator, IGetProductionOrderByOrderIdStorage storage) : IGetProductionOrderByOrdeIdUseCase
 {
-    public async Task<ProductionOrderDomain?> Execute(GetProductionOrderByOrderIdQuery getProductionOrderByOrderIdQuery, CancellationToken cancellationToken)
+    public async Task<OrderDomain?> Execute(GetProductionOrderByOrderIdQuery getProductionOrderByOrderIdQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getProductionOrderByOrderIdQuery, cancellationToken);
         var productionOrderExists = await storage.GetProductionOrderById(getProductionOrderByOrderIdQuery.OrderId, cancellationToken);

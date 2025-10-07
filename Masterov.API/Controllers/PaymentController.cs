@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models.Customer;
+using Masterov.API.Models.Order;
 using Masterov.API.Models.Payment;
-using Masterov.API.Models.ProductionOrder;
 using Masterov.Domain.Masterov.Payment.AddPayment;
 using Masterov.Domain.Masterov.Payment.AddPayment.Command;
 using Masterov.Domain.Masterov.Payment.DeletePayment;
 using Masterov.Domain.Masterov.Payment.DeletePayment.Command;
 using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId.Query;
+using Masterov.Domain.Masterov.Payment.GetOrderByPaymentId;
+using Masterov.Domain.Masterov.Payment.GetOrderByPaymentId.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPaymentById.Query;
 using Masterov.Domain.Masterov.Payment.GetPayments;
@@ -22,8 +24,6 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus.Query;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt.Query;
-using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
-using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId.Query;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.Payment.UpdatePayment.Command;
 using Microsoft.AspNetCore.Authorization;
@@ -187,87 +187,77 @@ public class PaymentController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить ордер по Идентификатору платежа
+    /// Получить ордер по идентификатору платежа
     /// </summary>
     /// <param name="request">Идентификатор платежа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о ордере</returns>
-    [HttpGet("getProductionOrderByPaymentId")]
-    [ProducesResponseType(200, Type = typeof(ProductionOrderRequestNoPayments))]
+    [HttpGet("getOrderByPaymentId")]
+    [ProducesResponseType(200, Type = typeof(OrderRequestNoPayments))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
-    [Authorize]
-    public async Task<IActionResult> GetProductionOrderByPaymentId(
-        [FromQuery] GetProductionOrderByPaymentIdRequest request,
-        [FromServices] IGetProductionOrderByPaymentIdUseCase useCase,
-        CancellationToken cancellationToken)
-    {
-        var productOrderDomain =
-            await useCase.Execute(new GetProductionOrderByPaymentIdQuery(request.PaymentId), cancellationToken);
-        return Ok(mapper.Map<ProductionOrderRequestNoPayments>(productOrderDomain));
-    }
-    
-    /// <summary>
-    /// Получить платежи по Идентификатору заказа
-    /// </summary>
-    /// <param name="request">Идентификатор заказа</param>
-    /// <param name="useCase">Сценарий использования</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о ордере</returns>
-    [HttpGet("getPaymentsByOrderId")]
-    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetPaymentsByOrderId(
-        [FromQuery] GetPaymentsByOrderIdRequest request,
-        [FromServices] IGetPaymentsByOrderIdUseCase useCase,
+    public async Task<IActionResult> GetOrderByPaymentId(
+        [FromQuery] GetOrderByPaymentIdRequest request,
+        [FromServices] IGetOrderByPaymentIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var payments =
-            await useCase.Execute(new GetPaymentsByOrderIdQuery(request.OrderId), cancellationToken);
-        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+        var orderDomain = await useCase.Execute(new GetOrderByPaymentIdQuery(request.PaymentId), cancellationToken);
+        return Ok(mapper.Map<OrderRequestNoPayments>(orderDomain));
     }
     
-
     /// <summary>
     /// Добавить платеж
     /// </summary>
-    /// <param name="request">Данные о заказчике</param>
-    /// <param name="useCase">Сценарий добавления заказчика</param>
+    /// <param name="orderId">Идентификатор заказа</param>
+    /// <param name="request">Данные о платеже</param>
+    /// <param name="useCase">Сценарий добавления платежа</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
-    [HttpPost("addPayment")]
+    [HttpPost("addPayment/{orderId:guid}")]
     [ProducesResponseType(201, Type = typeof(PaymentRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddPayment(
-        [FromForm] AddPaymentRequest request,
+        [FromRoute] Guid orderId,
+        [FromBody] AddPaymentRequest request,
         [FromServices] IAddPaymentUseCase useCase,
         CancellationToken cancellationToken)
     {
         var payment = await useCase.Execute(
-            new AddPaymentCommand(request.OrderId, EnumTypeHelper.FromExtensionPaymentMethod(request.MethodPayment),
-                request.Amount, request.NameCustomer, request.EmailCustomer, request.PhoneCustomer), cancellationToken);
+            new AddPaymentCommand(orderId, EnumTypeHelper.FromExtensionPaymentMethod(request.MethodPayment),
+                request.Amount, request.CustomerId), cancellationToken);
 
+        if (payment is null)
+        {
+            return NotFound(new ProblemDetails
+            {
+                Title = "Платеж не найден",
+                Detail = "Не удалось создать или получить информацию о платеже."
+            });
+        }
+        
         return CreatedAtAction(nameof(GetPaymentById),
             new { paymentId = payment.PaymentId },
             mapper.Map<PaymentRequest>(payment));
     }
 
     /// <summary>
-    /// Удаление платежа по Id.
+    /// Удаление платежа по Id
     /// </summary>
-    /// <param name="paymentId">Идентификатор платжа.</param>
-    /// <param name="useCase">Сценарий удаления платежа.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Ответ с кодом 204, если платеж был успешно удален.</returns>
-    [HttpDelete("deletePayment")]
+    /// <param name="paymentId">Идентификатор платежа</param>
+    /// <param name="useCase">Сценарий удаления платежа</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <returns>Ответ с кодом 204, если платеж был успешно удален</returns>
+    [HttpDelete("deletePayment/{paymentId:guid}")]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [ProducesResponseType(204, Type = typeof(bool))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> DeletePayment(
-        Guid paymentId,
+        [FromRoute] Guid paymentId,
         [FromServices] IDeletePaymentUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -278,24 +268,26 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Обновить платеж
     /// </summary>
+    /// <param name="paymentId">Идентификатор платежа</param>
     /// <param name="request">Данные для обновления платежа</param>
     /// <param name="useCase">Сценарий обновления заказчика</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления платежа</returns>
-    [HttpPatch("updatePayment")]
+    [HttpPatch("updatePayment/{paymentId:guid}")]
     [ProducesResponseType(200, Type = typeof(PaymentRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdatePayment(
+        [FromRoute] Guid paymentId,
         [FromForm] UpdatePaymentRequest request,
         [FromServices] IUpdatePaymentUseCase useCase,
         CancellationToken cancellationToken)
     {
         var updateCustomer = await useCase.Execute(
-            new UpdatePaymentCommand(request.PaymentId, request.OrderId, request.CustomerId, 
+            new UpdatePaymentCommand(paymentId, request.OrderId, request.CustomerId, 
                 EnumTypeHelper.FromExtensionPaymentMethod(request.MethodPayment), 
-                request.Amount, request.CreatedAt), cancellationToken);
+                request.Amount, request.CreatedAt.ToDateTime()), cancellationToken);
         return Ok(mapper.Map<PaymentRequest>(updateCustomer));
     }
 }

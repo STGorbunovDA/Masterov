@@ -2,5 +2,5 @@
 
 public interface IDeletePaymentStorage
 {
-    Task<bool> DeletePayment(Guid PaymentId, CancellationToken cancellationToken);
+    Task<bool> DeletePayment(Guid paymentId, CancellationToken cancellationToken);
 }

@@ -22,6 +22,7 @@ using Masterov.Domain.Masterov.JwtService;
 using Masterov.Domain.Masterov.Payment.AddPayment;
 using Masterov.Domain.Masterov.Payment.DeletePayment;
 using Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId;
+using Masterov.Domain.Masterov.Payment.GetOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Masterov.Payment.GetPayments;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByAmount;
@@ -29,12 +30,11 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByCreatedAt;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
-using Masterov.Domain.Masterov.Payment.GetProductionOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.ProductionOrder.AddProductionOrder;
 using Masterov.Domain.Masterov.ProductionOrder.DeleteProductionOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetCustomerByOrderId;
-using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder;
+using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductByOrderId;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductComponentAtOrder;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrderById;
 using Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
@@ -123,7 +123,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IAddProductionOrderUseCase, AddProductionOrderUseCase>()
             .AddScoped<IDeleteProductionOrderUseCase, DeleteProductionOrderUseCase>()
             .AddScoped<IUpdateProductionOrderStatusUseCase, UpdateProductionOrderStatusUseCase>()
-            .AddScoped<IGetFinishedProductAtOrderUseCase, GetFinishedProductAtOrderUseCase>()
+            .AddScoped<IGetFinishedProductByOrderIdUseCase, GetFinishedProductByOrderIdUseCase>()
             .AddScoped<IUpdateProductionOrderUseCase, UpdateProductionOrderUseCase>()
             .AddScoped<IGetProductComponentByOrderIdUseCase, GetProductComponentByOrderIdUseCase>()
             .AddScoped<IGetProductionOrderByOrdeIdUseCase, GetProductionOrderByOrdeIdUseCase>();
@@ -178,7 +178,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetPaymentByIdUseCase, GetPaymentByIdUseCase>()
             .AddScoped<IGetPaymentsByAmountUseCase, GetPaymentsByAmountUseCase>()
             .AddScoped<IGetCustomerByPaymentIdUseCase, GetCustomerByPaymentIdUseCase>()
-            .AddScoped<IGetProductionOrderByPaymentIdUseCase, GetProductionOrderByPaymentIdUseCase>()
+            .AddScoped<IGetOrderByPaymentIdUseCase, GetOrderByPaymentIdUseCase>()
             .AddScoped<IUpdatePaymentUseCase, UpdatePaymentUseCase>()
             .AddScoped<IGetPaymentsByCreatedAtUseCase, GetPaymentsByCreatedAtUseCase>()
             .AddScoped<IDeletePaymentUseCase, DeletePaymentUseCase>()

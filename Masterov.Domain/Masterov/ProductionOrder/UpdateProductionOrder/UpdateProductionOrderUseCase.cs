@@ -13,7 +13,7 @@ public class UpdateProductionOrderUseCase(
     IGetProductionOrderByOrderIdStorage getProductionOrderByOrderIdStorage,
     IGetCustomerByIdStorage getCustomerByIdStorage) : IUpdateProductionOrderUseCase
 {
-    public async Task<ProductionOrderDomain> Execute(UpdateProductionOrderCommand updateProductionOrderCommand,
+    public async Task<OrderDomain> Execute(UpdateProductionOrderCommand updateProductionOrderCommand,
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(updateProductionOrderCommand, cancellationToken);

@@ -1,4 +1,4 @@
-﻿using Masterov.API.Models.ProductionOrder;
+﻿using Masterov.API.Models.Order;
 
 namespace Masterov.API.Models.Customer;
 
@@ -10,5 +10,5 @@ public class CustomerRequest
     public DateTime? UpdatedAt { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }
-    public ProductionOrderNoCustomerNoComponentsRequest[] Orders { get; set; }
+    public OrderNoCustomerNoComponentsRequest[] Orders { get; set; }
 }

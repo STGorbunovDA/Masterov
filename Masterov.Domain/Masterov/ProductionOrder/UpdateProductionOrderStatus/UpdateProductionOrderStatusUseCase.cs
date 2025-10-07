@@ -11,7 +11,7 @@ public class UpdateProductionOrderStatusUseCase(IValidator<UpdateProductionOrder
     IUpdateProductionOrderStatusStorage storage,
     IGetProductionOrderByOrderIdStorage getProductionOrderByOrderIdStorage) : IUpdateProductionOrderStatusUseCase
 {
-    public async Task<ProductionOrderDomain> Execute(UpdateProductionOrderStatusCommand statusCommand, CancellationToken cancellationToken)
+    public async Task<OrderDomain> Execute(UpdateProductionOrderStatusCommand statusCommand, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(statusCommand, cancellationToken);
         

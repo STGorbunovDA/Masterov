@@ -5,5 +5,5 @@ namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByStatus;
 
 public interface IGetProductionOrdersByStatusUseCase
 {
-    Task<IEnumerable<ProductionOrderDomain>?> Execute(GetProductionOrdersByStatusQuery getProductionOrdersByStatusQuery, CancellationToken cancellationToken);
+    Task<IEnumerable<OrderDomain>?> Execute(GetProductionOrdersByStatusQuery getProductionOrdersByStatusQuery, CancellationToken cancellationToken);
 }

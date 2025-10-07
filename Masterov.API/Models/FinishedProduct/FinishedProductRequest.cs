@@ -1,4 +1,4 @@
-﻿using Masterov.API.Models.ProductionOrder;
+﻿using Masterov.API.Models.Order;
 
 namespace Masterov.API.Models.FinishedProduct;
 
@@ -13,5 +13,5 @@ public class FinishedProductRequest
     public int Height { get; set; }  // в мм
     public int Depth { get; set; }  // в мм
     public byte[]? Image { get; set; }
-    public ProductionOrderRequest[] Orders { get; set; }
+    public OrderRequest[] Orders { get; set; }
 }

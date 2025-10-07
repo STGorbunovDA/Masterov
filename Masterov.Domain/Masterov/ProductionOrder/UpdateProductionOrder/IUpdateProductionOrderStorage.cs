@@ -5,7 +5,7 @@ namespace Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrder;
 
 public interface IUpdateProductionOrderStorage
 {
-    Task<ProductionOrderDomain> UpdateProductionOrder(
+    Task<OrderDomain> UpdateProductionOrder(
         Guid orderId, 
         DateTime createdAt, 
         ProductionOrderStatus status,

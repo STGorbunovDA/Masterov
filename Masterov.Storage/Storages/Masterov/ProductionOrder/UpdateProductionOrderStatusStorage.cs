@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.ProductionOrder;
 
 internal class UpdateProductionOrderStatusStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateProductionOrderStatusStorage
 {
-    public async Task<ProductionOrderDomain> UpdateProductionOrderStatus(Guid orderId, ProductionOrderStatus status, CancellationToken cancellationToken)
+    public async Task<OrderDomain> UpdateProductionOrderStatus(Guid orderId, ProductionOrderStatus status, CancellationToken cancellationToken)
     {
         var productionOrder = await dbContext.Set<Storage.ProductionOrder>().FindAsync([orderId], cancellationToken);
         
@@ -21,7 +21,7 @@ internal class UpdateProductionOrderStatusStorage(MasterovDbContext dbContext, I
         
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        return mapper.Map<ProductionOrderDomain>(productionOrder);
+        return mapper.Map<OrderDomain>(productionOrder);
     }
 
     

@@ -1,6 +1,4 @@
-﻿using Masterov.API.Models.ProductionOrder;
-
-namespace Masterov.API.Models.Customer;
+﻿namespace Masterov.API.Models.Customer;
 
 public class AddCustomerRequest
 {

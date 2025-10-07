@@ -11,5 +11,5 @@ public class FinishedProductDomain
     public int Height { get; set; }  // в мм
     public int Depth { get; set; }  // в мм
     public byte[]? Image { get; set; }
-    public ProductionOrderDomain[] Orders { get; set; }
+    public OrderDomain[] Orders { get; set; }
 }

@@ -9,15 +9,15 @@ namespace Masterov.Storage.Storages.Masterov.ProductionOrder;
 
 internal class GetProductionOrdersStorage (MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetProductionOrdersStorage
 {
-    public async Task<IEnumerable<ProductionOrderDomain>> GetProductionOrders(CancellationToken cancellationToken) =>
-        (await memoryCache.GetOrCreateAsync<ProductionOrderDomain[]>(
+    public async Task<IEnumerable<OrderDomain>> GetProductionOrders(CancellationToken cancellationToken) =>
+        (await memoryCache.GetOrCreateAsync<OrderDomain[]>(
             nameof(GetProductionOrders),
             entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
                 return dbContext.ProductionOrders
                     .AsNoTracking() 
-                    .ProjectTo<ProductionOrderDomain>(mapper.ConfigurationProvider)
+                    .ProjectTo<OrderDomain>(mapper.ConfigurationProvider)
                     .ToArrayAsync(cancellationToken);
             }))!;
 }

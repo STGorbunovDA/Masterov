@@ -10,7 +10,7 @@ public class GetOrdersByCustomerIdUseCase(IValidator<GetOrdersByCustomerIdQuery>
     IGetOrdersByCustomerIdStorage storage, IGetCustomerByIdStorage getCustomerByIdStorage) 
     : IGetOrdersByCustomerIdUseCase
 {
-    public async Task<IEnumerable<ProductionOrderDomain>?> Execute(GetOrdersByCustomerIdQuery getOrdersByCustomerIdQuery,
+    public async Task<IEnumerable<OrderDomain>?> Execute(GetOrdersByCustomerIdQuery getOrdersByCustomerIdQuery,
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getOrdersByCustomerIdQuery, cancellationToken);

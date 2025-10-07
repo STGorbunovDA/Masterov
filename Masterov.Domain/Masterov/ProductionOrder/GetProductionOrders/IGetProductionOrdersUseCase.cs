@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrders;
 
 public interface IGetProductionOrdersUseCase
 {
-    Task<IEnumerable<ProductionOrderDomain>> Execute(CancellationToken cancellationToken);
+    Task<IEnumerable<OrderDomain>> Execute(CancellationToken cancellationToken);
 }

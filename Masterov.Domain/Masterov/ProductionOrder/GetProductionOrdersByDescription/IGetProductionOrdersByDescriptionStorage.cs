@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.ProductionOrder.GetProductionOrdersByDescript
 
 public interface IGetProductionOrdersByDescriptionStorage
 {
-    Task<IEnumerable<ProductionOrderDomain>?> GetProductionOrdersByDescription(string description, CancellationToken cancellationToken);
+    Task<IEnumerable<OrderDomain>?> GetProductionOrdersByDescription(string description, CancellationToken cancellationToken);
 }

@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.ProductionOrder;
 
 public class GetProductionOrdersByCreatedAtStorage (MasterovDbContext dbContext, IMapper mapper) : IGetProductionOrdersByCreatedAtStorage
 {
-    public async Task<IEnumerable<ProductionOrderDomain>?> GetProductionOrdersByCreatedAt(DateTime createdAt, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OrderDomain>?> GetProductionOrdersByCreatedAt(DateTime createdAt, CancellationToken cancellationToken)
     {
         // Фильтрация по дате (без учёта времени)
         var startOfDay = createdAt.Date;
@@ -25,6 +25,6 @@ public class GetProductionOrdersByCreatedAtStorage (MasterovDbContext dbContext,
                 .Include(o => o.Payments)
             .ToArrayAsync(cancellationToken);
 
-        return mapper.Map<IEnumerable<ProductionOrderDomain>>(orders);
+        return mapper.Map<IEnumerable<OrderDomain>>(orders);
     }
 }
