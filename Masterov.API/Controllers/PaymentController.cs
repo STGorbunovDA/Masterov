@@ -45,7 +45,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <returns>Информация о платежах</returns>
     [HttpGet("getPayments")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
-    [ProducesResponseType(410, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPayments(
         [FromServices] IGetPaymentsUseCase useCase,
@@ -65,7 +65,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [HttpGet("getPaymentById/{paymentId:guid}")]
     [ProducesResponseType(200, Type = typeof(PaymentRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize]
     public async Task<IActionResult> GetPaymentById(
         [FromRoute] Guid paymentId,

@@ -3,22 +3,17 @@ using AutoMapper.QueryableExtensions;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Masterov.Storage.Storages.Masterov.Payment;
 
-internal class GetPaymentByIdStorage(MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetPaymentByIdStorage
+internal class GetPaymentByIdStorage(MasterovDbContext dbContext, IMapper mapper) : IGetPaymentByIdStorage
 {
-    public async Task<PaymentDomain?> GetPaymentById(Guid customerId, CancellationToken cancellationToken) =>
-        (await memoryCache.GetOrCreateAsync<PaymentDomain?>( 
-            nameof(GetPaymentById),
-            entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
-                return dbContext.Payments
-                    .AsNoTracking() 
-                    .Where(f => f.PaymentId == customerId)
-                    .ProjectTo<PaymentDomain>(mapper.ConfigurationProvider)
-                    .FirstOrDefaultAsync(cancellationToken);
-            }))!;
+    public async Task<PaymentDomain?> GetPaymentById(Guid paymentId, CancellationToken cancellationToken)
+    {
+        return await dbContext.Payments
+            .AsNoTracking() 
+            .Where(f => f.PaymentId == paymentId)
+            .ProjectTo<PaymentDomain>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 }
