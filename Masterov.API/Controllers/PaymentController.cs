@@ -166,7 +166,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить заказчика по Идентификатору платежа
+    /// Получить заказчика по идентификатору платежа
     /// </summary>
     /// <param name="request">Идентификатор платежа</param>
     /// <param name="useCase">Сценарий использования</param>
@@ -175,8 +175,8 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomerByPaymentId")]
     [ProducesResponseType(200, Type = typeof(CustomerNewRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
-    [Authorize]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomerByPaymentId(
         [FromQuery] GetCustomerByPaymentIdRequest request,
         [FromServices] IGetCustomerByPaymentIdUseCase useCase,

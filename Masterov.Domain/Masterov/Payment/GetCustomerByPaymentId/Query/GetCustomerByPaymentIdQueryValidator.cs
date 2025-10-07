@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductAtOrder.Query;
 
 namespace Masterov.Domain.Masterov.Payment.GetCustomerByPaymentId.Query;
 
