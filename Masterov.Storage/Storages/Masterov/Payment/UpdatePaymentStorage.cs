@@ -22,7 +22,7 @@ internal class UpdatePaymentStorage(MasterovDbContext dbContext, IMapper mapper)
         paymentExists.MethodPayment = methodPayment;
         paymentExists.Amount = amount;
         if (createdAt.HasValue)
-            paymentExists.CreatedAt = createdAt.Value.Date;
+            paymentExists.CreatedAt = createdAt.Value;
         paymentExists.UpdatedAt = DateTime.Now;
         
         await dbContext.SaveChangesAsync(cancellationToken);

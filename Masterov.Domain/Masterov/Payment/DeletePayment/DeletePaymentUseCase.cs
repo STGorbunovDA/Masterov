@@ -1,67 +1,34 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
-using Masterov.Domain.Extension;
+using Masterov.Domain.Masterov.Payment.DeletePayment;
 using Masterov.Domain.Masterov.Payment.DeletePayment.Command;
 using Masterov.Domain.Masterov.Payment.GetOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
-using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
-using Masterov.Domain.Masterov.ProductionOrder.GetFinishedProductByOrderId;
-using Masterov.Domain.Masterov.ProductionOrder.UpdateProductionOrderStatus;
-
-namespace Masterov.Domain.Masterov.Payment.DeletePayment;
+using Masterov.Domain.Masterov.Payment.Service;
 
 public class DeletePaymentUseCase(
     IValidator<DeletePaymentCommand> validator,
     IDeletePaymentStorage storage,
     IGetPaymentByIdStorage getPaymentByIdStorage,
     IGetOrderByPaymentIdStorage getOrderByPaymentIdStorage,
-    IGetFinishedProductByOrderIdStorage getFinishedProductByOrderIdStorage,
-    IGetPaymentsByOrderIdStorage getPaymentsByOrderIdStorage,
-    IUpdateProductionOrderStatusStorage updateProductionOrderStatusStorage
-) : IDeletePaymentUseCase
+    IOrderPaymentStatusService orderPaymentStatusService)
+    : IDeletePaymentUseCase
 {
     public async Task<bool> Execute(DeletePaymentCommand deletePaymentCommand, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(deletePaymentCommand, cancellationToken);
-        
+
         var payment = await getPaymentByIdStorage.GetPaymentById(deletePaymentCommand.PaymentId, cancellationToken)
                       ?? throw new NotFoundByIdException(deletePaymentCommand.PaymentId, "Платеж");
-        
+
         var order = await getOrderByPaymentIdStorage.GetOrderByPaymentId(payment.PaymentId, cancellationToken)
                     ?? throw new InvalidOperationException("Платеж не привязан к заказу");
-        
-        await UpdateOrderStatusIfNeeded(order.OrderId, deletePaymentCommand.PaymentId, cancellationToken);
 
-        return await storage.DeletePayment(deletePaymentCommand.PaymentId, cancellationToken);;
-    }
+        var result = await storage.DeletePayment(deletePaymentCommand.PaymentId, cancellationToken);
 
-    private async Task UpdateOrderStatusIfNeeded(Guid orderId, Guid paymentId, CancellationToken ct)
-    {
-        var finishedProduct = await getFinishedProductByOrderIdStorage.GetFinishedProductByOrderId(orderId, ct);
-        var productPrice = finishedProduct?.Price ?? 0;
+        // 🔄 после удаления платежа обновляем статус заказа
+        await orderPaymentStatusService.UpdateOrderStatusAsync(order.OrderId, cancellationToken);
 
-        if (productPrice <= 0)
-            return;
-
-        var payments = await getPaymentsByOrderIdStorage.GetPaymentsByOrderId(orderId, ct);
-        
-        var totalPaid = payments?.Where(payment => payment.PaymentId != paymentId).Sum(payment => payment.Amount) ?? 0;
-
-        var status = GetTargetStatus(productPrice, totalPaid);
-
-        var updatedOrder = await updateProductionOrderStatusStorage.UpdateProductionOrderStatus(orderId, status, ct);
-
-        if (updatedOrder is null)
-            throw new InvalidOperationException("Не удалось обновить статус заказа после оплаты");
-    }
-
-    private static ProductionOrderStatus GetTargetStatus(decimal productPrice, decimal totalPaid)
-    {
-        if (totalPaid == 0)
-            return ProductionOrderStatus.Draft;
-
-        return productPrice <= totalPaid
-            ? ProductionOrderStatus.InProgress
-            : ProductionOrderStatus.Partial;
+        return result;
     }
 }

@@ -30,6 +30,8 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByCreatedAt;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
+using Masterov.Domain.Masterov.Payment.Service;
+using Masterov.Domain.Masterov.Payment.Services;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.ProductionOrder.AddProductionOrder;
 using Masterov.Domain.Masterov.ProductionOrder.DeleteProductionOrder;
@@ -221,6 +223,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetWarehouseByNameUseCase, GetWarehouseByNameUseCase>()
             .AddScoped<IGetSuppliesByWarehouseIdUseCase, GetSuppliesByWarehouseIdUseCase>()
             .AddScoped<IGetWarehousesUseCase, GetWarehousesUseCase>();
+        
+        services.AddScoped<IOrderPaymentStatusService, OrderPaymentStatusService>();
             
         return services;
     }
