@@ -16,6 +16,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct.Query;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
@@ -36,7 +37,24 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     //TODO Добавь метод получения готовых изделий без ордеров
     
     /// <summary>
-    /// Получить все готовые мебельные изделия
+    /// Получить все готовые мебельные изделия без заказов
+    /// </summary>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о всех готовых мебельных изделий без заказов</returns>
+    [HttpGet("getFinishedProductsWithoutOrders")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductRequestWithoutOrders>))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetFinishedProductsWithoutOrders(
+        [FromServices] IGetFinishedProductsWithoutOrdersUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var finishedProducts = await useCase.Execute(cancellationToken);
+        return Ok(finishedProducts.Select(mapper.Map<FinishedProductRequestWithoutOrders>));
+    }
+    
+    /// <summary>
+    /// Получить все готовые мебельные изделия с заказами
     /// </summary>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>

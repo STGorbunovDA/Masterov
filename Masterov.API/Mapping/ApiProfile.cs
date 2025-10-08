@@ -94,5 +94,6 @@ internal class ApiProfile : Profile
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType));
         
         CreateMap<CustomerDomain, CustomerNoOrdersRequest>();
+        CreateMap<FinishedProductWithoutOrdersDomain, FinishedProductRequestWithoutOrders>();
     }
 }
