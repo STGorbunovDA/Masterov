@@ -13,6 +13,7 @@ using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
@@ -137,6 +138,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetCustomerByOrderIdStorage, GetCustomerByOrderIdStorage>()
             .AddScoped<IAddOrderStorage, AddOrderStorage>()
             .AddScoped<IGetProductComponentByOrderIdStorage, GetProductComponentByOrderIdStorage>()
+            .AddScoped<IGetFinishedProductByIdWithoutOrdersStorage, GetFinishedProductByIdWithoutOrdersStorage>()
             .AddScoped<IUpdateOrderStatusStorage, UpdateOrderStatusStorage>()
             .AddScoped<IDeleteOrderStorage, DeleteOrderStorage>()
             .AddScoped<IUpdateOrderStorage, UpdateOrderStorage>()

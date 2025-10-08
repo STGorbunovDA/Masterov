@@ -9,6 +9,8 @@ using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct.Command;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithoutOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithoutOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
@@ -34,8 +36,6 @@ namespace Masterov.API.Controllers;
 [Route("api/finishedProducts")]
 public class FinishedProductController(IMapper mapper) : ControllerBase
 {
-    //TODO Добавь метод получения готовых изделий без ордеров
-    
     /// <summary>
     /// Получить все готовые мебельные изделия без заказов
     /// </summary>
@@ -88,6 +88,26 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     {
         var product = await useCase.Execute(new GetFinishedProductByIdQuery(finishedProductId), cancellationToken);
         return Ok(mapper.Map<FinishedProductRequest>(product));
+    }
+    
+    /// <summary>
+    /// Получить готовое мебельное изделие по Id без заказов
+    /// </summary>
+    /// <param name="finishedProductId">Идентификатор изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о готовом мебельном изделии без заказов</returns>
+    [HttpGet("getFinishedProductByIdWithoutOrders/{finishedProductId:guid}")]
+    [ProducesResponseType(200, Type = typeof(FinishedProductRequestWithoutOrders))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetFinishedProductByIdWithoutOrders(
+        [FromRoute] Guid finishedProductId,
+        [FromServices] IGetFinishedProductByIdWithoutOrdersUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var product = await useCase.Execute(new GetFinishedProductByIdWithoutOrdersQuery(finishedProductId), cancellationToken);
+        return Ok(mapper.Map<FinishedProductRequestWithoutOrders>(product));
     }
 
     /// <summary>
