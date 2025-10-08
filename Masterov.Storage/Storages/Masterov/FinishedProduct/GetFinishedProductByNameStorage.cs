@@ -8,7 +8,7 @@ namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
 internal class GetFinishedProductByNameStorage(MasterovDbContext dbContext, IMapper mapper) : IGetFinishedProductByNameStorage
 {
-    public async Task<FinishedProductDomain?> GetFinishedProductByName(string finishedProductName, CancellationToken cancellationToken)
+    public async Task<IEnumerable<FinishedProductDomain?>> GetFinishedProductByName(string finishedProductName, CancellationToken cancellationToken)
     {
         var normalizedName = finishedProductName.Trim().ToLower();
     
@@ -16,6 +16,6 @@ internal class GetFinishedProductByNameStorage(MasterovDbContext dbContext, IMap
             .AsNoTracking() 
             .Where(f => f.Name.ToLower() == normalizedName)
             .ProjectTo<FinishedProductDomain>(mapper.ConfigurationProvider)
-            .FirstOrDefaultAsync(cancellationToken);
+            .ToArrayAsync(cancellationToken);
     }
 }

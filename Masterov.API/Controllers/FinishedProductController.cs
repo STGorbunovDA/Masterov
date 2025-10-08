@@ -120,7 +120,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о готовом мебельном изделии</returns>
     [HttpGet("getFinishedProductByNameWithoutOrders/{finishedProductName}")]
-    [ProducesResponseType(200, Type = typeof(FinishedProductRequestWithoutOrders))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductRequestWithoutOrders>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProductByNameWithoutOrders(
@@ -128,8 +128,8 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         [FromServices] IGetFinishedProductByNameWithoutOrdersUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productType = await useCase.Execute(new GetFinishedProductByNameWithoutOrdersQuery(finishedProductName), cancellationToken);
-        return Ok(mapper.Map<FinishedProductRequestWithoutOrders>(productType));
+        var finishedProducts = await useCase.Execute(new GetFinishedProductByNameWithoutOrdersQuery(finishedProductName), cancellationToken);
+        return Ok(finishedProducts.Select(mapper.Map<FinishedProductRequestWithoutOrders>));
     }
     
     /// <summary>
@@ -140,7 +140,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о готовом мебельном изделии</returns>
     [HttpGet("getFinishedProductByName/{finishedProductName}")]
-    [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProductByName(
@@ -148,8 +148,8 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         [FromServices] IGetFinishedProductByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productType = await useCase.Execute(new GetFinishedProductByNameQuery(finishedProductName), cancellationToken);
-        return Ok(mapper.Map<FinishedProductRequest>(productType));
+        var finishedProducts = await useCase.Execute(new GetFinishedProductByNameQuery(finishedProductName), cancellationToken);
+        return Ok(finishedProducts.Select(mapper.Map<FinishedProductRequest>));
     }
     
     /// <summary>
