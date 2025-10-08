@@ -1,0 +1,3 @@
+﻿namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAtWithoutOrders.Query;
+
+public record GetFinishedProductsByUpdatedAtWithoutOrdersQuery(DateTime? UpdatedAt);

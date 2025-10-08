@@ -22,6 +22,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWit
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAtWithoutOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAtWithoutOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct.Query;
@@ -213,6 +215,26 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     {
         var products = await useCase.Execute(new GetFinishedProductsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(products?.Select(mapper.Map<FinishedProductRequest>) ?? Array.Empty<FinishedProductRequest>());
+    }
+    
+    /// <summary>
+    /// Получить готовое мебельное изделие по дате обновления без ордеров
+    /// </summary>
+    /// <param name="request">Дата обновления готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о готовых мебельных изделиях</returns>
+    [HttpGet("getFinishedProductsByUpdatedAtWithoutOrders")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductWithoutOrdersDomain>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetFinishedProductsByUpdatedAtWithoutOrders(
+        [FromQuery] GetFinishedProductsByUpdatedAtWithoutOrdersRequest request,
+        [FromServices] IGetFinishedProductsByUpdatedAtWithoutOrdersUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var products = await useCase.Execute(new GetFinishedProductsByUpdatedAtWithoutOrdersQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
+        return Ok(products?.Select(mapper.Map<FinishedProductWithoutOrdersDomain>) ?? Array.Empty<FinishedProductWithoutOrdersDomain>());
     }
     
     /// <summary>
