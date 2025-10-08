@@ -14,6 +14,7 @@ using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByNameWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
@@ -113,6 +114,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetFinishedProductsByCreatedAtUseCase, GetFinishedProductsByCreatedAtUseCase>()
             .AddScoped<IGetFinishedProductsWithoutOrdersUseCase, GetFinishedProductsWithoutOrdersUseCase>()
             .AddScoped<IGetFinishedProductByIdWithoutOrdersUseCase, GetFinishedProductByIdWithoutOrdersUseCase>()
+            .AddScoped<IGetFinishedProductByNameWithoutOrdersUseCase, GetFinishedProductByNameWithoutOrdersUseCase>()
             .AddScoped<IGetFinishedProductsByUpdatedAtUseCase, GetFinishedProductsByUpdatedAtUseCase>()
             .AddScoped<IGetOrdersByFinishedProductUseCase, GetOrdersByFinishedProductUseCase>()
             .AddScoped<IGetFinishedProductsUseCase, GetFinishedProductsUseCase>();

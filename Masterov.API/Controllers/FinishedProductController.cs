@@ -13,6 +13,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithoutOrde
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithoutOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByNameWithoutOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByNameWithoutOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt.Query;
@@ -111,7 +113,27 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить готовое мебельное изделие по имени
+    /// Получить готовое мебельное изделие по имени без заказов
+    /// </summary>
+    /// <param name="finishedProductName">Название готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о готовом мебельном изделии</returns>
+    [HttpGet("getFinishedProductByNameWithoutOrders/{finishedProductName}")]
+    [ProducesResponseType(200, Type = typeof(FinishedProductRequestWithoutOrders))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetFinishedProductByNameWithoutOrders(
+        [FromRoute] string finishedProductName,
+        [FromServices] IGetFinishedProductByNameWithoutOrdersUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var productType = await useCase.Execute(new GetFinishedProductByNameWithoutOrdersQuery(finishedProductName), cancellationToken);
+        return Ok(mapper.Map<FinishedProductRequestWithoutOrders>(productType));
+    }
+    
+    /// <summary>
+    /// Получить готовое мебельное изделие по имени 
     /// </summary>
     /// <param name="finishedProductName">Название готового мебельного изделия</param>
     /// <param name="useCase">Сценарий использования</param>
