@@ -1,0 +1,3 @@
+﻿namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders.Query;
+
+public record GetFinishedProductsByCreatedAtWithoutOrdersQuery(DateTime? CreatedAt);

@@ -18,6 +18,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByNameWithoutOr
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsWithoutOrders;
@@ -25,6 +27,7 @@ using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetOrdersByFinishedProduct.Query;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct.Command;
+using Masterov.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -170,6 +173,26 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     {
         var products = await useCase.Execute(new GetFinishedProductsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
         return Ok(products?.Select(mapper.Map<FinishedProductRequest>) ?? Array.Empty<FinishedProductRequest>());
+    }
+    
+    /// <summary>
+    /// Получить готовое мебельное изделие по дате создания без ордеров
+    /// </summary>
+    /// <param name="request">Дата создания готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о готовых мебельных изделиях</returns>
+    [HttpGet("getFinishedProductsByCreatedAtWithoutOrders")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductWithoutOrdersDomain>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetFinishedProductsByCreatedAtWithoutOrders(
+        [FromQuery] GetFinishedProductsByCreatedAtWithoutOrdersRequest request,
+        [FromServices] IGetFinishedProductsByCreatedAtWithoutOrdersUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var products = await useCase.Execute(new GetFinishedProductsByCreatedAtWithoutOrdersQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(products?.Select(mapper.Map<FinishedProductWithoutOrdersDomain>) ?? Array.Empty<FinishedProductWithoutOrdersDomain>());
     }
     
     /// <summary>

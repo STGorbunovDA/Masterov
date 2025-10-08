@@ -1,0 +1,9 @@
+﻿using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders.Query;
+using Masterov.Domain.Models;
+
+namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders;
+
+public interface IGetFinishedProductsByCreatedAtWithoutOrdersUseCase
+{
+    Task<IEnumerable<FinishedProductWithoutOrdersDomain>?> Execute(GetFinishedProductsByCreatedAtWithoutOrdersQuery getFinishedProductsByCreatedAtQuery, CancellationToken cancellationToken);
+}
