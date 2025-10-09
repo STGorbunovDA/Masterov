@@ -5,8 +5,7 @@ using Masterov.Domain.Models;
 namespace Masterov.Domain.Masterov.Order.GetOrdersByCompletedAt;
 
 public class GetOrdersByCompletedAtUseCase(IValidator<GetOrdersByCompletedAtQuery> validator,
-    IGetOrdersByCompletedAtStorage storage) 
-    : IGetOrdersByCompletedAtUseCase
+    IGetOrdersByCompletedAtStorage storage) : IGetOrdersByCompletedAtUseCase
 {
     public async Task<IEnumerable<OrderDomain>?> Execute(GetOrdersByCompletedAtQuery getOrdersByCompletedAtQuery,
         CancellationToken cancellationToken)

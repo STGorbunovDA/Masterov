@@ -7,7 +7,7 @@ public class GetOrdersByCompletedAtQueryValidator : AbstractValidator<GetOrdersB
     public GetOrdersByCompletedAtQueryValidator()
     {
         RuleFor(q => q.CompletedAt).Cascade(CascadeMode.Stop)
-            .LessThanOrEqualTo(DateTime.UtcNow)
+            .LessThanOrEqualTo(DateTime.Now)
             .WithErrorCode("InvalidDate")
             .WithMessage("CompletedAt date cannot be in the future.");
     }

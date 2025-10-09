@@ -2,5 +2,5 @@
 
 public class GetOrderByCompletedAtRequest
 {
-    public DateTime CompletedAt { get; set; }
+    public string CompletedAt { get; set; }
 }

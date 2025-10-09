@@ -131,22 +131,22 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить список ордеров (заказов) по дате закрытия
+    /// Получить список заказов по дате закрытия
     /// </summary>
-    /// <param name="request">Дата закрытия ордера (заказа)</param>
+    /// <param name="request">Дата закрытия заказа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказах (ордерах)</returns>
-    [HttpGet("getProductionOrdersByCompletedAt")]
+    /// <returns>Информация о заказах</returns>
+    [HttpGet("getOrdersByCompletedAt")]
     [ProducesResponseType(200, Type = typeof(OrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetProductionOrdersByCompletedAt(
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetOrdersByCompletedAt(
         [FromQuery] GetOrderByCompletedAtRequest request,
         [FromServices] IGetOrdersByCompletedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var orders = await useCase.Execute(new GetOrdersByCompletedAtQuery(request.CompletedAt),
+        var orders = await useCase.Execute(new GetOrdersByCompletedAtQuery(request.CompletedAt.ToDateTime()),
             cancellationToken);
         return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
     }

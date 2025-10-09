@@ -7,10 +7,12 @@ namespace Masterov.Storage.Storages.Masterov.Order;
 
 public class GetOrdersByCompletedAtStorage (MasterovDbContext dbContext, IMapper mapper) : IGetOrdersByCompletedAtStorage
 {
-    public async Task<IEnumerable<OrderDomain>?> GetOrdersByCompletedAt(DateTime completedAt, CancellationToken cancellationToken)
+    public async Task<IEnumerable<OrderDomain>?> GetOrdersByCompletedAt(DateTime? completedAt, CancellationToken cancellationToken)
     {
-        // Фильтрация по дате (без учёта времени)
-        var startOfDay = completedAt.Date;
+        if (!completedAt.HasValue)
+            return null;
+        
+        var startOfDay = completedAt.Value;
         var endOfDay = startOfDay.AddDays(1);
 
         var orders = await dbContext.Orders
