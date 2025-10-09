@@ -76,7 +76,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     [HttpGet("getOrderById/{orderId:guid}")]
     [ProducesResponseType(200, Type = typeof(OrderRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrderById(
         [FromRoute] Guid orderId,
         [FromServices] IGetOrderByIdUseCase useCase,
@@ -87,23 +87,23 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить список ордеров (заказов) по дате создания
+    /// Получить список заказов по дате создания
     /// </summary>
-    /// <param name="request">Дата создания ордера (заказа)</param>
+    /// <param name="request">Дата создания заказа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказах (ордерах)</returns>
-    [HttpGet("getProductionOrdersByCreatedAt")]
+    /// <returns>Информация о заказах</returns>
+    [HttpGet("getOrdersByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(OrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetProductionOrdersByCreatedAt(
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetOrdersByCreatedAt(
         [FromQuery] GetOrderByCreatedAtRequest request,
         [FromServices] IGetOrdersByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
         var orders =
-            await useCase.Execute(new GetOrdersByCreatedAtQuery(request.CreatedAt), cancellationToken);
+            await useCase.Execute(new GetOrdersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
         return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
     }
 
@@ -324,6 +324,7 @@ public class OrderController(IMapper mapper) : ControllerBase
             new UpdateOrderCommand(
                 request.OrderId, 
                 request.CreatedAt,
+                request.CompletedAt,
                 EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status), 
                 request.Description,
                 request.CustomerId),

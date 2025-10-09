@@ -7,7 +7,8 @@ public interface IUpdateOrderStorage
 {
     Task<OrderDomain> UpdateOrder(
         Guid orderId, 
-        DateTime createdAt, 
+        DateTime createdAt,
+        DateTime completedAt,
         OrderStatus status,
         string? description, 
         Guid customerId,

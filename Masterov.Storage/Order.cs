@@ -15,7 +15,7 @@ public class Order
     public FinishedProduct FinishedProduct { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
-
+    public DateTime? UpdatedAt  { get; set; }
     public DateTime? CompletedAt { get; set; }
     
     [MaxLength(200)]

@@ -19,6 +19,14 @@ public class UpdateOrderCommandValidator : AbstractValidator<UpdateOrderCommand>
             .LessThanOrEqualTo(DateTime.UtcNow)
             .WithErrorCode("FutureDate")
             .WithMessage("CreatedAt cannot be in the future.");
+        
+        RuleFor(q => q.CompletedAt)
+            .NotEmpty()
+            .WithErrorCode("InvalidDate")
+            .WithMessage("CreatedAt must be specified.")
+            .LessThanOrEqualTo(DateTime.UtcNow)
+            .WithErrorCode("FutureDate")
+            .WithMessage("CreatedAt cannot be in the future.");
 
         RuleFor(q => q.Status)
             .IsInEnum()

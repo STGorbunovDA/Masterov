@@ -34,6 +34,7 @@ public class UpdateOrderUseCase(
         return await storage.UpdateOrder(
             updateOrderCommand.OrderId,
             updateOrderCommand.CreatedAt, 
+            updateOrderCommand.CompletedAt,
             updateOrderCommand.Status,
             updateOrderCommand.Description,
             updateOrderCommand.CustomerId, cancellationToken);

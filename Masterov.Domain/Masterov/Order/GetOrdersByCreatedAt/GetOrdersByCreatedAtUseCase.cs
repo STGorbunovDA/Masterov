@@ -4,8 +4,7 @@ using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.Order.GetOrdersByCreatedAt;
 
-public class GetOrdersByCreatedAtUseCase(IValidator<GetOrdersByCreatedAtQuery> validator,
-    IGetOrdersByCreatedAtStorage storage) 
+public class GetOrdersByCreatedAtUseCase(IValidator<GetOrdersByCreatedAtQuery> validator, IGetOrdersByCreatedAtStorage storage) 
     : IGetOrdersByCreatedAtUseCase
 {
     public async Task<IEnumerable<OrderDomain>?> Execute(GetOrdersByCreatedAtQuery ordersByCreatedAtQuery,

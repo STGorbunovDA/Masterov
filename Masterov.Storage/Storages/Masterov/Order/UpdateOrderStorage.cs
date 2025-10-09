@@ -8,7 +8,7 @@ namespace Masterov.Storage.Storages.Masterov.Order;
 
 internal class UpdateOrderStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateOrderStorage
 {
-    public async Task<OrderDomain> UpdateOrder(Guid orderId, DateTime createdAt, OrderStatus status, string? description,
+    public async Task<OrderDomain> UpdateOrder(Guid orderId, DateTime createdAt, DateTime completedAt, OrderStatus status, string? description,
         Guid customerId, CancellationToken ct)
     {
         var order = await dbContext.Set<Storage.Order>().FindAsync([orderId], ct);
@@ -19,7 +19,8 @@ internal class UpdateOrderStorage(MasterovDbContext dbContext, IMapper mapper) :
         order.CustomerId = customerId;
         order.Status = status;
         order.CreatedAt = createdAt;
-        order.CompletedAt = DateTime.Now;
+        order.UpdatedAt = DateTime.Now;
+        order.CompletedAt = completedAt;
         if(description is not null)
             order.Description = description;
         
