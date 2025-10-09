@@ -152,23 +152,22 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить список ордеров (заказов) по описанию
+    /// Получить список ордеров заказов по описанию
     /// </summary>
-    /// <param name="request">Описание ордера (заказа)</param>
+    /// <param name="request">Описание заказа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказах (ордерах)</returns>
-    [HttpGet("getProductionOrdersByDescription")]
+    /// <returns>Информация о заказах</returns>
+    [HttpGet("getOrdersByDescription")]
     [ProducesResponseType(200, Type = typeof(OrderRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetProductionOrdersByDescription(
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetOrdersByDescription(
         [FromQuery] GetOrderByDescriptionRequest request,
         [FromServices] IGetOrdersByDescriptionUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var orders = await useCase.Execute(new GetOrdersByDescriptionQuery(request.Description),
-            cancellationToken);
+        var orders = await useCase.Execute(new GetOrdersByDescriptionQuery(request.Description), cancellationToken);
         return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
     }
 
