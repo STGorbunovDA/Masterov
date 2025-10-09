@@ -12,8 +12,8 @@ public class OrderRequest
     public DateTime? CompletedAt { get; set; }
     public OrderStatus Status { get; set; }
     public string? Description { get; set; }
-    public CustomerNoOrdersRequest CustomerNoOrders { get; set; }
+    public CustomerNoOrdersRequest Customer { get; set; }
     public List<ProductComponentRequest> Components { get; set; }
-    public List<PaymentsNewCustomerRequest> PaymentsNoCustomer { get; set; }
+    public List<PaymentsNewCustomerRequest> Payments { get; set; }
     public decimal FullPriceFinishedProduct { get; set; }
 }

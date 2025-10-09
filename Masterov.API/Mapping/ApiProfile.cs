@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Masterov.API.Models;
-using Masterov.API.Models.Auth;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.Order;
@@ -31,8 +29,8 @@ internal class ApiProfile : Profile
         // 3. Маппинг ProductionOrder с преобразованием коллекций
         CreateMap<OrderDomain, OrderRequest>()
             .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
-            .ForMember(dest => dest.PaymentsNoCustomer, opt => opt.MapFrom(src => src.Payments))
-            .ForMember(dest => dest.CustomerNoOrders, opt => opt.MapFrom(src => src.Customer))
+            .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments))
+            .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
             .ForMember(dest => dest.FullPriceFinishedProduct, opt => opt.MapFrom(src => src.FullPriceFinishedProduct))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
 
@@ -65,12 +63,8 @@ internal class ApiProfile : Profile
         
         CreateMap<CustomerDomain, CustomerNewRequest>()
             .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders)); // Автоматически применит маппинг ProductionOrder
-        
-        CreateMap<PaymentDomain, PaymentsNewCustomerRequest>()
-            .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.Name))
-            .ForMember(dest => dest.CustomerEmail, opt => opt.MapFrom(src => src.Customer.Email))
-            .ForMember(dest => dest.CustomerPhone, opt => opt.MapFrom(src => src.Customer.Phone));
 
+        CreateMap<PaymentDomain, PaymentsNewCustomerRequest>();
         CreateMap<UserDomain, UserRequest>()
             .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer));
 

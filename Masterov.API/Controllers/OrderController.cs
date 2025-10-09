@@ -54,15 +54,16 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о всех заказах (ордерах)</returns>
-    [HttpGet("getProductionOrders")]
+    [HttpGet("getOrders")]
     [ProducesResponseType(200, Type = typeof(OrderRequest[]))]
-    [ProducesResponseType(410)]
-    public async Task<IActionResult> GetProductionOrders(
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetOrders(
         [FromServices] IGetOrdersUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var files = await useCase.Execute(cancellationToken);
-        return Ok(files.Select(mapper.Map<OrderRequest>));
+        var orders = await useCase.Execute(cancellationToken);
+        return Ok(orders.Select(mapper.Map<OrderRequest>));
     }
 
     /// <summary>
