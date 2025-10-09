@@ -4,7 +4,7 @@ namespace Masterov.API.Extensions;
 
 public static class EnumTypeHelper
 {
-    public static OrderStatus FromExtensionProductionOrderStatus(string extension) => extension.ToLower() switch
+    public static OrderStatus FromExtensionOrderStatus(string extension) => extension.ToLower() switch
     {
         "draft" => OrderStatus.Draft,
         "partial" => OrderStatus.Partial,

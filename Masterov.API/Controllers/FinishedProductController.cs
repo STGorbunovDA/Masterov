@@ -261,7 +261,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
                 finishedProductId, 
                 request.CreatedAt, 
                 request.CompletedAt,
-                request.Status != null ? EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status) : OrderStatus.Unknown,
+                request.Status != null ? EnumTypeHelper.FromExtensionOrderStatus(request.Status) : OrderStatus.Unknown,
                 request.Description
             ), 
             cancellationToken);
