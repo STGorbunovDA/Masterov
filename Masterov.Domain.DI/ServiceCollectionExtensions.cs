@@ -109,7 +109,7 @@ public static class ServiceCollectionExtensions
     {
         // FinishedProduct
         services
-            .AddScoped<IGetFinishedProductByIdUseCase, GetFinishedProductByIdUseCase>()
+            .AddScoped<Masterov.FinishedProduct.GetFinishedProductById.IGetFinishedProductByIdUseCase, GetFinishedProductByIdUseCase>()
             .AddScoped<IGetFinishedProductByNameUseCase, GetFinishedProductByNameUseCase>()
             .AddScoped<IDeleteFinishedProductUseCase, DeleteFinishedProductUseCase>()
             .AddScoped<IAddFinishedProductUseCase, AddFinishedProductUseCase>()

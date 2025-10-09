@@ -194,14 +194,14 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Получить готовое мебельное изделие у ордера
     /// </summary>
-    /// <param name="request">Id Ордера (заказа)</param>
+    /// <param name="request">Идентификатор заказа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Готовое мебельное изделие</returns>
     [HttpGet("getFinishedProductByOrderId")]
     [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProductByOrderId(
         [FromQuery] GetFinishedProductByOrderIdRequest request,
         [FromServices] IGetFinishedProductByOrderIdUseCase useCase,
