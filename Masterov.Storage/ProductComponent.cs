@@ -14,12 +14,12 @@ public class ProductComponent
 
     [Required, ForeignKey(nameof(ProductType))]
     public Guid ProductTypeId { get; set; }
-    public ProductType ProductType { get; set; } // Например: ножка
+    public ProductType ProductType { get; set; }
 
     [Required, ForeignKey(nameof(Warehouse))]
     public Guid WarehouseId { get; set; }
-    public Warehouse Warehouse { get; set; } // С какого склада берем
+    public Warehouse Warehouse { get; set; }
 
     [Range(1, int.MaxValue)]
-    public int Quantity { get; set; } // Сколько нужно
+    public int Quantity { get; set; }
 }

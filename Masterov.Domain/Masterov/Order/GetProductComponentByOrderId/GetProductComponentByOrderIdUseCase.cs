@@ -11,10 +11,10 @@ public class GetProductComponentByOrderIdUseCase(IValidator<GetProductComponentB
     public async Task<IEnumerable<ProductComponentDomain?>> Execute(GetProductComponentByOrderIdQuery getProductComponentByOrderIdQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getProductComponentByOrderIdQuery, cancellationToken);
-        var productionOrderExists = await getOrderByIdStorage.GetOrderById(getProductComponentByOrderIdQuery.OrderId, cancellationToken);
+        var orderExists = await getOrderByIdStorage.GetOrderById(getProductComponentByOrderIdQuery.OrderId, cancellationToken);
         
-        if (productionOrderExists is null)
-            throw new NotFoundByIdException(getProductComponentByOrderIdQuery.OrderId, "Ордер (заказ)");
+        if (orderExists is null)
+            throw new NotFoundByIdException(getProductComponentByOrderIdQuery.OrderId, "Заказ)");
         
         return await orderIdStorage.GetProductComponentByOrderId(getProductComponentByOrderIdQuery.OrderId, cancellationToken);
     }

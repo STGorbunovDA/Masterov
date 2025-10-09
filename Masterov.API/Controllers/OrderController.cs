@@ -34,7 +34,6 @@ using Masterov.Domain.Masterov.Order.UpdateOrderStatus;
 using Masterov.Domain.Masterov.Order.UpdateOrderStatus.Command;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId.Query;
-using Masterov.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,7 +48,7 @@ namespace Masterov.API.Controllers;
 public class OrderController(IMapper mapper) : ControllerBase
 {
     // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно?
-
+    // TODO добавить контроллер используемых компонентов и соответственно когда компоненты используют вычитать со склада то кол-во которые используются
     /// <summary>
     /// Получить все заказы
     /// </summary>
@@ -192,7 +191,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить готовое мебельное изделие у ордера
+    /// Получить готовое мебельное изделие по идентификатору заказа
     /// </summary>
     /// <param name="request">Идентификатор заказа</param>
     /// <param name="useCase">Сценарий использования</param>
@@ -212,37 +211,36 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить используемые компоненты заказа по OrderId
+    /// Получить используемые компоненты заказа по идентификатору заказа
     /// </summary>
-    /// <param name="idRequest">Id Ордера (заказа)</param>
-    /// <param name="idUseCase">Сценарий использования</param>
+    /// <param name="request">Идентификатор заказа</param>
+    /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Используемые компоненты</returns>
     [HttpGet("getProductComponentByOrderId")]
-    [ProducesResponseType(200, Type = typeof(ProductComponentDomain[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductComponentNewRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetProductComponentByOrderId(
-        [FromQuery] GetProductComponentByOrderIdRequest idRequest,
-        [FromServices] IGetProductComponentByOrderIdUseCase idUseCase,
+        [FromQuery] GetProductComponentByOrderIdRequest request,
+        [FromServices] IGetProductComponentByOrderIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productionComponents =
-            await idUseCase.Execute(new GetProductComponentByOrderIdQuery(idRequest.OrderId), cancellationToken);
-        return Ok(mapper.Map<IEnumerable<ProductComponentRequest>>(productionComponents));
+        var productionComponents = await useCase.Execute(new GetProductComponentByOrderIdQuery(request.OrderId), cancellationToken);
+        return Ok(mapper.Map<IEnumerable<ProductComponentNewRequest>>(productionComponents));
     }
 
     /// <summary>
-    /// Получить заказчика по идентификатору заказа (ордера)
+    /// Получить заказчика по идентификатору заказа
     /// </summary>
-    /// <param name="orderId">Идентификатор ордера (заказа)</param>
+    /// <param name="orderId">Идентификатор заказа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчике</returns>
     [HttpGet("getCustomerByOrderId/{orderId:guid}")]
     [ProducesResponseType(200, Type = typeof(CustomerNoOrdersRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetCustomerByOrderId(
         [FromRoute] Guid orderId,
         [FromServices] IGetCustomerByOrderIdUseCase useCase,
