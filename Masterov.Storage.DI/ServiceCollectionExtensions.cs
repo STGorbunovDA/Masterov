@@ -34,6 +34,7 @@ using Masterov.Domain.Masterov.Order.GetOrdersByCompletedAt;
 using Masterov.Domain.Masterov.Order.GetOrdersByCreatedAt;
 using Masterov.Domain.Masterov.Order.GetOrdersByDescription;
 using Masterov.Domain.Masterov.Order.GetOrdersByStatus;
+using Masterov.Domain.Masterov.Order.GetOrdersByUpdatedAt;
 using Masterov.Domain.Masterov.Order.GetProductComponentByOrderId;
 using Masterov.Domain.Masterov.Order.UpdateOrder;
 using Masterov.Domain.Masterov.Order.UpdateOrderStatus;
@@ -130,7 +131,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGuidFactory, GuidFactory>()
             .AddDbContextPool<MasterovDbContext>(options => options.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString)));
 
-        // ProductionOrder
+        // Order
         services
             .AddScoped<IGetOrdersStorage, GetOrdersStorage>()
             .AddScoped<IGetOrdersByCreatedAtStorage, GetOrdersByCreatedAtStorage>()
@@ -145,6 +146,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetFinishedProductByNameWithoutOrdersStorage, GetFinishedProductByNameWithoutOrdersStorage>()
             .AddScoped<IGetFinishedProductsByCreatedAtWithoutOrdersStorage, GetFinishedProductsByCreatedAtWithoutOrdersStorage>()
             .AddScoped<IGetFinishedProductsByUpdatedAtWithoutOrdersStorage, GetFinishedProductsByUpdatedAtWithoutOrdersStorage>()
+            .AddScoped<IGetOrdersByUpdatedAtStorage, GetOrdersByUpdatedAtStorage>()
             .AddScoped<IUpdateOrderStatusStorage, UpdateOrderStatusStorage>()
             .AddScoped<IDeleteOrderStorage, DeleteOrderStorage>()
             .AddScoped<IUpdateOrderStorage, UpdateOrderStorage>()

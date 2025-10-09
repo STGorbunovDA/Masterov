@@ -16,6 +16,7 @@ internal class GetOrdersStorage(MasterovDbContext dbContext, IMapper mapper) : I
             {
                 OrderId = o.OrderId,
                 CreatedAt = o.CreatedAt,
+                UpdatedAt = o.UpdatedAt,
                 CompletedAt = o.CompletedAt,
                 Status = o.Status,
                 Description = o.Description,

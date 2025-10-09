@@ -34,6 +34,7 @@ using Masterov.Domain.Masterov.Order.GetOrdersByCompletedAt;
 using Masterov.Domain.Masterov.Order.GetOrdersByCreatedAt;
 using Masterov.Domain.Masterov.Order.GetOrdersByDescription;
 using Masterov.Domain.Masterov.Order.GetOrdersByStatus;
+using Masterov.Domain.Masterov.Order.GetOrdersByUpdatedAt;
 using Masterov.Domain.Masterov.Order.GetProductComponentByOrderId;
 using Masterov.Domain.Masterov.Order.UpdateOrder;
 using Masterov.Domain.Masterov.Order.UpdateOrderStatus;
@@ -123,7 +124,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetOrdersByFinishedProductUseCase, GetOrdersByFinishedProductUseCase>()
             .AddScoped<IGetFinishedProductsUseCase, GetFinishedProductsUseCase>();
 
-        // ProductionOrder
+        // Order
         services
             .AddScoped<IGetOrdersUseCase, GetOrdersUseCase>()
             .AddScoped<IGetOrdersByCreatedAtUseCase, GetOrdersByCreatedAtUseCase>()
@@ -132,6 +133,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetCustomerByOrderIdUseCase, GetCustomerByOrderIdUseCase>()
             .AddScoped<IGetOrdersByStatusUseCase, GetOrdersByStatusUseCase>()
             .AddScoped<IAddOrderUseCase, AddOrderUseCase>()
+            .AddScoped<IGetOrdersByUpdatedAtUseCase, GetOrdersByUpdatedAtUseCase>()
             .AddScoped<IDeleteOrderUseCase, DeleteOrderUseCase>()
             .AddScoped<IUpdateOrderStatusUseCase, UpdateOrderStatusUseCase>()
             .AddScoped<IGetFinishedProductByOrderIdUseCase, GetFinishedProductByOrderIdUseCase>()

@@ -24,6 +24,8 @@ using Masterov.Domain.Masterov.Order.GetOrdersByDescription;
 using Masterov.Domain.Masterov.Order.GetOrdersByDescription.Query;
 using Masterov.Domain.Masterov.Order.GetOrdersByStatus;
 using Masterov.Domain.Masterov.Order.GetOrdersByStatus.Query;
+using Masterov.Domain.Masterov.Order.GetOrdersByUpdatedAt;
+using Masterov.Domain.Masterov.Order.GetOrdersByUpdatedAt.Query;
 using Masterov.Domain.Masterov.Order.GetProductComponentByOrderId;
 using Masterov.Domain.Masterov.Order.GetProductComponentByOrderId.Query;
 using Masterov.Domain.Masterov.Order.UpdateOrder;
@@ -104,6 +106,27 @@ public class OrderController(IMapper mapper) : ControllerBase
     {
         var orders =
             await useCase.Execute(new GetOrdersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
+    }
+    
+    /// <summary>
+    /// Получить список заказов по дате обновления
+    /// </summary>
+    /// <param name="request">Дата обновления заказа</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказах</returns>
+    [HttpGet("getOrdersByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(OrderRequest[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetOrdersByUpdatedAt(
+        [FromQuery] GetOrderByUpdatedAtRequest request,
+        [FromServices] IGetOrdersByUpdatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var orders =
+            await useCase.Execute(new GetOrdersByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
     }
 
