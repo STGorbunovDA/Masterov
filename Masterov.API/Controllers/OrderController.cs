@@ -67,22 +67,22 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить ордер (заказ) по Id
+    /// Получить заказ по Id
     /// </summary>
-    /// <param name="orderId">Идентификатор ордера (заказа)</param>
+    /// <param name="orderId">Идентификатор заказа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказе (ордере)</returns>
-    [HttpGet("getProductionOrderByOrderId/{orderId:guid}")]
+    /// <returns>Информация о заказе</returns>
+    [HttpGet("getOrderById/{orderId:guid}")]
     [ProducesResponseType(200, Type = typeof(OrderRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
-    public async Task<IActionResult> GetProductionOrderByOrderId(
+    public async Task<IActionResult> GetOrderById(
         [FromRoute] Guid orderId,
-        [FromServices] IGetOrderByOrdeIdUseCase useCase,
+        [FromServices] IGetOrderByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var order = await useCase.Execute(new GetOrderByOrderIdQuery(orderId), cancellationToken);
+        var order = await useCase.Execute(new GetOrderByIdQuery(orderId), cancellationToken);
         return Ok(mapper.Map<OrderRequest>(order));
     }
 
@@ -276,7 +276,7 @@ public class OrderController(IMapper mapper) : ControllerBase
             new AddOrderCommand(request.FinishedProductId, request.Description, request.CustomerId,
                 request.CustomerName, request.CustomerPhone, request.CustomerEmail), cancellationToken);
 
-        return CreatedAtAction(nameof(GetProductionOrderByOrderId),
+        return CreatedAtAction(nameof(GetOrderById),
             new { orderId = productionOrder.OrderId },
             mapper.Map<OrderRequest>(productionOrder));
     }
@@ -302,7 +302,7 @@ public class OrderController(IMapper mapper) : ControllerBase
             new UpdateOrderStatusCommand(request.OrderId,
                 EnumTypeHelper.FromExtensionProductionOrderStatus(request.Status)), cancellationToken);
 
-        return CreatedAtAction(nameof(GetProductionOrderByOrderId),
+        return CreatedAtAction(nameof(GetOrderById),
             new { orderId = productionOrder.OrderId },
             mapper.Map<OrderRequest>(productionOrder));
     }
@@ -329,7 +329,7 @@ public class OrderController(IMapper mapper) : ControllerBase
                 request.CustomerId),
             cancellationToken);
 
-        return CreatedAtAction(nameof(GetProductionOrderByOrderId),
+        return CreatedAtAction(nameof(GetOrderById),
             new { orderId = productionOrder.OrderId },
             mapper.Map<OrderRequest>(productionOrder));
     }

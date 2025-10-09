@@ -12,7 +12,7 @@ public class UpdatePaymentUseCase(
     IValidator<UpdatePaymentCommand> validator,
     IUpdatePaymentStorage updatePaymentStorage,
     IGetPaymentByIdStorage getPaymentByIdStorage,
-    IGetOrderByOrderIdStorage getGetOrderByOrderIdStorage,
+    IGetOrderByIdStorage getGetOrderByIdStorage,
     IGetCustomerByIdStorage getCustomerByIdStorage,
     IOrderPaymentStatusService orderPaymentStatusService)
     : IUpdatePaymentUseCase
@@ -24,7 +24,7 @@ public class UpdatePaymentUseCase(
         var paymentExists = await getPaymentByIdStorage.GetPaymentById(updatePaymentCommand.PaymentId, cancellationToken)
                             ?? throw new NotFoundByIdException(updatePaymentCommand.PaymentId, "Платеж");
 
-        var order = await getGetOrderByOrderIdStorage.GetOrderByOrderId(updatePaymentCommand.OrderId, cancellationToken)
+        var order = await getGetOrderByIdStorage.GetOrderById(updatePaymentCommand.OrderId, cancellationToken)
                     ?? throw new NotFoundByIdException(updatePaymentCommand.OrderId, "Заказ");
 
         var customer = await getCustomerByIdStorage.GetCustomerById(updatePaymentCommand.CustomerId, cancellationToken)

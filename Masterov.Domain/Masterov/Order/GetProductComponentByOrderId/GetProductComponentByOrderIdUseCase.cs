@@ -6,12 +6,12 @@ using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.Order.GetProductComponentByOrderId;
 
-public class GetProductComponentByOrderIdUseCase(IValidator<GetProductComponentByOrderIdQuery> validator, IGetProductComponentByOrderIdStorage orderIdStorage, IGetOrderByOrderIdStorage getOrderByOrderIdStorage) : IGetProductComponentByOrderIdUseCase
+public class GetProductComponentByOrderIdUseCase(IValidator<GetProductComponentByOrderIdQuery> validator, IGetProductComponentByOrderIdStorage orderIdStorage, IGetOrderByIdStorage getOrderByIdStorage) : IGetProductComponentByOrderIdUseCase
 {
     public async Task<IEnumerable<ProductComponentDomain?>> Execute(GetProductComponentByOrderIdQuery getProductComponentByOrderIdQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getProductComponentByOrderIdQuery, cancellationToken);
-        var productionOrderExists = await getOrderByOrderIdStorage.GetOrderByOrderId(getProductComponentByOrderIdQuery.OrderId, cancellationToken);
+        var productionOrderExists = await getOrderByIdStorage.GetOrderById(getProductComponentByOrderIdQuery.OrderId, cancellationToken);
         
         if (productionOrderExists is null)
             throw new NotFoundByIdException(getProductComponentByOrderIdQuery.OrderId, "Ордер (заказ)");

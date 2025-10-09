@@ -10,7 +10,7 @@ namespace Masterov.Domain.Masterov.Order.UpdateOrder;
 public class UpdateOrderUseCase(
     IValidator<UpdateOrderCommand> validator,
     IUpdateOrderStorage storage,
-    IGetOrderByOrderIdStorage getOrderByOrderIdStorage,
+    IGetOrderByIdStorage getOrderByIdStorage,
     IGetCustomerByIdStorage getCustomerByIdStorage) : IUpdateOrderUseCase
 {
     public async Task<OrderDomain> Execute(UpdateOrderCommand updateOrderCommand,
@@ -19,7 +19,7 @@ public class UpdateOrderUseCase(
         await validator.ValidateAndThrowAsync(updateOrderCommand, cancellationToken);
 
         var productionOrderExists =
-            await getOrderByOrderIdStorage.GetOrderByOrderId(updateOrderCommand.OrderId,
+            await getOrderByIdStorage.GetOrderById(updateOrderCommand.OrderId,
                 cancellationToken);
 
         if (productionOrderExists is null)

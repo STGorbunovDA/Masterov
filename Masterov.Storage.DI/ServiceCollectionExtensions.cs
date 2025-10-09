@@ -148,7 +148,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IUpdateOrderStatusStorage, UpdateOrderStatusStorage>()
             .AddScoped<IDeleteOrderStorage, DeleteOrderStorage>()
             .AddScoped<IUpdateOrderStorage, UpdateOrderStorage>()
-            .AddScoped<IGetOrderByOrderIdStorage, GetOrderByOrderIdStorage>();
+            .AddScoped<IGetOrderByIdStorage, GetOrderByIdStorage>();
         
         // ProductType
         services

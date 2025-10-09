@@ -8,13 +8,13 @@ namespace Masterov.Domain.Masterov.Order.UpdateOrderStatus;
 
 public class UpdateOrderStatusUseCase(IValidator<UpdateOrderStatusCommand> validator, 
     IUpdateOrderStatusStorage storage,
-    IGetOrderByOrderIdStorage getOrderByOrderIdStorage) : IUpdateOrderStatusUseCase
+    IGetOrderByIdStorage getOrderByIdStorage) : IUpdateOrderStatusUseCase
 {
     public async Task<OrderDomain> Execute(UpdateOrderStatusCommand statusCommand, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(statusCommand, cancellationToken);
         
-        var productionOrderExists = await getOrderByOrderIdStorage.GetOrderByOrderId(statusCommand.OrderId, cancellationToken);
+        var productionOrderExists = await getOrderByIdStorage.GetOrderById(statusCommand.OrderId, cancellationToken);
         
         if (productionOrderExists is null)
             throw new NotFoundByIdException(statusCommand.OrderId, "Ордер (заказ)");

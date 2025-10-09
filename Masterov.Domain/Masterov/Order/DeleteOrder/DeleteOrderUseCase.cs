@@ -10,7 +10,7 @@ namespace Masterov.Domain.Masterov.Order.DeleteOrder;
 public class DeleteOrderUseCase(
     IValidator<DeleteOrderCommand> validator,
     IDeleteOrderStorage storage,
-    IGetOrderByOrderIdStorage getOrderByOrderIdStorage,
+    IGetOrderByIdStorage getOrderByIdStorage,
     IGetPaymentsByOrderIdStorage getPaymentsByOrderIdStorage,
     IGetProductComponentByOrderIdStorage getProductComponentByOrderIdStorage) : IDeleteOrderUseCase
 {
@@ -18,7 +18,7 @@ public class DeleteOrderUseCase(
     {
         await validator.ValidateAndThrowAsync(command, cancellationToken);
 
-        var productionOrder = await getOrderByOrderIdStorage.GetOrderByOrderId(command.OrderId, cancellationToken);
+        var productionOrder = await getOrderByIdStorage.GetOrderById(command.OrderId, cancellationToken);
         if (productionOrder is null)
             throw new NotFoundByIdException(command.OrderId, "Заказ");
 

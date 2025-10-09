@@ -11,7 +11,7 @@ using Masterov.Domain.Models;
 public class AddPaymentUseCase(
     IValidator<AddPaymentCommand> validator,
     IAddPaymentStorage addPaymentStorage,
-    IGetOrderByOrderIdStorage getGetOrderByOrderIdStorage,
+    IGetOrderByIdStorage getGetOrderByIdStorage,
     IGetCustomerByIdStorage getCustomerByIdStorage,
     IGetPaymentByIdStorage getPaymentByIdStorage,
     IOrderPaymentStatusService orderPaymentStatusService)
@@ -21,7 +21,7 @@ public class AddPaymentUseCase(
     {
         await validator.ValidateAndThrowAsync(addPaymentCommand, cancellationToken);
 
-        var order = await getGetOrderByOrderIdStorage.GetOrderByOrderId(addPaymentCommand.OrderId, cancellationToken)
+        var order = await getGetOrderByIdStorage.GetOrderById(addPaymentCommand.OrderId, cancellationToken)
                     ?? throw new NotFoundByIdException(addPaymentCommand.OrderId, "Заказ");
 
         var customer = await getCustomerByIdStorage.GetCustomerById(addPaymentCommand.CustomerId, cancellationToken)
