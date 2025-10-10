@@ -7,8 +7,7 @@ using Masterov.Domain.Models;
 namespace Masterov.Domain.Masterov.Order.GetCustomerByOrderId;
 
 public class GetCustomerByOrderIdUseCase(IValidator<GetCustomerByOrderIdQuery> validator, 
-    IGetOrderByIdStorage getOrderByIdStorage,
-    IGetCustomerByOrderIdStorage storage) : IGetCustomerByOrderIdUseCase
+    IGetOrderByIdStorage getOrderByIdStorage, IGetCustomerByOrderIdStorage storage) : IGetCustomerByOrderIdUseCase
 {
     public async Task<CustomerDomain?> Execute(GetCustomerByOrderIdQuery getCustomerByOrderIdQuery, CancellationToken cancellationToken)
     {
@@ -17,8 +16,6 @@ public class GetCustomerByOrderIdUseCase(IValidator<GetCustomerByOrderIdQuery> v
         
         if (orderExists is null)
             throw new NotFoundByIdException(getCustomerByOrderIdQuery.OrderId, "Ордер");
-        
-        
         
         return await storage.GetCustomerByOrderId(getCustomerByOrderIdQuery.OrderId, cancellationToken);
     }

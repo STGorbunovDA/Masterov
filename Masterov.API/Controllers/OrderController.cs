@@ -211,7 +211,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить используемые компоненты заказа по идентификатору заказа
+    /// Получить используемые компоненты заказа по идентификатору
     /// </summary>
     /// <param name="request">Идентификатор заказа</param>
     /// <param name="useCase">Сценарий использования</param>
