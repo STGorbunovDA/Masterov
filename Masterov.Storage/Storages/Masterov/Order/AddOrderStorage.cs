@@ -35,7 +35,7 @@ internal class AddOrderStorage(MasterovDbContext dbContext, IGuidFactory guidFac
             CustomerId = customerId,
             Description = description,
             Status = OrderStatus.Draft,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.Now
         };
 
         await dbContext.Orders.AddAsync(order, cancellationToken);

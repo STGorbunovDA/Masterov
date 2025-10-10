@@ -256,7 +256,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="request">Идентификатор заказа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о ордере</returns>
+    /// <returns>Информация о платежах заказа</returns>
     [HttpGet("getPaymentsByOrderId")]
     [ProducesResponseType(200, Type = typeof(PaymentNewRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -273,29 +273,27 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Добавить ордер
+    /// Добавить заказ
     /// </summary>
-    /// <param name="request">Данные ордера</param>
+    /// <param name="request">Данные для добавления заказа</param>
     /// <param name="useCase">Сценарий добавления ордера</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
-    [HttpPost("addProductionOrder")]
+    [HttpPost("addOrder")]
     [ProducesResponseType(201, Type = typeof(OrderRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> AddProductionOrder(
-        [FromForm] AddOrderRequest request,
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> AddOrder(
+        [FromBody] AddOrderRequest request,
         [FromServices] IAddOrderUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productionOrder = await useCase.Execute(
-            new AddOrderCommand(request.FinishedProductId, request.Description, request.CustomerId,
-                request.CustomerName, request.CustomerPhone, request.CustomerEmail), cancellationToken);
+        var order = await useCase.Execute(
+            new AddOrderCommand(request.FinishedProductId, request.Description, request.CustomerId), cancellationToken);
 
         return CreatedAtAction(nameof(GetOrderById),
-            new { orderId = productionOrder.OrderId },
-            mapper.Map<OrderRequest>(productionOrder));
+            new { orderId = order.OrderId },
+            mapper.Map<OrderRequest>(order));
     }
 
     /// <summary>
