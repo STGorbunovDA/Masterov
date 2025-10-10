@@ -26,7 +26,6 @@ internal class ApiProfile : Profile
         CreateMap<ProductComponentDomain, ProductComponentNewRequest>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType)) // AutoMapper сам применит маппинг ProductType
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
-
         
         // 2. Затем маппинг ProductComponent с указанием зависимостей
         CreateMap<ProductComponentDomain, ProductComponentRequest>()
@@ -72,6 +71,7 @@ internal class ApiProfile : Profile
             .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders)); // Автоматически применит маппинг ProductionOrder
 
         CreateMap<PaymentDomain, PaymentsNewCustomerRequest>();
+        CreateMap<PaymentDomain, PaymentNewRequest>();
         CreateMap<UserDomain, UserRequest>()
             .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer));
 

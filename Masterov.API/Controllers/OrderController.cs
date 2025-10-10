@@ -251,17 +251,17 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить платежи по Идентификатору заказа
+    /// Получить платежи по идентификатору заказа
     /// </summary>
     /// <param name="request">Идентификатор заказа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о ордере</returns>
     [HttpGet("getPaymentsByOrderId")]
-    [ProducesResponseType(200, Type = typeof(PaymentRequest[]))]
+    [ProducesResponseType(200, Type = typeof(PaymentNewRequest[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize]
     public async Task<IActionResult> GetPaymentsByOrderId(
         [FromQuery] GetPaymentsByOrderIdRequest request,
         [FromServices] IGetPaymentsByOrderIdUseCase useCase,
@@ -269,7 +269,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     {
         var payments =
             await useCase.Execute(new GetPaymentsByOrderIdQuery(request.OrderId), cancellationToken);
-        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+        return Ok(payments?.Select(mapper.Map<PaymentNewRequest>) ?? Array.Empty<PaymentNewRequest>());
     }
 
     /// <summary>
