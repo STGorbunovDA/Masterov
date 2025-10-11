@@ -19,6 +19,7 @@ internal class ApiProfile : Profile
         // 1. Сначала маппинг простых зависимостей (ProductType и Warehouse)
         CreateMap<ProductTypeDomain, ProductTypeRequest>();
         CreateMap<WarehouseDomain, WarehouseNewRequest>();
+        CreateMap<WarehouseDomain, WarehouseForOrderRequest>();
         CreateMap<WarehouseDomain, WarehouseNewNoProductTypeRequest>();
         CreateMap<WarehouseDomain, WarehouseRequest>();
 
@@ -26,11 +27,11 @@ internal class ApiProfile : Profile
         CreateMap<ProductComponentDomain, ProductComponentNewRequest>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType)) // AutoMapper сам применит маппинг ProductType
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
-        
+
         // 2. Затем маппинг ProductComponent с указанием зависимостей
         CreateMap<ProductComponentDomain, ProductComponentRequest>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType)) // AutoMapper сам применит маппинг ProductType
-            .ForMember(dest => dest.WarehouseNew, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
+            .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
 
         // 3. Маппинг ProductionOrder с преобразованием коллекций
         CreateMap<OrderDomain, OrderRequest>()

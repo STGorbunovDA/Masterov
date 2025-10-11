@@ -12,10 +12,10 @@ public class UpdateOrderStatusCommandValidator : AbstractValidator<UpdateOrderSt
             .WithErrorCode("InvalidId")
             .WithMessage("OrderId must not be an empty GUID.");
         
-        RuleFor(q => q.Status).Cascade(CascadeMode.Stop)
+        RuleFor(q => q.OrderStatus).Cascade(CascadeMode.Stop)
             .IsInEnum()
             .WithErrorCode("InvalidStatus")
-            .WithMessage("Status must be a valid ProductionOrderStatus value.")
+            .WithMessage("Status must be a valid OrderStatus value.")
             .Must(status => status != OrderStatus.Unknown)
             .WithErrorCode("InvalidStatusValue")
             .WithMessage("Status cannot be 'Unknown'.");

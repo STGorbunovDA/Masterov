@@ -21,8 +21,8 @@ public static class MapToHelper
             },
             Warehouse = new WarehouseDomain
             {
-                WarehouseId = c.WarehouseNew.WarehouseId,
-                Name = c.WarehouseNew.Name
+                WarehouseId = c.Warehouse.WarehouseId,
+                Name = c.Warehouse.Name
             },
             Quantity = c.Quantity
         }).ToList();

@@ -5,5 +5,5 @@ namespace Masterov.Domain.Masterov.Order.UpdateOrderStatus;
 
 public interface IUpdateOrderStatusStorage
 {
-    Task<OrderDomain> UpdateOrderStatus(Guid orderId, OrderStatus status, CancellationToken cancellationToken);
+    Task<OrderDomain> UpdateOrderStatus(Guid orderId, OrderStatus orderStatus, CancellationToken cancellationToken);
 }

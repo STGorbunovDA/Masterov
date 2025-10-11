@@ -218,7 +218,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Используемые компоненты</returns>
     [HttpGet("getProductComponentByOrderId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductComponentNewRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductComponentRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetProductComponentByOrderId(
@@ -227,7 +227,7 @@ public class OrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var productionComponents = await useCase.Execute(new GetProductComponentByOrderIdQuery(request.OrderId), cancellationToken);
-        return Ok(mapper.Map<IEnumerable<ProductComponentNewRequest>>(productionComponents));
+        return Ok(mapper.Map<IEnumerable<ProductComponentRequest>>(productionComponents));
     }
 
     /// <summary>
@@ -290,36 +290,37 @@ public class OrderController(IMapper mapper) : ControllerBase
     {
         var order = await useCase.Execute(
             new AddOrderCommand(request.FinishedProductId, request.Description, request.CustomerId), cancellationToken);
-
+ 
         return CreatedAtAction(nameof(GetOrderById),
             new { orderId = order.OrderId },
             mapper.Map<OrderRequest>(order));
     }
 
     /// <summary>
-    /// Обновить статус у ордера (заказа)
+    /// Обновить статус заказа
     /// </summary>
+    /// <param name="orderId">Идентификатор заказчика</param>
     /// <param name="request">Данные для обновления статуса заказа</param>
     /// <param name="useCase">Сценарий обновления статуса заказа</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
-    [HttpPatch("updateProductionOrderStatus")]
+    [HttpPatch("updateOrderStatus/{orderId:guid}")]
     [ProducesResponseType(201, Type = typeof(OrderRequest))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> UpdateProductionOrderStatus(
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> UpdateOrderStatus(
+        [FromRoute] Guid orderId,
         [FromForm] UpdateOrderStatusRequest request,
         [FromServices] IUpdateOrderStatusUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productionOrder = await useCase.Execute(
-            new UpdateOrderStatusCommand(request.OrderId,
+        var order = await useCase.Execute(new UpdateOrderStatusCommand(orderId,
                 EnumTypeHelper.FromExtensionOrderStatus(request.Status)), cancellationToken);
 
         return CreatedAtAction(nameof(GetOrderById),
-            new { orderId = productionOrder.OrderId },
-            mapper.Map<OrderRequest>(productionOrder));
+            new { orderId = order.OrderId },
+            mapper.Map<OrderRequest>(order));
     }
 
     /// <summary>

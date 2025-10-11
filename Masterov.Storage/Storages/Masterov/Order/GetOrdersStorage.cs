@@ -12,21 +12,14 @@ internal class GetOrdersStorage(MasterovDbContext dbContext, IMapper mapper) : I
         var orders = await dbContext.Orders
             .AsNoTracking()
             .Include(o => o.FinishedProduct)
-            .Select(o => new OrderDomain
-            {
-                OrderId = o.OrderId,
-                CreatedAt = o.CreatedAt,
-                UpdatedAt = o.UpdatedAt,
-                CompletedAt = o.CompletedAt,
-                Status = o.Status,
-                Description = o.Description,
-                FullPriceFinishedProduct = o.FinishedProduct.Price,
-                Customer = mapper.Map<CustomerDomain>(o.Customer),
-                Components = o.Components.Select(c => mapper.Map<ProductComponentDomain>(c)),
-                Payments = o.Payments.Select(p => mapper.Map<PaymentDomain>(p))
-            })
+            .Include(o => o.Customer)
+            .Include(o => o.Components)
+                .ThenInclude(c => c.ProductType)
+            .Include(o => o.Components)
+                .ThenInclude(c => c.Warehouse)
+            .Include(o => o.Payments)
             .ToListAsync(cancellationToken);
 
-        return orders;
+        return orders.Select(o => mapper.Map<OrderDomain>(o));
     }
 }

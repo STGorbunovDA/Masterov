@@ -44,7 +44,8 @@ internal class AddOrderStorage(MasterovDbContext dbContext, IGuidFactory guidFac
         var orderDb = await dbContext.Orders
             .AsNoTracking()
             .Where(t => t.OrderId == order.OrderId)
-            .Include(c => c.Customer)
+            .Include(o => o.FinishedProduct)
+            .Include(o => o.Customer)
             .FirstOrDefaultAsync(cancellationToken);
         
         return mapper.Map<OrderDomain>(orderDb);
