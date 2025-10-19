@@ -324,31 +324,37 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Обновить ордер (заказ)
+    /// Обновить заказ
     /// </summary>
-    /// <param name="request">Данные для обновления заказа (ордера)</param>
-    /// <param name="useCase">Сценарий обновления заказа (ордера)</param>
+    /// <param name="orderId">Идентификатор заказчика</param>
+    /// <param name="request">Данные для обновления заказа</param>
+    /// <param name="useCase">Сценарий обновления заказа</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
-    [HttpPatch("updateProductionOrder")]
-    public async Task<IActionResult> UpdateProductionOrder(
+    [HttpPatch("updateOrder/{orderId:guid}")]
+    [ProducesResponseType(200, Type = typeof(OrderRequest))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(OrderRequest))]
+    public async Task<IActionResult> UpdateOrder(
+        [FromRoute] Guid orderId,
         [FromForm] UpdateOrderRequest request,
         [FromServices] IUpdateOrderUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productionOrder = await useCase.Execute(
+        var order = await useCase.Execute(
             new UpdateOrderCommand(
-                request.OrderId, 
-                request.CreatedAt,
-                request.CompletedAt,
+                orderId, 
+                request.CreatedAt.ToDateTime(),
+                request.CompletedAt.ToDateTime(),
                 EnumTypeHelper.FromExtensionOrderStatus(request.Status), 
                 request.Description,
+                request.FinishedProductId,
                 request.CustomerId),
             cancellationToken);
 
         return CreatedAtAction(nameof(GetOrderById),
-            new { orderId = productionOrder.OrderId },
-            mapper.Map<OrderRequest>(productionOrder));
+            new { orderId = order.OrderId },
+            mapper.Map<OrderRequest>(order));
     }
 
     /// <summary>

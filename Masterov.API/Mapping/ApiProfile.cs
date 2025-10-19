@@ -38,6 +38,7 @@ internal class ApiProfile : Profile
             .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
             .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
+            .ForMember(dest => dest.FinishedProductId, opt => opt.MapFrom(src => src.FinishedProductId))
             .ForMember(dest => dest.FullPriceFinishedProduct, opt => opt.MapFrom(src => src.FullPriceFinishedProduct))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
 

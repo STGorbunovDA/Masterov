@@ -13,5 +13,6 @@ public class OrderDomain
     public CustomerDomain Customer { get; set; }
     public IEnumerable<ProductComponentDomain> Components { get; set; }
     public IEnumerable<PaymentDomain> Payments { get; set; }
+    public Guid FinishedProductId { get; set; }
     public decimal FullPriceFinishedProduct { get; set; }
 }

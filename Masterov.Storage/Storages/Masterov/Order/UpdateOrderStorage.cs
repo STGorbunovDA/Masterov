@@ -8,21 +8,29 @@ namespace Masterov.Storage.Storages.Masterov.Order;
 
 internal class UpdateOrderStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateOrderStorage
 {
-    public async Task<OrderDomain> UpdateOrder(Guid orderId, DateTime createdAt, DateTime completedAt, OrderStatus status, string? description,
-        Guid customerId, CancellationToken ct)
+    public async Task<OrderDomain> UpdateOrder(Guid orderId, DateTime? createdAt, DateTime? completedAt, OrderStatus status, string? description,
+        Guid customerId, Guid finishedProductId, CancellationToken ct)
     {
         var order = await dbContext.Set<Storage.Order>().FindAsync([orderId], ct);
         
         if (order == null)
-            throw new Exception("ProductionOrder not found");
+            throw new Exception("Order not found");
 
-        order.CustomerId = customerId;
+        if (createdAt.HasValue)
+            order.CreatedAt = createdAt.Value;
+        if (completedAt.HasValue)
+            order.CompletedAt = completedAt.Value;
+        
         order.Status = status;
-        order.CreatedAt = createdAt;
-        order.UpdatedAt = DateTime.Now;
-        order.CompletedAt = completedAt;
+        
         if(description is not null)
             order.Description = description;
+        
+        order.CustomerId = customerId;
+        order.FinishedProductId = finishedProductId;
+        
+        order.UpdatedAt = DateTime.Now;
+        
         
         await dbContext.SaveChangesAsync(ct);
         

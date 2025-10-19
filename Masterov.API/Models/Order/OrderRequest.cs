@@ -16,5 +16,6 @@ public class OrderRequest
     public CustomerNoOrdersRequest Customer { get; set; }
     public List<ProductComponentRequest> Components { get; set; }
     public List<PaymentsNewCustomerRequest> Payments { get; set; }
+    public Guid FinishedProductId { get; set; }
     public decimal FullPriceFinishedProduct { get; set; }
 }
