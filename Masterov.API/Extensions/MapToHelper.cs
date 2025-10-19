@@ -1,6 +1,5 @@
-﻿using Masterov.API.Models;
+﻿using Masterov.API.Models.Component;
 using Masterov.API.Models.Payment;
-using Masterov.API.Models.ProductComponent;
 using Masterov.Domain.Models;
 
 namespace Masterov.API.Extensions;
@@ -8,11 +7,11 @@ namespace Masterov.API.Extensions;
 public static class MapToHelper
 {
     
-    public static List<ProductComponentDomain>? MapToProductComponentDomain(List<ProductComponentRequest>? components)
+    public static List<ComponentsDomain>? MapToProductComponentDomain(List<ComponentRequest>? components)
     {
-        return components?.Select(c => new ProductComponentDomain
+        return components?.Select(c => new ComponentsDomain
         {
-            ProductComponentId = c.ProductComponentId,
+            ComponentId = c.ComponentId,
             ProductType = new ProductTypeDomain
             {
                 ProductTypeId = c.ProductType.ProductTypeId,

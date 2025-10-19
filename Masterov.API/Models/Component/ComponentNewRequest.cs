@@ -1,11 +1,11 @@
 ﻿using Masterov.API.Models.ProductType;
 using Masterov.API.Models.Warehouse;
 
-namespace Masterov.API.Models.ProductComponent;
+namespace Masterov.API.Models.Component;
 
-public class ProductComponentNewRequest
+public class ComponentNewRequest
 {
-    public Guid ProductComponentId { get; set; }
+    public Guid ComponentId { get; set; }
     public ProductTypeRequest ProductType { get; set; }
     public WarehouseNewNoProductTypeRequest Warehouse { get; set; }
     public int Quantity { get; set; }

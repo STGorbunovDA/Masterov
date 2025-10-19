@@ -25,7 +25,7 @@ public class Order
     [Column(TypeName = "varchar(20)")]
     public OrderStatus Status { get; set; } = OrderStatus.Draft;
 
-    public ICollection<ProductComponent> Components { get; set; } = new List<ProductComponent>();
+    public ICollection<Component> Components { get; set; } = new List<Component>();
     
     [Required, ForeignKey(nameof(Customer))]
     public Guid CustomerId { get; set; }

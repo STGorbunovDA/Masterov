@@ -1,8 +1,8 @@
 ﻿namespace Masterov.Domain.Models;
 
-public class ProductComponentDomain
+public class ComponentsDomain
 {
-    public Guid ProductComponentId { get; set; }
+    public Guid ComponentId { get; set; }
     public ProductTypeDomain ProductType { get; set; }
     public WarehouseDomain Warehouse { get; set; }
     public int Quantity { get; set; }

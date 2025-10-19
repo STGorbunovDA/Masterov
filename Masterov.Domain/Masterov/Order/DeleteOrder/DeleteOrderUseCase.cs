@@ -12,7 +12,7 @@ public class DeleteOrderUseCase(
     IDeleteOrderStorage storage,
     IGetOrderByIdStorage getOrderByIdStorage,
     IGetPaymentsByOrderIdStorage getPaymentsByOrderIdStorage,
-    IGetProductComponentByOrderIdStorage getProductComponentByOrderIdStorage) : IDeleteOrderUseCase
+    IGetComponentsByOrderIdStorage getComponentsByOrderIdStorage) : IDeleteOrderUseCase
 {
     public async Task<bool> Execute(DeleteOrderCommand command, CancellationToken cancellationToken)
     {
@@ -27,9 +27,9 @@ public class DeleteOrderUseCase(
         if (payments?.Any() == true)
             throw new Conflict409Exception("Нельзя удалить ордер — у него есть оплата.");
         
-        var productComponents = await getProductComponentByOrderIdStorage.GetProductComponentByOrderId(command.OrderId, cancellationToken);
+        var components = await getComponentsByOrderIdStorage.GetComponentsByOrderId(command.OrderId, cancellationToken);
 
-        if (productComponents?.Any() == true)
+        if (components?.Any() == true)
             throw new Conflict409Exception("Нельзя удалить ордер — у него есть используемые компоненты.");
 
         return await storage.DeleteOrder(command.OrderId, cancellationToken);

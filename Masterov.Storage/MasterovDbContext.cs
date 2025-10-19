@@ -7,7 +7,7 @@ public class MasterovDbContext : DbContext
     public MasterovDbContext(DbContextOptions<MasterovDbContext> options) : base(options) { }
     
     public DbSet<FinishedProduct> FinishedProducts { get; set; }
-    public DbSet<ProductComponent> ProductComponents { get; set; }
+    public DbSet<Component> Components { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Payment> Payments { get; set; }
@@ -19,7 +19,7 @@ public class MasterovDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<ProductComponent>()
+        modelBuilder.Entity<Component>()
             .Property(p => p.WarehouseId)
             .HasColumnType("char(36)")
             .UseCollation("ascii_general_ci");

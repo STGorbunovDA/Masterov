@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
+using Masterov.API.Models.Component;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.Order;
 using Masterov.API.Models.Payment;
-using Masterov.API.Models.ProductComponent;
 using Masterov.API.Models.ProductType;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
@@ -24,12 +24,12 @@ internal class ApiProfile : Profile
         CreateMap<WarehouseDomain, WarehouseRequest>();
 
         // 2. Затем маппинг ProductComponent с указанием зависимостей
-        CreateMap<ProductComponentDomain, ProductComponentNewRequest>()
+        CreateMap<ComponentsDomain, ComponentNewRequest>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType)) // AutoMapper сам применит маппинг ProductType
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
 
         // 2. Затем маппинг ProductComponent с указанием зависимостей
-        CreateMap<ProductComponentDomain, ProductComponentRequest>()
+        CreateMap<ComponentsDomain, ComponentRequest>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType)) // AutoMapper сам применит маппинг ProductType
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
 

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
+using Masterov.API.Models.Component;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.Order;
 using Masterov.API.Models.Payment;
-using Masterov.API.Models.ProductComponent;
 using Masterov.Domain.Masterov.Order.AddOrder;
 using Masterov.Domain.Masterov.Order.AddOrder.Command;
 using Masterov.Domain.Masterov.Order.DeleteOrder;
@@ -211,23 +211,23 @@ public class OrderController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить используемые компоненты заказа по идентификатору
+    /// Получить используемые компоненты заказа по идентификатору заказа
     /// </summary>
     /// <param name="request">Идентификатор заказа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Используемые компоненты</returns>
-    [HttpGet("getProductComponentByOrderId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductComponentRequest>))]
+    [HttpGet("getComponentsByOrderId")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> GetProductComponentByOrderId(
-        [FromQuery] GetProductComponentByOrderIdRequest request,
-        [FromServices] IGetProductComponentByOrderIdUseCase useCase,
+    public async Task<IActionResult> GetComponentsByOrderId(
+        [FromQuery] GetComponentsByOrderIdRequest request,
+        [FromServices] IGetComponentsByOrderIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productionComponents = await useCase.Execute(new GetProductComponentByOrderIdQuery(request.OrderId), cancellationToken);
-        return Ok(mapper.Map<IEnumerable<ProductComponentRequest>>(productionComponents));
+        var components = await useCase.Execute(new GetComponentsByOrderIdQuery(request.OrderId), cancellationToken);
+        return Ok(mapper.Map<IEnumerable<ComponentRequest>>(components));
     }
 
     /// <summary>
@@ -366,6 +366,10 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <returns>Ответ с кодом 204, если заказ был успешно удален</returns>
     [HttpDelete("deleteOrder/{orderId:guid}")]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [ProducesResponseType(204, Type = typeof(bool))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> DeleteOrder(
         Guid orderId,
         [FromServices] IDeleteOrderUseCase useCase,
