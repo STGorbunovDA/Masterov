@@ -1,4 +1,5 @@
-﻿using Masterov.Domain.Masterov.Customer.AddCustomer;
+﻿using Masterov.Domain.Masterov.Component.GetComponents;
+using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
 using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
@@ -234,6 +235,11 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetWarehouseByNameUseCase, GetWarehouseByNameUseCase>()
             .AddScoped<IGetSuppliesByWarehouseIdUseCase, GetSuppliesByWarehouseIdUseCase>()
             .AddScoped<IGetWarehousesUseCase, GetWarehousesUseCase>();
+        
+        // Component
+        services
+            .AddScoped<IGetComponentsUseCase, GetComponentsUseCase>()
+            ;
         
         services.AddScoped<IOrderPaymentStatusService, OrderPaymentStatusService>();
             

@@ -47,8 +47,7 @@ namespace Masterov.API.Controllers;
 [Route("api/orders")]
 public class OrderController(IMapper mapper) : ControllerBase
 {
-    // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно?
-    // TODO добавить контроллер используемых компонентов и соответственно когда компоненты используют вычитать со склада то кол-во которые используются
+    
     /// <summary>
     /// Получить все заказы
     /// </summary>

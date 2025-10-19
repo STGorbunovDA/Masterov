@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Masterov.Domain.Masterov.Component.GetComponents;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
 using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
@@ -98,6 +99,7 @@ using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Masterov.Storage.Extension;
+using Masterov.Storage.Storages.Masterov.Component;
 using Masterov.Storage.Storages.Masterov.Customer;
 using Masterov.Storage.Storages.Masterov.FinishedProduct;
 using Masterov.Storage.Storages.Masterov.Order;
@@ -242,6 +244,11 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetWarehouseByNameStorage, GetWarehouseByNameStorage>()
             .AddScoped<IGetSuppliesByWarehouseIdStorage, GetSuppliesByWarehouseIdStorage>()
             .AddScoped<IGetWarehousesStorage, GetWarehousesStorage>();
+        
+        // Component
+        services
+            .AddScoped<IGetComponentsStorage, GetComponentsStorage>()
+            ;
         
         services.AddMemoryCache();
         
