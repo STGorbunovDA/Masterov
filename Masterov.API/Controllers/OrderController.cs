@@ -258,7 +258,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах заказа</returns>
     [HttpGet("getPaymentsByOrderId")]
-    [ProducesResponseType(200, Type = typeof(PaymentNewRequest[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentNewRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize]
@@ -299,7 +299,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Обновить статус заказа
     /// </summary>
-    /// <param name="orderId">Идентификатор заказчика</param>
+    /// <param name="orderId">Идентификатор заказа</param>
     /// <param name="request">Данные для обновления статуса заказа</param>
     /// <param name="useCase">Сценарий обновления статуса заказа</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -326,7 +326,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Обновить заказ
     /// </summary>
-    /// <param name="orderId">Идентификатор заказчика</param>
+    /// <param name="orderId">Идентификатор заказа</param>
     /// <param name="request">Данные для обновления заказа</param>
     /// <param name="useCase">Сценарий обновления заказа</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -360,18 +360,18 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Удаление заказа по указанному Id.
     /// </summary>
-    /// <param name="productionOrderId">Идентификатор заказа по Id.</param>
-    /// <param name="useCase">Сценарий удаления заказа.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Ответ с кодом 204, если заказ был успешно удален.</returns>
-    [HttpDelete("DeleteProductionOrder")]
-    //[Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> DeleteProductionOrder(
-        Guid productionOrderId,
+    /// <param name="orderId">Идентификатор заказчика</param>
+    /// <param name="useCase">Сценарий удаления заказа</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <returns>Ответ с кодом 204, если заказ был успешно удален</returns>
+    [HttpDelete("deleteOrder/{orderId:guid}")]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> DeleteOrder(
+        Guid orderId,
         [FromServices] IDeleteOrderUseCase useCase,
         CancellationToken cancellationToken)
     {
-        await useCase.Execute(new DeleteOrderCommand(productionOrderId), cancellationToken);
+        await useCase.Execute(new DeleteOrderCommand(orderId), cancellationToken);
         return NoContent();
     }
 }

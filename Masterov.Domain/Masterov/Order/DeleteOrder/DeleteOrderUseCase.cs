@@ -18,8 +18,8 @@ public class DeleteOrderUseCase(
     {
         await validator.ValidateAndThrowAsync(command, cancellationToken);
 
-        var productionOrder = await getOrderByIdStorage.GetOrderById(command.OrderId, cancellationToken);
-        if (productionOrder is null)
+        var order = await getOrderByIdStorage.GetOrderById(command.OrderId, cancellationToken);
+        if (order is null)
             throw new NotFoundByIdException(command.OrderId, "Заказ");
 
         var payments = await getPaymentsByOrderIdStorage.GetPaymentsByOrderId(command.OrderId, cancellationToken);

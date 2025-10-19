@@ -6,12 +6,12 @@ internal class DeleteOrderStorage(MasterovDbContext dbContext) : IDeleteOrderSto
 {
     public async Task<bool> DeleteOrder(Guid productionOrderId, CancellationToken cancellationToken)
     {
-        var productionOrder = await dbContext.Set<Storage.Order>().FindAsync(new object[] { productionOrderId }, cancellationToken);
+        var order = await dbContext.Set<Storage.Order>().FindAsync(new object[] { productionOrderId }, cancellationToken);
         
-        if (productionOrder == null)
+        if (order == null)
             return false;
         
-        dbContext.Set<Storage.Order>().Remove(productionOrder);
+        dbContext.Set<Storage.Order>().Remove(order);
         await dbContext.SaveChangesAsync(cancellationToken);
         
         return true;
