@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Masterov.API.Extensions;
 using Masterov.API.Models.UsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById.Query;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity.Query;
 using Microsoft.AspNetCore.Authorization;
@@ -78,6 +81,26 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     {
         var usedComponents = await useCase.Execute(new GetUsedComponentsByQuantityQuery(request.Quantity), cancellationToken);
         return Ok(usedComponents.Select(mapper.Map<UsedComponentResponse>));
+    }
+    
+    /// <summary>
+    /// Получить используемые компоненты по дате создания
+    /// </summary>
+    /// <param name="request">Дата создания используемых компонентов</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о используемых компонентах</returns>
+    [HttpGet("getUsedComponentsByCreatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetUsedComponentsByCreatedAt(
+        [FromQuery] GetUsedComponentsByCreatedAtRequest request,
+        [FromServices] IGetUsedComponentsByCreatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var usedComponents = await useCase.Execute(new GetUsedComponentsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
     }
 
 }

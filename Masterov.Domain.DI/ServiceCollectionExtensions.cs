@@ -79,6 +79,7 @@ using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
 using Masterov.Domain.Masterov.Supply.UpdateSupply;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
 using Masterov.Domain.Masterov.UserFolder.ChangeAccountLoginDateUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
@@ -242,6 +243,7 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<IGetUsedComponentsUseCase, GetUsedComponentsUseCase>()
             .AddScoped<IGetUsedComponentsByQuantityUseCase, GetUsedComponentsByQuantityUseCase>()
+            .AddScoped<IGetUsedComponentsByCreatedAtUseCase, GetUsedComponentsByCreatedAtUseCase>()
             .AddScoped<IGetUsedComponentByIdUseCase, GetUsedComponentByIdUseCase>();
         
         services.AddScoped<IOrderPaymentStatusService, OrderPaymentStatusService>();
