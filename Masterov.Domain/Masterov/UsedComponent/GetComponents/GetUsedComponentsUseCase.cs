@@ -2,7 +2,7 @@
 
 namespace Masterov.Domain.Masterov.UsedComponent.GetComponents;
 
-public class UsedUsedComponentsUseCase(IGetUsedComponentsStorage storage) : IGetUsedComponentsUseCase
+public class GetUsedComponentsUseCase(IGetUsedComponentsStorage storage) : IGetUsedComponentsUseCase
 {
     public async Task<IEnumerable<UsedComponentDomain>> Execute(CancellationToken cancellationToken)
     {

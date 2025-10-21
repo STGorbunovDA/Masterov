@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Masterov.Storage.Storages.Masterov.UsedComponent;
 
-internal class UsedUsedComponentsStorage(MasterovDbContext dbContext, IMapper mapper) : IGetUsedComponentsStorage
+internal class GetUsedComponentsStorage(MasterovDbContext dbContext, IMapper mapper) : IGetUsedComponentsStorage
 {
     public async Task<IEnumerable<UsedComponentDomain>> GetUsedComponents(CancellationToken cancellationToken)
     {
