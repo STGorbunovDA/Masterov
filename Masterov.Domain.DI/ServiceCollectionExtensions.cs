@@ -1,5 +1,4 @@
-﻿using Masterov.Domain.Masterov.Component.GetComponents;
-using Masterov.Domain.Masterov.Customer.AddCustomer;
+﻿using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
 using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
@@ -36,7 +35,7 @@ using Masterov.Domain.Masterov.Order.GetOrdersByCreatedAt;
 using Masterov.Domain.Masterov.Order.GetOrdersByDescription;
 using Masterov.Domain.Masterov.Order.GetOrdersByStatus;
 using Masterov.Domain.Masterov.Order.GetOrdersByUpdatedAt;
-using Masterov.Domain.Masterov.Order.GetProductComponentByOrderId;
+using Masterov.Domain.Masterov.Order.GetUsedComponentsByOrderId;
 using Masterov.Domain.Masterov.Order.UpdateOrder;
 using Masterov.Domain.Masterov.Order.UpdateOrderStatus;
 using Masterov.Domain.Masterov.Payment.AddPayment;
@@ -78,6 +77,7 @@ using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
 using Masterov.Domain.Masterov.Supply.UpdateSupply;
+using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UserFolder.ChangeAccountLoginDateUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
@@ -139,7 +139,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IUpdateOrderStatusUseCase, UpdateOrderStatusUseCase>()
             .AddScoped<IGetFinishedProductByOrderIdUseCase, GetFinishedProductByOrderIdUseCase>()
             .AddScoped<IUpdateOrderUseCase, UpdateOrderUseCase>()
-            .AddScoped<IGetComponentsByOrderIdUseCase, GetComponentsByOrderIdUseCase>()
+            .AddScoped<IGetUsedComponentsByOrderIdUseCase, UsedUsedComponentsByOrderIdUseCase>()
             .AddScoped<IGetOrderByIdUseCase, GetOrderByIdUseCase>();
         
         // ProductType
@@ -238,7 +238,7 @@ public static class ServiceCollectionExtensions
         
         // Component
         services
-            .AddScoped<IGetComponentsUseCase, GetComponentsUseCase>()
+            .AddScoped<IGetUsedComponentsUseCase, UsedUsedComponentsUseCase>()
             ;
         
         services.AddScoped<IOrderPaymentStatusService, OrderPaymentStatusService>();

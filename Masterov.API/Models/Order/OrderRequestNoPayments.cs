@@ -1,5 +1,5 @@
-﻿using Masterov.API.Models.Component;
-using Masterov.API.Models.Customer;
+﻿using Masterov.API.Models.Customer;
+using Masterov.API.Models.UsedComponent;
 using Masterov.Domain.Extension;
 
 namespace Masterov.API.Models.Order;
@@ -13,5 +13,5 @@ public class OrderRequestNoPayments
     public OrderStatus Status { get; set; }
     public string? Description { get; set; }
     public CustomerNoOrdersRequest CustomerNoOrders { get; set; }
-    public List<ComponentRequest> Components { get; set; }
+    public List<UsedComponentRequest> Components { get; set; }
 }

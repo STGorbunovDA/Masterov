@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using Masterov.Domain.Masterov.Component.GetComponents;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
 using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
@@ -36,7 +35,7 @@ using Masterov.Domain.Masterov.Order.GetOrdersByCreatedAt;
 using Masterov.Domain.Masterov.Order.GetOrdersByDescription;
 using Masterov.Domain.Masterov.Order.GetOrdersByStatus;
 using Masterov.Domain.Masterov.Order.GetOrdersByUpdatedAt;
-using Masterov.Domain.Masterov.Order.GetProductComponentByOrderId;
+using Masterov.Domain.Masterov.Order.GetUsedComponentsByOrderId;
 using Masterov.Domain.Masterov.Order.UpdateOrder;
 using Masterov.Domain.Masterov.Order.UpdateOrderStatus;
 using Masterov.Domain.Masterov.Payment.AddPayment;
@@ -77,6 +76,7 @@ using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
 using Masterov.Domain.Masterov.Supply.UpdateSupply;
+using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UserFolder.ChangeAccountLoginDateUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
@@ -99,7 +99,6 @@ using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Masterov.Storage.Extension;
-using Masterov.Storage.Storages.Masterov.Component;
 using Masterov.Storage.Storages.Masterov.Customer;
 using Masterov.Storage.Storages.Masterov.FinishedProduct;
 using Masterov.Storage.Storages.Masterov.Order;
@@ -107,6 +106,7 @@ using Masterov.Storage.Storages.Masterov.Payment;
 using Masterov.Storage.Storages.Masterov.ProductType;
 using Masterov.Storage.Storages.Masterov.Supplier;
 using Masterov.Storage.Storages.Masterov.Supply;
+using Masterov.Storage.Storages.Masterov.UsedComponent;
 using Masterov.Storage.Storages.Masterov.Warehouse;
 using Masterov.Storage.Storages.UserFolder;
 using Microsoft.EntityFrameworkCore;
@@ -143,7 +143,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetFinishedProductByOrderIdStorage, GetFinishedProductByOrderIdStorage>()
             .AddScoped<IGetCustomerByOrderIdStorage, GetCustomerByOrderIdStorage>()
             .AddScoped<IAddOrderStorage, AddOrderStorage>()
-            .AddScoped<IGetComponentsByOrderIdStorage, GetComponentsByOrderIdStorage>()
+            .AddScoped<IGetUsedComponentsByOrderIdStorage, GetUsedComponentsByOrderIdStorage>()
             .AddScoped<IGetFinishedProductByIdWithoutOrdersStorage, GetFinishedProductByIdWithoutOrdersStorage>()
             .AddScoped<IGetFinishedProductByNameWithoutOrdersStorage, GetFinishedProductByNameWithoutOrdersStorage>()
             .AddScoped<IGetFinishedProductsByCreatedAtWithoutOrdersStorage, GetFinishedProductsByCreatedAtWithoutOrdersStorage>()
@@ -247,7 +247,7 @@ public static class ServiceCollectionExtensions
         
         // Component
         services
-            .AddScoped<IGetComponentsStorage, GetComponentsStorage>()
+            .AddScoped<IGetUsedComponentsStorage, UsedUsedComponentsStorage>()
             ;
         
         services.AddMemoryCache();

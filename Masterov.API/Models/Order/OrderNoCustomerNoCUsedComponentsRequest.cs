@@ -3,7 +3,7 @@ using Masterov.Domain.Extension;
 
 namespace Masterov.API.Models.Order;
 
-public class OrderNoCustomerNoComponentsRequest
+public class OrderNoCustomerNoCUsedComponentsRequest
 {
     public Guid OrderId { get; set; }
     public DateTime CreatedAt { get; set; }

@@ -2,7 +2,7 @@
 
 namespace Masterov.API.Models.Order;
 
-public class OrderNoCustomerNoComponentsNoPaymentsRequest
+public class OrderNoCustomerNoUsedComponentsNoPaymentsRequest
 {
     public Guid OrderId { get; set; }
     public DateTime CreatedAt { get; set; }

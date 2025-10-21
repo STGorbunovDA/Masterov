@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 
-namespace Masterov.Domain.Masterov.Order.GetProductComponentByOrderId.Query;
+namespace Masterov.Domain.Masterov.Order.GetUsedComponentsByOrderId.Query;
 
-public class GetComponentsByOrderIdQueryValidator : AbstractValidator<GetComponentsByOrderIdQuery>
+public class GetUsedComponentsByOrderIdQueryValidator : AbstractValidator<GetUsedComponentsByOrderIdQuery>
 {
-    public GetComponentsByOrderIdQueryValidator()
+    public GetUsedComponentsByOrderIdQueryValidator()
     {
         RuleFor(q => q.OrderId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)

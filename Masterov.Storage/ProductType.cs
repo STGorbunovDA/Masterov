@@ -13,6 +13,6 @@ public class ProductType
     [MaxLength(200)]
     public string? Description { get; set; }
 
-    public ICollection<Component> ProductComponents { get; set; } = new List<Component>();
+    public ICollection<UsedComponent> ProductComponents { get; set; } = new List<UsedComponent>();
     public ICollection<Supply> Supplies { get; set; } = new List<Supply>();
 }

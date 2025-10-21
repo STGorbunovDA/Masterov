@@ -8,5 +8,5 @@ public class CustomerNewRequest
     public string Name { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }
-    public OrderNoCustomerNoComponentsNoPaymentsRequest[] Orders { get; set; }
+    public OrderNoCustomerNoUsedComponentsNoPaymentsRequest[] Orders { get; set; }
 }

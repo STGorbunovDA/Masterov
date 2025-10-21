@@ -19,7 +19,7 @@ internal class StorageProfile : Profile
             .ForMember(dest => dest.FullPriceFinishedProduct, opt => opt.MapFrom(src => src.FinishedProduct.Price));
             
         // ProductComponent mapping
-        CreateMap<Component, ComponentsDomain>()
+        CreateMap<UsedComponent, UsedComponentDomain>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType))
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));
             

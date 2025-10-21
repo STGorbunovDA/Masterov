@@ -1,6 +1,6 @@
 ﻿namespace Masterov.API.Models.Order;
 
-public class GetComponentsByOrderIdRequest
+public class GetUsedComponentsByOrderIdRequest
 {
     public Guid OrderId { get; set; }
 }

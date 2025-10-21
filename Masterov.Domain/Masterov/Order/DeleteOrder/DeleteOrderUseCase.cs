@@ -2,7 +2,7 @@
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.Order.DeleteOrder.Command;
 using Masterov.Domain.Masterov.Order.GetOrderById;
-using Masterov.Domain.Masterov.Order.GetProductComponentByOrderId;
+using Masterov.Domain.Masterov.Order.GetUsedComponentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 
 namespace Masterov.Domain.Masterov.Order.DeleteOrder;
@@ -12,7 +12,7 @@ public class DeleteOrderUseCase(
     IDeleteOrderStorage storage,
     IGetOrderByIdStorage getOrderByIdStorage,
     IGetPaymentsByOrderIdStorage getPaymentsByOrderIdStorage,
-    IGetComponentsByOrderIdStorage getComponentsByOrderIdStorage) : IDeleteOrderUseCase
+    IGetUsedComponentsByOrderIdStorage getUsedComponentsByOrderIdStorage) : IDeleteOrderUseCase
 {
     public async Task<bool> Execute(DeleteOrderCommand command, CancellationToken cancellationToken)
     {
@@ -27,7 +27,7 @@ public class DeleteOrderUseCase(
         if (payments?.Any() == true)
             throw new Conflict409Exception("Нельзя удалить ордер — у него есть оплата.");
         
-        var components = await getComponentsByOrderIdStorage.GetComponentsByOrderId(command.OrderId, cancellationToken);
+        var components = await getUsedComponentsByOrderIdStorage.GetUsedComponentsByOrderId(command.OrderId, cancellationToken);
 
         if (components?.Any() == true)
             throw new Conflict409Exception("Нельзя удалить ордер — у него есть используемые компоненты.");

@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
-using Masterov.API.Models.Component;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.Order;
 using Masterov.API.Models.Payment;
+using Masterov.API.Models.UsedComponent;
 using Masterov.Domain.Masterov.Order.AddOrder;
 using Masterov.Domain.Masterov.Order.AddOrder.Command;
 using Masterov.Domain.Masterov.Order.DeleteOrder;
@@ -26,8 +26,8 @@ using Masterov.Domain.Masterov.Order.GetOrdersByStatus;
 using Masterov.Domain.Masterov.Order.GetOrdersByStatus.Query;
 using Masterov.Domain.Masterov.Order.GetOrdersByUpdatedAt;
 using Masterov.Domain.Masterov.Order.GetOrdersByUpdatedAt.Query;
-using Masterov.Domain.Masterov.Order.GetProductComponentByOrderId;
-using Masterov.Domain.Masterov.Order.GetProductComponentByOrderId.Query;
+using Masterov.Domain.Masterov.Order.GetUsedComponentsByOrderId;
+using Masterov.Domain.Masterov.Order.GetUsedComponentsByOrderId.Query;
 using Masterov.Domain.Masterov.Order.UpdateOrder;
 using Masterov.Domain.Masterov.Order.UpdateOrder.Command;
 using Masterov.Domain.Masterov.Order.UpdateOrderStatus;
@@ -216,17 +216,17 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Используемые компоненты</returns>
-    [HttpGet("getComponentsByOrderId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentRequest>))]
+    [HttpGet("getUsedComponentsByOrderId")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentRequest>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> GetComponentsByOrderId(
-        [FromQuery] GetComponentsByOrderIdRequest request,
-        [FromServices] IGetComponentsByOrderIdUseCase useCase,
+    public async Task<IActionResult> GetUsedComponentsByOrderId(
+        [FromQuery] GetUsedComponentsByOrderIdRequest request,
+        [FromServices] IGetUsedComponentsByOrderIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var components = await useCase.Execute(new GetComponentsByOrderIdQuery(request.OrderId), cancellationToken);
-        return Ok(mapper.Map<IEnumerable<ComponentRequest>>(components));
+        var usedComponents = await useCase.Execute(new GetUsedComponentsByOrderIdQuery(request.OrderId), cancellationToken);
+        return Ok(mapper.Map<IEnumerable<UsedComponentRequest>>(usedComponents));
     }
 
     /// <summary>

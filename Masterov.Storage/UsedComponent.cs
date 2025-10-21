@@ -3,10 +3,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Masterov.Storage;
 
-public class Component
+public class UsedComponent
 {
     [Key]
-    public Guid ComponentId { get; set; } = Guid.NewGuid();
+    public Guid UsedComponentId { get; set; } = Guid.NewGuid();
 
     [Required, ForeignKey(nameof(Order))]
     public Guid OrderId { get; set; }
