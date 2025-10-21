@@ -2,9 +2,9 @@
 
 namespace Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity.Query;
 
-public class GetSuppliesByQuantityValidator : AbstractValidator<GetSuppliesByQuantityQuery>
+public class GetSuppliesByQuantityQueryValidator : AbstractValidator<GetSuppliesByQuantityQuery>
 {
-    public GetSuppliesByQuantityValidator()
+    public GetSuppliesByQuantityQueryValidator()
     {
         RuleFor(q => q.Quantity).Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(0)

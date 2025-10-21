@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Masterov.API.Models.UsedComponent;
+using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById.Query;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -57,5 +60,25 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         return Ok(mapper.Map<UsedComponentResponse>(customer));
     }
 
-    
+    /// <summary>
+    /// Получить используемые компоненты по количеству
+    /// </summary>
+    /// <param name="request">Количество используемых компонентов</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о используемых компонентах</returns>
+    [HttpGet("getUsedComponentsByQuantity")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetUsedComponentsByQuantity(
+        [FromQuery] UsedComponentsByQuantityRequest request,
+        [FromServices] IGetUsedComponentsByQuantityUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var usedComponents = await useCase.Execute(new GetUsedComponentsByQuantityQuery(request.Quantity), cancellationToken);
+        return Ok(usedComponents.Select(mapper.Map<UsedComponentResponse>));
+    }
+
 }
