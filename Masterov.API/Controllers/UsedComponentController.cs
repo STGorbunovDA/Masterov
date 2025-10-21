@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
+using Masterov.API.Models.Order;
 using Masterov.API.Models.UsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
+using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
+using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
@@ -26,7 +29,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     // TODO если статус Canceled тогда все компоненты должны вернуться на склад с которого взяли и соответсвенно?
     // TODO добавить контроллер используемых компонентов и соответственно когда компоненты используют вычитать со склада то кол-во которые используются
     /// <summary>
-    /// Получить все компоненты
+    /// Получить все используемые компоненты
     /// </summary>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
@@ -60,8 +63,8 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         [FromServices] IGetUsedComponentByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer = await useCase.Execute(new GetUsedComponentByIdQuery(usedComponentId), cancellationToken);
-        return Ok(mapper.Map<UsedComponentResponse>(customer));
+        var usedComponent = await useCase.Execute(new GetUsedComponentByIdQuery(usedComponentId), cancellationToken);
+        return Ok(mapper.Map<UsedComponentResponse>(usedComponent));
     }
 
     /// <summary>
@@ -121,8 +124,28 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         [FromServices] IGetUsedComponentsByUpdatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customers = await useCase.Execute(new GetUsedComponentsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
-        return Ok(customers?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
+        var usedComponents = await useCase.Execute(new GetUsedComponentsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
+        return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
     }
 
+    /// <summary>
+    /// Получить заказ по идентификатору используемого компонента
+    /// </summary>
+    /// <param name="request">Идентификатор используемого компонента</param>
+    /// <param name="getOrderByUsedComponentIdUseCase"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Результат получения ордера</returns>
+    [HttpGet("getOrderByUsedComponentId")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetOrderByUsedComponentId(
+        [FromQuery] GetOrderByUsedComponentIdRequest request,
+        [FromServices] IGetOrderByUsedComponentIdUseCase getOrderByUsedComponentIdUseCase,
+        CancellationToken cancellationToken)
+    {
+        var usedComponent = await getOrderByUsedComponentIdUseCase.Execute(new GetOrderByUsedComponentIdQuery(request.UsedComponentId), cancellationToken);
+        return Ok(mapper.Map<OrderResponse>(usedComponent));
+    }
 }

@@ -44,15 +44,20 @@ internal class ApiProfile : Profile
         CreateMap<OrderDomain, OrderNoPaymentsResponse>()
             .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
             .ForMember(dest => dest.CustomerNoOrders, opt => opt.MapFrom(src => src.Customer))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString())); // Автоматически применит маппинг ProductComponent
         
         CreateMap<OrderDomain, OrderNoCustumerResponse>()
             .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
             .ForMember(dest => dest.PaymentsNoCustomer, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
-
         
-        CreateMap<OrderDomain, OrderNoCustomerNoCUsedComponentsRequest>()
+        CreateMap<OrderDomain, OrderNoUsedComponentResponse>()
+            .ForMember(dest => dest.FinishedProductId, opt => opt.MapFrom(src => src.FinishedProductId))
+            .ForMember(dest => dest.FullPriceFinishedProduct, opt => opt.MapFrom(src => src.FullPriceFinishedProduct))
+            .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
+        
+        CreateMap<OrderDomain, OrderNoCustomerNoUsedComponentsRequest>()
             .ForMember(dest => dest.PaymentsNoCustomer, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString()));; // Автоматически применит маппинг ProductComponent
         

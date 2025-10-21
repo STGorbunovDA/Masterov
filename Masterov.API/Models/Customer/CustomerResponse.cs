@@ -10,5 +10,5 @@ public class CustomerResponse
     public DateTime? UpdatedAt { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }
-    public OrderNoCustomerNoCUsedComponentsRequest[] Orders { get; set; }
+    public OrderNoCustomerNoUsedComponentsRequest[] Orders { get; set; }
 }

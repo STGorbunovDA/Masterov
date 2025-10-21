@@ -9,19 +9,16 @@ public class GetOrdersByCustomerIdStorage (MasterovDbContext dbContext, IMapper 
 {
     public async Task<IEnumerable<OrderDomain>?> GetOrdersByCustomerId(Guid customerId, CancellationToken cancellationToken)
     {
-        var customer = await dbContext.Customers
-            .AsNoTracking() 
-                .Include(c => c.Orders)
-                    .ThenInclude(o => o.Components)
-                    .ThenInclude(pc => pc.ProductType)
-                .Include(c => c.Orders)
-                    .ThenInclude(o => o.Components)
-                    .ThenInclude(pc => pc.Warehouse)
-                .Include(c => c.Orders)
-                    .ThenInclude(o => o.Payments)
-                    .ThenInclude(p => p.Customer)
-            .FirstOrDefaultAsync(c => c.CustomerId == customerId, cancellationToken);
+        var orders = await dbContext.Orders
+            .AsNoTracking()
+            .Where(o => o.CustomerId == customerId)
+                .Include(o => o.Components)
+                    .ThenInclude(c => c.ProductType)
+                .Include(o => o.Components)
+                    .ThenInclude(c => c.Warehouse)
+                .Include(o => o.Payments)
+            .ToListAsync(cancellationToken);
 
-        return customer == null ? null : mapper.Map<IEnumerable<OrderDomain>>(customer.Orders);
+        return mapper.Map<IEnumerable<OrderDomain>>(orders);
     }
 }
