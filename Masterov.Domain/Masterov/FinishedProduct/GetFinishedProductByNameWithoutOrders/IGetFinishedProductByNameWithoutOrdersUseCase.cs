@@ -5,5 +5,5 @@ namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByNameWitho
 
 public interface IGetFinishedProductByNameWithoutOrdersUseCase
 {
-    Task<IEnumerable<FinishedProductWithoutOrdersDomain?>> Execute(GetFinishedProductByNameWithoutOrdersQuery finishedProductByNameQuery, CancellationToken cancellationToken);
+    Task<IEnumerable<FinishedProductNoOrdersDomain?>> Execute(GetFinishedProductByNameWithoutOrdersQuery finishedProductByNameQuery, CancellationToken cancellationToken);
 }

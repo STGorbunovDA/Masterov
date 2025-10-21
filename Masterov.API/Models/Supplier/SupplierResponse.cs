@@ -2,11 +2,11 @@
 
 namespace Masterov.API.Models.Supplier;
 
-public class SupplierRequest
+public class SupplierResponse
 {
     public Guid SupplierId { get; set; }
     public string Name { get; set; }
     public string? Address { get; set; }
     public string? Phone { get; set; }
-    public SupplyNewRequest[] Supplies { get; set; }
+    public SupplyNewResponse[] Supplies { get; set; }
 }

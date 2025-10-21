@@ -7,7 +7,7 @@ namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithout
 
 public class GetFinishedProductByIdWithoutOrdersUseCase(IValidator<GetFinishedProductByIdWithoutOrdersQuery> validator, IGetFinishedProductByIdWithoutOrdersStorage storage) : IGetFinishedProductByIdWithoutOrdersUseCase
 {
-    public async Task<FinishedProductWithoutOrdersDomain?> Execute(GetFinishedProductByIdWithoutOrdersQuery getFinishedProductByIdQuery, CancellationToken cancellationToken)
+    public async Task<FinishedProductNoOrdersDomain?> Execute(GetFinishedProductByIdWithoutOrdersQuery getFinishedProductByIdQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getFinishedProductByIdQuery, cancellationToken);
         var finishedProductExists = await storage.GetFinishedProductByIdWithoutOrders(getFinishedProductByIdQuery.FinishedProductId, cancellationToken);

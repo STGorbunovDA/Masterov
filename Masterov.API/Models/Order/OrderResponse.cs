@@ -5,7 +5,7 @@ using Masterov.Domain.Extension;
 
 namespace Masterov.API.Models.Order;
 
-public class OrderRequest
+public class OrderResponse
 {
     public Guid OrderId { get; set; }
     public DateTime CreatedAt { get; set; }
@@ -13,8 +13,8 @@ public class OrderRequest
     public DateTime? CompletedAt { get; set; }
     public OrderStatus Status { get; set; }
     public string? Description { get; set; }
-    public CustomerNoOrdersRequest Customer { get; set; }
-    public List<UsedComponentRequest> Components { get; set; }
+    public CustomerNoOrdersResponse Customer { get; set; }
+    public List<UsedComponentResponse> Components { get; set; }
     public List<PaymentsNewCustomerRequest> Payments { get; set; }
     public Guid FinishedProductId { get; set; }
     public decimal FullPriceFinishedProduct { get; set; }

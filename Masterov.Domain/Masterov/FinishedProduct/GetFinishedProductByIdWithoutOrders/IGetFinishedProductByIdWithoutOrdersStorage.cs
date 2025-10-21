@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithout
 
 public interface IGetFinishedProductByIdWithoutOrdersStorage
 {
-    Task<FinishedProductWithoutOrdersDomain?> GetFinishedProductByIdWithoutOrders(Guid finishedProductId, CancellationToken cancellationToken);
+    Task<FinishedProductNoOrdersDomain?> GetFinishedProductByIdWithoutOrders(Guid finishedProductId, CancellationToken cancellationToken);
 }

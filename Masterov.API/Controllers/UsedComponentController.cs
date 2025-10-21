@@ -25,7 +25,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о компонентах</returns>
     [HttpGet("getUsedComponents")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetUsedComponents(
@@ -33,7 +33,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var usedComponents = await useCase.Execute(cancellationToken);
-        return Ok(usedComponents.Select(mapper.Map<UsedComponentRequest>));
+        return Ok(usedComponents.Select(mapper.Map<UsedComponentResponse>));
     }
     
     /// <summary>
@@ -44,7 +44,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о используемом компоненте</returns>
     [HttpGet("getUsedComponentIdById/{usedComponentId:guid}")]
-    [ProducesResponseType(200, Type = typeof(UsedComponentRequest))]
+    [ProducesResponseType(200, Type = typeof(UsedComponentResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -54,7 +54,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customer = await useCase.Execute(new GetUsedComponentByIdQuery(usedComponentId), cancellationToken);
-        return Ok(mapper.Map<UsedComponentRequest>(customer));
+        return Ok(mapper.Map<UsedComponentResponse>(customer));
     }
 
     

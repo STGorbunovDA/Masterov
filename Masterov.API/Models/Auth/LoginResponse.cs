@@ -5,5 +5,5 @@ namespace Masterov.API.Models.Auth;
 public class LoginResponse
 {
     public AuthResponse Auth { get; set; } = new AuthResponse();
-    public UserRequest User { get; set; } = new UserRequest();
+    public UserResponse User { get; set; } = new UserResponse();
 }

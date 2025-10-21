@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedA
 
 public interface IGetFinishedProductsByCreatedAtWithoutOrdersStorage
 {
-    Task<IEnumerable<FinishedProductWithoutOrdersDomain>?> GetFinishedProductsByCreatedAtWithoutOrders(DateTime? createdAt, CancellationToken cancellationToken);
+    Task<IEnumerable<FinishedProductNoOrdersDomain>?> GetFinishedProductsByCreatedAtWithoutOrders(DateTime? createdAt, CancellationToken cancellationToken);
 }

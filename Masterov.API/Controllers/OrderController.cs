@@ -55,7 +55,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о всех заказах (ордерах)</returns>
     [HttpGet("getOrders")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetOrders(
@@ -63,7 +63,7 @@ public class OrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var orders = await useCase.Execute(cancellationToken);
-        return Ok(orders.Select(mapper.Map<OrderRequest>));
+        return Ok(orders.Select(mapper.Map<OrderResponse>));
     }
 
     /// <summary>
@@ -74,7 +74,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказе</returns>
     [HttpGet("getOrderById/{orderId:guid}")]
-    [ProducesResponseType(200, Type = typeof(OrderRequest))]
+    [ProducesResponseType(200, Type = typeof(OrderResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrderById(
@@ -83,7 +83,7 @@ public class OrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var order = await useCase.Execute(new GetOrderByIdQuery(orderId), cancellationToken);
-        return Ok(mapper.Map<OrderRequest>(order));
+        return Ok(mapper.Map<OrderResponse>(order));
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказах</returns>
     [HttpGet("getOrdersByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByCreatedAt(
@@ -104,7 +104,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     {
         var orders =
             await useCase.Execute(new GetOrdersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
-        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
+        return Ok(orders?.Select(mapper.Map<OrderResponse>) ?? Array.Empty<OrderResponse>());
     }
     
     /// <summary>
@@ -115,7 +115,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказах</returns>
     [HttpGet("getOrdersByUpdatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByUpdatedAt(
@@ -125,7 +125,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     {
         var orders =
             await useCase.Execute(new GetOrdersByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
-        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
+        return Ok(orders?.Select(mapper.Map<OrderResponse>) ?? Array.Empty<OrderResponse>());
     }
 
     /// <summary>
@@ -136,7 +136,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказах</returns>
     [HttpGet("getOrdersByCompletedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByCompletedAt(
@@ -146,7 +146,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     {
         var orders = await useCase.Execute(new GetOrdersByCompletedAtQuery(request.CompletedAt.ToDateTime()),
             cancellationToken);
-        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
+        return Ok(orders?.Select(mapper.Map<OrderResponse>) ?? Array.Empty<OrderResponse>());
     }
 
     /// <summary>
@@ -157,7 +157,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказах</returns>
     [HttpGet("getOrdersByDescription")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByDescription(
@@ -166,7 +166,7 @@ public class OrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var orders = await useCase.Execute(new GetOrdersByDescriptionQuery(request.Description), cancellationToken);
-        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
+        return Ok(orders?.Select(mapper.Map<OrderResponse>) ?? Array.Empty<OrderResponse>());
     }
 
     /// <summary>
@@ -177,7 +177,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказах</returns>
     [HttpGet("getOrdersByStatus")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByStatus(
@@ -186,7 +186,7 @@ public class OrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var orders = await useCase.Execute(new GetOrdersByStatusQuery(EnumTypeHelper.FromExtensionOrderStatus(request.Status)), cancellationToken);
-        return Ok(orders?.Select(mapper.Map<OrderRequest>) ?? Array.Empty<OrderRequest>());
+        return Ok(orders?.Select(mapper.Map<OrderResponse>) ?? Array.Empty<OrderResponse>());
     }
 
     /// <summary>
@@ -197,7 +197,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Готовое мебельное изделие</returns>
     [HttpGet("getFinishedProductByOrderId")]
-    [ProducesResponseType(200, Type = typeof(FinishedProductRequest))]
+    [ProducesResponseType(200, Type = typeof(FinishedProductResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetFinishedProductByOrderId(
@@ -206,7 +206,7 @@ public class OrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var product = await useCase.Execute(new GetFinishedProductByOrderIdQuery(request.OrderId), cancellationToken);
-        return Ok(mapper.Map<FinishedProductRequest>(product));
+        return Ok(mapper.Map<FinishedProductResponse>(product));
     }
 
     /// <summary>
@@ -217,7 +217,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Используемые компоненты</returns>
     [HttpGet("getUsedComponentsByOrderId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetUsedComponentsByOrderId(
@@ -226,7 +226,7 @@ public class OrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var usedComponents = await useCase.Execute(new GetUsedComponentsByOrderIdQuery(request.OrderId), cancellationToken);
-        return Ok(mapper.Map<IEnumerable<UsedComponentRequest>>(usedComponents));
+        return Ok(mapper.Map<IEnumerable<UsedComponentResponse>>(usedComponents));
     }
 
     /// <summary>
@@ -237,7 +237,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчике</returns>
     [HttpGet("getCustomerByOrderId/{orderId:guid}")]
-    [ProducesResponseType(200, Type = typeof(CustomerNoOrdersRequest))]
+    [ProducesResponseType(200, Type = typeof(CustomerNoOrdersResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetCustomerByOrderId(
@@ -246,7 +246,7 @@ public class OrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customer = await useCase.Execute(new GetCustomerByOrderIdQuery(orderId), cancellationToken);
-        return Ok(mapper.Map<CustomerNoOrdersRequest>(customer));
+        return Ok(mapper.Map<CustomerNoOrdersResponse>(customer));
     }
 
     /// <summary>
@@ -257,7 +257,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах заказа</returns>
     [HttpGet("getPaymentsByOrderId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentNewRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentNewResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize]
@@ -268,7 +268,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     {
         var payments =
             await useCase.Execute(new GetPaymentsByOrderIdQuery(request.OrderId), cancellationToken);
-        return Ok(payments?.Select(mapper.Map<PaymentNewRequest>) ?? Array.Empty<PaymentNewRequest>());
+        return Ok(payments?.Select(mapper.Map<PaymentNewResponse>) ?? Array.Empty<PaymentNewResponse>());
     }
 
     /// <summary>
@@ -279,7 +279,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
     [HttpPost("addOrder")]
-    [ProducesResponseType(201, Type = typeof(OrderRequest))]
+    [ProducesResponseType(201, Type = typeof(OrderResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> AddOrder(
@@ -292,7 +292,7 @@ public class OrderController(IMapper mapper) : ControllerBase
  
         return CreatedAtAction(nameof(GetOrderById),
             new { orderId = order.OrderId },
-            mapper.Map<OrderRequest>(order));
+            mapper.Map<OrderResponse>(order));
     }
 
     /// <summary>
@@ -304,7 +304,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
     [HttpPatch("updateOrderStatus/{orderId:guid}")]
-    [ProducesResponseType(201, Type = typeof(OrderRequest))]
+    [ProducesResponseType(201, Type = typeof(OrderResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -319,7 +319,7 @@ public class OrderController(IMapper mapper) : ControllerBase
 
         return CreatedAtAction(nameof(GetOrderById),
             new { orderId = order.OrderId },
-            mapper.Map<OrderRequest>(order));
+            mapper.Map<OrderResponse>(order));
     }
 
     /// <summary>
@@ -331,9 +331,9 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
     [HttpPatch("updateOrder/{orderId:guid}")]
-    [ProducesResponseType(200, Type = typeof(OrderRequest))]
+    [ProducesResponseType(200, Type = typeof(OrderResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(OrderRequest))]
+    [ProducesResponseType(404, Type = typeof(OrderResponse))]
     public async Task<IActionResult> UpdateOrder(
         [FromRoute] Guid orderId,
         [FromForm] UpdateOrderRequest request,
@@ -353,7 +353,7 @@ public class OrderController(IMapper mapper) : ControllerBase
 
         return CreatedAtAction(nameof(GetOrderById),
             new { orderId = order.OrderId },
-            mapper.Map<OrderRequest>(order));
+            mapper.Map<OrderResponse>(order));
     }
 
     /// <summary>

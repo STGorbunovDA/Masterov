@@ -1,6 +1,8 @@
-﻿namespace Masterov.API.Models.FinishedProduct;
+﻿using Masterov.API.Models.Order;
 
-public class FinishedProductRequestWithoutOrders
+namespace Masterov.API.Models.FinishedProduct;
+
+public class FinishedProductResponse
 {
     public Guid FinishedProductId { get; set; }
     public string Name { get; set; }
@@ -11,4 +13,5 @@ public class FinishedProductRequestWithoutOrders
     public int Height { get; set; }  // в мм
     public int Depth { get; set; }  // в мм
     public byte[]? Image { get; set; }
+    public OrderResponse[] Orders { get; set; }
 }

@@ -8,11 +8,11 @@ namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
 internal class GetFinishedProductsWithoutOrdersStorage (MasterovDbContext dbContext, IMapper mapper) : IGetFinishedProductsWithoutOrdersStorage
 {
-    public async Task<IEnumerable<FinishedProductWithoutOrdersDomain>> GetFinishedProductsWithoutOrders(CancellationToken cancellationToken)
+    public async Task<IEnumerable<FinishedProductNoOrdersDomain>> GetFinishedProductsWithoutOrders(CancellationToken cancellationToken)
     {
         return await dbContext.FinishedProducts
             .AsNoTracking()
-            .ProjectTo<FinishedProductWithoutOrdersDomain>(mapper.ConfigurationProvider)
+            .ProjectTo<FinishedProductNoOrdersDomain>(mapper.ConfigurationProvider)
             .ToArrayAsync(cancellationToken);
     }
 }

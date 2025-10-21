@@ -45,7 +45,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Список пользователей</returns>
     [HttpGet("getUsers")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UserResponse>))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUsers(
@@ -53,7 +53,7 @@ public class UserController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var users = await useCase.Execute(cancellationToken);
-        return Ok(users.Select(mapper.Map<UserRequest>));
+        return Ok(users.Select(mapper.Map<UserResponse>));
     }
     
     /// <summary>
@@ -64,7 +64,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены операции</param>
     /// <returns>Данные пользователя</returns>
     [HttpGet("getUserByLogin")]
-    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(200, Type = typeof(UserResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
@@ -74,7 +74,7 @@ public class UserController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var user = await getUserByLoginUseCase.Execute(new GetUserByLoginQuery(request.Login), cancellationToken);
-        return Ok(mapper.Map<UserRequest>(user));
+        return Ok(mapper.Map<UserResponse>(user));
     }
 
     /// <summary>
@@ -85,7 +85,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Данные пользователя</returns>
     [HttpGet("getUserById/{userId:guid}")]
-    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(200, Type = typeof(UserResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
@@ -95,7 +95,7 @@ public class UserController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var user = await getUserByIdUseCase.Execute(new GetUserByIdQuery(userId), cancellationToken);
-        return Ok(mapper.Map<UserRequest>(user));
+        return Ok(mapper.Map<UserResponse>(user));
     }
     
     /// <summary>
@@ -106,7 +106,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Данные пользователей</returns>
     [HttpGet("getUsersByRole")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UserResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
@@ -116,7 +116,7 @@ public class UserController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var users = await getUsersByRoleUseCase.Execute(new GetUsersByRoleQuery(EnumTypeHelper.FromExtensionRoleMethod(request.Role)), cancellationToken);
-        return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
+        return Ok(users?.Select(mapper.Map<UserResponse>) ?? Array.Empty<UserResponse>());
     }
     
     /// <summary>
@@ -127,7 +127,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о пользователях</returns>
     [HttpGet("getUsersByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UserResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
@@ -137,7 +137,7 @@ public class UserController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var users = await useCase.Execute(new GetUsersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
-        return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
+        return Ok(users?.Select(mapper.Map<UserResponse>) ?? Array.Empty<UserResponse>());
     }
     
     /// <summary>
@@ -148,7 +148,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о пользователях</returns>
     [HttpGet("getUsersByAccountLoginDate")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UserResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
@@ -158,7 +158,7 @@ public class UserController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var users = await useCase.Execute(new GetUsersByAccountLoginDateQuery(request.AccountLoginDate.ToDateTime()), cancellationToken);
-        return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
+        return Ok(users?.Select(mapper.Map<UserResponse>) ?? Array.Empty<UserResponse>());
     }
     
     /// <summary>
@@ -169,7 +169,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о пользователях</returns>
     [HttpGet("getUsersByUpdatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<UserRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UserResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
@@ -179,7 +179,7 @@ public class UserController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var users = await useCase.Execute(new GetUsersByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
-        return Ok(users?.Select(mapper.Map<UserRequest>) ?? Array.Empty<UserRequest>());
+        return Ok(users?.Select(mapper.Map<UserResponse>) ?? Array.Empty<UserResponse>());
     }
     
     /// <summary>
@@ -191,7 +191,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("updateUser/{userId:guid}")]
-    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(200, Type = typeof(UserResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(401, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
@@ -212,7 +212,7 @@ public class UserController(IMapper mapper) : ControllerBase
                 request.CreatedAt?.ToDateTime(),
                 request.CustomerId),
             cancellationToken);
-        return Ok(mapper.Map<UserRequest>(updateUser));
+        return Ok(mapper.Map<UserResponse>(updateUser));
     }
     
     /// <summary>
@@ -224,7 +224,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changeAccountLoginDateUserById")]
-    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(200, Type = typeof(UserResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
@@ -237,7 +237,7 @@ public class UserController(IMapper mapper) : ControllerBase
         var user = await changeAccountLoginDateUserByIdUseCase.Execute(
             new ChangeAccountLoginDateUserByIdCommand(userId, request.AccountLoginDate.ToDateTime()), cancellationToken);
 
-        return Ok(mapper.Map<UserRequest>(user));
+        return Ok(mapper.Map<UserResponse>(user));
     }
 
     /// <summary>
@@ -248,7 +248,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changeRoleUserByLogin")]
-    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(200, Type = typeof(UserResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
@@ -262,7 +262,7 @@ public class UserController(IMapper mapper) : ControllerBase
                 EnumTypeHelper.FromExtensionRoleMethod(request.Role)),
             cancellationToken);
 
-        return Ok(mapper.Map<UserRequest>(user));
+        return Ok(mapper.Map<UserResponse>(user));
     }
     
     /// <summary>
@@ -274,7 +274,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changeRoleUserById/{userId:guid}")]
-    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(200, Type = typeof(UserResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
@@ -289,7 +289,7 @@ public class UserController(IMapper mapper) : ControllerBase
                 EnumTypeHelper.FromExtensionRoleMethod(request.Role)),
             cancellationToken);
 
-        return Ok(mapper.Map<UserRequest>(user));
+        return Ok(mapper.Map<UserResponse>(user));
     }
 
     /// <summary>
@@ -301,7 +301,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changeCustomerFromUser")]
-    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(200, Type = typeof(UserResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
@@ -315,7 +315,7 @@ public class UserController(IMapper mapper) : ControllerBase
             new ChangeCustomerFromUserCommand(userId, request.CustomerId),
             cancellationToken);
 
-        return Ok(mapper.Map<UserRequest>(user));
+        return Ok(mapper.Map<UserResponse>(user));
     }
 
     /// <summary>
@@ -327,7 +327,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changePasswordFromUser")]
-    [ProducesResponseType(200, Type = typeof(UserRequest))]
+    [ProducesResponseType(200, Type = typeof(UserResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]

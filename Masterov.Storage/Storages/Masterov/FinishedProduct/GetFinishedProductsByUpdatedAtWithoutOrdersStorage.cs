@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
 public class GetFinishedProductsByUpdatedAtWithoutOrdersStorage (MasterovDbContext dbContext, IMapper mapper) : IGetFinishedProductsByUpdatedAtWithoutOrdersStorage
 {
-    public async Task<IEnumerable<FinishedProductWithoutOrdersDomain>?> GetFinishedProductsByUpdatedAtWithoutOrders(DateTime? updatedAt, CancellationToken cancellationToken)
+    public async Task<IEnumerable<FinishedProductNoOrdersDomain>?> GetFinishedProductsByUpdatedAtWithoutOrders(DateTime? updatedAt, CancellationToken cancellationToken)
     {
         if (!updatedAt.HasValue)
             return null;
@@ -20,6 +20,6 @@ public class GetFinishedProductsByUpdatedAtWithoutOrdersStorage (MasterovDbConte
             .Where(order => order.UpdatedAt >= startOfDay && order.UpdatedAt < endOfDay)
             .ToArrayAsync(cancellationToken);
 
-        return mapper.Map<IEnumerable<FinishedProductWithoutOrdersDomain>>(customers);
+        return mapper.Map<IEnumerable<FinishedProductNoOrdersDomain>>(customers);
     }
 }

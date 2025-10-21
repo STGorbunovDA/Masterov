@@ -1,6 +1,6 @@
-﻿namespace Masterov.Domain.Models;
+﻿namespace Masterov.API.Models.FinishedProduct;
 
-public class FinishedProductWithoutOrdersDomain
+public class FinishedProductNoOrdersResponse
 {
     public Guid FinishedProductId { get; set; }
     public string Name { get; set; }

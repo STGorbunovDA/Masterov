@@ -23,7 +23,7 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
     /// Регистрация нового пользователя.
     /// </summary>
     [HttpPost("register")]
-    [ProducesResponseType(201, Type = typeof(UserRequest))]
+    [ProducesResponseType(201, Type = typeof(UserResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(409, Type = typeof(string))]
     public async Task<IActionResult> RegisterUser(
@@ -33,7 +33,7 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
     {
         var user = await userUseCase.Execute(new RegisterUserCommand(request.Email, request.Password, request.Phone),
             cancellationToken);
-        return CreatedAtAction(nameof(RegisterUser), mapper.Map<UserRequest>(user));
+        return CreatedAtAction(nameof(RegisterUser), mapper.Map<UserResponse>(user));
     }
 
     /// <summary>
@@ -58,7 +58,7 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
                 Token = "Bearer " + token,
                 Expires = DateTime.Now.AddHours(24)
             },
-            User = mapper.Map<UserRequest>(user)
+            User = mapper.Map<UserResponse>(user)
         };
 
         return Ok(response);

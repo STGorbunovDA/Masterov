@@ -8,10 +8,10 @@ namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
 internal class GetFinishedProductByIdWithoutOrdersStorage(MasterovDbContext dbContext, IMapper mapper) : IGetFinishedProductByIdWithoutOrdersStorage
 {
-    public async Task<FinishedProductWithoutOrdersDomain?> GetFinishedProductByIdWithoutOrders(Guid productId, CancellationToken cancellationToken) =>
+    public async Task<FinishedProductNoOrdersDomain?> GetFinishedProductByIdWithoutOrders(Guid productId, CancellationToken cancellationToken) =>
         await dbContext.FinishedProducts
             .AsNoTracking() 
             .Where(f => f.FinishedProductId == productId)
-            .ProjectTo<FinishedProductWithoutOrdersDomain>(mapper.ConfigurationProvider)
+            .ProjectTo<FinishedProductNoOrdersDomain>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(cancellationToken);
 }

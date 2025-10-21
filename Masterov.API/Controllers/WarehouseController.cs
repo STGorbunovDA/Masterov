@@ -31,7 +31,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о складах</returns>
     [HttpGet("getWarehouses")]
-    [ProducesResponseType(200, Type = typeof(WarehouseRequest[]))]
+    [ProducesResponseType(200, Type = typeof(WarehouseResponse[]))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetWarehouses(
@@ -39,7 +39,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var warehouses = await useCase.Execute(cancellationToken);
-        return Ok(warehouses.Select(mapper.Map<WarehouseRequest>));
+        return Ok(warehouses.Select(mapper.Map<WarehouseResponse>));
     }
     
     /// <summary>
@@ -50,7 +50,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о складе</returns>
     [HttpGet("getWarehouseById/{warehouseId:guid}")]
-    [ProducesResponseType(200, Type = typeof(WarehouseRequest))]
+    [ProducesResponseType(200, Type = typeof(WarehouseResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -60,7 +60,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var warehouse = await useCase.Execute(new GetWarehouseByIdQuery(warehouseId), cancellationToken);
-        return Ok(mapper.Map<WarehouseRequest>(warehouse));
+        return Ok(mapper.Map<WarehouseResponse>(warehouse));
     }
     
     /// <summary>
@@ -71,7 +71,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления</returns>
     [HttpPatch("updateWarehouse")]
-    [ProducesResponseType(200, Type = typeof(WarehouseRequest))]
+    [ProducesResponseType(200, Type = typeof(WarehouseResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -83,7 +83,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         var updateWarehouse = await useCase.Execute(
             new UpdateWarehouseCommand(request.WarehouseId, request.ProductTypeId, request.Name, request.Quantity, request.Price),
             cancellationToken);
-        return Ok(mapper.Map<WarehouseRequest>(updateWarehouse));
+        return Ok(mapper.Map<WarehouseResponse>(updateWarehouse));
     }
     
     /// <summary>
@@ -94,7 +94,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о складе</returns>
     [HttpGet("getWarehouseByName/{nameWarehouse}")]
-    [ProducesResponseType(200, Type = typeof(WarehouseRequest[]))]
+    [ProducesResponseType(200, Type = typeof(WarehouseResponse[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetWarehouseByName(
@@ -104,7 +104,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     {
         var warehouses =
             await useCase.Execute(new GetWarehouseByNameQuery(nameWarehouse), cancellationToken);
-        return Ok(warehouses.Select(mapper.Map<WarehouseRequest>));
+        return Ok(warehouses.Select(mapper.Map<WarehouseResponse>));
     }
     
     /// <summary>
@@ -115,7 +115,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
     [HttpGet("getSuppliesByWarehouseId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNewRequestNoWarehouse>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNoWarehouseNewResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -125,6 +125,6 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplies = await useCase.Execute(new GetSuppliesByWarehouseIdQuery(request.WarehouseId), cancellationToken);
-        return Ok(mapper.Map<IEnumerable<SupplyNewRequestNoWarehouse>>(supplies));
+        return Ok(mapper.Map<IEnumerable<SupplyNoWarehouseNewResponse>>(supplies));
     }
 }

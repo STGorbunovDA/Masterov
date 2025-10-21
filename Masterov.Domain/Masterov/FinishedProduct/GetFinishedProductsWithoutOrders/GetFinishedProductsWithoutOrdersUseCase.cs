@@ -4,6 +4,6 @@ namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsWithoutOrd
 
 public class GetFinishedProductsWithoutOrdersUseCase(IGetFinishedProductsWithoutOrdersStorage storage) : IGetFinishedProductsWithoutOrdersUseCase
 {
-    public async Task<IEnumerable<FinishedProductWithoutOrdersDomain>> Execute(CancellationToken cancellationToken) =>
+    public async Task<IEnumerable<FinishedProductNoOrdersDomain>> Execute(CancellationToken cancellationToken) =>
         await storage.GetFinishedProductsWithoutOrders(cancellationToken);
 }

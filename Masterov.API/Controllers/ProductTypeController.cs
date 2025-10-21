@@ -26,14 +26,14 @@ public class ProductTypeController(IMapper mapper): ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Типы изделий</returns>
     [HttpGet("getProductsType")]
-    [ProducesResponseType(200, Type = typeof(ProductTypeRequest[]))]
+    [ProducesResponseType(200, Type = typeof(ProductTypeResponse[]))]
     [ProducesResponseType(410)]
     public async Task<IActionResult> GetProductsType(
         [FromServices] IGetProductsTypeUseCase useCase,
         CancellationToken cancellationToken)
     {
         var files = await useCase.Execute(cancellationToken);
-        return Ok(files.Select(mapper.Map<ProductTypeRequest>));
+        return Ok(files.Select(mapper.Map<ProductTypeResponse>));
     }
     
     /// <summary>
@@ -44,7 +44,7 @@ public class ProductTypeController(IMapper mapper): ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе изделия</returns>
     [HttpGet("getProductTypeById/{productTypeId:guid}")]
-    [ProducesResponseType(200, Type = typeof(ProductTypeRequest))]
+    [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetProductTypeById(
@@ -53,7 +53,7 @@ public class ProductTypeController(IMapper mapper): ControllerBase
         CancellationToken cancellationToken)
     {
         var productType = await useCase.Execute(new GetProductTypeByIdQuery(productTypeId), cancellationToken);
-        return Ok(mapper.Map<ProductTypeRequest>(productType));
+        return Ok(mapper.Map<ProductTypeResponse>(productType));
     }
     
     /// <summary>
@@ -64,7 +64,7 @@ public class ProductTypeController(IMapper mapper): ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе изделия</returns>
     [HttpGet("getProductTypeByName/{productTypeName}")]
-    [ProducesResponseType(200, Type = typeof(ProductTypeRequest))]
+    [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetProductTypeByName(
@@ -73,7 +73,7 @@ public class ProductTypeController(IMapper mapper): ControllerBase
         CancellationToken cancellationToken)
     {
         var productType = await useCase.Execute(new GetProductTypeByNameQuery(productTypeName), cancellationToken);
-        return Ok(mapper.Map<ProductTypeRequest>(productType));
+        return Ok(mapper.Map<ProductTypeResponse>(productType));
     }
     
     /// <summary>
@@ -84,7 +84,7 @@ public class ProductTypeController(IMapper mapper): ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе изделия</returns>
     [HttpPost("addProductType")]
-    [ProducesResponseType(201, Type = typeof(ProductTypeRequest))]
+    [ProducesResponseType(201, Type = typeof(ProductTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     public async Task<IActionResult> AddProductType(
@@ -94,7 +94,7 @@ public class ProductTypeController(IMapper mapper): ControllerBase
     {
         var productType = await useCase.Execute(new AddProductTypeCommand(request.Name, request.Description), cancellationToken);
         
-        return CreatedAtAction(nameof(GetProductTypeById), new { productTypeId = productType.ProductTypeId }, mapper.Map<ProductTypeRequest>(productType));
+        return CreatedAtAction(nameof(GetProductTypeById), new { productTypeId = productType.ProductTypeId }, mapper.Map<ProductTypeResponse>(productType));
     }
     
     /// <summary>
@@ -125,7 +125,7 @@ public class ProductTypeController(IMapper mapper): ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     [HttpPatch("updateProductType")]
-    [ProducesResponseType(200, Type = typeof(ProductTypeRequest))]
+    [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     public async Task<IActionResult> UpdateProductType(
@@ -134,6 +134,6 @@ public class ProductTypeController(IMapper mapper): ControllerBase
         CancellationToken cancellationToken)
     {
         var updatedProductType = await useCase.Execute(new UpdateProductTypeCommand(request.ProductTypeId, request.Name, request.Description), cancellationToken);
-        return Ok(mapper.Map<ProductTypeRequest>(updatedProductType));
+        return Ok(mapper.Map<ProductTypeResponse>(updatedProductType));
     }
 }

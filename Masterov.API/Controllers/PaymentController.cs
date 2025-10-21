@@ -44,7 +44,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах</returns>
     [HttpGet("getPayments")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentResponse>))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPayments(
@@ -52,7 +52,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var payments = await useCase.Execute(cancellationToken);
-        return Ok(payments.Select(mapper.Map<PaymentRequest>));
+        return Ok(payments.Select(mapper.Map<PaymentResponse>));
     }
 
     /// <summary>
@@ -63,7 +63,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платеже</returns>
     [HttpGet("getPaymentById/{paymentId:guid}")]
-    [ProducesResponseType(200, Type = typeof(PaymentRequest))]
+    [ProducesResponseType(200, Type = typeof(PaymentResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize]
@@ -73,7 +73,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var paymentDomain = await useCase.Execute(new GetPaymentByIdQuery(paymentId), cancellationToken);
-        return Ok(mapper.Map<PaymentRequest>(paymentDomain));
+        return Ok(mapper.Map<PaymentResponse>(paymentDomain));
     }
 
     /// <summary>
@@ -84,7 +84,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах</returns>
     [HttpGet("getPaymentsByStatus")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -97,7 +97,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
             await useCase.Execute(
                 new GetPaymentsByStatusQuery(EnumTypeHelper.FromExtensionPaymentMethod(request.StatusPayment)),
                 cancellationToken);
-        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+        return Ok(payments?.Select(mapper.Map<PaymentResponse>) ?? Array.Empty<PaymentResponse>());
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах</returns>
     [HttpGet("getPaymentsByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -118,7 +118,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var payments = await useCase.Execute(new GetPaymentsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
-        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+        return Ok(payments?.Select(mapper.Map<PaymentResponse>) ?? Array.Empty<PaymentResponse>());
     }
     
     /// <summary>
@@ -129,7 +129,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах</returns>
     [HttpGet("getPaymentsByUpdatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -139,7 +139,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var payments = await useCase.Execute(new GetPaymentsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
-        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+        return Ok(payments?.Select(mapper.Map<PaymentResponse>) ?? Array.Empty<PaymentResponse>());
     }
 
     /// <summary>
@@ -150,7 +150,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о платежах</returns>
     [HttpGet("getPaymentsByAmount")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -160,7 +160,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var payments = await useCase.Execute(new GetPaymentsByAmountQuery(request.Amount), cancellationToken);
-        return Ok(payments?.Select(mapper.Map<PaymentRequest>) ?? Array.Empty<PaymentRequest>());
+        return Ok(payments?.Select(mapper.Map<PaymentResponse>) ?? Array.Empty<PaymentResponse>());
     }
 
     /// <summary>
@@ -171,7 +171,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчике</returns>
     [HttpGet("getCustomerByPaymentId")]
-    [ProducesResponseType(200, Type = typeof(CustomerNewRequest))]
+    [ProducesResponseType(200, Type = typeof(CustomerNewResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -181,7 +181,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customer = await useCase.Execute(new GetCustomerByPaymentIdQuery(request.PaymentId), cancellationToken);
-        return Ok(mapper.Map<CustomerNewRequest>(customer));
+        return Ok(mapper.Map<CustomerNewResponse>(customer));
     }
 
     /// <summary>
@@ -192,7 +192,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о ордере</returns>
     [HttpGet("getOrderByPaymentId")]
-    [ProducesResponseType(200, Type = typeof(OrderRequestNoPayments))]
+    [ProducesResponseType(200, Type = typeof(OrderNoPaymentsResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -202,7 +202,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var orderDomain = await useCase.Execute(new GetOrderByPaymentIdQuery(request.PaymentId), cancellationToken);
-        return Ok(mapper.Map<OrderRequestNoPayments>(orderDomain));
+        return Ok(mapper.Map<OrderNoPaymentsResponse>(orderDomain));
     }
     
     /// <summary>
@@ -214,7 +214,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
     [HttpPost("addPayment/{orderId:guid}")]
-    [ProducesResponseType(201, Type = typeof(PaymentRequest))]
+    [ProducesResponseType(201, Type = typeof(PaymentResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -239,7 +239,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         
         return CreatedAtAction(nameof(GetPaymentById),
             new { paymentId = payment.PaymentId },
-            mapper.Map<PaymentRequest>(payment));
+            mapper.Map<PaymentResponse>(payment));
     }
 
     /// <summary>
@@ -272,7 +272,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления платежа</returns>
     [HttpPatch("updatePayment/{paymentId:guid}")]
-    [ProducesResponseType(200, Type = typeof(PaymentRequest))]
+    [ProducesResponseType(200, Type = typeof(PaymentResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -296,6 +296,6 @@ public class PaymentController(IMapper mapper) : ControllerBase
             });
         }
         
-        return Ok(mapper.Map<PaymentRequest>(updateCustomer));
+        return Ok(mapper.Map<PaymentResponse>(updateCustomer));
     }
 }

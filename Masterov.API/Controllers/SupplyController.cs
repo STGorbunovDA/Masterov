@@ -44,7 +44,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
     [HttpGet("getSupplies")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewRequest[]))]
+    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSupplies(
@@ -52,7 +52,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplies = await useCase.Execute(cancellationToken);
-        return Ok(supplies.Select(mapper.Map<SupplyNewRequest>));
+        return Ok(supplies.Select(mapper.Map<SupplyNewResponse>));
     }
     
     /// <summary>
@@ -63,7 +63,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставке</returns>
     [HttpGet("getSupplyById/{supplyId:guid}")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewRequest))]
+    [ProducesResponseType(200, Type = typeof(SupplyNewResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -73,7 +73,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supply = await useCase.Execute(new GetSupplyByIdQuery(supplyId), cancellationToken);
-        return Ok(mapper.Map<SupplyNewRequest>(supply));
+        return Ok(mapper.Map<SupplyNewResponse>(supply));
     }
     
     /// <summary>
@@ -84,7 +84,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
     [HttpGet("getSuppliesByQuantity")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewRequest[]))]
+    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -94,7 +94,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplies = await useCase.Execute(new GetSuppliesByQuantityQuery(request.Quantity), cancellationToken);
-        return Ok(supplies.Select(mapper.Map<SupplyNewRequest>));
+        return Ok(supplies.Select(mapper.Map<SupplyNewResponse>));
     }
     
     /// <summary>
@@ -105,7 +105,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
     [HttpGet("getSuppliesByPriceSupply")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewRequest[]))]
+    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -115,7 +115,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var payments = await useCase.Execute(new GetSuppliesByAmountPriceSupply(request.PriceSupply), cancellationToken);
-        return Ok(payments?.Select(mapper.Map<SupplyNewRequest>) ?? Array.Empty<SupplyNewRequest>());
+        return Ok(payments?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
     }
     
     /// <summary>
@@ -126,7 +126,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
     [HttpGet("getSuppliesBySupplyDate")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewRequest[]))]
+    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -136,7 +136,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var payments = await useCase.Execute(new GetSuppliesBySupplyDateQuery(request.SupplyDate), cancellationToken);
-        return Ok(payments?.Select(mapper.Map<SupplyNewRequest>) ?? Array.Empty<SupplyNewRequest>());
+        return Ok(payments?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
     }
     
     /// <summary>
@@ -147,7 +147,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставщике</returns>
     [HttpGet("GetSupplierBySupplyId")]
-    [ProducesResponseType(200, Type = typeof(SupplierNewRequest))]
+    [ProducesResponseType(200, Type = typeof(SupplierNewResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -157,7 +157,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplier = await useCase.Execute(new GetSupplierBySupplyIdQuery(request.SupplyId), cancellationToken);
-        return Ok(mapper.Map<SupplierNewRequest>(supplier));
+        return Ok(mapper.Map<SupplierNewResponse>(supplier));
     }
     
     /// <summary>
@@ -168,7 +168,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе продука</returns>
     [HttpGet("GetProductTypeBySupplyId")]
-    [ProducesResponseType(200, Type = typeof(ProductTypeRequest))]
+    [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -178,7 +178,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplier = await useCase.Execute(new GetProductTypeBySupplyIdQuery(request.SupplyId), cancellationToken);
-        return Ok(mapper.Map<ProductTypeRequest>(supplier));
+        return Ok(mapper.Map<ProductTypeResponse>(supplier));
     }
     
     /// <summary>
@@ -189,7 +189,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о складе</returns>
     [HttpGet("GetWarehouseBySupplyId")]
-    [ProducesResponseType(200, Type = typeof(WarehouseNewRequest))]
+    [ProducesResponseType(200, Type = typeof(WarehouseNewResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -199,7 +199,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplier = await useCase.Execute(new GetWarehouseBySupplyIdQuery(request.SupplyId), cancellationToken);
-        return Ok(mapper.Map<WarehouseNewRequest>(supplier));
+        return Ok(mapper.Map<WarehouseNewResponse>(supplier));
     }
     
     /// <summary>
@@ -210,7 +210,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
     [HttpPost("addSupply")]
-    [ProducesResponseType(201, Type = typeof(SupplyNewRequest))]
+    [ProducesResponseType(201, Type = typeof(SupplyNewResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -223,7 +223,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     
         return CreatedAtAction(nameof(GetSupplyById),
             new { supplyId = supply.SupplyId },
-            mapper.Map<SupplyNewRequest>(supply));
+            mapper.Map<SupplyNewResponse>(supply));
     }
     
     /// <summary>
@@ -252,7 +252,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления</returns>
     [HttpPatch("updateSupply")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewRequest))]
+    [ProducesResponseType(200, Type = typeof(SupplyNewResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -264,6 +264,6 @@ public class SupplyController(IMapper mapper) : ControllerBase
         var updateSupply = await useCase.Execute(
             new UpdateSupplyCommand(request.SupplyId, request.SupplierId, request.ProductTypeId, request.WarehouseId, request.Quantity, request.PriceSupply),
             cancellationToken);
-        return Ok(mapper.Map<SupplyNewRequest>(updateSupply));
+        return Ok(mapper.Map<SupplyNewResponse>(updateSupply));
     }
 }

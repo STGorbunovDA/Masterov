@@ -7,7 +7,7 @@ namespace Masterov.API.Extensions;
 public static class MapToHelper
 {
     
-    public static List<UsedComponentDomain>? MapToProductComponentDomain(List<UsedComponentRequest>? components)
+    public static List<UsedComponentDomain>? MapToProductComponentDomain(List<UsedComponentResponse>? components)
     {
         return components?.Select(c => new UsedComponentDomain
         {

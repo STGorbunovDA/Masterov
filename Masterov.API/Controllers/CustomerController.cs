@@ -43,7 +43,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчиках</returns>
     [HttpGet("getCustomers")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerResponse>))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomers(
@@ -51,7 +51,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customers = await useCase.Execute(cancellationToken);
-        return Ok(customers.Select(mapper.Map<CustomerRequest>));
+        return Ok(customers.Select(mapper.Map<CustomerResponse>));
     }
     
     /// <summary>
@@ -62,7 +62,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчике</returns>
     [HttpGet("getCustomerById/{customerId:guid}")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    [ProducesResponseType(200, Type = typeof(CustomerResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -72,7 +72,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customer = await useCase.Execute(new GetCustomerByIdQuery(customerId), cancellationToken);
-        return Ok(mapper.Map<CustomerRequest>(customer));
+        return Ok(mapper.Map<CustomerResponse>(customer));
     }
     
     /// <summary>
@@ -83,7 +83,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчике</returns>
     [HttpGet("getCustomerByName")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    [ProducesResponseType(200, Type = typeof(CustomerResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -93,7 +93,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customer = await useCase.Execute(new GetCustomerByNameQuery(request.Name), cancellationToken);
-        return Ok(mapper.Map<CustomerRequest>(customer));
+        return Ok(mapper.Map<CustomerResponse>(customer));
     }
     
     /// <summary>
@@ -104,7 +104,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчике</returns>
     [HttpGet("getCustomerByPhone")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    [ProducesResponseType(200, Type = typeof(CustomerResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -114,7 +114,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customer = await useCase.Execute(new GetCustomerByPhoneQuery(request.Phone), cancellationToken);
-        return Ok(mapper.Map<CustomerRequest>(customer));
+        return Ok(mapper.Map<CustomerResponse>(customer));
     }
     
     /// <summary>
@@ -125,7 +125,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчике</returns>
     [HttpGet($"getCustomerByEmail")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    [ProducesResponseType(200, Type = typeof(CustomerResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -135,7 +135,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customer = await useCase.Execute(new GetCustomerByEmailQuery(request.Email), cancellationToken);
-        return Ok(mapper.Map<CustomerRequest>(customer));
+        return Ok(mapper.Map<CustomerResponse>(customer));
     }
     
     /// <summary>
@@ -146,7 +146,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчиках</returns>
     [HttpGet("getCustomersByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetCustomersByCreatedAt(
@@ -155,7 +155,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customers = await useCase.Execute(new GetCustomersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
-        return Ok(customers?.Select(mapper.Map<CustomerRequest>) ?? Array.Empty<CustomerRequest>());
+        return Ok(customers?.Select(mapper.Map<CustomerResponse>) ?? Array.Empty<CustomerResponse>());
     }
     
     /// <summary>
@@ -166,7 +166,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о заказчиках</returns>
     [HttpGet("getCustomersByUpdatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerRequest>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetCustomersByUpdatedAt(
@@ -175,7 +175,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customers = await useCase.Execute(new GetCustomersByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
-        return Ok(customers?.Select(mapper.Map<CustomerRequest>) ?? Array.Empty<CustomerRequest>());
+        return Ok(customers?.Select(mapper.Map<CustomerResponse>) ?? Array.Empty<CustomerResponse>());
     }
     
     /// <summary>
@@ -186,7 +186,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken"></param>
     /// <returns>Результат получения списка ордеров заказчика</returns>
     [HttpGet("getOrdersByCustomerId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderRequestNoCustumer>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<OrderNoCustumerResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -196,7 +196,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var orders = await getOrdersByCustomerIdUseCase.Execute(new GetOrdersByCustomerIdQuery(request.CustomerId), cancellationToken);
-        return Ok(orders?.Select(mapper.Map<OrderRequestNoCustumer>) ?? Array.Empty<OrderRequestNoCustumer>());
+        return Ok(orders?.Select(mapper.Map<OrderNoCustumerResponse>) ?? Array.Empty<OrderNoCustumerResponse>());
     }
     
     /// <summary>
@@ -207,7 +207,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат выполнения</returns>
     [HttpPost("addCustomer")]
-    [ProducesResponseType(201, Type = typeof(CustomerRequest))]
+    [ProducesResponseType(201, Type = typeof(CustomerResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(409, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -220,7 +220,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     
         return CreatedAtAction(nameof(GetCustomerById),
             new { customerId = customer.CustomerId },
-            mapper.Map<CustomerRequest>(customer));
+            mapper.Map<CustomerResponse>(customer));
     }
     
     /// <summary>
@@ -253,7 +253,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления заказчика</returns>
     [HttpPatch("updateCustomer/{customerId:guid}")]
-    [ProducesResponseType(200, Type = typeof(CustomerRequest))]
+    [ProducesResponseType(200, Type = typeof(CustomerResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -267,6 +267,6 @@ public class CustomerController(IMapper mapper) : ControllerBase
             new UpdateCustomerCommand(customerId, request.Name, request.Email, request.Phone, 
                 request.CreatedAt?.ToDateTime()),
             cancellationToken);
-        return Ok(mapper.Map<CustomerRequest>(updateCustomer));
+        return Ok(mapper.Map<CustomerResponse>(updateCustomer));
     }
 }

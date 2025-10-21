@@ -1,6 +1,6 @@
 ﻿namespace Masterov.API.Models.Supplier;
 
-public class SupplierNewRequest
+public class SupplierNewResponse
 {
     public Guid SupplierId { get; set; }
     public string Name { get; set; }

@@ -45,6 +45,6 @@ internal class StorageProfile : Profile
         // Supply mapping (если нужно)
         CreateMap<Supply, SupplyDomain>();
         
-        CreateMap<FinishedProduct, FinishedProductWithoutOrdersDomain>();
+        CreateMap<FinishedProduct, FinishedProductNoOrdersDomain>();
     }
 }

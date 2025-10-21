@@ -8,7 +8,7 @@ public class GetFinishedProductsByUpdatedAtWithoutOrdersUseCase(IValidator<GetFi
     IGetFinishedProductsByUpdatedAtWithoutOrdersStorage storage) 
     : IGetFinishedProductsByUpdatedAtWithoutOrdersUseCase
 {
-    public async Task<IEnumerable<FinishedProductWithoutOrdersDomain>?> Execute(GetFinishedProductsByUpdatedAtWithoutOrdersQuery finishedProductsByUpdatedAtQuery,
+    public async Task<IEnumerable<FinishedProductNoOrdersDomain>?> Execute(GetFinishedProductsByUpdatedAtWithoutOrdersQuery finishedProductsByUpdatedAtQuery,
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(finishedProductsByUpdatedAtQuery, cancellationToken);

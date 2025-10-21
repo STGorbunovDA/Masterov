@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
 public class GetFinishedProductsByCreatedAtWithoutOrdersStorage (MasterovDbContext dbContext, IMapper mapper) : IGetFinishedProductsByCreatedAtWithoutOrdersStorage
 {
-    public async Task<IEnumerable<FinishedProductWithoutOrdersDomain>?> GetFinishedProductsByCreatedAtWithoutOrders(DateTime? createdAt, CancellationToken cancellationToken)
+    public async Task<IEnumerable<FinishedProductNoOrdersDomain>?> GetFinishedProductsByCreatedAtWithoutOrders(DateTime? createdAt, CancellationToken cancellationToken)
     {
         if (!createdAt.HasValue)
             return null;
@@ -20,6 +20,6 @@ public class GetFinishedProductsByCreatedAtWithoutOrdersStorage (MasterovDbConte
             .Where(order => order.CreatedAt >= startOfDay && order.CreatedAt < endOfDay)
             .ToArrayAsync(cancellationToken);
 
-        return mapper.Map<IEnumerable<FinishedProductWithoutOrdersDomain>>(customers);
+        return mapper.Map<IEnumerable<FinishedProductNoOrdersDomain>>(customers);
     }
 }

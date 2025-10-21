@@ -3,10 +3,10 @@ using Masterov.Domain.Extension;
 
 namespace Masterov.API.Models.Payment;
 
-public class PaymentRequest
+public class PaymentNewResponse
 {
     public Guid PaymentId { get; set; }
-    public CustomerNewRequest Customer { get; set; }
+    public CustomerNoOrdersResponse Customer { get; set; }
     public PaymentMethod MethodPayment { get; set; }
     public decimal Amount { get; set; }
     public DateTime CreatedAt { get; set; }

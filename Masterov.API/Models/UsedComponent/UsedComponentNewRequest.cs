@@ -6,7 +6,7 @@ namespace Masterov.API.Models.UsedComponent;
 public class UsedComponentNewRequest
 {
     public Guid UsedComponentId { get; set; }
-    public ProductTypeRequest ProductType { get; set; }
+    public ProductTypeResponse ProductType { get; set; }
     public WarehouseNewNoProductTypeRequest Warehouse { get; set; }
     public int Quantity { get; set; }
 }

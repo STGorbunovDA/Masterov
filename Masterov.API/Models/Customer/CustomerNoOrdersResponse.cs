@@ -1,6 +1,6 @@
 ﻿namespace Masterov.API.Models.Customer;
 
-public class CustomerNoOrdersRequest
+public class CustomerNoOrdersResponse
 {
     public Guid CustomerId { get; set; }
     public string Name { get; set; }
