@@ -8,6 +8,8 @@ using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity.Query;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -101,6 +103,26 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     {
         var usedComponents = await useCase.Execute(new GetUsedComponentsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
         return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
+    }
+    
+    /// <summary>
+    /// Получить используемые компоненты по дате обновления
+    /// </summary>
+    /// <param name="request">Дата обновления используемых компонентов</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о используемых компонентах</returns>
+    [HttpGet("getUsedComponentsByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetUsedComponentsByUpdatedAt(
+        [FromQuery] GetUsedComponentsByUpdatedAtRequest request,
+        [FromServices] IGetUsedComponentsByUpdatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var customers = await useCase.Execute(new GetUsedComponentsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
+        return Ok(customers?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
     }
 
 }

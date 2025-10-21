@@ -80,6 +80,7 @@ using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt;
 using Masterov.Domain.Masterov.UserFolder.ChangeAccountLoginDateUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
@@ -253,6 +254,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetUsedComponentsStorage, GetUsedComponentsStorage>()
             .AddScoped<IGetUsedComponentsByQuantityStorage, GetUsedComponentsByQuantityStorage>()
             .AddScoped<IGetUsedComponentsByCreatedAtStorage, GetUsedComponentsByCreatedAtStorage>()
+            .AddScoped<IGetUsedComponentsByUpdatedAtStorage, GetUsedComponentsByUpdatedAtStorage>()
             .AddScoped<IGetUsedComponentByIdStorage, GetUsedComponentByIdStorage>();
         
         services.AddMemoryCache();
