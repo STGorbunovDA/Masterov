@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Masterov.API.Models.UsedComponent;
-using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById.Query;

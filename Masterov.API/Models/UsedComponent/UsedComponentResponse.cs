@@ -9,4 +9,6 @@ public class UsedComponentResponse
     public ProductTypeResponse ProductType { get; set; }
     public WarehouseForOrderRequest Warehouse { get; set; }
     public int Quantity { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }

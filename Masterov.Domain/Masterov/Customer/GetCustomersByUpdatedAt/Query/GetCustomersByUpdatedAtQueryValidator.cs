@@ -2,9 +2,9 @@
 
 namespace Masterov.Domain.Masterov.Customer.GetCustomersByUpdatedAt.Query;
 
-public class GetCustomersByUpdatedAtValidator : AbstractValidator<GetCustomersByUpdatedAtQuery>
+public class GetCustomersByUpdatedAtQueryValidator : AbstractValidator<GetCustomersByUpdatedAtQuery>
 {
-    public GetCustomersByUpdatedAtValidator()
+    public GetCustomersByUpdatedAtQueryValidator()
     {
         RuleFor(q => q.UpdatedAt).Cascade(CascadeMode.Stop)
             .LessThanOrEqualTo(DateTime.Now)
