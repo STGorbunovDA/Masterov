@@ -3,6 +3,7 @@ using Masterov.API.Extensions;
 using Masterov.API.Models.Order;
 using Masterov.API.Models.ProductType;
 using Masterov.API.Models.UsedComponent;
+using Masterov.API.Models.Warehouse;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId.Query;
@@ -16,6 +17,8 @@ using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt.Query;
+using Masterov.Domain.Masterov.UsedComponent.GetWarehouseByUsedComponentId;
+using Masterov.Domain.Masterov.UsedComponent.GetWarehouseByUsedComponentId.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -155,7 +158,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить тип продукта по идентификатору используемого компонента
+    /// Получить тип продукта используемого компонента ппо идентификатору используемого компонента
     /// </summary>
     /// <param name="request">Идентификатор используемого компонента</param>
     /// <param name="useCase">Сценарий использования</param>
@@ -173,5 +176,26 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     {
         var productTypeDomain = await useCase.Execute(new GetProductTypeByUsedComponentIdQuery(request.UsedComponentId), cancellationToken);
         return Ok(mapper.Map<ProductTypeResponse>(productTypeDomain));
+    }
+    
+    /// <summary>
+    /// Получить склад используемого компонента по идентификатору используемого компонента
+    /// </summary>
+    /// <param name="request">Идентификатор используемого компонента</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о складе</returns>
+    [HttpGet("getWarehouseByUsedComponentId")]
+    [ProducesResponseType(200, Type = typeof(WarehouseResponse))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetWarehouseByUsedComponentId(
+        [FromQuery] GetWarehouseByUsedComponentIdRequest request,
+        [FromServices] IGetWarehouseByUsedComponentIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var warehouseDomain = await useCase.Execute(new GetWarehouseByUsedComponentIdQuery(request.UsedComponentId), cancellationToken);
+        return Ok(mapper.Map<WarehouseResponse>(warehouseDomain));
     }
 }

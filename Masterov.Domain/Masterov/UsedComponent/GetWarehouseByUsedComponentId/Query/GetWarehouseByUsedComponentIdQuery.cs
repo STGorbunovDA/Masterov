@@ -1,0 +1,3 @@
+﻿namespace Masterov.Domain.Masterov.UsedComponent.GetWarehouseByUsedComponentId.Query;
+
+public record GetWarehouseByUsedComponentIdQuery(Guid UsedComponentId);
