@@ -88,6 +88,7 @@ using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetWarehouseByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.ServiceUsedComponentAdditional;
+using Masterov.Domain.Masterov.UsedComponent.UpdateUsedComponent;
 using Masterov.Domain.Masterov.UserFolder.ChangeAccountLoginDateUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
@@ -253,6 +254,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetUsedComponentsByQuantityUseCase, GetUsedComponentsByQuantityUseCase>()
             .AddScoped<IGetUsedComponentsByCreatedAtUseCase, GetUsedComponentsByCreatedAtUseCase>()
             .AddScoped<IGetProductTypeByUsedComponentIdUseCase, GetProductTypeByUsedComponentIdUseCase>()
+            .AddScoped<IUpdateUsedComponentUseCase, UpdateUsedComponentUseCase>()
             .AddScoped<IGetWarehouseByUsedComponentIdUseCase, GetWarehouseByUsedComponentIdUseCase>()
             .AddScoped<IAddUsedComponentUseCase, AddUsedComponentUseCase>()
             .AddScoped<IUpdateQuantityWarehouseByIdUseCase, UpdateQuantityWarehouseByIdUseCase>()

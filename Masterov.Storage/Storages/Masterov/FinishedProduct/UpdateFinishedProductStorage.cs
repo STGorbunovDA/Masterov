@@ -17,7 +17,7 @@ internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper
         finishedProductExists.Name = name.Trim();
 
         if (createdAt.HasValue)
-            finishedProductExists.CreatedAt = createdAt.Value.Date;
+            finishedProductExists.CreatedAt = createdAt.Value;
         
         finishedProductExists.UpdatedAt = DateTime.Now;
         finishedProductExists.Price = price ?? finishedProductExists.Price;

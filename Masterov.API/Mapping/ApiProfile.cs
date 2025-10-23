@@ -25,11 +25,13 @@ internal class ApiProfile : Profile
         // 2. Затем маппинг ProductComponent с указанием зависимостей
         CreateMap<UsedComponentDomain, UsedComponentNewRequest>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType)) // AutoMapper сам применит маппинг ProductType
+            .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId)) // AutoMapper сам применит маппинг OrderId
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
 
         // 2. Затем маппинг ProductComponent с указанием зависимостей
         CreateMap<UsedComponentDomain, UsedComponentResponse>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType)) // AutoMapper сам применит маппинг ProductType
+            .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId)) // AutoMapper сам применит маппинг OrderId
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
 
         // 3. Маппинг ProductionOrder с преобразованием коллекций

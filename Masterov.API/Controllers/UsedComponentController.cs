@@ -24,6 +24,8 @@ using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetWarehouseByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetWarehouseByUsedComponentId.Query;
+using Masterov.Domain.Masterov.UsedComponent.UpdateUsedComponent;
+using Masterov.Domain.Masterov.UsedComponent.UpdateUsedComponent.Command;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,7 +58,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         var usedComponents = await useCase.Execute(cancellationToken);
         return Ok(usedComponents.Select(mapper.Map<UsedComponentResponse>));
     }
-    
+
     /// <summary>
     /// Получить используемый компонент по Id
     /// </summary>
@@ -95,10 +97,11 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         [FromServices] IGetUsedComponentsByQuantityUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var usedComponents = await useCase.Execute(new GetUsedComponentsByQuantityQuery(request.Quantity), cancellationToken);
+        var usedComponents =
+            await useCase.Execute(new GetUsedComponentsByQuantityQuery(request.Quantity), cancellationToken);
         return Ok(usedComponents.Select(mapper.Map<UsedComponentResponse>));
     }
-    
+
     /// <summary>
     /// Получить используемые компоненты по дате создания
     /// </summary>
@@ -116,10 +119,12 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         [FromServices] IGetUsedComponentsByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var usedComponents = await useCase.Execute(new GetUsedComponentsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        var usedComponents =
+            await useCase.Execute(new GetUsedComponentsByCreatedAtQuery(request.CreatedAt.ToDateTime()),
+                cancellationToken);
         return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
     }
-    
+
     /// <summary>
     /// Получить используемые компоненты по дате обновления
     /// </summary>
@@ -137,7 +142,9 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         [FromServices] IGetUsedComponentsByUpdatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var usedComponents = await useCase.Execute(new GetUsedComponentsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
+        var usedComponents =
+            await useCase.Execute(new GetUsedComponentsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()),
+                cancellationToken);
         return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
     }
 
@@ -158,10 +165,12 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         [FromServices] IGetOrderByUsedComponentIdUseCase getOrderByUsedComponentIdUseCase,
         CancellationToken cancellationToken)
     {
-        var usedComponent = await getOrderByUsedComponentIdUseCase.Execute(new GetOrderByUsedComponentIdQuery(request.UsedComponentId), cancellationToken);
+        var usedComponent =
+            await getOrderByUsedComponentIdUseCase.Execute(new GetOrderByUsedComponentIdQuery(request.UsedComponentId),
+                cancellationToken);
         return Ok(mapper.Map<OrderResponse>(usedComponent));
     }
-    
+
     /// <summary>
     /// Получить тип продукта используемого компонента ппо идентификатору используемого компонента
     /// </summary>
@@ -179,10 +188,11 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         [FromServices] IGetProductTypeByUsedComponentIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productTypeDomain = await useCase.Execute(new GetProductTypeByUsedComponentIdQuery(request.UsedComponentId), cancellationToken);
+        var productTypeDomain = await useCase.Execute(new GetProductTypeByUsedComponentIdQuery(request.UsedComponentId),
+            cancellationToken);
         return Ok(mapper.Map<ProductTypeResponse>(productTypeDomain));
     }
-    
+
     /// <summary>
     /// Получить склад используемого компонента по идентификатору используемого компонента
     /// </summary>
@@ -200,10 +210,11 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         [FromServices] IGetWarehouseByUsedComponentIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var warehouseDomain = await useCase.Execute(new GetWarehouseByUsedComponentIdQuery(request.UsedComponentId), cancellationToken);
+        var warehouseDomain = await useCase.Execute(new GetWarehouseByUsedComponentIdQuery(request.UsedComponentId),
+            cancellationToken);
         return Ok(mapper.Map<WarehouseResponse>(warehouseDomain));
     }
-    
+
     /// <summary>
     /// Добавить используемый компонент c учётом общего кол-ва на складе
     /// </summary>
@@ -222,15 +233,18 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         [FromServices] IAddUsedComponentUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var usedComponent = await useCase.Execute(new AddUsedComponentCommand(request.OrderId, request.ProductTypeId, request.WarehouseId, request.Quantity), cancellationToken);
-    
+        var usedComponent =
+            await useCase.Execute(
+                new AddUsedComponentCommand(request.OrderId, request.ProductTypeId, request.WarehouseId,
+                    request.Quantity), cancellationToken);
+
         return CreatedAtAction(nameof(GetUsedComponentId),
             new { usedComponentId = usedComponent.UsedComponentId },
             mapper.Map<UsedComponentResponse>(usedComponent));
     }
 
     /// <summary>
-    /// Удаление используемый компонент по Id
+    /// Удаление используемый компонент по идентификатору
     /// </summary>
     /// <param name="usedComponentId">Идентификатор используемого компонента</param>
     /// <param name="request">Предикат возврат на склад</param>
@@ -248,7 +262,39 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         [FromServices] IDeleteUsedComponentUseCase useCase,
         CancellationToken cancellationToken)
     {
-        await useCase.Execute(new DeleteUsedComponentCommand(usedComponentId, request.ReturnWarehouse), cancellationToken);
+        await useCase.Execute(new DeleteUsedComponentCommand(usedComponentId, request.ReturnWarehouse),
+            cancellationToken);
         return NoContent();
+    }
+
+    /// <summary>
+    /// Обновить используемый компонент по идентификатору
+    /// </summary>
+    /// <param name="usedComponentId">Идентификатор используемого компонента</param>
+    /// <param name="request">Данные для обновления используемого компонента</param>
+    /// <param name="useCase">Сценарий обновления используемого компонента</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат обновления используемого компонента</returns>
+    [HttpPatch("updateUsedComponent/{usedComponentId:guid}")]
+    [ProducesResponseType(200, Type = typeof(UsedComponentResponse))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> UpdateUsedComponent(
+        [FromRoute] Guid usedComponentId,
+        [FromBody] UpdateUsedComponentRequest request,
+        [FromServices] IUpdateUsedComponentUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var updateUsedComponent = await useCase.Execute(
+            new UpdateUsedComponentCommand(
+                usedComponentId, 
+                request.OrderId, 
+                request.ProductTypeId, 
+                request.WarehouseId,
+                request.Quantity,
+                request.CreatedAt.ToDateTime()),
+            cancellationToken);
+        return Ok(mapper.Map<UsedComponentResponse>(updateUsedComponent));
     }
 }

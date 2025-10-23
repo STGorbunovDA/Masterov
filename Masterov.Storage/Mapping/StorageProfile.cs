@@ -21,7 +21,8 @@ internal class StorageProfile : Profile
         // ProductComponent mapping
         CreateMap<UsedComponent, UsedComponentDomain>()
             .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType))
-            .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));
+            .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse))
+            .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId));
             
         // Product mapping
         CreateMap<Customer, CustomerDomain>()

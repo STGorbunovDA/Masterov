@@ -17,7 +17,7 @@ internal class UpdateCustomerStorage(MasterovDbContext dbContext, IMapper mapper
         customerExists.Email = email;
         customerExists.Phone = phone;
         if (createdAt.HasValue)
-            customerExists.CreatedAt = createdAt.Value.Date;
+            customerExists.CreatedAt = createdAt.Value;
         customerExists.UpdatedAt = DateTime.Now;
         
         await dbContext.SaveChangesAsync(cancellationToken);
