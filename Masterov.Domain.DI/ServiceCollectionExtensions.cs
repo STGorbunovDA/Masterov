@@ -49,7 +49,7 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByCreatedAt;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
-using Masterov.Domain.Masterov.Payment.Service;
+using Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.DeleteProductType;
@@ -77,6 +77,7 @@ using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
 using Masterov.Domain.Masterov.Supply.UpdateSupply;
+using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetProductTypeByUsedComponentId;
@@ -85,6 +86,7 @@ using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetWarehouseByUsedComponentId;
+using Masterov.Domain.Masterov.UsedComponent.ServiceUsedComponentAdditional;
 using Masterov.Domain.Masterov.UserFolder.ChangeAccountLoginDateUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
 using Masterov.Domain.Masterov.UserFolder.ChangePasswordFromUser;
@@ -106,6 +108,7 @@ using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
+using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -250,11 +253,15 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetUsedComponentsByCreatedAtUseCase, GetUsedComponentsByCreatedAtUseCase>()
             .AddScoped<IGetProductTypeByUsedComponentIdUseCase, GetProductTypeByUsedComponentIdUseCase>()
             .AddScoped<IGetWarehouseByUsedComponentIdUseCase, GetWarehouseByUsedComponentIdUseCase>()
+            .AddScoped<IAddUsedComponentUseCase, AddUsedComponentUseCase>()
+            .AddScoped<IUpdateQuantityWarehouseByIdUseCase, UpdateQuantityWarehouseByIdUseCase>()
             .AddScoped<IGetOrderByUsedComponentIdUseCase, GetOrderByUsedComponentIdUseCase>()
             .AddScoped<IGetUsedComponentsByUpdatedAtUseCase, GetUsedComponentsByUpdatedAtUseCase>()
             .AddScoped<IGetUsedComponentByIdUseCase, GetUsedComponentByIdUseCase>();
-        
-        services.AddScoped<IOrderPaymentStatusService, OrderPaymentStatusService>();
+
+        services
+            .AddScoped<IOrderPaymentStatusService, OrderPaymentStatusService>()
+            .AddScoped<IWarehouseService, WarehouseService>();
             
         return services;
     }

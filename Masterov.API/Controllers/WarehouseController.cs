@@ -9,6 +9,8 @@ using Masterov.Domain.Masterov.Warehouse.GetWarehouseById.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
+using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById;
+using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById.Command;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse.Command;
 using Microsoft.AspNetCore.Authorization;
@@ -83,6 +85,29 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         var updateWarehouse = await useCase.Execute(
             new UpdateWarehouseCommand(request.WarehouseId, request.ProductTypeId, request.Name, request.Quantity, request.Price),
             cancellationToken);
+        return Ok(mapper.Map<WarehouseResponse>(updateWarehouse));
+    }
+    
+    /// <summary>
+    /// Обновить количество на складе по Id
+    /// </summary>
+    /// <param name="request">Данные для обновления склада</param>
+    /// <param name="useCase">Сценарий обновления скалад</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат обновления</returns>
+    [HttpPatch("updateQuantityWarehouseById")]
+    [ProducesResponseType(200, Type = typeof(WarehouseResponse))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> UpdateQuantityWarehouseById(
+        [FromForm] UpdateQuantityWarehouseByIdRequest request,
+        [FromServices] IUpdateQuantityWarehouseByIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var updateWarehouse = await useCase.Execute(
+            new UpdateQuantityWarehouseByIdCommand(request.WarehouseId, request.Quantity), cancellationToken);
         return Ok(mapper.Map<WarehouseResponse>(updateWarehouse));
     }
     

@@ -1,4 +1,4 @@
-﻿namespace Masterov.Domain.Masterov.Payment.Service;
+﻿namespace Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
 
 public interface IOrderPaymentStatusService
 {

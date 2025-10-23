@@ -3,7 +3,7 @@ using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Order.GetOrderById;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
-using Masterov.Domain.Masterov.Payment.Service;
+using Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.Payment.UpdatePayment.Command;
 using Masterov.Domain.Models;

@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
+using Masterov.API.Models.Customer;
 using Masterov.API.Models.Order;
 using Masterov.API.Models.ProductType;
 using Masterov.API.Models.UsedComponent;
 using Masterov.API.Models.Warehouse;
+using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent;
+using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent.Command;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId.Query;
@@ -167,7 +170,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     [HttpGet("getProductTypeByUsedComponentId")]
     [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetProductTypeByUsedComponentId(
         [FromQuery] GetProductTypeByUsedComponentIdRequest request,
@@ -188,7 +191,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     [HttpGet("getWarehouseByUsedComponentId")]
     [ProducesResponseType(200, Type = typeof(WarehouseResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetWarehouseByUsedComponentId(
         [FromQuery] GetWarehouseByUsedComponentIdRequest request,
@@ -197,5 +200,30 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     {
         var warehouseDomain = await useCase.Execute(new GetWarehouseByUsedComponentIdQuery(request.UsedComponentId), cancellationToken);
         return Ok(mapper.Map<WarehouseResponse>(warehouseDomain));
+    }
+    
+    /// <summary>
+    /// Добавить используемый компонент c учётом общего кол-ва на складе
+    /// </summary>
+    /// <param name="request">Данные о компоненте</param>
+    /// <param name="useCase">Сценарий добавления компонента</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат выполнения</returns>
+    [HttpPost("addUsedComponent")]
+    [ProducesResponseType(201, Type = typeof(UsedComponentResponse))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> AddUsedComponent(
+        [FromBody] AddUsedComponentRequest request,
+        [FromServices] IAddUsedComponentUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var usedComponent = await useCase.Execute(new AddUsedComponentCommand(request.OrderId, request.ProductTypeId, request.WarehouseId, request.Quantity), cancellationToken);
+    
+        return CreatedAtAction(nameof(GetUsedComponentId),
+            new { usedComponentId = usedComponent.UsedComponentId },
+            mapper.Map<UsedComponentResponse>(usedComponent));
     }
 }

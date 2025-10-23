@@ -3,7 +3,7 @@ using Masterov.Domain.Masterov.Order.GetFinishedProductByOrderId;
 using Masterov.Domain.Masterov.Order.UpdateOrderStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 
-namespace Masterov.Domain.Masterov.Payment.Service;
+namespace Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
 
 public class OrderPaymentStatusService(
     IGetFinishedProductByOrderIdStorage getFinishedProductByOrderIdStorage,

@@ -4,7 +4,7 @@ using Masterov.Domain.Masterov.Payment.DeletePayment;
 using Masterov.Domain.Masterov.Payment.DeletePayment.Command;
 using Masterov.Domain.Masterov.Payment.GetOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
-using Masterov.Domain.Masterov.Payment.Service;
+using Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
 
 public class DeletePaymentUseCase(
     IValidator<DeletePaymentCommand> validator,

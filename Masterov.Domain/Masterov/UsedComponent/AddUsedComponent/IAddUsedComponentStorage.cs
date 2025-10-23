@@ -1,0 +1,8 @@
+﻿using Masterov.Domain.Models;
+
+namespace Masterov.Domain.Masterov.UsedComponent.AddUsedComponent;
+
+public interface IAddUsedComponentStorage
+{
+    Task<UsedComponentDomain> AddUsedComponent(Guid orderId, Guid productTypeId, Guid warehouseId, int quantity, CancellationToken cancellationToken);
+}

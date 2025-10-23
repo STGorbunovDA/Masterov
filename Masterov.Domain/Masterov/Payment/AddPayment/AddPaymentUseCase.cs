@@ -5,7 +5,7 @@ using Masterov.Domain.Masterov.Order.GetOrderById;
 using Masterov.Domain.Masterov.Payment.AddPayment;
 using Masterov.Domain.Masterov.Payment.AddPayment.Command;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
-using Masterov.Domain.Masterov.Payment.Service;
+using Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
 using Masterov.Domain.Models;
 
 public class AddPaymentUseCase(
