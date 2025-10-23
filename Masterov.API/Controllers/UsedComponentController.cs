@@ -7,6 +7,8 @@ using Masterov.API.Models.UsedComponent;
 using Masterov.API.Models.Warehouse;
 using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent.Command;
+using Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent;
+using Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent.Command;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId.Query;
@@ -225,5 +227,28 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         return CreatedAtAction(nameof(GetUsedComponentId),
             new { usedComponentId = usedComponent.UsedComponentId },
             mapper.Map<UsedComponentResponse>(usedComponent));
+    }
+
+    /// <summary>
+    /// Удаление используемый компонент по Id
+    /// </summary>
+    /// <param name="usedComponentId">Идентификатор используемого компонента</param>
+    /// <param name="request">Предикат возврат на склад</param>
+    /// <param name="useCase">Сценарий удаления заказчика</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <returns>Ответ с кодом 204, если заказчик был успешно удален</returns>
+    [HttpDelete("deleteUsedComponent/{usedComponentId:guid}")]
+    [ProducesResponseType(204, Type = typeof(bool))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> DeleteUsedComponent(
+        Guid usedComponentId,
+        [FromQuery] DeleteUsedComponentRequest request,
+        [FromServices] IDeleteUsedComponentUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        await useCase.Execute(new DeleteUsedComponentCommand(usedComponentId, request.ReturnWarehouse), cancellationToken);
+        return NoContent();
     }
 }

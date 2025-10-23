@@ -34,7 +34,7 @@ public class AddUsedComponentUseCase(
         if (warehouse is null)
             throw new NotFoundByIdException(command.WarehouseId, "Склад");
 
-        await warehouseService.UpdateQuantityWarehouseAsync(command.WarehouseId, command.Quantity, cancellationToken);
+        await warehouseService.RemoveQuantityWarehouse(command.WarehouseId, command.Quantity, cancellationToken);
 
         return await usedComponentStorage.AddUsedComponent(
             command.OrderId,

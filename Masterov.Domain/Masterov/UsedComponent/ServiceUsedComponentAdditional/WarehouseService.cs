@@ -7,7 +7,7 @@ namespace Masterov.Domain.Masterov.UsedComponent.ServiceUsedComponentAdditional;
 
 public class WarehouseService (IUpdateQuantityWarehouseByIdStorage updateQuantityWarehouseByIdStorage, IGetWarehouseByIdStorage warehouseByIdStorage) : IWarehouseService
 {
-    public async Task<WarehouseDomain> UpdateQuantityWarehouseAsync(Guid warehouseId, int quantityToUse, CancellationToken cancellationToken)
+    public async Task<WarehouseDomain> RemoveQuantityWarehouse(Guid warehouseId, int quantityToUse, CancellationToken cancellationToken)
     {
         if (quantityToUse <= 0)
             throw new ArgumentException("Количество должно быть положительным", nameof(quantityToUse));
@@ -20,6 +20,24 @@ public class WarehouseService (IUpdateQuantityWarehouseByIdStorage updateQuantit
             throw new InsufficientQuantityException(warehouse.Quantity, quantityToUse);
     
         var newQuantity = warehouse.Quantity - quantityToUse;
+        var updated = await updateQuantityWarehouseByIdStorage.UpdateQuantityWarehouseById(warehouseId, newQuantity, cancellationToken);
+    
+        if (updated is null)
+            throw new Conflict409Exception("Не удалось обновить количество на складе");
+
+        return updated;
+    }
+
+    public async Task<WarehouseDomain> ReturnQuantityWarehouse(Guid warehouseId, int quantityToUse, CancellationToken cancellationToken)
+    {
+        if (quantityToUse <= 0)
+            throw new ArgumentException("Количество должно быть положительным", nameof(quantityToUse));
+        
+        var warehouse = await warehouseByIdStorage.GetWarehouseById(warehouseId, cancellationToken);
+        if (warehouse is null)
+            throw new NotFoundByIdException(warehouseId, "Склад");
+
+        var newQuantity = warehouse.Quantity + quantityToUse;
         var updated = await updateQuantityWarehouseByIdStorage.UpdateQuantityWarehouseById(warehouseId, newQuantity, cancellationToken);
     
         if (updated is null)

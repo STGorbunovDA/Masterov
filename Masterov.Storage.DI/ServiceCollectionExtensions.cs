@@ -77,6 +77,7 @@ using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
 using Masterov.Domain.Masterov.Supply.UpdateSupply;
 using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent;
+using Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetProductTypeByUsedComponentId;
@@ -261,6 +262,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetUsedComponentsByCreatedAtStorage, GetUsedComponentsByCreatedAtStorage>()
             .AddScoped<IGetProductTypeByUsedComponentIdStorage, GetProductTypeByUsedComponentIdStorage>()
             .AddScoped<IUpdateQuantityWarehouseByIdStorage, UpdateQuantityWarehouseByIdStorage>()
+            .AddScoped<IDeleteUsedComponentStorage, DeleteUsedComponentStorage>()
+            .AddScoped<IDeleteUsedComponentStorage, DeleteUsedComponentStorage>()
             .AddScoped<IAddUsedComponentStorage, AddUsedComponentStorage>()
             .AddScoped<IGetWarehouseByUsedComponentIdStorage, GetWarehouseByUsedComponentIdStorage>()
             .AddScoped<IGetUsedComponentsByUpdatedAtStorage, GetUsedComponentsByUpdatedAtStorage>()

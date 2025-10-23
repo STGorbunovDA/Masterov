@@ -4,5 +4,6 @@ namespace Masterov.Domain.Masterov.UsedComponent.ServiceUsedComponentAdditional;
 
 public interface IWarehouseService
 {
-    Task<WarehouseDomain> UpdateQuantityWarehouseAsync(Guid warehouseId, int newQuantity, CancellationToken cancellationToken);
+    Task<WarehouseDomain> RemoveQuantityWarehouse(Guid warehouseId, int quantityToUse, CancellationToken cancellationToken);
+    Task<WarehouseDomain> ReturnQuantityWarehouse(Guid warehouseId, int quantityToUse, CancellationToken cancellationToken);
 }
