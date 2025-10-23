@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models.Order;
+using Masterov.API.Models.ProductType;
 using Masterov.API.Models.UsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId.Query;
+using Masterov.Domain.Masterov.UsedComponent.GetProductTypeByUsedComponentId;
+using Masterov.Domain.Masterov.UsedComponent.GetProductTypeByUsedComponentId.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
@@ -99,6 +102,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetUsedComponentsByCreatedAt(
         [FromQuery] GetUsedComponentsByCreatedAtRequest request,
         [FromServices] IGetUsedComponentsByCreatedAtUseCase useCase,
@@ -119,6 +123,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetUsedComponentsByUpdatedAt(
         [FromQuery] GetUsedComponentsByUpdatedAtRequest request,
         [FromServices] IGetUsedComponentsByUpdatedAtUseCase useCase,
@@ -134,7 +139,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     /// <param name="request">Идентификатор используемого компонента</param>
     /// <param name="getOrderByUsedComponentIdUseCase"></param>
     /// <param name="cancellationToken"></param>
-    /// <returns>Результат получения ордера</returns>
+    /// <returns>Результат получения заказа</returns>
     [HttpGet("getOrderByUsedComponentId")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -147,5 +152,26 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     {
         var usedComponent = await getOrderByUsedComponentIdUseCase.Execute(new GetOrderByUsedComponentIdQuery(request.UsedComponentId), cancellationToken);
         return Ok(mapper.Map<OrderResponse>(usedComponent));
+    }
+    
+    /// <summary>
+    /// Получить тип продукта по идентификатору используемого компонента
+    /// </summary>
+    /// <param name="request">Идентификатор используемого компонента</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о типе продука</returns>
+    [HttpGet("getProductTypeByUsedComponentId")]
+    [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetProductTypeByUsedComponentId(
+        [FromQuery] GetProductTypeByUsedComponentIdRequest request,
+        [FromServices] IGetProductTypeByUsedComponentIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var productTypeDomain = await useCase.Execute(new GetProductTypeByUsedComponentIdQuery(request.UsedComponentId), cancellationToken);
+        return Ok(mapper.Map<ProductTypeResponse>(productTypeDomain));
     }
 }

@@ -177,8 +177,8 @@ public class SupplyController(IMapper mapper) : ControllerBase
         [FromServices] IGetProductTypeBySupplyIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supplier = await useCase.Execute(new GetProductTypeBySupplyIdQuery(request.SupplyId), cancellationToken);
-        return Ok(mapper.Map<ProductTypeResponse>(supplier));
+        var productTypeDomain = await useCase.Execute(new GetProductTypeBySupplyIdQuery(request.SupplyId), cancellationToken);
+        return Ok(mapper.Map<ProductTypeResponse>(productTypeDomain));
     }
     
     /// <summary>
@@ -198,8 +198,8 @@ public class SupplyController(IMapper mapper) : ControllerBase
         [FromServices] IGetWarehouseBySupplyIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supplier = await useCase.Execute(new GetWarehouseBySupplyIdQuery(request.SupplyId), cancellationToken);
-        return Ok(mapper.Map<WarehouseNewResponse>(supplier));
+        var warehouseDomain = await useCase.Execute(new GetWarehouseBySupplyIdQuery(request.SupplyId), cancellationToken);
+        return Ok(mapper.Map<WarehouseNewResponse>(warehouseDomain));
     }
     
     /// <summary>
