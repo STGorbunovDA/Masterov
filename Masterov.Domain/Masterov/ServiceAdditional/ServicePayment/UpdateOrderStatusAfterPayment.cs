@@ -3,13 +3,13 @@ using Masterov.Domain.Masterov.Order.GetFinishedProductByOrderId;
 using Masterov.Domain.Masterov.Order.UpdateOrderStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 
-namespace Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
+namespace Masterov.Domain.Masterov.ServiceAdditional.ServicePayment;
 
-public class OrderPaymentStatusService(
+public class UpdateOrderStatusAfterPayment(
     IGetFinishedProductByOrderIdStorage getFinishedProductByOrderIdStorage,
     IGetPaymentsByOrderIdStorage getPaymentsByOrderIdStorage,
     IUpdateOrderStatusStorage updateOrderStatusStorage)
-    : IOrderPaymentStatusService
+    : IUpdateOrderStatusAfterPayment
 {
     public async Task UpdateOrderStatus(Guid orderId, CancellationToken cancellationToken)
     {

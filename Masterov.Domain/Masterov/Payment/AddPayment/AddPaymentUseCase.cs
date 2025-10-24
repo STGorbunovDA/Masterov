@@ -5,7 +5,7 @@ using Masterov.Domain.Masterov.Order.GetOrderById;
 using Masterov.Domain.Masterov.Payment.AddPayment;
 using Masterov.Domain.Masterov.Payment.AddPayment.Command;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
-using Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
+using Masterov.Domain.Masterov.ServiceAdditional.ServicePayment;
 using Masterov.Domain.Models;
 
 public class AddPaymentUseCase(
@@ -14,7 +14,7 @@ public class AddPaymentUseCase(
     IGetOrderByIdStorage getGetOrderByIdStorage,
     IGetCustomerByIdStorage getCustomerByIdStorage,
     IGetPaymentByIdStorage getPaymentByIdStorage,
-    IOrderPaymentStatusService orderPaymentStatusService)
+    IUpdateOrderStatusAfterPayment updateOrderStatusAfterPayment)
     : IAddPaymentUseCase
 {
     public async Task<PaymentDomain?> Execute(AddPaymentCommand addPaymentCommand, CancellationToken cancellationToken)
@@ -34,7 +34,7 @@ public class AddPaymentUseCase(
             customer.CustomerId,
             cancellationToken);
 
-        await orderPaymentStatusService.UpdateOrderStatus(order.OrderId, cancellationToken);
+        await updateOrderStatusAfterPayment.UpdateOrderStatus(order.OrderId, cancellationToken);
 
         return await getPaymentByIdStorage.GetPaymentById(payment.PaymentId, cancellationToken);
     }

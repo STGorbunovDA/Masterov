@@ -2,8 +2,8 @@
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.Order.GetOrderById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
+using Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent.Command;
-using Masterov.Domain.Masterov.UsedComponent.ServiceUsedComponentAdditional;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Models;
 
@@ -15,7 +15,7 @@ public class AddUsedComponentUseCase(
     IGetOrderByIdStorage orderStorage,
     IGetProductTypeByIdStorage productTypeStorage,
     IGetWarehouseByIdStorage warehouseStorage,
-    IWarehouseService warehouseService)
+    IUpdateWarehouseComponentQuantity updateWarehouseComponentQuantity)
     : IAddUsedComponentUseCase
 {
     public async Task<UsedComponentDomain> Execute(AddUsedComponentCommand command, CancellationToken cancellationToken)
@@ -34,7 +34,7 @@ public class AddUsedComponentUseCase(
         if (warehouse is null)
             throw new NotFoundByIdException(command.WarehouseId, "Склад");
 
-        await warehouseService.RemoveQuantityWarehouse(command.WarehouseId, command.Quantity, cancellationToken);
+        await updateWarehouseComponentQuantity.RemoveQuantityWarehouse(command.WarehouseId, command.Quantity, cancellationToken);
 
         return await usedComponentStorage.AddUsedComponent(
             command.OrderId,

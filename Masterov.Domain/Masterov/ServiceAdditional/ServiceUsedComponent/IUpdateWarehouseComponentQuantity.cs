@@ -1,8 +1,8 @@
 ﻿using Masterov.Domain.Models;
 
-namespace Masterov.Domain.Masterov.UsedComponent.ServiceUsedComponentAdditional;
+namespace Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 
-public interface IWarehouseService
+public interface IUpdateWarehouseComponentQuantity
 {
     Task<WarehouseDomain> RemoveQuantityWarehouse(Guid warehouseId, int quantityToUse, CancellationToken cancellationToken);
     Task<WarehouseDomain> ReturnQuantityWarehouse(Guid warehouseId, int quantityToUse, CancellationToken cancellationToken);

@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
+using Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent.Command;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
-using Masterov.Domain.Masterov.UsedComponent.ServiceUsedComponentAdditional;
 
 namespace Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent;
 
@@ -10,7 +10,7 @@ public class DeleteUsedComponentUseCase(
     IValidator<DeleteUsedComponentCommand> validator,
     IDeleteUsedComponentStorage storage,
     IGetUsedComponentByIdStorage getUsedComponentByIdStorage,
-    IWarehouseService warehouseService) : IDeleteUsedComponentUseCase
+    IUpdateWarehouseComponentQuantity updateWarehouseComponentQuantity) : IDeleteUsedComponentUseCase
 {
     public async Task<bool> Execute(DeleteUsedComponentCommand deleteUsedComponentCommand,
         CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ public class DeleteUsedComponentUseCase(
 
         if (deleteUsedComponentCommand.DeleteWarehouse)
         {
-          await warehouseService.ReturnQuantityWarehouse(usedComponentExists.Warehouse.WarehouseId,
+          await updateWarehouseComponentQuantity.ReturnQuantityWarehouse(usedComponentExists.Warehouse.WarehouseId,
                 usedComponentExists.Quantity, cancellationToken);
         }
 

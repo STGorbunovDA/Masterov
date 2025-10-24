@@ -2,8 +2,8 @@
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.Order.GetOrderById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
+using Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
-using Masterov.Domain.Masterov.UsedComponent.ServiceUsedComponentAdditional;
 using Masterov.Domain.Masterov.UsedComponent.UpdateUsedComponent.Command;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Models;
@@ -17,7 +17,7 @@ public class UpdateUsedComponentUseCase(
     IGetOrderByIdStorage orderStorage,
     IGetProductTypeByIdStorage productTypeStorage,
     IGetWarehouseByIdStorage warehouseStorage,
-    IWarehouseService warehouseService) : IUpdateUsedComponentUseCase
+    IUpdateWarehouseComponentQuantity updateWarehouseComponentQuantity) : IUpdateUsedComponentUseCase
 {
     public async Task<UsedComponentDomain> Execute(UpdateUsedComponentCommand updateUsedComponentCommand,
         CancellationToken cancellationToken)
@@ -41,12 +41,12 @@ public class UpdateUsedComponentUseCase(
             throw new NotFoundByIdException(updateUsedComponentCommand.WarehouseId, "Склад");
 
         if (usedComponentExists.Quantity > updateUsedComponentCommand.Quantity)
-           await warehouseService.ReturnQuantityWarehouse(
+           await updateWarehouseComponentQuantity.ReturnQuantityWarehouse(
                 updateUsedComponentCommand.WarehouseId,
                 usedComponentExists.Quantity - updateUsedComponentCommand.Quantity,
                 cancellationToken);
         else if(usedComponentExists.Quantity < updateUsedComponentCommand.Quantity)
-            await warehouseService.RemoveQuantityWarehouse(
+            await updateWarehouseComponentQuantity.RemoveQuantityWarehouse(
                 updateUsedComponentCommand.WarehouseId,
                 updateUsedComponentCommand.Quantity - usedComponentExists.Quantity,
                 cancellationToken);

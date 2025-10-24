@@ -49,7 +49,6 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByCreatedAt;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
-using Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.ProductType.AddProductType;
 using Masterov.Domain.Masterov.ProductType.DeleteProductType;
@@ -57,6 +56,8 @@ using Masterov.Domain.Masterov.ProductType.GetProductsType;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
 using Masterov.Domain.Masterov.ProductType.UpdateProductType;
+using Masterov.Domain.Masterov.ServiceAdditional.ServicePayment;
+using Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
 using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
 using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
@@ -87,7 +88,6 @@ using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetWarehouseByUsedComponentId;
-using Masterov.Domain.Masterov.UsedComponent.ServiceUsedComponentAdditional;
 using Masterov.Domain.Masterov.UsedComponent.UpdateUsedComponent;
 using Masterov.Domain.Masterov.UserFolder.ChangeAccountLoginDateUserById;
 using Masterov.Domain.Masterov.UserFolder.ChangeCustomerFromUser;
@@ -264,8 +264,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetUsedComponentByIdUseCase, GetUsedComponentByIdUseCase>();
 
         services
-            .AddScoped<IOrderPaymentStatusService, OrderPaymentStatusService>()
-            .AddScoped<IWarehouseService, WarehouseService>();
+            .AddScoped<IUpdateOrderStatusAfterPayment, UpdateOrderStatusAfterPayment>()
+            .AddScoped<IUpdateWarehouseComponentQuantity, UpdateWarehouseComponentQuantity>();
             
         return services;
     }

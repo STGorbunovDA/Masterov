@@ -3,9 +3,9 @@ using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Order.GetOrderById;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
-using Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.Payment.UpdatePayment.Command;
+using Masterov.Domain.Masterov.ServiceAdditional.ServicePayment;
 using Masterov.Domain.Models;
 
 public class UpdatePaymentUseCase(
@@ -14,7 +14,7 @@ public class UpdatePaymentUseCase(
     IGetPaymentByIdStorage getPaymentByIdStorage,
     IGetOrderByIdStorage getGetOrderByIdStorage,
     IGetCustomerByIdStorage getCustomerByIdStorage,
-    IOrderPaymentStatusService orderPaymentStatusService)
+    IUpdateOrderStatusAfterPayment updateOrderStatusAfterPayment)
     : IUpdatePaymentUseCase
 {
     public async Task<PaymentDomain?> Execute(UpdatePaymentCommand updatePaymentCommand, CancellationToken cancellationToken)
@@ -40,7 +40,7 @@ public class UpdatePaymentUseCase(
             cancellationToken);
 
         // 🔄 после обновления платежа пересчитываем статус заказа
-        await orderPaymentStatusService.UpdateOrderStatus(order.OrderId, cancellationToken);
+        await updateOrderStatusAfterPayment.UpdateOrderStatus(order.OrderId, cancellationToken);
 
         return await getPaymentByIdStorage.GetPaymentById(paymentUpdate.PaymentId, cancellationToken);
     }

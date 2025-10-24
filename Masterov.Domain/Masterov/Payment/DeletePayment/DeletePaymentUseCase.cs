@@ -4,14 +4,14 @@ using Masterov.Domain.Masterov.Payment.DeletePayment;
 using Masterov.Domain.Masterov.Payment.DeletePayment.Command;
 using Masterov.Domain.Masterov.Payment.GetOrderByPaymentId;
 using Masterov.Domain.Masterov.Payment.GetPaymentById;
-using Masterov.Domain.Masterov.Payment.ServicePaymentAdditional;
+using Masterov.Domain.Masterov.ServiceAdditional.ServicePayment;
 
 public class DeletePaymentUseCase(
     IValidator<DeletePaymentCommand> validator,
     IDeletePaymentStorage storage,
     IGetPaymentByIdStorage getPaymentByIdStorage,
     IGetOrderByPaymentIdStorage getOrderByPaymentIdStorage,
-    IOrderPaymentStatusService orderPaymentStatusService)
+    IUpdateOrderStatusAfterPayment updateOrderStatusAfterPayment)
     : IDeletePaymentUseCase
 {
     public async Task<bool> Execute(DeletePaymentCommand deletePaymentCommand, CancellationToken cancellationToken)
@@ -27,7 +27,7 @@ public class DeletePaymentUseCase(
         var result = await storage.DeletePayment(deletePaymentCommand.PaymentId, cancellationToken);
 
         // 🔄 после удаления платежа обновляем статус заказа
-        await orderPaymentStatusService.UpdateOrderStatus(order.OrderId, cancellationToken);
+        await updateOrderStatusAfterPayment.UpdateOrderStatus(order.OrderId, cancellationToken);
 
         return result;
     }

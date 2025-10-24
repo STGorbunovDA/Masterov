@@ -3,9 +3,9 @@ using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById;
 using Masterov.Domain.Models;
 
-namespace Masterov.Domain.Masterov.UsedComponent.ServiceUsedComponentAdditional;
+namespace Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 
-public class WarehouseService (IUpdateQuantityWarehouseByIdStorage updateQuantityWarehouseByIdStorage, IGetWarehouseByIdStorage warehouseByIdStorage) : IWarehouseService
+public class UpdateWarehouseComponentQuantity (IUpdateQuantityWarehouseByIdStorage updateQuantityWarehouseByIdStorage, IGetWarehouseByIdStorage warehouseByIdStorage) : IUpdateWarehouseComponentQuantity
 {
     public async Task<WarehouseDomain> RemoveQuantityWarehouse(Guid warehouseId, int quantityToUse, CancellationToken cancellationToken)
     {
