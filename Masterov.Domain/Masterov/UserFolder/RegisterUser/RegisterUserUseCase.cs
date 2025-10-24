@@ -12,10 +12,7 @@ namespace Masterov.Domain.Masterov.UserFolder.RegisterUser;
 public class RegisterUserUseCase(
     IValidator<RegisterUserCommand> validator,
     IRegisterUserStorage registerUserStorage,
-    IGetUserByLoginStorage getUserByLoginStorage,
-    IGetCustomerByEmailStorage getCustomerByEmailStorage,
-    IGetCustomerByPhoneStorage getCustomerByPhoneStorage,
-    IUpdateCustomerStorage updateCustomerStorage) : IRegisterUserUseCase
+    IGetUserByLoginStorage getUserByLoginStorage) : IRegisterUserUseCase
 {
     public async Task<UserDomain> Execute(RegisterUserCommand registerUserCommand, CancellationToken cancellationToken)
     {
@@ -26,22 +23,7 @@ public class RegisterUserUseCase(
         if (userExists is not null)
             throw new UserExistsException();
 
-        var customerDomain =
-            await getCustomerByEmailStorage.GetCustomerByEmail(registerUserCommand.Email, cancellationToken);
-
-        if (customerDomain is null)
-        {
-            customerDomain =
-                await getCustomerByPhoneStorage.GetCustomerByPhone(registerUserCommand.Phone, cancellationToken);
-
-            if (customerDomain is not null)
-            {
-                await updateCustomerStorage.UpdateCustomer(customerDomain.CustomerId, customerDomain.Name,
-                    registerUserCommand.Email, customerDomain.Phone, customerDomain.CreatedAt, cancellationToken);
-            }
-        }
-
         return await registerUserStorage.RegisterUser(registerUserCommand.Email, registerUserCommand.Password,
-            customerDomain?.CustomerId, cancellationToken);
+            registerUserCommand?.CustomerId, cancellationToken);
     }
 }

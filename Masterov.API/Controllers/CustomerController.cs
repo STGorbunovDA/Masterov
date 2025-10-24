@@ -210,13 +210,12 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [ProducesResponseType(201, Type = typeof(CustomerResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(409, Type = typeof(ProblemDetails))]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddCustomer(
         [FromBody] AddCustomerRequest request,
         [FromServices] IAddCustomerUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer = await useCase.Execute(new AddCustomerCommand(request.Name, request.Email, request.Phone), cancellationToken);
+        var customer = await useCase.Execute(new AddCustomerCommand(request.Name, request.Email, request.Phone, request.UserId), cancellationToken);
     
         return CreatedAtAction(nameof(GetCustomerById),
             new { customerId = customer.CustomerId },

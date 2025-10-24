@@ -71,7 +71,8 @@ internal class ApiProfile : Profile
             .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders)); // Автоматически применит маппинг ProductionOrder
 
         CreateMap<CustomerDomain, CustomerResponse>()
-            .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders)); // Автоматически применит маппинг ProductionOrder
+            .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders)) // Автоматически применит маппинг ProductionOrder
+            .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId)); // Автоматически применит маппинг ProductionOrder
         CreateMap<PaymentDomain, PaymentResponse>()
             .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer));
         

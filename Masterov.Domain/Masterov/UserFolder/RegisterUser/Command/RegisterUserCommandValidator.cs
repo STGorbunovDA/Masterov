@@ -29,5 +29,13 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
             .Matches(@"^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$")
             .WithErrorCode("InvalidPhone")
             .WithMessage("The phone number must contain from 7 to 10 digits.");
+        
+        When(c => c.CustomerId.HasValue, () =>
+        {
+            RuleFor(c => c.CustomerId)
+                .Must(id => id != Guid.Empty)
+                .WithErrorCode("InvalidUserId")
+                .WithMessage("The specified CustomerId cannot be an empty GUID.");
+        });
     }
 }

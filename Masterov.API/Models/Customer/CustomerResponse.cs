@@ -10,5 +10,6 @@ public class CustomerResponse
     public DateTime? UpdatedAt { get; set; }
     public string? Email { get; set; }
     public string? Phone { get; set; }
+    public Guid? UserId { get; set; }
     public OrderNoCustomerNoUsedComponentsRequest[] Orders { get; set; }
 }

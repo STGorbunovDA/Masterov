@@ -37,5 +37,13 @@ public class AddCustomerCommandValidator : AbstractValidator<AddCustomerCommand>
             .WithErrorCode("ContactRequired")
             .WithMessage("You must provide an email or phone number for communication.");
         
+        When(c => c.UserId.HasValue, () =>
+        {
+            RuleFor(c => c.UserId)
+                .Must(id => id != Guid.Empty)
+                .WithErrorCode("InvalidUserId")
+                .WithMessage("The specified UserId cannot be an empty GUID.");
+        });
+        
     }
 }

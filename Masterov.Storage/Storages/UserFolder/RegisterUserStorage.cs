@@ -16,9 +16,20 @@ internal class RegisterUserStorage (MasterovDbContext dbContext, IMapper mapper)
             Login = login,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
             Role = UserRole.RegularUser,
-            CreatedAt = DateTime.Now,
-            CustomerId = customerId
+            CreatedAt = DateTime.Now
         };
+        
+        if (customerId.HasValue)
+        {
+            var customer = await dbContext.Customers
+                .FirstOrDefaultAsync(u => u.CustomerId == customerId.Value, cancellationToken);
+
+            if (customer is not null)
+            {
+                customer.UserId = user.UserId;
+                user.CustomerId = customerId;
+            }
+        }
         
         await dbContext.Users.AddAsync(user, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);

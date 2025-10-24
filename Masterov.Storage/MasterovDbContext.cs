@@ -28,5 +28,12 @@ public class MasterovDbContext : DbContext
             .Property(w => w.WarehouseId)
             .HasColumnType("char(36)")
             .UseCollation("ascii_general_ci");
+        
+        // Customer имеет UserId как внешний ключ, который может быть null.
+        modelBuilder.Entity<Customer>()
+            .HasOne(c => c.User)
+            .WithOne(u => u.Customer)
+            .HasForeignKey<Customer>(c => c.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

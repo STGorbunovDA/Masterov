@@ -9,7 +9,7 @@ namespace Masterov.Storage.Storages.Masterov.Customer;
 
 internal class AddCustomerStorage(MasterovDbContext dbContext, IGuidFactory guidFactory, IMapper mapper) : IAddCustomerStorage
 {
-    public async Task<CustomerDomain> AddCustomer(string name, string? phone, string? email, 
+    public async Task<CustomerDomain> AddCustomer(string name, string? phone, string? email, Guid? userId, 
         CancellationToken cancellationToken)
     {
         var customerId = guidFactory.Create();
@@ -22,6 +22,18 @@ internal class AddCustomerStorage(MasterovDbContext dbContext, IGuidFactory guid
             Phone = phone,
             Email = email
         };
+
+        if (userId.HasValue)
+        {
+            var user = await dbContext.Users
+                .FirstOrDefaultAsync(u => u.UserId == userId.Value, cancellationToken);
+
+            if (user is not null)
+            {
+                customer.UserId = userId;
+                user.CustomerId = customerId;
+            }
+        }
 
         await dbContext.Customers.AddAsync(customer, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);

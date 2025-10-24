@@ -31,7 +31,7 @@ public class AuthController(IMapper mapper, IJwtService jwtService) : Controller
         [FromServices] IRegisterUserUseCase userUseCase,
         CancellationToken cancellationToken)
     {
-        var user = await userUseCase.Execute(new RegisterUserCommand(request.Email, request.Password, request.Phone),
+        var user = await userUseCase.Execute(new RegisterUserCommand(request.Email, request.Password, request.Phone, request.CustomerId),
             cancellationToken);
         return CreatedAtAction(nameof(RegisterUser), mapper.Map<UserResponse>(user));
     }

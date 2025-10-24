@@ -24,4 +24,7 @@ public class Customer
     public DateTime? UpdatedAt  { get; set; }
 
     public ICollection<Order> Orders { get; set; } = new List<Order>();
+    
+    public Guid? UserId { get; set; }
+    public User? User { get; set; }
 }

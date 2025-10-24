@@ -4,6 +4,7 @@ using Masterov.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masterov.Storage.Migrations
 {
     [DbContext(typeof(MasterovDbContext))]
-    partial class MasterovDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251024071601_AddColumnInCustomerUserId")]
+    partial class AddColumnInCustomerUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

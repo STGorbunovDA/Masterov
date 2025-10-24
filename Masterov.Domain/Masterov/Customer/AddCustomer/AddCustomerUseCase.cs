@@ -35,6 +35,6 @@ public class AddCustomerUseCase(
         }
 
         return await addCustomerStorage.AddCustomer(addCustomerCommand.Name,
-            addCustomerCommand?.Phone, addCustomerCommand?.Email, cancellationToken);
+            addCustomerCommand?.Phone, addCustomerCommand?.Email, addCustomerCommand?.UserId, cancellationToken);
     }
 }
