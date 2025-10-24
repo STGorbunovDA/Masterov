@@ -26,7 +26,7 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Типы компонентов</returns>
     [HttpGet("getComponentTypes")]
-    [ProducesResponseType(200, Type = typeof(ComponentTypeResponse[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
     [ProducesResponseType(410)]
     public async Task<IActionResult> GetComponentTypes(
         [FromServices] IGetComponentTypesUseCase useCase,
