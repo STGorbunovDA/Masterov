@@ -1,4 +1,10 @@
 ﻿using System.Reflection;
+using Masterov.Domain.Masterov.ComponentType.AddComponentType;
+using Masterov.Domain.Masterov.ComponentType.DeleteComponentType;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
+using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
 using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
@@ -50,12 +56,6 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
-using Masterov.Domain.Masterov.ProductType.AddProductType;
-using Masterov.Domain.Masterov.ProductType.DeleteProductType;
-using Masterov.Domain.Masterov.ProductType.GetProductsType;
-using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
-using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
-using Masterov.Domain.Masterov.ProductType.UpdateProductType;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
 using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
 using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
@@ -110,11 +110,11 @@ using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
 using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Masterov.Storage.Extension;
+using Masterov.Storage.Storages.Masterov.ComponentType;
 using Masterov.Storage.Storages.Masterov.Customer;
 using Masterov.Storage.Storages.Masterov.FinishedProduct;
 using Masterov.Storage.Storages.Masterov.Order;
 using Masterov.Storage.Storages.Masterov.Payment;
-using Masterov.Storage.Storages.Masterov.ProductType;
 using Masterov.Storage.Storages.Masterov.Supplier;
 using Masterov.Storage.Storages.Masterov.Supply;
 using Masterov.Storage.Storages.Masterov.UsedComponent;
@@ -167,12 +167,12 @@ public static class ServiceCollectionExtensions
         
         // ProductType
         services
-            .AddScoped<IUpdateProductTypeStorage, UpdateProductTypeStorage>()
-            .AddScoped<IDeleteProductTypeStorage, DeleteProductTypeStorage>()
-            .AddScoped<IAddProductTypeStorage, AddProductTypeStorage>()
-            .AddScoped<IGetProductTypeByNameStorage, GetProductTypeByNameStorage>()
-            .AddScoped<IGetProductsTypeStorage, GetProductsTypeStorage>()
-            .AddScoped<IGetProductTypeByIdStorage, GetProductTypeByIdStorage>();
+            .AddScoped<IUpdateProductTypeStorage, UpdateComponentTypeStorage>()
+            .AddScoped<IDeleteComponentTypeStorage, DeleteComponentTypeStorage>()
+            .AddScoped<IAddComponentTypeStorage, AddComponentTypeStorage>()
+            .AddScoped<IGetComponentTypeByNameStorage, GetComponentTypeByNameStorage>()
+            .AddScoped<IGetProductsTypeStorage, GetComponentTypeStorage>()
+            .AddScoped<IGetComponentTypeByIdStorage, GetComponentTypeByIdStorage>();
 
         // User
         services

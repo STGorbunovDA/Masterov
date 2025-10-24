@@ -9,7 +9,7 @@ namespace Masterov.Storage.Storages.Masterov.Supply;
 
 internal class GetProductTypeBySupplyIdStorage(MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetProductTypeBySupplyIdStorage
 {
-    public async Task<ProductTypeDomain?> GetProductTypeBySupplyId(Guid supplyId, CancellationToken cancellationToken) =>
+    public async Task<ComponentTypeDomain?> GetProductTypeBySupplyId(Guid supplyId, CancellationToken cancellationToken) =>
         await memoryCache.GetOrCreateAsync(
             nameof(GetProductTypeBySupplyId),
             async entry =>
@@ -19,8 +19,8 @@ internal class GetProductTypeBySupplyIdStorage(MasterovDbContext dbContext, IMem
                 return await dbContext.Supplies
                     .AsNoTracking() 
                     .Where(o => o.SupplyId == supplyId)
-                        .Select(o => o.ProductType)
-                    .ProjectTo<ProductTypeDomain>(mapper.ConfigurationProvider)
+                        .Select(o => o.ComponentType)
+                    .ProjectTo<ComponentTypeDomain>(mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(cancellationToken);
             });
 }

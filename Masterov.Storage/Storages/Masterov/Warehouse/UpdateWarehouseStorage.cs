@@ -24,7 +24,7 @@ internal class UpdateWarehouseStorage(MasterovDbContext dbContext, IMapper mappe
         
         var warehouse = await dbContext.Warehouses
             .AsNoTracking()
-                .Include(c => c.ProductType)
+                .Include(c => c.ComponentType)
             .Where(f => f.WarehouseId == warehouseId)
             .FirstOrDefaultAsync( cancellationToken);
 

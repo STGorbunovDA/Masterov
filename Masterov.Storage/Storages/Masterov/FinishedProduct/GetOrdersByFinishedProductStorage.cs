@@ -41,9 +41,9 @@ public class GetOrdersByFinishedProductStorage (MasterovDbContext dbContext, IMa
 
         var orders = await query
             .AsNoTracking() 
-                .Include(o => o.Components)
-                    .ThenInclude(c => c.ProductType)
-                .Include(o => o.Components)
+                .Include(o => o.UsedComponents)
+                    .ThenInclude(c => c.ComponentType)
+                .Include(o => o.UsedComponents)
                     .ThenInclude(c => c.Warehouse)
                 .Include(o => o.Customer)
                 .Include(o => o.Payments)

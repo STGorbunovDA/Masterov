@@ -22,7 +22,7 @@ internal class UpdateQuantityWarehouseByIdStorage(MasterovDbContext dbContext, I
         
         var warehouse = await dbContext.Warehouses
             .AsNoTracking()
-                .Include(c => c.ProductType)
+                .Include(c => c.ComponentType)
             .Where(f => f.WarehouseId == warehouseId)
             .FirstOrDefaultAsync( cancellationToken);
 

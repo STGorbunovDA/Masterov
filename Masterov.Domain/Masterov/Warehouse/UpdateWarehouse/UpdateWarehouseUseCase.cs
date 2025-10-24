@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
-using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse.Command;
 using Masterov.Domain.Models;
@@ -10,7 +10,7 @@ namespace Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 public class UpdateWarehouseUseCase(
     IValidator<UpdateWarehouseCommand> validator,
     IUpdateWarehouseStorage updateSupplyStorage,
-    IGetProductTypeByIdStorage getProductTypeByIdStorage,
+    IGetComponentTypeByIdStorage getComponentTypeByIdStorage,
     IGetWarehouseByIdStorage getWarehouseByIdStorage) : IUpdateWarehouseUseCase
 {
     public async Task<WarehouseDomain> Execute(UpdateWarehouseCommand updateWarehouseCommand,
@@ -19,7 +19,7 @@ public class UpdateWarehouseUseCase(
         await validator.ValidateAndThrowAsync(updateWarehouseCommand, cancellationToken);
 
         var productTypeExists =
-            await getProductTypeByIdStorage.GetProductTypeById(updateWarehouseCommand.ProductTypeId, cancellationToken);
+            await getComponentTypeByIdStorage.GetComponentTypeById(updateWarehouseCommand.ProductTypeId, cancellationToken);
 
         if (productTypeExists is null)
             throw new NotFoundByIdException(updateWarehouseCommand.ProductTypeId, "Тип изделия");

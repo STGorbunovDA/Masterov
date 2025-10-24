@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
 using Masterov.Domain.Masterov.Order.GetOrderById;
-using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
 using Masterov.Domain.Masterov.UsedComponent.UpdateUsedComponent.Command;
@@ -15,7 +15,7 @@ public class UpdateUsedComponentUseCase(
     IUpdateUsedComponentStorage storage,
     IGetUsedComponentByIdStorage usedComponentByIdStorage,
     IGetOrderByIdStorage orderStorage,
-    IGetProductTypeByIdStorage productTypeStorage,
+    IGetComponentTypeByIdStorage componentTypeStorage,
     IGetWarehouseByIdStorage warehouseStorage,
     IUpdateWarehouseComponentQuantity updateWarehouseComponentQuantity) : IUpdateUsedComponentUseCase
 {
@@ -32,7 +32,7 @@ public class UpdateUsedComponentUseCase(
         if (order is null)
             throw new NotFoundByIdException(updateUsedComponentCommand.OrderId, "Заказ");
 
-        var productType = await productTypeStorage.GetProductTypeById(updateUsedComponentCommand.ProductTypeId, cancellationToken);
+        var productType = await componentTypeStorage.GetComponentTypeById(updateUsedComponentCommand.ProductTypeId, cancellationToken);
         if (productType is null)
             throw new NotFoundByIdException(updateUsedComponentCommand.ProductTypeId, "Тип изделия");
 

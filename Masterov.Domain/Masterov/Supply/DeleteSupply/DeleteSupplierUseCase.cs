@@ -22,7 +22,7 @@ public class DeleteSupplyUseCase(IValidator<DeleteSupplyCommand> validator,
         var result = await storage.DeleteSupply(deleteSupplyCommand.SupplyId, cancellationToken);
         
         var warehouse = await updateWarehouseStorage.UpdateWarehouse(supplyExists.Warehouse.WarehouseId,
-            supplyExists.Warehouse.ProductType.ProductTypeId, supplyExists.Warehouse.Name,
+            supplyExists.Warehouse.ComponentType.ComponentTypeId, supplyExists.Warehouse.Name,
             supplyExists.Warehouse.Quantity - supplyExists.Quantity,
             supplyExists.Warehouse.Price - supplyExists.PriceSupply, cancellationToken);
         

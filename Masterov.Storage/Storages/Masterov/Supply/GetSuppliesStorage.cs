@@ -18,9 +18,9 @@ internal class GetSuppliesStorage (MasterovDbContext dbContext, IMemoryCache mem
                 var supplies = await dbContext.Supplies
                     .AsNoTracking()
                         .Include(c => c.Supplier)
-                        .Include(c => c.ProductType)
+                        .Include(c => c.ComponentType)
                         .Include(o => o.Warehouse) 
-                            .ThenInclude(w => w.ProductType)
+                            .ThenInclude(w => w.ComponentType)
                     .ToArrayAsync(cancellationToken);
 
                 return mapper.Map<SupplyDomain[]>(supplies); 

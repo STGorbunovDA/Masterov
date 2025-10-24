@@ -3,7 +3,7 @@
 public class UsedComponentDomain
 {
     public Guid UsedComponentId { get; set; }
-    public ProductTypeDomain ProductType { get; set; }
+    public ComponentTypeDomain ComponentType { get; set; }
     public WarehouseDomain Warehouse { get; set; }
     public Guid OrderId { get; set; }
     public int Quantity { get; set; }

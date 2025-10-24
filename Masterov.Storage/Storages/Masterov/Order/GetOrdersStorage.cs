@@ -13,9 +13,9 @@ internal class GetOrdersStorage(MasterovDbContext dbContext, IMapper mapper) : I
             .AsNoTracking()
             .Include(o => o.FinishedProduct)
             .Include(o => o.Customer)
-            .Include(o => o.Components)
-                .ThenInclude(c => c.ProductType)
-            .Include(o => o.Components)
+            .Include(o => o.UsedComponents)
+                .ThenInclude(c => c.ComponentType)
+            .Include(o => o.UsedComponents)
                 .ThenInclude(c => c.Warehouse)
             .Include(o => o.Payments)
             .ToListAsync(cancellationToken);

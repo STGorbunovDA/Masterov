@@ -18,10 +18,10 @@ internal class GetCustomerByNameStorage(MasterovDbContext dbContext, IMapper map
                     .ThenInclude(o => o.Payments)
                     .ThenInclude(p => p.Customer)
                 .Include(c => c.Orders)
-                    .ThenInclude(o => o.Components)
-                    .ThenInclude(pc => pc.ProductType)
+                    .ThenInclude(o => o.UsedComponents)
+                    .ThenInclude(pc => pc.ComponentType)
                 .Include(c => c.Orders)
-                    .ThenInclude(o => o.Components)
+                    .ThenInclude(o => o.UsedComponents)
                     .ThenInclude(pc => pc.Warehouse)
             .FirstOrDefaultAsync(cancellationToken);
             

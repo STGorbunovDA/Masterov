@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Masterov.API.Models.ProductType;
+using Masterov.API.Models.ComponentType;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.API.Models.Warehouse;
@@ -168,7 +168,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе продука</returns>
     [HttpGet("GetProductTypeBySupplyId")]
-    [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
+    [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -178,7 +178,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var productTypeDomain = await useCase.Execute(new GetProductTypeBySupplyIdQuery(request.SupplyId), cancellationToken);
-        return Ok(mapper.Map<ProductTypeResponse>(productTypeDomain));
+        return Ok(mapper.Map<ComponentTypeResponse>(productTypeDomain));
     }
     
     /// <summary>

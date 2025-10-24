@@ -8,7 +8,7 @@ namespace Masterov.Domain.Masterov.UsedComponent.GetProductTypeByUsedComponentId
 
 public class GetProductTypeByUsedComponentIdUseCase(IValidator<GetProductTypeByUsedComponentIdQuery> validator, IGetProductTypeByUsedComponentIdStorage storage, IGetUsedComponentByIdStorage getUsedComponentByIdStorage) : IGetProductTypeByUsedComponentIdUseCase
 {
-    public async Task<ProductTypeDomain?> Execute(GetProductTypeByUsedComponentIdQuery productTypeByUsedComponentIdQuery, CancellationToken cancellationToken)
+    public async Task<ComponentTypeDomain?> Execute(GetProductTypeByUsedComponentIdQuery productTypeByUsedComponentIdQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(productTypeByUsedComponentIdQuery, cancellationToken);
         

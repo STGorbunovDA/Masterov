@@ -1,4 +1,4 @@
-﻿using Masterov.API.Models.ProductType;
+﻿using Masterov.API.Models.ComponentType;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Warehouse;
 
@@ -8,7 +8,7 @@ public class SupplyNewResponse
 {
     public Guid SupplyId { get; set; }
     public SupplierRequestNoSupply Supplier { get; set; }
-    public ProductTypeResponse ProductType { get; set; }
+    public ComponentTypeResponse ComponentType { get; set; }
     public WarehouseNewResponse WarehouseNew { get; set; }
     public int Quantity { get; set; }
     public decimal PriceSupply { get; set; }

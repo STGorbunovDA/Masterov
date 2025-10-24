@@ -15,7 +15,7 @@ internal class GetUsedComponentsByQuantityStorage(MasterovDbContext dbContext, I
             .Where(p => p.Quantity == quantity)
                 .Include(c => c.Warehouse)
                     .ThenInclude(o => o.Supplies)
-                .Include(c => c.ProductType)
+                .Include(c => c.ComponentType)
             .ToArrayAsync(cancellationToken);
 
         return mapper.Map<IEnumerable<UsedComponentDomain>>(supplies);

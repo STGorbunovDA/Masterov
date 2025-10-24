@@ -16,9 +16,9 @@ public class GetSuppliesBySupplyDateStorage (MasterovDbContext dbContext, IMappe
         var payments = await dbContext.Supplies
             .AsNoTracking() 
             .Where(payDate => payDate.SupplyDate >= startOfDay && payDate.SupplyDate < endOfDay)
-                .Include(c => c.ProductType)
+                .Include(c => c.ComponentType)
                 .Include(o => o.Warehouse) 
-                    .ThenInclude(w => w.ProductType)
+                    .ThenInclude(w => w.ComponentType)
                 .Include(c => c.Supplier)
             .ToArrayAsync(cancellationToken);
 

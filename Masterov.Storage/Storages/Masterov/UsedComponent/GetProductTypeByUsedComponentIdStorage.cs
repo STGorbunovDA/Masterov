@@ -8,11 +8,11 @@ namespace Masterov.Storage.Storages.Masterov.UsedComponent;
 
 internal class GetProductTypeByUsedComponentIdStorage(MasterovDbContext dbContext, IMapper mapper) : IGetProductTypeByUsedComponentIdStorage
 {
-    public async Task<ProductTypeDomain?> GetProductTypeByUsedComponentId(Guid usedComponentId, CancellationToken cancellationToken) =>
+    public async Task<ComponentTypeDomain?> GetProductTypeByUsedComponentId(Guid usedComponentId, CancellationToken cancellationToken) =>
         await dbContext.UsedComponents
             .AsNoTracking() 
             .Where(o => o.UsedComponentId == usedComponentId)
-            .Select(o => o.ProductType)
-            .ProjectTo<ProductTypeDomain>(mapper.ConfigurationProvider)
+            .Select(o => o.ComponentType)
+            .ProjectTo<ComponentTypeDomain>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(cancellationToken);
 }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
+using Masterov.API.Models.ComponentType;
 using Masterov.API.Models.Customer;
 using Masterov.API.Models.Order;
-using Masterov.API.Models.ProductType;
 using Masterov.API.Models.UsedComponent;
 using Masterov.API.Models.Warehouse;
 using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent;
@@ -69,7 +69,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetUsedComponentId(
+    public async Task<IActionResult> GetUsedComponentById(
         [FromRoute] Guid usedComponentId,
         [FromServices] IGetUsedComponentByIdUseCase useCase,
         CancellationToken cancellationToken)
@@ -177,7 +177,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе продука</returns>
     [HttpGet("getProductTypeByUsedComponentId")]
-    [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
+    [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
@@ -188,7 +188,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     {
         var productTypeDomain = await useCase.Execute(new GetProductTypeByUsedComponentIdQuery(request.UsedComponentId),
             cancellationToken);
-        return Ok(mapper.Map<ProductTypeResponse>(productTypeDomain));
+        return Ok(mapper.Map<ComponentTypeResponse>(productTypeDomain));
     }
 
     /// <summary>
@@ -236,7 +236,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
                 new AddUsedComponentCommand(request.OrderId, request.ProductTypeId, request.WarehouseId,
                     request.Quantity), cancellationToken);
 
-        return CreatedAtAction(nameof(GetUsedComponentId),
+        return CreatedAtAction(nameof(GetUsedComponentById),
             new { usedComponentId = usedComponent.UsedComponentId },
             mapper.Map<UsedComponentResponse>(usedComponent));
     }

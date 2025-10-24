@@ -14,7 +14,7 @@ public class GetNewSuppliesBySupplierIdStorage (MasterovDbContext dbContext, IMa
                 .Include(s => s.Supplies)
                     .ThenInclude(o => o.Warehouse)
                 .Include(s => s.Supplies)
-                    .ThenInclude(o => o.ProductType)
+                    .ThenInclude(o => o.ComponentType)
             .FirstOrDefaultAsync(c => c.SupplierId == supplierId, cancellationToken);
 
         return supplier == null ? null : mapper.Map<IEnumerable<SupplyDomain>>(supplier.Supplies);

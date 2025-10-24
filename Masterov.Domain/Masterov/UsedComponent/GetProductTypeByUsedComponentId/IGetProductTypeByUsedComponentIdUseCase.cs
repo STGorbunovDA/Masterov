@@ -5,5 +5,5 @@ namespace Masterov.Domain.Masterov.UsedComponent.GetProductTypeByUsedComponentId
 
 public interface IGetProductTypeByUsedComponentIdUseCase
 {
-    Task<ProductTypeDomain?> Execute(GetProductTypeByUsedComponentIdQuery productTypeByUsedComponentIdQuery, CancellationToken cancellationToken);
+    Task<ComponentTypeDomain?> Execute(GetProductTypeByUsedComponentIdQuery productTypeByUsedComponentIdQuery, CancellationToken cancellationToken);
 }

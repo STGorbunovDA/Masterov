@@ -13,7 +13,7 @@ internal class GetUsedComponentsStorage(MasterovDbContext dbContext, IMapper map
             .AsNoTracking()
                 .Include(c => c.Warehouse)
                     .ThenInclude(o => o.Supplies)
-                .Include(c => c.ProductType)
+                .Include(c => c.ComponentType)
             .ToArrayAsync(cancellationToken);
 
         return mapper.Map<IEnumerable<UsedComponentDomain>>(usedComponents);

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Masterov.Domain.Masterov.ProductType.GetProductTypeByName.Query;
 
 namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
 

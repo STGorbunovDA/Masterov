@@ -12,9 +12,9 @@ public class GetOrdersByCustomerIdStorage (MasterovDbContext dbContext, IMapper 
         var orders = await dbContext.Orders
             .AsNoTracking()
             .Where(o => o.CustomerId == customerId)
-                .Include(o => o.Components)
-                    .ThenInclude(c => c.ProductType)
-                .Include(o => o.Components)
+                .Include(o => o.UsedComponents)
+                    .ThenInclude(c => c.ComponentType)
+                .Include(o => o.UsedComponents)
                     .ThenInclude(c => c.Warehouse)
                 .Include(o => o.Payments)
             .ToListAsync(cancellationToken);

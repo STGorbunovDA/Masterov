@@ -19,7 +19,7 @@ internal class GetSupplierByAddressStorage(MasterovDbContext dbContext, IMemoryC
                 var supplier = await dbContext.Suppliers
                     .AsNoTracking()
                         .Include(c => c.Supplies)
-                            .ThenInclude(p => p.ProductType)
+                            .ThenInclude(p => p.ComponentType)
                         .Include(c => c.Supplies)
                             .ThenInclude(p => p.Warehouse)
                         .Where(f => f.Address != null && f.Address.ToLower() == supplierAddress.ToLower().Trim())

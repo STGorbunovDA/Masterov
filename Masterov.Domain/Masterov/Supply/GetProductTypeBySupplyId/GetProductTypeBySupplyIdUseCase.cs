@@ -8,7 +8,7 @@ namespace Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId;
 
 public class GetProductTypeBySupplyIdUseCase(IValidator<GetProductTypeBySupplyIdQuery> validator, IGetProductTypeBySupplyIdStorage storage, IGetSupplyByIdStorage getSupplyByIdStorage) : IGetProductTypeBySupplyIdUseCase
 {
-    public async Task<ProductTypeDomain?> Execute(GetProductTypeBySupplyIdQuery getProductTypeBySupplyIdQuery, CancellationToken cancellationToken)
+    public async Task<ComponentTypeDomain?> Execute(GetProductTypeBySupplyIdQuery getProductTypeBySupplyIdQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getProductTypeBySupplyIdQuery, cancellationToken);
         

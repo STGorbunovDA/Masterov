@@ -12,9 +12,9 @@ public class Supply
     public Guid SupplierId { get; set; }
     public Supplier Supplier { get; set; }
 
-    [Required, ForeignKey(nameof(ProductType))]
+    [Required, ForeignKey(nameof(ComponentType))]
     public Guid ProductTypeId { get; set; }
-    public ProductType ProductType { get; set; }
+    public ComponentType ComponentType { get; set; }
 
     [Required, ForeignKey(nameof(Warehouse))]
     public Guid WarehouseId { get; set; }

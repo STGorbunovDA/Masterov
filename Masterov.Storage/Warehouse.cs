@@ -10,9 +10,9 @@ public class Warehouse
     [Required, MaxLength(100)]
     public string Name { get; set; }
 
-    [ForeignKey(nameof(ProductType))]
+    [ForeignKey(nameof(ComponentType))]
     public Guid ProductTypeId { get; set; }
-    public ProductType ProductType { get; set; }
+    public ComponentType ComponentType { get; set; }
 
     [Range(0, int.MaxValue)]
     public int Quantity { get; set; }

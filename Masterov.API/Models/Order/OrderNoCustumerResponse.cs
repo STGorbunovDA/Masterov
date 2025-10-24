@@ -12,6 +12,6 @@ public class OrderNoCustumerResponse
     public DateTime? CompletedAt { get; set; }
     public OrderStatus Status { get; set; }
     public string? Description { get; set; }
-    public List<UsedComponentResponse> Components { get; set; }
+    public List<UsedComponentResponse> UsedComponents { get; set; }
     public List<PaymentsNewCustomerRequest> PaymentsNoCustomer { get; set; }
 }

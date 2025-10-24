@@ -30,7 +30,7 @@ internal class UpdateUsedComponentStorage(MasterovDbContext dbContext, IMapper m
             .Where(f => f.UsedComponentId == usedComponentId)
                 .Include(c => c.Warehouse)
                     .ThenInclude(o => o.Supplies)
-                .Include(c => c.ProductType)
+                .Include(c => c.ComponentType)
             .FirstOrDefaultAsync(cancellationToken);
         
         return mapper.Map<UsedComponentDomain>(usedComponent);

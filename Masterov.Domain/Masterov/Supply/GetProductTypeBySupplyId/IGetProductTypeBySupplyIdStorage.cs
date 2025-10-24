@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId;
 
 public interface IGetProductTypeBySupplyIdStorage
 {
-    Task<ProductTypeDomain?> GetProductTypeBySupplyId(Guid supplyId, CancellationToken cancellationToken);
+    Task<ComponentTypeDomain?> GetProductTypeBySupplyId(Guid supplyId, CancellationToken cancellationToken);
 }

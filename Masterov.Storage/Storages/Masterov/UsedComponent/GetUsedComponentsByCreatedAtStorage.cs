@@ -20,7 +20,7 @@ public class GetUsedComponentsByCreatedAtStorage (MasterovDbContext dbContext, I
             .Where(order => order.CreatedAt >= startOfDay && order.CreatedAt < endOfDay)
                 .Include(c => c.Warehouse)
                     .ThenInclude(o => o.Supplies)
-                .Include(c => c.ProductType)
+                .Include(c => c.ComponentType)
             .ToArrayAsync(cancellationToken);
 
         return mapper.Map<IEnumerable<UsedComponentDomain>>(usedComponents);

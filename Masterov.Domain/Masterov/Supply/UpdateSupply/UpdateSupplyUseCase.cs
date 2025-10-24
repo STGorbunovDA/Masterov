@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
-using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.UpdateSupply.Command;
@@ -15,7 +15,7 @@ public class UpdateSupplyUseCase(
     IUpdateSupplyStorage updateSupplyStorage,
     IGetSupplyByIdStorage getSupplyByIdStorage,
     IGetSupplierByIdStorage getSupplierByIdStorage,
-    IGetProductTypeByIdStorage getProductTypeByIdStorage,
+    IGetComponentTypeByIdStorage getComponentTypeByIdStorage,
     IGetWarehouseByIdStorage getWarehouseByIdStorage) : IUpdateSupplyUseCase
 {
     public async Task<SupplyDomain> Execute(UpdateSupplyCommand updateSupplyCommand,
@@ -33,7 +33,7 @@ public class UpdateSupplyUseCase(
         if (supplierExists is null)
             throw new NotFoundByIdException(updateSupplyCommand.SupplierId, "Поставщик");
 
-        var productTypeExists = await getProductTypeByIdStorage.GetProductTypeById(updateSupplyCommand.ProductTypeId, cancellationToken);
+        var productTypeExists = await getComponentTypeByIdStorage.GetComponentTypeById(updateSupplyCommand.ProductTypeId, cancellationToken);
         
         if (productTypeExists is null)
             throw new NotFoundByIdException(updateSupplyCommand.ProductTypeId, "Тип изделия");

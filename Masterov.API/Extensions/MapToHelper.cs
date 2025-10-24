@@ -12,11 +12,11 @@ public static class MapToHelper
         return components?.Select(c => new UsedComponentDomain
         {
             UsedComponentId = c.UsedComponentId,
-            ProductType = new ProductTypeDomain
+            ComponentType = new ComponentTypeDomain
             {
-                ProductTypeId = c.ProductType.ProductTypeId,
-                Name = c.ProductType.Name,
-                Description = c.ProductType.Description
+                ComponentTypeId = c.ComponentType.ComponentTypeId,
+                Name = c.ComponentType.Name,
+                Description = c.ComponentType.Description
             },
             Warehouse = new WarehouseDomain
             {

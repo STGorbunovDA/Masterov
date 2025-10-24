@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
-using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supply.AddSupply.Command;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
@@ -15,7 +15,7 @@ public class AddSupplyUseCase(
     IAddSupplyStorage addSupplyStorage,
     IGetSupplyByIdStorage getSupplyByIdStorage,
     IGetSupplierByIdStorage getSupplierByIdStorage,
-    IGetProductTypeByIdStorage getProductTypeByIdStorage,
+    IGetComponentTypeByIdStorage getComponentTypeByIdStorage,
     IGetWarehouseByIdStorage getWarehouseByIdStorage,
     IUpdateWarehouseStorage updateWarehouseStorage) : IAddSupplyUseCase
 {
@@ -31,7 +31,7 @@ public class AddSupplyUseCase(
             throw new NotFoundByIdException(addSupplyCommand.SupplierId, "Поставщик");
 
         var productTypeExists =
-            await getProductTypeByIdStorage.GetProductTypeById(addSupplyCommand.ProductTypeId, cancellationToken);
+            await getComponentTypeByIdStorage.GetComponentTypeById(addSupplyCommand.ProductTypeId, cancellationToken);
 
         if (productTypeExists is null)
             throw new NotFoundByIdException(addSupplyCommand.ProductTypeId, "Тип изделия");
@@ -50,7 +50,7 @@ public class AddSupplyUseCase(
             throw new Conflict422Exception("Невозможно обработать запрос: поставки не существует");
 
         var warehouse = await updateWarehouseStorage.UpdateWarehouse(supplyDomain.Warehouse.WarehouseId,
-            supplyDomain.Warehouse.ProductType.ProductTypeId, supplyDomain.Warehouse.Name,
+            supplyDomain.Warehouse.ComponentType.ComponentTypeId, supplyDomain.Warehouse.Name,
             supplyDomain.Warehouse.Quantity + addSupplyCommand.Quantity,
             supplyDomain.Warehouse.Price + addSupplyCommand.PriceSupply, cancellationToken);
         

@@ -21,7 +21,7 @@ public class GetCustomersByCreatedAtStorage (MasterovDbContext dbContext, IMappe
                 .Include(order => order.Orders)
                     .ThenInclude(c => c.FinishedProduct)
                 .Include(order => order.Orders)
-                    .ThenInclude(c => c.Components)
+                    .ThenInclude(c => c.UsedComponents)
                 .Include(order => order.Orders)
                     .ThenInclude(c => c.Payments)
             .ToArrayAsync(cancellationToken);

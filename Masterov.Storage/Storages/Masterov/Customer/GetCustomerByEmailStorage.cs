@@ -18,10 +18,10 @@ internal class GetCustomerByEmailStorage(MasterovDbContext dbContext, IMapper ma
                 .Include(c => c.Orders)
                     .ThenInclude(o => o.Payments)
                 .Include(c => c.Orders)
-                    .ThenInclude(o => o.Components)
-                    .ThenInclude(pc => pc.ProductType)
+                    .ThenInclude(o => o.UsedComponents)
+                    .ThenInclude(pc => pc.ComponentType)
                 .Include(c => c.Orders)
-                    .ThenInclude(o => o.Components)
+                    .ThenInclude(o => o.UsedComponents)
                     .ThenInclude(pc => pc.Warehouse)
             .FirstOrDefaultAsync(cancellationToken);
             

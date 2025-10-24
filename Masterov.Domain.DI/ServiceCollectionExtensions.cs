@@ -1,4 +1,10 @@
-﻿using Masterov.Domain.Masterov.Customer.AddCustomer;
+﻿using Masterov.Domain.Masterov.ComponentType.AddComponentType;
+using Masterov.Domain.Masterov.ComponentType.DeleteComponentType;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
+using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
+using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
 using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
@@ -50,12 +56,6 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
-using Masterov.Domain.Masterov.ProductType.AddProductType;
-using Masterov.Domain.Masterov.ProductType.DeleteProductType;
-using Masterov.Domain.Masterov.ProductType.GetProductsType;
-using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
-using Masterov.Domain.Masterov.ProductType.GetProductTypeByName;
-using Masterov.Domain.Masterov.ProductType.UpdateProductType;
 using Masterov.Domain.Masterov.ServiceAdditional.ServicePayment;
 using Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
@@ -157,11 +157,11 @@ public static class ServiceCollectionExtensions
         // ProductType
         services
             .AddScoped<IUpdateProductTypeUseCase, UpdateProductTypeUseCase>()
-            .AddScoped<IDeleteProductTypeUseCase, DeleteProductTypeUseCase>()
-            .AddScoped<IGetProductTypeByNameUseCase, GetProductTypeByNameUseCase>()
-            .AddScoped<IAddProductTypeUseCase, AddProductTypeUseCase>()
-            .AddScoped<IGetProductTypeByIdUseCase, GetProductTypeByIdUseCase>()
-            .AddScoped<IGetProductsTypeUseCase, GetProductsTypeUseCase>();
+            .AddScoped<IDeleteComponentTypeUseCase, DeleteComponentTypeUseCase>()
+            .AddScoped<IGetComponentTypeByNameUseCase, GetComponentTypeByNameUseCase>()
+            .AddScoped<IAddComponentTypeUseCase, AddComponentTypeUseCase>()
+            .AddScoped<IGetComponentTypeByIdUseCase, GetComponentTypeByIdUseCase>()
+            .AddScoped<IGetComponentTypesUseCase, ComponentTypesUseCase>();
         
         // User
         services

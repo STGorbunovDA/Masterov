@@ -11,7 +11,7 @@ public class MasterovDbContext : DbContext
     public DbSet<Order> Orders { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Payment> Payments { get; set; }
-    public DbSet<ProductType> ProductTypes { get; set; }
+    public DbSet<ComponentType> ComponentTypes { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
     public DbSet<Supply> Supplies { get; set; }
     public DbSet<Warehouse> Warehouses { get; set; }

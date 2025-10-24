@@ -19,7 +19,7 @@ public class GetFinishedProductsByCreatedAtStorage (MasterovDbContext dbContext,
             .AsNoTracking() 
             .Where(order => order.CreatedAt >= startOfDay && order.CreatedAt < endOfDay)
                 .Include(order => order.Orders)
-                    .ThenInclude(c => c.Components)
+                    .ThenInclude(c => c.UsedComponents)
                 .Include(order => order.Orders)
                     .ThenInclude(c => c.Payments)
             .ToArrayAsync(cancellationToken);

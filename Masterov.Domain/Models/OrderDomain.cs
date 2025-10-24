@@ -11,7 +11,7 @@ public class OrderDomain
     public OrderStatus Status { get; set; }
     public string? Description { get; set; }
     public CustomerDomain Customer { get; set; }
-    public IEnumerable<UsedComponentDomain> Components { get; set; }
+    public IEnumerable<UsedComponentDomain> UsedComponents { get; set; }
     public IEnumerable<PaymentDomain> Payments { get; set; }
     public Guid FinishedProductId { get; set; }
     public decimal FullPriceFinishedProduct { get; set; }

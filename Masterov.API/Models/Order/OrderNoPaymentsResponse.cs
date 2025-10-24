@@ -13,5 +13,5 @@ public class OrderNoPaymentsResponse
     public OrderStatus Status { get; set; }
     public string? Description { get; set; }
     public CustomerNoOrdersResponse CustomerNoOrders { get; set; }
-    public List<UsedComponentResponse> Components { get; set; }
+    public List<UsedComponentResponse> UsedComponents { get; set; }
 }

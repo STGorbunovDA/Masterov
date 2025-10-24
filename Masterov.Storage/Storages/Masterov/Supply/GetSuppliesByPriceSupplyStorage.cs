@@ -12,9 +12,9 @@ internal class GetSuppliesByPriceSupplyStorage(MasterovDbContext dbContext, IMap
         var supplies = await dbContext.Supplies
             .AsNoTracking() 
             .Where(p => p.PriceSupply == priceSupply)
-                .Include(c => c.ProductType)
+                .Include(c => c.ComponentType)
                 .Include(o => o.Warehouse) 
-                    .ThenInclude(w => w.ProductType)
+                    .ThenInclude(w => w.ComponentType)
                 .Include(c => c.Supplier)
             .ToArrayAsync(cancellationToken);
 

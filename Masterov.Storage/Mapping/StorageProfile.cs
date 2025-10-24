@@ -13,14 +13,14 @@ internal class StorageProfile : Profile
             
         // ProductionOrder mapping
         CreateMap<Order, OrderDomain>()
-            .ForMember(dest => dest.Components, opt => opt.MapFrom(src => src.Components))
+            .ForMember(dest => dest.UsedComponents, opt => opt.MapFrom(src => src.UsedComponents))
             .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.FinishedProductId, opt => opt.MapFrom(src => src.FinishedProduct.FinishedProductId))
             .ForMember(dest => dest.FullPriceFinishedProduct, opt => opt.MapFrom(src => src.FinishedProduct.Price));
             
         // ProductComponent mapping
         CreateMap<UsedComponent, UsedComponentDomain>()
-            .ForMember(dest => dest.ProductType, opt => opt.MapFrom(src => src.ProductType))
+            .ForMember(dest => dest.ComponentType, opt => opt.MapFrom(src => src.ComponentType))
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse))
             .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId));
             
@@ -36,7 +36,7 @@ internal class StorageProfile : Profile
 
         
         // ProductType mapping
-        CreateMap<ProductType, ProductTypeDomain>();
+        CreateMap<ComponentType, ComponentTypeDomain>();
             
         // Warehouse mapping
         CreateMap<Warehouse, WarehouseDomain>();

@@ -14,7 +14,7 @@ public class OrderResponse
     public OrderStatus Status { get; set; }
     public string? Description { get; set; }
     public CustomerNoOrdersResponse Customer { get; set; }
-    public List<UsedComponentResponse> Components { get; set; }
+    public List<UsedComponentResponse> UsedComponents { get; set; }
     public List<PaymentsNewCustomerRequest> Payments { get; set; }
     public Guid FinishedProductId { get; set; }
     public decimal FullPriceFinishedProduct { get; set; }
