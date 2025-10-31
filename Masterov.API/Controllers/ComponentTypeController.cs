@@ -98,7 +98,7 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
         CancellationToken cancellationToken)
     {
         var componentType = await useCase.Execute(new AddComponentTypeCommand(request.Name, request.Description), cancellationToken);
-        return CreatedAtAction(nameof(GetComponentTypeById), new { productTypeId = componentType.ComponentTypeId }, mapper.Map<ComponentTypeResponse>(componentType));
+        return CreatedAtAction(nameof(GetComponentTypeById), new { componentTypeId = componentType.ComponentTypeId }, mapper.Map<ComponentTypeResponse>(componentType));
     }
     
     /// <summary>
