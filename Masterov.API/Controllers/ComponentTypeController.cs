@@ -69,7 +69,8 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     [HttpGet("getComponentTypeByName/{componentTypeName}")]
     [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetComponentTypeByName(
         [FromRoute] string componentTypeName,
         [FromServices] IGetComponentTypeByNameUseCase useCase,
