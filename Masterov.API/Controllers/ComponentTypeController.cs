@@ -11,6 +11,7 @@ using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName.Query;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType.Command;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masterov.API.Controllers;
@@ -27,7 +28,8 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// <returns>Типы компонентов</returns>
     [HttpGet("getComponentTypes")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetComponentTypes(
         [FromServices] IGetComponentTypesUseCase useCase,
         CancellationToken cancellationToken)
@@ -46,7 +48,8 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     [HttpGet("getComponentTypeById/{componentTypeId:guid}")]
     [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetComponentTypeById(
         [FromRoute] Guid componentTypeId,
         [FromServices] IGetComponentTypeByIdUseCase useCase,

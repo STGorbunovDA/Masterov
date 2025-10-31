@@ -171,7 +171,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IDeleteComponentTypeStorage, DeleteComponentTypeStorage>()
             .AddScoped<IAddComponentTypeStorage, AddComponentTypeStorage>()
             .AddScoped<IGetComponentTypeByNameStorage, GetComponentTypeByNameStorage>()
-            .AddScoped<IGetProductsTypeStorage, GetComponentTypeStorage>()
+            .AddScoped<IGetProductsTypeStorage, GetComponentTypesStorage>()
             .AddScoped<IGetComponentTypeByIdStorage, GetComponentTypeByIdStorage>();
 
         // User
