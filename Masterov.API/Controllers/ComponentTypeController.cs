@@ -10,6 +10,8 @@ using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById.Query;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName.Query;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt.Query;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType.Command;
 using Microsoft.AspNetCore.Authorization;
@@ -79,6 +81,26 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     {
         var componentType = await useCase.Execute(new GetComponentTypeByNameQuery(componentTypeName), cancellationToken);
         return Ok(mapper.Map<ComponentTypeResponse>(componentType));
+    }
+    
+    /// <summary>
+    /// Получить изделие по дате создания
+    /// </summary>
+    /// <param name="request">Дата создания изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о типе изделия</returns>
+    [HttpGet("getComponentTypesByCreatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetComponentTypesByCreatedAt(
+        [FromQuery] GetComponentTypesByCreatedAtRequest request,
+        [FromServices] IGetComponentTypesByCreatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var componentTypes = await useCase.Execute(new GetComponentTypesByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
     }
     
     /// <summary>
