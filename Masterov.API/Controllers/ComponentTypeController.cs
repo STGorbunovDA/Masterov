@@ -12,6 +12,8 @@ using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName.Query;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt.Query;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt.Query;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType.Command;
 using Microsoft.AspNetCore.Authorization;
@@ -100,6 +102,26 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
         CancellationToken cancellationToken)
     {
         var componentTypes = await useCase.Execute(new GetComponentTypesByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
+    }
+    
+    /// <summary>
+    /// Получить изделие по дате обновления
+    /// </summary>
+    /// <param name="request">Дата обновления изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о типе изделия</returns>
+    [HttpGet("getComponentTypesByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> GetComponentTypesByUpdatedAt(
+        [FromQuery] GetComponentTypesByUpdatedAtRequest request,
+        [FromServices] IGetComponentTypesByUpdatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var componentTypes = await useCase.Execute(new GetComponentTypesByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
     }
     

@@ -5,6 +5,7 @@ using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
@@ -170,6 +171,7 @@ public static class ServiceCollectionExtensions
         services
             .AddScoped<IUpdateComponentTypeStorage, UpdateComponentTypeStorage>()
             .AddScoped<IDeleteComponentTypeStorage, DeleteComponentTypeStorage>()
+            .AddScoped<IGetComponentTypesByUpdatedAtStorage, GetComponentTypesByUpdatedAtStorage>()
             .AddScoped<IGetComponentTypesByCreatedAtStorage, GetComponentTypesByCreatedAtStorage>()
             .AddScoped<IAddComponentTypeStorage, AddComponentTypeStorage>()
             .AddScoped<IGetComponentTypeByNameStorage, GetComponentTypeByNameStorage>()
