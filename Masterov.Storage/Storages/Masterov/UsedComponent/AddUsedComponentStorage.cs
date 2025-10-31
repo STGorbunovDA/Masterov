@@ -9,14 +9,14 @@ namespace Masterov.Storage.Storages.Masterov.UsedComponent;
 
 internal class AddUsedComponentStorage(MasterovDbContext dbContext, IGuidFactory guidFactory, IMapper mapper) : IAddUsedComponentStorage
 {
-    public async Task<UsedComponentDomain> AddUsedComponent(Guid orderId, Guid productTypeId, Guid warehouseId, int quantity, CancellationToken cancellationToken)
+    public async Task<UsedComponentDomain> AddUsedComponent(Guid orderId, Guid componentTypeId, Guid warehouseId, int quantity, CancellationToken cancellationToken)
     {
         var usedComponentIdGuide = guidFactory.Create();
         var usedComponent = new Storage.UsedComponent()
         {
             UsedComponentId = usedComponentIdGuide,
             OrderId = orderId,
-            ProductTypeId = productTypeId,
+            ComponentTypeId = componentTypeId,
             WarehouseId = warehouseId,
             Quantity = quantity,
             CreatedAt = DateTime.Now

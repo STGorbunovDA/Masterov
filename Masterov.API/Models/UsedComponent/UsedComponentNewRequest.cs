@@ -7,7 +7,7 @@ public class UsedComponentNewRequest
 {
     public Guid UsedComponentId { get; set; }
     public ComponentTypeResponse ComponentType { get; set; }
-    public WarehouseNewNoProductTypeRequest Warehouse { get; set; }
+    public WarehouseNewNoComponentTypeRequest Warehouse { get; set; }
     public Guid OrderId { get; set; }
     public int Quantity { get; set; }
     public DateTime CreatedAt { get; set; }

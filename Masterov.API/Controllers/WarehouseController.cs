@@ -83,7 +83,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var updateWarehouse = await useCase.Execute(
-            new UpdateWarehouseCommand(request.WarehouseId, request.ProductTypeId, request.Name, request.Quantity, request.Price),
+            new UpdateWarehouseCommand(request.WarehouseId, request.ComponentTypeId, request.Name, request.Quantity, request.Price),
             cancellationToken);
         return Ok(mapper.Map<WarehouseResponse>(updateWarehouse));
     }

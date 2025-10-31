@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models.ComponentType;
-using Masterov.API.Models.Customer;
 using Masterov.API.Models.Order;
 using Masterov.API.Models.UsedComponent;
 using Masterov.API.Models.Warehouse;
@@ -10,10 +9,10 @@ using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent.Command;
 using Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent.Command;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
+using Masterov.Domain.Masterov.UsedComponent.GetComponentTypeByUsedComponentId;
+using Masterov.Domain.Masterov.UsedComponent.GetComponentTypeByUsedComponentId.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId.Query;
-using Masterov.Domain.Masterov.UsedComponent.GetProductTypeByUsedComponentId;
-using Masterov.Domain.Masterov.UsedComponent.GetProductTypeByUsedComponentId.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
@@ -39,6 +38,7 @@ namespace Masterov.API.Controllers;
 [Route("api/usedComponents")]
 public class UsedComponentController(IMapper mapper) : ControllerBase
 {
+    //TODO Продумать формирование вычета цены когда забираем со склада компоненты
     /// <summary>
     /// Получить все используемые компоненты
     /// </summary>
@@ -176,19 +176,19 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе продука</returns>
-    [HttpGet("getProductTypeByUsedComponentId")]
+    [HttpGet("getComponentTypeByUsedComponentId")]
     [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetProductTypeByUsedComponentId(
-        [FromQuery] GetProductTypeByUsedComponentIdRequest request,
-        [FromServices] IGetProductTypeByUsedComponentIdUseCase useCase,
+    public async Task<IActionResult> GetComponentTypeByUsedComponentId(
+        [FromQuery] GetComponentTypeByUsedComponentIdRequest request,
+        [FromServices] IGetComponentTypeByUsedComponentIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productTypeDomain = await useCase.Execute(new GetProductTypeByUsedComponentIdQuery(request.UsedComponentId),
+        var componentTypeDomain = await useCase.Execute(new GetComponentTypeByUsedComponentIdQuery(request.UsedComponentId),
             cancellationToken);
-        return Ok(mapper.Map<ComponentTypeResponse>(productTypeDomain));
+        return Ok(mapper.Map<ComponentTypeResponse>(componentTypeDomain));
     }
 
     /// <summary>
@@ -233,7 +233,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     {
         var usedComponent =
             await useCase.Execute(
-                new AddUsedComponentCommand(request.OrderId, request.ProductTypeId, request.WarehouseId,
+                new AddUsedComponentCommand(request.OrderId, request.ComponentTypeId, request.WarehouseId,
                     request.Quantity), cancellationToken);
 
         return CreatedAtAction(nameof(GetUsedComponentById),
@@ -288,7 +288,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
             new UpdateUsedComponentCommand(
                 usedComponentId, 
                 request.OrderId, 
-                request.ProductTypeId, 
+                request.ComponentTypeId, 
                 request.WarehouseId,
                 request.Quantity,
                 request.CreatedAt.ToDateTime()),

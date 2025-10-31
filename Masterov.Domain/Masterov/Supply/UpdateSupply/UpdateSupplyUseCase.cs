@@ -33,17 +33,17 @@ public class UpdateSupplyUseCase(
         if (supplierExists is null)
             throw new NotFoundByIdException(updateSupplyCommand.SupplierId, "Поставщик");
 
-        var productTypeExists = await getComponentTypeByIdStorage.GetComponentTypeById(updateSupplyCommand.ProductTypeId, cancellationToken);
+        var componentTypeExists = await getComponentTypeByIdStorage.GetComponentTypeById(updateSupplyCommand.ComponentTypeId, cancellationToken);
         
-        if (productTypeExists is null)
-            throw new NotFoundByIdException(updateSupplyCommand.ProductTypeId, "Тип изделия");
+        if (componentTypeExists is null)
+            throw new NotFoundByIdException(updateSupplyCommand.ComponentTypeId, "Тип изделия");
         
         var warehouseExists = await getWarehouseByIdStorage.GetWarehouseById(updateSupplyCommand.WarehouseId, cancellationToken);
         
         if (warehouseExists is null)
             throw new NotFoundByIdException(updateSupplyCommand.WarehouseId, "Склад");
 
-        return await updateSupplyStorage.UpdateSupply(updateSupplyCommand.SupplyId, updateSupplyCommand.SupplierId, updateSupplyCommand.ProductTypeId,
+        return await updateSupplyStorage.UpdateSupply(updateSupplyCommand.SupplyId, updateSupplyCommand.SupplierId, updateSupplyCommand.ComponentTypeId,
             updateSupplyCommand.WarehouseId, updateSupplyCommand.Quantity, updateSupplyCommand.PriceSupply, cancellationToken);
     }
 }

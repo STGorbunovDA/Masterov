@@ -13,7 +13,7 @@ public class UsedComponent
     public Order Order { get; set; }
 
     [Required, ForeignKey(nameof(ComponentType))]
-    public Guid ProductTypeId { get; set; }
+    public Guid ComponentTypeId { get; set; }
     public ComponentType ComponentType { get; set; }
 
     [Required, ForeignKey(nameof(Warehouse))]

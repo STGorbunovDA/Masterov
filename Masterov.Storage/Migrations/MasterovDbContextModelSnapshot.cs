@@ -223,11 +223,11 @@ namespace Masterov.Storage.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid>("ComponentTypeId")
+                        .HasColumnType("char(36)");
+
                     b.Property<decimal>("PriceSupply")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("ProductTypeId")
-                        .HasColumnType("char(36)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -243,7 +243,7 @@ namespace Masterov.Storage.Migrations
 
                     b.HasKey("SupplyId");
 
-                    b.HasIndex("ProductTypeId");
+                    b.HasIndex("ComponentTypeId");
 
                     b.HasIndex("SupplierId");
 
@@ -258,13 +258,13 @@ namespace Masterov.Storage.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid>("ComponentTypeId")
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("OrderId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("ProductTypeId")
                         .HasColumnType("char(36)");
 
                     b.Property<int>("Quantity")
@@ -279,9 +279,9 @@ namespace Masterov.Storage.Migrations
 
                     b.HasKey("UsedComponentId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("ComponentTypeId");
 
-                    b.HasIndex("ProductTypeId");
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("WarehouseId");
 
@@ -331,6 +331,9 @@ namespace Masterov.Storage.Migrations
                         .HasColumnType("char(36)")
                         .UseCollation("ascii_general_ci");
 
+                    b.Property<Guid>("ComponentTypeId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -339,15 +342,12 @@ namespace Masterov.Storage.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("ProductTypeId")
-                        .HasColumnType("char(36)");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("WarehouseId");
 
-                    b.HasIndex("ProductTypeId");
+                    b.HasIndex("ComponentTypeId");
 
                     b.ToTable("Warehouses");
                 });
@@ -404,7 +404,7 @@ namespace Masterov.Storage.Migrations
                 {
                     b.HasOne("Masterov.Storage.ComponentType", "ComponentType")
                         .WithMany("Supplies")
-                        .HasForeignKey("ProductTypeId")
+                        .HasForeignKey("ComponentTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -429,15 +429,15 @@ namespace Masterov.Storage.Migrations
 
             modelBuilder.Entity("Masterov.Storage.UsedComponent", b =>
                 {
-                    b.HasOne("Masterov.Storage.Order", "Order")
+                    b.HasOne("Masterov.Storage.ComponentType", "ComponentType")
                         .WithMany("UsedComponents")
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("ComponentTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masterov.Storage.ComponentType", "ComponentType")
+                    b.HasOne("Masterov.Storage.Order", "Order")
                         .WithMany("UsedComponents")
-                        .HasForeignKey("ProductTypeId")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -458,7 +458,7 @@ namespace Masterov.Storage.Migrations
                 {
                     b.HasOne("Masterov.Storage.ComponentType", "ComponentType")
                         .WithMany()
-                        .HasForeignKey("ProductTypeId")
+                        .HasForeignKey("ComponentTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

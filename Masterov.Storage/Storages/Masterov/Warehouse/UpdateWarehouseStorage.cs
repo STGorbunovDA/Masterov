@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.Warehouse;
 
 internal class UpdateWarehouseStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateWarehouseStorage
 {
-    public async Task<WarehouseDomain> UpdateWarehouse(Guid warehouseId, Guid productTypeId, string name, int quantity, decimal price,
+    public async Task<WarehouseDomain> UpdateWarehouse(Guid warehouseId, Guid componentTypeId, string name, int quantity, decimal price,
         CancellationToken cancellationToken)
     {
         var warehouseExists = await dbContext.Set<Storage.Warehouse>().FindAsync([warehouseId], cancellationToken);
@@ -15,7 +15,7 @@ internal class UpdateWarehouseStorage(MasterovDbContext dbContext, IMapper mappe
         if (warehouseExists == null)
             throw new Exception("warehouse not found");
         
-        warehouseExists.ProductTypeId = productTypeId;
+        warehouseExists.ComponentTypeId = componentTypeId;
         warehouseExists.Name = name;
         warehouseExists.Quantity = quantity;
         warehouseExists.Price = price;

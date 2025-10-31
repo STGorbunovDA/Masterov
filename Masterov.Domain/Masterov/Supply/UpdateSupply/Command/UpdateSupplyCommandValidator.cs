@@ -16,10 +16,10 @@ public class UpdateSupplyCommandValidator : AbstractValidator<UpdateSupplyComman
             .WithErrorCode("InvalidId")
             .WithMessage("SupplierId must not be an empty GUID.");
         
-        RuleFor(q => q.ProductTypeId).Cascade(CascadeMode.Stop)
+        RuleFor(q => q.ComponentTypeId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
-            .WithMessage("ProductTypeId must not be an empty GUID.");
+            .WithMessage("ComponentTypeId must not be an empty GUID.");
         
         RuleFor(q => q.WarehouseId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)

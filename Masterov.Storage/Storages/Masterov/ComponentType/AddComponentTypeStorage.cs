@@ -11,20 +11,20 @@ internal class AddComponentTypeStorage(MasterovDbContext dbContext, IGuidFactory
 {
     public async Task<ComponentTypeDomain> AddComponentType(string name, string? description, CancellationToken cancellationToken)
     {
-        var productTypeGuide = guidFactory.Create();
-        var productType = new Storage.ComponentType
+        var componentTypeGuide = guidFactory.Create();
+        var componentType = new Storage.ComponentType
         {
-            ComponentTypeId = productTypeGuide,
+            ComponentTypeId = componentTypeGuide,
             Name = name,
             CreatedAt = DateTime.Now,
             Description = description
         };
 
-        await dbContext.ComponentTypes.AddAsync(productType, cancellationToken);
+        await dbContext.ComponentTypes.AddAsync(componentType, cancellationToken);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return await dbContext.ComponentTypes
-            .Where(t => t.ComponentTypeId == productTypeGuide)
+            .Where(t => t.ComponentTypeId == componentTypeGuide)
             .ProjectTo<ComponentTypeDomain>(mapper.ConfigurationProvider)
             .FirstAsync(cancellationToken);
     }

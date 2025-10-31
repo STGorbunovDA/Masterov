@@ -17,10 +17,10 @@ public class UpdateUsedComponentCommandValidator : AbstractValidator<UpdateUsedC
             .WithErrorCode("InvalidId")
             .WithMessage("OrderId must not be an empty GUID.");
         
-        RuleFor(q => q.ProductTypeId).Cascade(CascadeMode.Stop)
+        RuleFor(q => q.ComponentTypeId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
-            .WithMessage("ProductTypeId must not be an empty GUID.");
+            .WithMessage("ComponentTypeId must not be an empty GUID.");
         
         RuleFor(q => q.WarehouseId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)

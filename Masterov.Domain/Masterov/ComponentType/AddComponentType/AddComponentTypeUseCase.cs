@@ -18,7 +18,7 @@ public class AddComponentTypeUseCase(IValidator<AddComponentTypeCommand> validat
         var componentType = await getComponentTypeByNameStorage.GetComponentTypeByName(addComponentTypeCommand.Name, cancellationToken);
 
         if (componentType is not null)
-            throw new ProductTypeExistsException(addComponentTypeCommand.Name);
+            throw new ComponentTypeExistsException(addComponentTypeCommand.Name);
         
         return await addComponentTypeStorage.AddComponentType(addComponentTypeCommand.Name, addComponentTypeCommand?.Description, cancellationToken);
     }

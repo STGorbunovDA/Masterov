@@ -1,3 +1,0 @@
-﻿namespace Masterov.Domain.Masterov.UsedComponent.GetProductTypeByUsedComponentId.Query;
-
-public record GetProductTypeByUsedComponentIdQuery(Guid UsedComponentId);

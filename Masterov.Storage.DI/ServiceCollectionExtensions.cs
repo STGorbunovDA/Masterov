@@ -6,6 +6,7 @@ using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt;
+using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
@@ -69,7 +70,7 @@ using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Masterov.Domain.Masterov.Supplier.UpdateSupplier;
 using Masterov.Domain.Masterov.Supply.AddSupply;
 using Masterov.Domain.Masterov.Supply.DeleteSupply;
-using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId;
+using Masterov.Domain.Masterov.Supply.GetComponentTypeBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplies;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByPriceSupply;
@@ -81,8 +82,8 @@ using Masterov.Domain.Masterov.Supply.UpdateSupply;
 using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.GetComponents;
+using Masterov.Domain.Masterov.UsedComponent.GetComponentTypeByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
-using Masterov.Domain.Masterov.UsedComponent.GetProductTypeByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
@@ -175,7 +176,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetComponentTypesByCreatedAtStorage, GetComponentTypesByCreatedAtStorage>()
             .AddScoped<IAddComponentTypeStorage, AddComponentTypeStorage>()
             .AddScoped<IGetComponentTypeByNameStorage, GetComponentTypeByNameStorage>()
-            .AddScoped<IGetProductsTypeStorage, GetComponentTypesStorage>()
+            .AddScoped<IGetUsedComponentsByComponentTypeIdStorage, GetUsedComponentsByComponentTypeIdStorage>()
+            .AddScoped<IGetComponentTypesStorage, GetComponentTypesStorage>()
             .AddScoped<IGetComponentTypeByIdStorage, GetComponentTypeByIdStorage>();
 
         // User
@@ -245,7 +247,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetSupplierBySupplyIdStorage, GetSupplierBySupplyIdStorage>()
             .AddScoped<IGetSuppliesBySupplyDateStorage, GetSuppliesBySupplyDateStorage>()
             .AddScoped<IGetWarehouseBySupplyIdStorage, GetWarehouseBySupplyIdStorage>()
-            .AddScoped<IGetProductTypeBySupplyIdStorage, GetProductTypeBySupplyIdStorage>()
+            .AddScoped<IGetComponentTypeBySupplyIdStorage, GetComponentTypeBySupplyIdStorage>()
             .AddScoped<IAddSupplyStorage, AddSupplyStorage>()
             .AddScoped<IDeleteSupplyStorage, DeleteSupplyStorage>()
             .AddScoped<IGetSuppliesByPriceSupplyStorage, GetSuppliesByPriceSupplyStorage>()
@@ -265,7 +267,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetUsedComponentsStorage, GetUsedComponentsStorage>()
             .AddScoped<IGetUsedComponentsByQuantityStorage, GetUsedComponentsByQuantityStorage>()
             .AddScoped<IGetUsedComponentsByCreatedAtStorage, GetUsedComponentsByCreatedAtStorage>()
-            .AddScoped<IGetProductTypeByUsedComponentIdStorage, GetProductTypeByUsedComponentIdStorage>()
+            .AddScoped<IGetComponentTypeByUsedComponentIdStorage, GetComponentTypeByUsedComponentIdStorage>()
             .AddScoped<IUpdateQuantityWarehouseByIdStorage, UpdateQuantityWarehouseByIdStorage>()
             .AddScoped<IDeleteUsedComponentStorage, DeleteUsedComponentStorage>()
             .AddScoped<IDeleteUsedComponentStorage, DeleteUsedComponentStorage>()

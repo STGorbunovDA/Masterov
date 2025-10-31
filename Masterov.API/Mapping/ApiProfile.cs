@@ -15,22 +15,22 @@ internal class ApiProfile : Profile
 {
     public ApiProfile()
     {
-        // 1. Сначала маппинг простых зависимостей (ProductType и Warehouse)
+        // 1. Сначала маппинг простых зависимостей (ComponentType и Warehouse)
         CreateMap<ComponentTypeDomain, ComponentTypeResponse>();
         CreateMap<WarehouseDomain, WarehouseNewResponse>();
         CreateMap<WarehouseDomain, WarehouseForOrderRequest>();
-        CreateMap<WarehouseDomain, WarehouseNewNoProductTypeRequest>();
+        CreateMap<WarehouseDomain, WarehouseNewNoComponentTypeRequest>();
         CreateMap<WarehouseDomain, WarehouseResponse>();
 
         // 2. Затем маппинг ProductComponent с указанием зависимостей
         CreateMap<UsedComponentDomain, UsedComponentNewRequest>()
-            .ForMember(dest => dest.ComponentType, opt => opt.MapFrom(src => src.ComponentType)) // AutoMapper сам применит маппинг ProductType
+            .ForMember(dest => dest.ComponentType, opt => opt.MapFrom(src => src.ComponentType)) // AutoMapper сам применит маппинг ComponentType
             .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId)) // AutoMapper сам применит маппинг OrderId
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
 
         // 2. Затем маппинг ProductComponent с указанием зависимостей
         CreateMap<UsedComponentDomain, UsedComponentResponse>()
-            .ForMember(dest => dest.ComponentType, opt => opt.MapFrom(src => src.ComponentType)) // AutoMapper сам применит маппинг ProductType
+            .ForMember(dest => dest.ComponentType, opt => opt.MapFrom(src => src.ComponentType)) // AutoMapper сам применит маппинг ComponentType
             .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId)) // AutoMapper сам применит маппинг OrderId
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));   // AutoMapper сам применит маппинг Warehouse
 

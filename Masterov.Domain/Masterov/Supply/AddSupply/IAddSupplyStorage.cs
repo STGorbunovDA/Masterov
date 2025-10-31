@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.Supply.AddSupply;
 
 public interface IAddSupplyStorage
 {
-    Task<SupplyDomain> AddSupply(Guid supplierId, Guid productTypeId, Guid warehouseId, int quantity, decimal priceSupply, CancellationToken cancellationToken);
+    Task<SupplyDomain> AddSupply(Guid supplierId, Guid componentTypeId, Guid warehouseId, int quantity, decimal priceSupply, CancellationToken cancellationToken);
 }

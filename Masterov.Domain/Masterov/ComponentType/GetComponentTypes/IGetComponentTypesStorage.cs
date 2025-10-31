@@ -2,7 +2,7 @@
 
 namespace Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
 
-public interface IGetProductsTypeStorage
+public interface IGetComponentTypesStorage
 {
     Task<IEnumerable<ComponentTypeDomain>> GetComponentTypes(CancellationToken cancellationToken);
 }

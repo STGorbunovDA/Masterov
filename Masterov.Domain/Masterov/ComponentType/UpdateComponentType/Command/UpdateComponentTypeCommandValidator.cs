@@ -10,7 +10,7 @@ public class UpdateComponentTypeCommandValidator : AbstractValidator<UpdateCompo
         RuleFor(q => q.ComponentTypeId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
-            .WithMessage("productTypeId must not be an empty GUID.");
+            .WithMessage("componentTypeId must not be an empty GUID.");
         
         RuleFor(c => c.Name).Cascade(CascadeMode.Stop)
             .NotEmpty()

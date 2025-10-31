@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.Supply;
 
 internal class UpdateSupplyStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateSupplyStorage
 {
-    public async Task<SupplyDomain> UpdateSupply(Guid supplyId, Guid supplierId, Guid productTypeId, Guid warehouseId, int quantity, decimal priceSupply, CancellationToken cancellationToken)
+    public async Task<SupplyDomain> UpdateSupply(Guid supplyId, Guid supplierId, Guid componentTypeId, Guid warehouseId, int quantity, decimal priceSupply, CancellationToken cancellationToken)
     {
         var supplyExists = await dbContext.Set<Storage.Supply>().FindAsync([supplyId], cancellationToken);
         
@@ -15,7 +15,7 @@ internal class UpdateSupplyStorage(MasterovDbContext dbContext, IMapper mapper) 
             throw new Exception("supply not found");
         
         supplyExists.SupplierId = supplierId;
-        supplyExists.ProductTypeId = productTypeId;
+        supplyExists.ComponentTypeId = componentTypeId;
         supplyExists.WarehouseId = warehouseId;
         supplyExists.Quantity = quantity;
         supplyExists.PriceSupply = priceSupply;

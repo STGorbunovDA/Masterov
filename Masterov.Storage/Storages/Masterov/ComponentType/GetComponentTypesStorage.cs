@@ -7,7 +7,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Masterov.Storage.Storages.Masterov.ComponentType;
 
-internal class GetComponentTypesStorage (MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetProductsTypeStorage
+internal class GetComponentTypesStorage (MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetComponentTypesStorage
 {
     public async Task<IEnumerable<ComponentTypeDomain>> GetComponentTypes(CancellationToken cancellationToken) =>
         (await memoryCache.GetOrCreateAsync<ComponentTypeDomain[]>(

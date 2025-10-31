@@ -36,7 +36,7 @@ internal class StorageProfile : Profile
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId));
 
         
-        // ProductType mapping
+        // ComponentType mapping
         CreateMap<ComponentType, ComponentTypeDomain>();
             
         // Warehouse mapping

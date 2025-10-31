@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models.ComponentType;
+using Masterov.API.Models.UsedComponent;
 using Masterov.Domain.Masterov.ComponentType.AddComponentType;
 using Masterov.Domain.Masterov.ComponentType.AddComponentType.Command;
 using Masterov.Domain.Masterov.ComponentType.DeleteComponentType;
@@ -14,6 +15,8 @@ using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt.Query;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt.Query;
+using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId;
+using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId.Query;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType.Command;
 using Microsoft.AspNetCore.Authorization;
@@ -44,12 +47,12 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     }
     
     /// <summary>
-    /// Получить изделие по Id
+    /// Получить тип компонента по Id
     /// </summary>
-    /// <param name="componentTypeId">Идентификатор типа изделия</param>
+    /// <param name="componentTypeId">Идентификатор типа компонента</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе изделия</returns>
+    /// <returns>Информация о типе компонента</returns>
     [HttpGet("getComponentTypeById/{componentTypeId:guid}")]
     [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -65,12 +68,12 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     }
     
     /// <summary>
-    /// Получить изделие по имени
+    /// Получить тип компонента по имени
     /// </summary>
-    /// <param name="componentTypeName">Название типа изделия</param>
+    /// <param name="componentTypeName">Название типа компонента</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе изделия</returns>
+    /// <returns>Информация о типе компонента</returns>
     [HttpGet("getComponentTypeByName/{componentTypeName}")]
     [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -86,12 +89,12 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     }
     
     /// <summary>
-    /// Получить изделие по дате создания
+    /// Получить компонент по дате создания
     /// </summary>
-    /// <param name="request">Дата создания изделия</param>
+    /// <param name="request">Дата создания компонента</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе изделия</returns>
+    /// <returns>Информация о типе компонента</returns>
     [HttpGet("getComponentTypesByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -106,12 +109,12 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     }
     
     /// <summary>
-    /// Получить изделие по дате обновления
+    /// Получить компонент по дате обновления
     /// </summary>
-    /// <param name="request">Дата обновления изделия</param>
+    /// <param name="request">Дата обновления компонента</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе изделия</returns>
+    /// <returns>Информация о типе компонента</returns>
     [HttpGet("getComponentTypesByUpdatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -123,6 +126,27 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     {
         var componentTypes = await useCase.Execute(new GetComponentTypesByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
+    }
+    
+    /// <summary>
+    /// Получить используемые компоненты по идентификатору типа компонента
+    /// </summary>
+    /// <param name="request">Идентификатор компонента</param>
+    /// <param name="getUsedComponentsByComponentTypeIdUseCase"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>Результат получения списка используемых компонентов</returns>
+    [HttpGet("getUsedComponentsByComponentTypeId")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetUsedComponentsByComponentTypeId(
+        [FromQuery] GetUsedComponentsByComponentTypeIdRequest request,
+        [FromServices] IGetUsedComponentsByComponentTypeIdUseCase getUsedComponentsByComponentTypeIdUseCase,
+        CancellationToken cancellationToken)
+    {
+        var usedComponents = await getUsedComponentsByComponentTypeIdUseCase.Execute(new GetUsedComponentsByComponentTypeIdQuery(request.componentTypeId), cancellationToken);
+        return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
     }
     
     /// <summary>

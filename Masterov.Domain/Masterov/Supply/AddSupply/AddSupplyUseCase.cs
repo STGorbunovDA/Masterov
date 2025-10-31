@@ -30,11 +30,11 @@ public class AddSupplyUseCase(
         if (supplierExists is null)
             throw new NotFoundByIdException(addSupplyCommand.SupplierId, "Поставщик");
 
-        var productTypeExists =
-            await getComponentTypeByIdStorage.GetComponentTypeById(addSupplyCommand.ProductTypeId, cancellationToken);
+        var componentTypeExists =
+            await getComponentTypeByIdStorage.GetComponentTypeById(addSupplyCommand.ComponentTypeId, cancellationToken);
 
-        if (productTypeExists is null)
-            throw new NotFoundByIdException(addSupplyCommand.ProductTypeId, "Тип изделия");
+        if (componentTypeExists is null)
+            throw new NotFoundByIdException(addSupplyCommand.ComponentTypeId, "Тип изделия");
 
         var warehouseExists =
             await getWarehouseByIdStorage.GetWarehouseById(addSupplyCommand.WarehouseId, cancellationToken);
@@ -43,7 +43,7 @@ public class AddSupplyUseCase(
             throw new NotFoundByIdException(addSupplyCommand.WarehouseId, "Склад");
 
         var supplyDomain = await addSupplyStorage.AddSupply(addSupplyCommand.SupplierId,
-            addSupplyCommand.ProductTypeId, addSupplyCommand.WarehouseId, addSupplyCommand.Quantity,
+            addSupplyCommand.ComponentTypeId, addSupplyCommand.WarehouseId, addSupplyCommand.Quantity,
             addSupplyCommand.PriceSupply, cancellationToken);
 
         if (supplyDomain is null)

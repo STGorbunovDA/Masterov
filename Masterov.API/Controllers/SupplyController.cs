@@ -7,8 +7,8 @@ using Masterov.Domain.Masterov.Supply.AddSupply;
 using Masterov.Domain.Masterov.Supply.AddSupply.Command;
 using Masterov.Domain.Masterov.Supply.DeleteSupply;
 using Masterov.Domain.Masterov.Supply.DeleteSupply.Command;
-using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId;
-using Masterov.Domain.Masterov.Supply.GetProductTypeBySupplyId.Query;
+using Masterov.Domain.Masterov.Supply.GetComponentTypeBySupplyId;
+using Masterov.Domain.Masterov.Supply.GetComponentTypeBySupplyId.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplies;
@@ -167,18 +167,18 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе продука</returns>
-    [HttpGet("GetProductTypeBySupplyId")]
+    [HttpGet("GetComponentTypeBySupplyId")]
     [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetProductTypeBySupplyId(
-        [FromQuery] GetProductTypeBySupplyIdRequest request,
-        [FromServices] IGetProductTypeBySupplyIdUseCase useCase,
+    public async Task<IActionResult> GetComponentTypeBySupplyId(
+        [FromQuery] GetComponentTypeBySupplyIdRequest request,
+        [FromServices] IGetComponentTypeBySupplyIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var productTypeDomain = await useCase.Execute(new GetProductTypeBySupplyIdQuery(request.SupplyId), cancellationToken);
-        return Ok(mapper.Map<ComponentTypeResponse>(productTypeDomain));
+        var componentTypeDomain = await useCase.Execute(new GetComponentTypeBySupplyIdQuery(request.SupplyId), cancellationToken);
+        return Ok(mapper.Map<ComponentTypeResponse>(componentTypeDomain));
     }
     
     /// <summary>
@@ -219,7 +219,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         [FromServices] IAddSupplyUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supply = await useCase.Execute(new AddSupplyCommand(request.SupplierId, request.ProductTypeId, request.WarehouseId, request.Quantity, request.PriceSupply), cancellationToken);
+        var supply = await useCase.Execute(new AddSupplyCommand(request.SupplierId, request.ComponentTypeId, request.WarehouseId, request.Quantity, request.PriceSupply), cancellationToken);
     
         return CreatedAtAction(nameof(GetSupplyById),
             new { supplyId = supply.SupplyId },
@@ -262,7 +262,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var updateSupply = await useCase.Execute(
-            new UpdateSupplyCommand(request.SupplyId, request.SupplierId, request.ProductTypeId, request.WarehouseId, request.Quantity, request.PriceSupply),
+            new UpdateSupplyCommand(request.SupplyId, request.SupplierId, request.ComponentTypeId, request.WarehouseId, request.Quantity, request.PriceSupply),
             cancellationToken);
         return Ok(mapper.Map<SupplyNewResponse>(updateSupply));
     }

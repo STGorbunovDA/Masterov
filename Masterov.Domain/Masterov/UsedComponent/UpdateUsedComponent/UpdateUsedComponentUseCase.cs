@@ -32,9 +32,9 @@ public class UpdateUsedComponentUseCase(
         if (order is null)
             throw new NotFoundByIdException(updateUsedComponentCommand.OrderId, "Заказ");
 
-        var productType = await componentTypeStorage.GetComponentTypeById(updateUsedComponentCommand.ProductTypeId, cancellationToken);
-        if (productType is null)
-            throw new NotFoundByIdException(updateUsedComponentCommand.ProductTypeId, "Тип изделия");
+        var componentType = await componentTypeStorage.GetComponentTypeById(updateUsedComponentCommand.ComponentTypeId, cancellationToken);
+        if (componentType is null)
+            throw new NotFoundByIdException(updateUsedComponentCommand.ComponentTypeId, "Тип изделия");
 
         var warehouse = await warehouseStorage.GetWarehouseById(updateUsedComponentCommand.WarehouseId, cancellationToken);
         if (warehouse is null)
@@ -52,7 +52,7 @@ public class UpdateUsedComponentUseCase(
                 cancellationToken);
         
         return await storage.UpdateUsedComponent(updateUsedComponentCommand.UsedComponentId,
-            updateUsedComponentCommand.OrderId, updateUsedComponentCommand.ProductTypeId,
+            updateUsedComponentCommand.OrderId, updateUsedComponentCommand.ComponentTypeId,
             updateUsedComponentCommand.WarehouseId, updateUsedComponentCommand.Quantity,
             updateUsedComponentCommand.CreatedAt, cancellationToken);
     }

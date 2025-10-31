@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.UsedComponent;
 
 internal class UpdateUsedComponentStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateUsedComponentStorage
 {
-    public async Task<UsedComponentDomain> UpdateUsedComponent(Guid usedComponentId, Guid orderId, Guid productTypeId, Guid warehouseId, int quantity,
+    public async Task<UsedComponentDomain> UpdateUsedComponent(Guid usedComponentId, Guid orderId, Guid componentTypeId, Guid warehouseId, int quantity,
         DateTime? createdAt, CancellationToken cancellationToken)
     {
         var usedComponentExists = await dbContext.Set<Storage.UsedComponent>().FindAsync([usedComponentId], cancellationToken);
@@ -16,7 +16,7 @@ internal class UpdateUsedComponentStorage(MasterovDbContext dbContext, IMapper m
             throw new Exception("usedComponent not found");
 
         usedComponentExists.OrderId = orderId;
-        usedComponentExists.ProductTypeId = productTypeId;
+        usedComponentExists.ComponentTypeId = componentTypeId;
         usedComponentExists.WarehouseId = warehouseId;
         usedComponentExists.Quantity = quantity;
         if (createdAt.HasValue)

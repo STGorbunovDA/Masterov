@@ -6,10 +6,10 @@ namespace Masterov.Storage.Storages.Masterov.ComponentType;
 
 internal class UpdateComponentTypeStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateComponentTypeStorage
 {
-    public async Task<ComponentTypeDomain> UpdateComponentType(Guid productTypeId, string name, DateTime? createdAt,
+    public async Task<ComponentTypeDomain> UpdateComponentType(Guid componentTypeId, string name, DateTime? createdAt,
         string? description, CancellationToken cancellationToken)
     {
-        var componentType = await dbContext.Set<Storage.ComponentType>().FindAsync([productTypeId], cancellationToken);
+        var componentType = await dbContext.Set<Storage.ComponentType>().FindAsync([componentTypeId], cancellationToken);
 
         if (componentType == null)
             throw new Exception("componentType not found");

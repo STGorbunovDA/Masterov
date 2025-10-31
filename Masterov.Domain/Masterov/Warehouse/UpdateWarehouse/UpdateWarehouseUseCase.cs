@@ -18,11 +18,11 @@ public class UpdateWarehouseUseCase(
     {
         await validator.ValidateAndThrowAsync(updateWarehouseCommand, cancellationToken);
 
-        var productTypeExists =
-            await getComponentTypeByIdStorage.GetComponentTypeById(updateWarehouseCommand.ProductTypeId, cancellationToken);
+        var componentTypeExists =
+            await getComponentTypeByIdStorage.GetComponentTypeById(updateWarehouseCommand.ComponentTypeId, cancellationToken);
 
-        if (productTypeExists is null)
-            throw new NotFoundByIdException(updateWarehouseCommand.ProductTypeId, "Тип изделия");
+        if (componentTypeExists is null)
+            throw new NotFoundByIdException(updateWarehouseCommand.ComponentTypeId, "Тип изделия");
 
         var warehouseExists =
             await getWarehouseByIdStorage.GetWarehouseById(updateWarehouseCommand.WarehouseId, cancellationToken);
@@ -31,7 +31,7 @@ public class UpdateWarehouseUseCase(
             throw new NotFoundByIdException(updateWarehouseCommand.WarehouseId, "Склад");
 
         return await updateSupplyStorage.UpdateWarehouse(updateWarehouseCommand.WarehouseId,
-            updateWarehouseCommand.ProductTypeId, updateWarehouseCommand.Name, updateWarehouseCommand.Quantity,
+            updateWarehouseCommand.ComponentTypeId, updateWarehouseCommand.Name, updateWarehouseCommand.Quantity,
             updateWarehouseCommand.Price, cancellationToken);
     }
 }

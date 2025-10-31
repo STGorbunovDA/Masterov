@@ -26,9 +26,9 @@ public class AddUsedComponentUseCase(
         if (order is null)
             throw new NotFoundByIdException(command.OrderId, "Заказ");
         
-        var productType = await componentTypeStorage.GetComponentTypeById(command.ProductTypeId, cancellationToken);
-        if (productType is null)
-            throw new NotFoundByIdException(command.ProductTypeId, "Тип изделия");
+        var componentType = await componentTypeStorage.GetComponentTypeById(command.ComponentTypeId, cancellationToken);
+        if (componentType is null)
+            throw new NotFoundByIdException(command.ComponentTypeId, "Тип изделия");
         
         var warehouse = await warehouseStorage.GetWarehouseById(command.WarehouseId, cancellationToken);
         if (warehouse is null)
@@ -38,7 +38,7 @@ public class AddUsedComponentUseCase(
 
         return await usedComponentStorage.AddUsedComponent(
             command.OrderId,
-            command.ProductTypeId,
+            command.ComponentTypeId,
             command.WarehouseId,
             command.Quantity,
             cancellationToken);

@@ -10,7 +10,7 @@ namespace Masterov.Storage.Storages.Masterov.Supply;
 
 internal class AddSupplyStorage(MasterovDbContext dbContext, IGuidFactory guidFactory, IMapper mapper) : IAddSupplyStorage
 {
-    public async Task<SupplyDomain> AddSupply(Guid supplierId, Guid productTypeId, Guid warehouseId, int quantity, decimal priceSupply, 
+    public async Task<SupplyDomain> AddSupply(Guid supplierId, Guid componentTypeId, Guid warehouseId, int quantity, decimal priceSupply, 
         CancellationToken cancellationToken)
     {
         var supplyId = guidFactory.Create();
@@ -20,7 +20,7 @@ internal class AddSupplyStorage(MasterovDbContext dbContext, IGuidFactory guidFa
         {
             SupplyId = supplyId,
             SupplierId = supplierId,
-            ProductTypeId = productTypeId,
+            ComponentTypeId = componentTypeId,
             WarehouseId = warehouseId,
             Quantity = quantity,
             PriceSupply = priceSupply,

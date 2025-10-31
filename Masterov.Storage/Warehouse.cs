@@ -11,7 +11,7 @@ public class Warehouse
     public string Name { get; set; }
 
     [ForeignKey(nameof(ComponentType))]
-    public Guid ProductTypeId { get; set; }
+    public Guid ComponentTypeId { get; set; }
     public ComponentType ComponentType { get; set; }
 
     [Range(0, int.MaxValue)]

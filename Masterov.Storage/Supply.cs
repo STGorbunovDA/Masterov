@@ -13,7 +13,7 @@ public class Supply
     public Supplier Supplier { get; set; }
 
     [Required, ForeignKey(nameof(ComponentType))]
-    public Guid ProductTypeId { get; set; }
+    public Guid ComponentTypeId { get; set; }
     public ComponentType ComponentType { get; set; }
 
     [Required, ForeignKey(nameof(Warehouse))]
