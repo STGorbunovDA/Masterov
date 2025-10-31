@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
+using Masterov.Domain.Extension;
 
 namespace Masterov.Domain.Masterov.ComponentType.UpdateComponentType.Command;
 
-public class UpdateProductTypeCommandValidator : AbstractValidator<UpdateComponentTypeCommand>
+public class UpdateComponentTypeCommandValidator : AbstractValidator<UpdateComponentTypeCommand>
 {
-    public UpdateProductTypeCommandValidator()
+    public UpdateComponentTypeCommandValidator()
     {
         RuleFor(q => q.ComponentTypeId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
@@ -18,6 +19,13 @@ public class UpdateProductTypeCommandValidator : AbstractValidator<UpdateCompone
             .MaximumLength(100)
             .WithErrorCode("TooLong")
             .WithMessage("The maximum length of the name should not be more than 100");
+        
+        // Валидация даты создания (CreatedAt)
+        RuleFor(c => c.CreatedAt)
+            .Must(DomainExtension.BeValidPastOrPresentDate)
+            .When(c => c.CreatedAt.HasValue)
+            .WithErrorCode("InvalidCreatedAt")
+            .WithMessage("Creation date cannot be in the future.");
         
         RuleFor(c => c.Description).Cascade(CascadeMode.Stop)
             .MaximumLength(200)

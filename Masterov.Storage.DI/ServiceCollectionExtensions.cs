@@ -167,7 +167,7 @@ public static class ServiceCollectionExtensions
         
         // ProductType
         services
-            .AddScoped<IUpdateProductTypeStorage, UpdateComponentTypeStorage>()
+            .AddScoped<IUpdateComponentTypeStorage, UpdateComponentTypeStorage>()
             .AddScoped<IDeleteComponentTypeStorage, DeleteComponentTypeStorage>()
             .AddScoped<IAddComponentTypeStorage, AddComponentTypeStorage>()
             .AddScoped<IGetComponentTypeByNameStorage, GetComponentTypeByNameStorage>()

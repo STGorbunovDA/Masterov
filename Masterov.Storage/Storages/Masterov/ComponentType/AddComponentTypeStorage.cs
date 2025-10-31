@@ -16,6 +16,7 @@ internal class AddComponentTypeStorage(MasterovDbContext dbContext, IGuidFactory
         {
             ComponentTypeId = productTypeGuide,
             Name = name,
+            CreatedAt = DateTime.Now,
             Description = description
         };
 

@@ -3,7 +3,7 @@ using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 
-public interface IUpdateProductTypeUseCase
+public interface IUpdateComponentTypeUseCase
 {
     Task<ComponentTypeDomain> Execute(UpdateComponentTypeCommand command, CancellationToken cancellationToken);
 }

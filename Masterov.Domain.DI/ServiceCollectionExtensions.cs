@@ -156,7 +156,7 @@ public static class ServiceCollectionExtensions
         
         // ProductType
         services
-            .AddScoped<IUpdateProductTypeUseCase, UpdateProductTypeUseCase>()
+            .AddScoped<IUpdateComponentTypeUseCase, UpdateComponentTypeUseCase>()
             .AddScoped<IDeleteComponentTypeUseCase, DeleteComponentTypeUseCase>()
             .AddScoped<IGetComponentTypeByNameUseCase, GetComponentTypeByNameUseCase>()
             .AddScoped<IAddComponentTypeUseCase, AddComponentTypeUseCase>()

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Masterov.API.Extensions;
 using Masterov.API.Models.ComponentType;
 using Masterov.Domain.Masterov.ComponentType.AddComponentType;
 using Masterov.Domain.Masterov.ComponentType.AddComponentType.Command;
@@ -108,9 +109,10 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация выполения</returns>
     [HttpDelete("deleteComponentType/{componentTypeId:guid}/")]
-    [ProducesResponseType(204)]
-    [ProducesResponseType(400)]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(204, Type = typeof(bool))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteComponentType(
         Guid componentTypeId,
         [FromServices] IDeleteComponentTypeUseCase useCase,
@@ -123,20 +125,23 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// <summary>
     /// Обновить тип изделия по Id
     /// </summary>
-    /// <param name="request"></param>
-    /// <param name="useCase"></param>
-    /// <param name="cancellationToken"></param>
-    /// <returns></returns>
-    [HttpPatch("updateComponentType")]
+    /// <param name="componentTypeId">Идентификатор типа изделия</param>
+    /// <param name="request">Данные для обновления типа изделия</param>
+    /// <param name="useCase">Сценарий обновления типа изделия</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат обновления типа изделия</returns>
+    [HttpPatch("updateComponentType/{componentTypeId:guid}")]
     [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateComponentType(
+        Guid componentTypeId,
         [FromBody] UpdateComponentTypeRequest request,
-        [FromServices] IUpdateProductTypeUseCase useCase,
+        [FromServices] IUpdateComponentTypeUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var updatedComponentType = await useCase.Execute(new UpdateComponentTypeCommand(request.ComponentTypeId, request.Name, request.Description), cancellationToken);
+        var updatedComponentType = await useCase.Execute(new UpdateComponentTypeCommand(componentTypeId, request.Name, request.CreatedAt.ToDateTime(), request.Description), cancellationToken);
         return Ok(mapper.Map<ComponentTypeResponse>(updatedComponentType));
     }
 }
