@@ -20,7 +20,6 @@ public class AddComponentTypeUseCase(IValidator<AddComponentTypeCommand> validat
         if (componentType is not null)
             throw new ProductTypeExistsException(addComponentTypeCommand.Name);
         
-        
         return await addComponentTypeStorage.AddComponentType(addComponentTypeCommand.Name, addComponentTypeCommand?.Description, cancellationToken);
     }
 }

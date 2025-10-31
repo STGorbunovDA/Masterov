@@ -79,21 +79,20 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// <summary>
     /// Добавить тип изделия
     /// </summary>
-    /// <param name="request">Изделие</param>
+    /// <param name="request">Данные о типе изделия</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе изделия</returns>
     [HttpPost("addComponentType")]
     [ProducesResponseType(201, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> AddComponentType(
         [FromBody] AddComponentTypeRequest request,
         [FromServices] IAddComponentTypeUseCase useCase,
         CancellationToken cancellationToken)
     {
         var componentType = await useCase.Execute(new AddComponentTypeCommand(request.Name, request.Description), cancellationToken);
-        
         return CreatedAtAction(nameof(GetComponentTypeById), new { productTypeId = componentType.ComponentTypeId }, mapper.Map<ComponentTypeResponse>(componentType));
     }
     
