@@ -9,6 +9,8 @@ using Masterov.Domain.Masterov.Warehouse.GetWarehouseById.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
+using Masterov.Domain.Masterov.Warehouse.UpdatePriceWarehouseById;
+using Masterov.Domain.Masterov.Warehouse.UpdatePriceWarehouseById.Command;
 using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById.Command;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
@@ -66,6 +68,48 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
+    /// Получить склад по имени
+    /// </summary>
+    /// <param name="nameWarehouse">Название склада</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о складе</returns>
+    [HttpGet("getWarehouseByName/{nameWarehouse}")]
+    [ProducesResponseType(200, Type = typeof(WarehouseResponse[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    public async Task<IActionResult> GetWarehouseByName(
+        [FromRoute] string nameWarehouse,
+        [FromServices] IGetWarehouseByNameUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var warehouses =
+            await useCase.Execute(new GetWarehouseByNameQuery(nameWarehouse), cancellationToken);
+        return Ok(warehouses.Select(mapper.Map<WarehouseResponse>));
+    }
+    
+    /// <summary>
+    /// Получить поставки по идентификатору склада
+    /// </summary>
+    /// <param name="request">Идентификатор склада</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставках</returns>
+    [HttpGet("getSuppliesByWarehouseId")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNoWarehouseNewResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSuppliesByWarehouseId(
+        [FromQuery] GetSuppliesByWarehouseIdRequest request,
+        [FromServices] IGetSuppliesByWarehouseIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplies = await useCase.Execute(new GetSuppliesByWarehouseIdQuery(request.WarehouseId), cancellationToken);
+        return Ok(mapper.Map<IEnumerable<SupplyNoWarehouseNewResponse>>(supplies));
+    }
+    
+    /// <summary>
     /// Обновить склад по Id
     /// </summary>
     /// <param name="request">Данные для обновления склада</param>
@@ -112,44 +156,27 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить склад по имени
+    /// Обновить цену на складе по Id
     /// </summary>
-    /// <param name="nameWarehouse">Название склада</param>
-    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="warehouseId">Идентификатор склада</param>
+    /// <param name="request">Данные для обновления склада</param>
+    /// <param name="useCase">Сценарий обновления скалад</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о складе</returns>
-    [HttpGet("getWarehouseByName/{nameWarehouse}")]
-    [ProducesResponseType(200, Type = typeof(WarehouseResponse[]))]
+    /// <returns>Результат обновления</returns>
+    [HttpPatch("updatePriceWarehouseById/{warehouseId:guid}")]
+    [ProducesResponseType(200, Type = typeof(WarehouseResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
-    public async Task<IActionResult> GetWarehouseByName(
-        [FromRoute] string nameWarehouse,
-        [FromServices] IGetWarehouseByNameUseCase useCase,
-        CancellationToken cancellationToken)
-    {
-        var warehouses =
-            await useCase.Execute(new GetWarehouseByNameQuery(nameWarehouse), cancellationToken);
-        return Ok(warehouses.Select(mapper.Map<WarehouseResponse>));
-    }
-    
-    /// <summary>
-    /// Получить поставки по идентификатору склада
-    /// </summary>
-    /// <param name="request">Идентификатор склада</param>
-    /// <param name="useCase">Сценарий использования</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о поставках</returns>
-    [HttpGet("getSuppliesByWarehouseId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNoWarehouseNewResponse>))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetSuppliesByWarehouseId(
-        [FromQuery] GetSuppliesByWarehouseIdRequest request,
-        [FromServices] IGetSuppliesByWarehouseIdUseCase useCase,
+    public async Task<IActionResult> UpdatePriceWarehouseById(
+        [FromRoute] Guid warehouseId,
+        [FromBody] UpdatePriceWarehouseByIdRequest request,
+        [FromServices] IUpdatePriceWarehouseByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supplies = await useCase.Execute(new GetSuppliesByWarehouseIdQuery(request.WarehouseId), cancellationToken);
-        return Ok(mapper.Map<IEnumerable<SupplyNoWarehouseNewResponse>>(supplies));
+        var updateWarehouse = await useCase.Execute(
+            new UpdatePriceWarehouseByIdCommand(warehouseId, request.Price), cancellationToken);
+        return Ok(mapper.Map<WarehouseResponse>(updateWarehouse));
     }
 }

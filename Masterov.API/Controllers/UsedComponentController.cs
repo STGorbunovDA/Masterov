@@ -38,7 +38,6 @@ namespace Masterov.API.Controllers;
 [Route("api/usedComponents")]
 public class UsedComponentController(IMapper mapper) : ControllerBase
 {
-    //TODO Продумать формирование вычета цены когда забираем со склада компоненты
     /// <summary>
     /// Получить все используемые компоненты
     /// </summary>

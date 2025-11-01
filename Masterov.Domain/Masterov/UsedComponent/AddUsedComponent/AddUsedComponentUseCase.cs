@@ -15,7 +15,7 @@ public class AddUsedComponentUseCase(
     IGetOrderByIdStorage orderStorage,
     IGetComponentTypeByIdStorage componentTypeStorage,
     IGetWarehouseByIdStorage warehouseStorage,
-    IUpdateWarehouseComponentQuantity updateWarehouseComponentQuantity)
+    IUpdateWarehouseComponentQuantityPrice updateWarehouseComponentQuantityPrice)
     : IAddUsedComponentUseCase
 {
     public async Task<UsedComponentDomain> Execute(AddUsedComponentCommand command, CancellationToken cancellationToken)
@@ -34,7 +34,7 @@ public class AddUsedComponentUseCase(
         if (warehouse is null)
             throw new NotFoundByIdException(command.WarehouseId, "Склад");
 
-        await updateWarehouseComponentQuantity.RemoveQuantityWarehouse(command.WarehouseId, command.Quantity, cancellationToken);
+        await updateWarehouseComponentQuantityPrice.RemoveQuantityPriceWarehouse(command.WarehouseId, command.Quantity, cancellationToken);
 
         return await usedComponentStorage.AddUsedComponent(
             command.OrderId,

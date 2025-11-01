@@ -10,12 +10,12 @@ public class UpdateWarehouseCommandValidator : AbstractValidator<UpdateWarehouse
         RuleFor(q => q.WarehouseId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
-            .WithMessage("SupplyId must not be an empty GUID.");
+            .WithMessage("WarehouseId must not be an empty GUID.");
         
         RuleFor(q => q.ComponentTypeId).Cascade(CascadeMode.Stop)
             .NotEqual(Guid.Empty)
             .WithErrorCode("InvalidId")
-            .WithMessage("SupplierId must not be an empty GUID.");
+            .WithMessage("ComponentTypeId must not be an empty GUID.");
         
         RuleFor(c => c.Name).Cascade(CascadeMode.Stop)
             .NotEmpty()
@@ -31,6 +31,6 @@ public class UpdateWarehouseCommandValidator : AbstractValidator<UpdateWarehouse
         
         RuleFor(q => q.Price).Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(0)
-            .WithMessage("The PriceSupply cannot be negative.");
+            .WithMessage("The Price cannot be negative.");
     }
 }

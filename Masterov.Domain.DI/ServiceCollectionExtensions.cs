@@ -113,6 +113,7 @@ using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
+using Masterov.Domain.Masterov.Warehouse.UpdatePriceWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Microsoft.Extensions.DependencyInjection;
@@ -251,6 +252,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetWarehouseByIdUseCase, GetWarehouseByIdUseCase>()
             .AddScoped<IUpdateWarehouseUseCase, UpdateWarehouseUseCase>()
             .AddScoped<IGetWarehouseByNameUseCase, GetWarehouseByNameUseCase>()
+            .AddScoped<IUpdatePriceWarehouseByIdUseCase, UpdatePriceWarehouseByIdUseCase>()
             .AddScoped<IGetSuppliesByWarehouseIdUseCase, GetSuppliesByWarehouseIdUseCase>()
             .AddScoped<IGetWarehousesUseCase, GetWarehousesUseCase>();
         
@@ -271,7 +273,7 @@ public static class ServiceCollectionExtensions
 
         services
             .AddScoped<IUpdateOrderStatusAfterPayment, UpdateOrderStatusAfterPayment>()
-            .AddScoped<IUpdateWarehouseComponentQuantity, UpdateWarehouseComponentQuantity>();
+            .AddScoped<IUpdateWarehouseComponentQuantityPrice, UpdateWarehouseComponentQuantityPrice>();
             
         return services;
     }
