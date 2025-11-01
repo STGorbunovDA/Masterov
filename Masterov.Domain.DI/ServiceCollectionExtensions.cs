@@ -66,10 +66,11 @@ using Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
 using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
 using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
-using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress;
+using Masterov.Domain.Masterov.Supplier.GetSupplierByEmail;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByAddress;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByName;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersBySurname;
 using Masterov.Domain.Masterov.Supplier.UpdateSupplier;
@@ -231,7 +232,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetSuppliersUseCase, GetSuppliersUseCase>()
             .AddScoped<IGetSuppliersByNameUseCase, GetSuppliersByNameUseCase>()
             .AddScoped<IGetSupplierByPhoneUseCase, GetSupplierByPhoneUseCase>()
-            .AddScoped<IGetSupplierByAddressUseCase, GetSupplierByAddressUseCase>()
+            .AddScoped<IGetSuppliersByAddressUseCase, GetSuppliersByAddressUseCase>()
+            .AddScoped<IGetSupplierByEmailUseCase, GetSupplierByEmailUseCase>()
             .AddScoped<IGetNewSuppliesBySupplierIdUseCase, GetNewSuppliesBySupplierIdUseCase>()
             .AddScoped<IDeleteSupplierUseCase, DeleteSupplierUseCase>()
             .AddScoped<IUpdateSupplierUseCase, UpdateSupplierUseCase>()

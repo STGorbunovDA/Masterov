@@ -7,13 +7,15 @@ using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
 using Masterov.Domain.Masterov.Supplier.DeleteSupplier.Command;
 using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
 using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId.Query;
-using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress;
-using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress.Query;
+using Masterov.Domain.Masterov.Supplier.GetSupplierByEmail;
+using Masterov.Domain.Masterov.Supplier.GetSupplierByEmail.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByAddress;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByAddress.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByName;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByName.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersBySurname;
@@ -77,85 +79,106 @@ public class SupplierController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Получить поставщиков по имени
     /// </summary>
-    /// <param name="supplierName">Имя поставщика</param>
+    /// <param name="request">Имя поставщика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставщиках</returns>
-    [HttpGet("GetSuppliersByName/{supplierName}")]
+    [HttpGet("GetSuppliersByName")]
     [ProducesResponseType(200, Type = typeof(SupplierResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliersByName(
-        [FromRoute] string supplierName,
+        [FromQuery] GetSuppliersByNameRequest request,
         [FromServices] IGetSuppliersByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var suppliers = await useCase.Execute(new GetSuppliersByNameQuery(supplierName), cancellationToken);
+        var suppliers = await useCase.Execute(new GetSuppliersByNameQuery(request.SupplierName), cancellationToken);
         return Ok(suppliers?.Select(mapper.Map<SupplierResponse>) ?? Array.Empty<SupplierResponse>());
     }
     
     /// <summary>
     /// Получить поставщиков по фамилии
     /// </summary>
-    /// <param name="supplierSurname">Фамилия поставщика</param>
+    /// <param name="request">Фамилия поставщика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставщиках</returns>
-    [HttpGet("getSuppliersBySurname/{supplierSurname}")]
+    [HttpGet("getSuppliersBySurname")]
     [ProducesResponseType(200, Type = typeof(SupplierResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliersBySurname(
-        [FromRoute] string supplierSurname,
+        [FromQuery] GetSuppliersBySurnameRequest request,
         [FromServices] IGetSuppliersBySurnameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var suppliers = await useCase.Execute(new GetSuppliersBySurnameQuery(supplierSurname), cancellationToken);
+        var suppliers = await useCase.Execute(new GetSuppliersBySurnameQuery(request.SupplierSurname), cancellationToken);
         return Ok(suppliers?.Select(mapper.Map<SupplierResponse>) ?? Array.Empty<SupplierResponse>());
     }
     
     /// <summary>
-    /// Получить потавщика по телефону
+    /// Получить поставщика по телефону
     /// </summary>
-    /// <param name="supplierPhone">Телефон поставщика</param>
+    /// <param name="request">Телефон поставщика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставщике</returns>
-    [HttpGet("GetSupplierByPhone/{supplierPhone}")]
+    [HttpGet("GetSupplierByPhone")]
     [ProducesResponseType(200, Type = typeof(SupplierResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSupplierByPhone(
-        [FromRoute] string supplierPhone,
+        [FromQuery] GetSuppliersByPhoneRequest request,
         [FromServices] IGetSupplierByPhoneUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supplier = await useCase.Execute(new GetSupplierByPhoneQuery(supplierPhone), cancellationToken);
+        var supplier = await useCase.Execute(new GetSupplierByPhoneQuery(request.SupplierPhone), cancellationToken);
+        return Ok(mapper.Map<SupplierResponse>(supplier));
+    }
+    
+    /// <summary>
+    /// Получить поставщика по почте
+    /// </summary>
+    /// <param name="request">Почта поставщика</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставщике</returns>
+    [HttpGet($"getSupplierByEmail")]
+    [ProducesResponseType(200, Type = typeof(SupplierResponse))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSupplierByEmail(
+        [FromQuery] GetSupplierByEmailRequest request,
+        [FromServices] IGetSupplierByEmailUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplier = await useCase.Execute(new GetSupplierByEmailQuery(request.Email), cancellationToken);
         return Ok(mapper.Map<SupplierResponse>(supplier));
     }
     
     /// <summary>
     /// Получить потавщика по адресу
     /// </summary>
-    /// <param name="supplierAddress">адрес поставщика</param>
+    /// <param name="request">Адрес поставщика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставщике</returns>
-    [HttpGet("GetSupplierByAdress/{supplierAddress}")]
+    [HttpGet("getSuppliersByAddress")]
     [ProducesResponseType(200, Type = typeof(SupplierResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetSupplierByAddress(
-        [FromRoute] string supplierAddress,
-        [FromServices] IGetSupplierByAddressUseCase useCase,
+    public async Task<IActionResult> GetSuppliersByAddress(
+        [FromQuery] GetSuppliersByAddressRequest request,
+        [FromServices] IGetSuppliersByAddressUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supplier = await useCase.Execute(new GetSupplierByAddressQuery(supplierAddress), cancellationToken);
-        return Ok(mapper.Map<SupplierResponse>(supplier));
+        var suppliers = await useCase.Execute(new GetSuppliersByAddressQuery(request.SupplierAddress), cancellationToken);
+        return Ok(suppliers?.Select(mapper.Map<SupplierResponse>) ?? Array.Empty<SupplierResponse>());
     }
     
     /// <summary>

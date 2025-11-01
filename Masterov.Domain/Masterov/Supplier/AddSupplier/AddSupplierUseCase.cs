@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.Supplier.AddSupplier.Command;
-using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByAddress;
 using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.Supplier.AddSupplier;
@@ -22,8 +22,8 @@ public class AddSupplierUseCase(
 
         if (addSupplierCommand.Phone is not null)
             supplier = await getSupplierByPhoneStorage.GetSupplierByPhone(addSupplierCommand.Phone, cancellationToken);
-        else if (supplier is null && addSupplierCommand.Address is not null)
-            supplier = await getSupplierByAddressStorage.GetSupplierByAddress(addSupplierCommand.Address, cancellationToken);
+        // else if (supplier is null && addSupplierCommand.Address is not null)
+        //     supplier = await getSupplierByAddressStorage.GetSuppliersByAddress(addSupplierCommand.Address, cancellationToken); // TODO 
 
         if (supplier is not null)
             if (supplier is { Address: not null, Phone: not null })
