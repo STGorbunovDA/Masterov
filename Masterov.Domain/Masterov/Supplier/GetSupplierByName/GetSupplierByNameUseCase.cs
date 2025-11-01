@@ -7,7 +7,7 @@ namespace Masterov.Domain.Masterov.Supplier.GetSupplierByName;
 
 public class GetSupplierByNameUseCase(IValidator<GetSupplierByNameQuery> validator, IGetSupplierByNameStorage storage) : IGetSupplierByNameUseCase
 {
-    public async Task<SupplierDomain?> Execute(GetSupplierByNameQuery getSupplierByNameQuery, CancellationToken cancellationToken)
+    public async Task<IEnumerable<SupplierDomain?>> Execute(GetSupplierByNameQuery getSupplierByNameQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getSupplierByNameQuery, cancellationToken);
         var supplierExists = await storage.GetSupplierByName(getSupplierByNameQuery.SupplierName, cancellationToken);

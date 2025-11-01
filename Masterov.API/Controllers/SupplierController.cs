@@ -82,16 +82,15 @@ public class SupplierController(IMapper mapper) : ControllerBase
     [HttpGet("GetSupplierByName/{supplierName}")]
     [ProducesResponseType(200, Type = typeof(SupplierResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSupplierByName(
         [FromRoute] string supplierName,
         [FromServices] IGetSupplierByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supplier =
-            await useCase.Execute(new GetSupplierByNameQuery(supplierName), cancellationToken);
-        return Ok(mapper.Map<SupplierResponse>(supplier));
+        var suppliers = await useCase.Execute(new GetSupplierByNameQuery(supplierName), cancellationToken);
+        return Ok(suppliers.Select(mapper.Map<SupplierResponse>));
     }
     
     /// <summary>

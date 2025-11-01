@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.Supplier.GetSupplierByName;
 
 public interface IGetSupplierByNameStorage
 {
-    Task<SupplierDomain?> GetSupplierByName(string supplierName, CancellationToken cancellationToken);
+    Task<IEnumerable<SupplierDomain?>> GetSupplierByName(string supplierName, CancellationToken cancellationToken);
 }

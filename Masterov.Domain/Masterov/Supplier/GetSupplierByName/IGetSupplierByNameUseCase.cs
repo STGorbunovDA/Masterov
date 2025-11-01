@@ -5,5 +5,5 @@ namespace Masterov.Domain.Masterov.Supplier.GetSupplierByName;
 
 public interface IGetSupplierByNameUseCase
 {
-    Task<SupplierDomain?> Execute(GetSupplierByNameQuery getSupplierByNameQuery, CancellationToken cancellationToken);
+    Task<IEnumerable<SupplierDomain?>> Execute(GetSupplierByNameQuery getSupplierByNameQuery, CancellationToken cancellationToken);
 }

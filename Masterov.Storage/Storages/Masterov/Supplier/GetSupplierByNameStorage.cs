@@ -2,28 +2,24 @@
 using Masterov.Domain.Masterov.Supplier.GetSupplierByName;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Masterov.Storage.Storages.Masterov.Supplier;
 
-internal class GetSupplierByNameStorage(MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetSupplierByNameStorage
+internal class GetSupplierByNameStorage(MasterovDbContext dbContext, IMapper mapper) : IGetSupplierByNameStorage
 {
-    public async Task<SupplierDomain?> GetSupplierByName(string supplierName, CancellationToken cancellationToken)=>
-        (await memoryCache.GetOrCreateAsync<SupplierDomain?>( 
-            nameof(GetSupplierByName),
-            async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
-                
-                var supplier = await dbContext.Suppliers
-                    .AsNoTracking()
-                        .Include(c => c.Supplies)
-                            .ThenInclude(p => p.ComponentType)
-                        .Include(c => c.Supplies)
-                            .ThenInclude(p => p.Warehouse)
-                    .Where(f => f.Name.ToLower() == supplierName.ToLower().Trim())
-                    .FirstOrDefaultAsync( cancellationToken);
-                
-                return mapper.Map<SupplierDomain>(supplier);
-            }))!;
+    public async Task<IEnumerable<SupplierDomain?>> GetSupplierByName(string supplierName, CancellationToken cancellationToken)
+    {
+        var normalizedName = supplierName.Trim().ToLower();
+
+        var suppliers = await dbContext.Suppliers
+            .AsNoTracking()
+                .Include(c => c.Supplies)
+                    .ThenInclude(p => p.ComponentType)
+                .Include(c => c.Supplies)
+                    .ThenInclude(p => p.Warehouse)
+            .Where(f => f.Name.ToLower().Contains(normalizedName))
+            .ToArrayAsync(cancellationToken);
+
+        return mapper.Map<IEnumerable<SupplierDomain>>(suppliers);
+    }
 }
