@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models.ComponentType;
+using Masterov.API.Models.Supply;
 using Masterov.API.Models.UsedComponent;
 using Masterov.Domain.Masterov.ComponentType.AddComponentType;
 using Masterov.Domain.Masterov.ComponentType.AddComponentType.Command;
@@ -15,6 +16,8 @@ using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt.Query;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt.Query;
+using Masterov.Domain.Masterov.ComponentType.GetSuppliesByComponentTypeId;
+using Masterov.Domain.Masterov.ComponentType.GetSuppliesByComponentTypeId.Query;
 using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId;
 using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId.Query;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
@@ -132,8 +135,8 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// Получить используемые компоненты по идентификатору типа компонента
     /// </summary>
     /// <param name="request">Идентификатор компонента</param>
-    /// <param name="getUsedComponentsByComponentTypeIdUseCase"></param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="getUsedComponentsByComponentTypeIdUseCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат получения списка используемых компонентов</returns>
     [HttpGet("getUsedComponentsByComponentTypeId")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
@@ -145,8 +148,29 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
         [FromServices] IGetUsedComponentsByComponentTypeIdUseCase getUsedComponentsByComponentTypeIdUseCase,
         CancellationToken cancellationToken)
     {
-        var usedComponents = await getUsedComponentsByComponentTypeIdUseCase.Execute(new GetUsedComponentsByComponentTypeIdQuery(request.componentTypeId), cancellationToken);
+        var usedComponents = await getUsedComponentsByComponentTypeIdUseCase.Execute(new GetUsedComponentsByComponentTypeIdQuery(request.ComponentTypeId), cancellationToken);
         return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
+    }
+    
+    /// <summary>
+    /// Получить поставки по идентификатору типа компонента
+    /// </summary>
+    /// <param name="request">Идентификатор компонента</param>
+    /// <param name="getSuppliesByComponentTypeIdUseCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат получения списка поставок</returns>
+    [HttpGet("getSuppliesByComponentTypeId")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNewResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSuppliesByComponentTypeId(
+        [FromQuery] GetSuppliesByComponentTypeIdRequest request,
+        [FromServices] IGetSuppliesByComponentTypeIdUseCase getSuppliesByComponentTypeIdUseCase,
+        CancellationToken cancellationToken)
+    {
+        var supplies = await getSuppliesByComponentTypeIdUseCase.Execute(new GetSuppliesByComponentTypeIdQuery(request.ComponentTypeId), cancellationToken);
+        return Ok(supplies?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
     }
     
     /// <summary>

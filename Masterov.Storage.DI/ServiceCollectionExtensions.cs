@@ -6,6 +6,7 @@ using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt;
+using Masterov.Domain.Masterov.ComponentType.GetSuppliesByComponentTypeId;
 using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 using Masterov.Domain.Masterov.Customer.AddCustomer;
@@ -176,6 +177,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetComponentTypesByUpdatedAtStorage, GetComponentTypesByUpdatedAtStorage>()
             .AddScoped<IGetComponentTypesByCreatedAtStorage, GetComponentTypesByCreatedAtStorage>()
             .AddScoped<IAddComponentTypeStorage, AddComponentTypeStorage>()
+            .AddScoped<IGetSuppliesByComponentTypeIdStorage, GetSuppliesByComponentTypeIdStorage>()
             .AddScoped<IGetComponentTypeByNameStorage, GetComponentTypeByNameStorage>()
             .AddScoped<IGetUsedComponentsByComponentTypeIdStorage, GetUsedComponentsByComponentTypeIdStorage>()
             .AddScoped<IGetComponentTypesStorage, GetComponentTypesStorage>()
@@ -264,7 +266,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetSuppliesByWarehouseIdStorage, GetSuppliesByWarehouseIdStorage>()
             .AddScoped<IGetWarehousesStorage, GetWarehousesStorage>();
         
-        // Component
+        // Used Component
         services
             .AddScoped<IGetUsedComponentsStorage, GetUsedComponentsStorage>()
             .AddScoped<IGetUsedComponentsByQuantityStorage, GetUsedComponentsByQuantityStorage>()

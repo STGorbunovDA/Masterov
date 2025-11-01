@@ -89,7 +89,7 @@ internal class ApiProfile : Profile
         CreateMap<SupplierDomain, SupplierResponse>();
         CreateMap<SupplierDomain, SupplierNewResponse>();
         CreateMap<SupplyDomain, SupplyRequest>()
-            .ForMember(dest => dest.WarehouseNew, opt => opt.MapFrom(src => src.Warehouse))
+            .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse))
             .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
             .ForMember(dest => dest.ComponentType, opt => opt.MapFrom(src => src.ComponentType));
         CreateMap<SupplierDomain, SupplierRequestNoSupply>();
@@ -97,7 +97,7 @@ internal class ApiProfile : Profile
         CreateMap<SupplyDomain, SupplyNewResponse>()
             .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
             .ForMember(dest => dest.ComponentType, opt => opt.MapFrom(src => src.ComponentType))
-            .ForMember(dest => dest.WarehouseNew, opt => opt.MapFrom(src => src.Warehouse));
+            .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse));
 
         CreateMap<SupplyDomain, SupplyNoWarehouseNewResponse>()
             .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
