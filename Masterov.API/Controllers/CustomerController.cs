@@ -192,10 +192,10 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetOrdersByCustomerId(
         [FromQuery] GetOrdersByCustomerIdRequest request,
-        [FromServices] IGetOrdersByCustomerIdUseCase getOrdersByCustomerIdUseCase,
+        [FromServices] IGetOrdersByCustomerIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var orders = await getOrdersByCustomerIdUseCase.Execute(new GetOrdersByCustomerIdQuery(request.CustomerId), cancellationToken);
+        var orders = await useCase.Execute(new GetOrdersByCustomerIdQuery(request.CustomerId), cancellationToken);
         return Ok(orders?.Select(mapper.Map<OrderNoCustumerResponse>) ?? Array.Empty<OrderNoCustumerResponse>());
     }
     

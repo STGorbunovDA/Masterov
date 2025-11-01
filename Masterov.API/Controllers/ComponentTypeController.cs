@@ -157,7 +157,7 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// Получить используемые компоненты по идентификатору типа компонента
     /// </summary>
     /// <param name="request">Идентификатор компонента</param>
-    /// <param name="getUsedComponentsByComponentTypeIdUseCase">Сценарий использования</param>
+    /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат получения списка используемых компонентов</returns>
     [HttpGet("getUsedComponentsByComponentTypeId")]
@@ -167,10 +167,10 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetUsedComponentsByComponentTypeId(
         [FromQuery] GetUsedComponentsByComponentTypeIdRequest request,
-        [FromServices] IGetUsedComponentsByComponentTypeIdUseCase getUsedComponentsByComponentTypeIdUseCase,
+        [FromServices] IGetUsedComponentsByComponentTypeIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var usedComponents = await getUsedComponentsByComponentTypeIdUseCase.Execute(new GetUsedComponentsByComponentTypeIdQuery(request.ComponentTypeId), cancellationToken);
+        var usedComponents = await useCase.Execute(new GetUsedComponentsByComponentTypeIdQuery(request.ComponentTypeId), cancellationToken);
         return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
     }
     
@@ -178,7 +178,7 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// Получить поставки по идентификатору типа компонента
     /// </summary>
     /// <param name="request">Идентификатор компонента</param>
-    /// <param name="getSuppliesByComponentTypeIdUseCase">Сценарий использования</param>
+    /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат получения списка поставок</returns>
     [HttpGet("getSuppliesByComponentTypeId")]
@@ -188,10 +188,10 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliesByComponentTypeId(
         [FromQuery] GetSuppliesByComponentTypeIdRequest request,
-        [FromServices] IGetSuppliesByComponentTypeIdUseCase getSuppliesByComponentTypeIdUseCase,
+        [FromServices] IGetSuppliesByComponentTypeIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supplies = await getSuppliesByComponentTypeIdUseCase.Execute(new GetSuppliesByComponentTypeIdQuery(request.ComponentTypeId), cancellationToken);
+        var supplies = await useCase.Execute(new GetSuppliesByComponentTypeIdQuery(request.ComponentTypeId), cancellationToken);
         return Ok(supplies?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
     }
     

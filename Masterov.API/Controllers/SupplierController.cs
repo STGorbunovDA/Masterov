@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using Masterov.API.Models.Customer;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
-using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
-using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId.Query;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
 using Masterov.Domain.Masterov.Supplier.AddSupplier.Command;
 using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
@@ -31,7 +28,7 @@ namespace Masterov.API.Controllers;
 /// </summary>
 /// <param name="mapper"></param>
 [ApiController]
-[Route("api/supplier")]
+[Route("api/suppliers")]
 public class SupplierController(IMapper mapper) : ControllerBase
 {
     // TODO при добавлении поставщика имя должно быть уникальным
@@ -41,10 +38,10 @@ public class SupplierController(IMapper mapper) : ControllerBase
     /// </summary>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказчиках</returns>
+    /// <returns>Информация о поставщиках</returns>
     [HttpGet("getSuppliers")]
-    [ProducesResponseType(200, Type = typeof(SupplierResponse[]))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplierResponse>))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliers(
         [FromServices] IGetSuppliersUseCase useCase,

@@ -60,7 +60,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// Получить пользователя по логину
     /// </summary>
     /// <param name="request">Логин пользователя</param>
-    /// <param name="getUserByLoginUseCase">Сценарий получения пользователя по логину</param>
+    /// <param name="useCase">Сценарий получения пользователя по логину</param>
     /// <param name="cancellationToken">Токен отмены операции</param>
     /// <returns>Данные пользователя</returns>
     [HttpGet("getUserByLogin")]
@@ -70,10 +70,10 @@ public class UserController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUserByLogin(
         [FromQuery] GetUserByLoginRequest request,
-        [FromServices] IGetUserByLoginUseCase getUserByLoginUseCase,
+        [FromServices] IGetUserByLoginUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var user = await getUserByLoginUseCase.Execute(new GetUserByLoginQuery(request.Login), cancellationToken);
+        var user = await useCase.Execute(new GetUserByLoginQuery(request.Login), cancellationToken);
         return Ok(mapper.Map<UserResponse>(user));
     }
 
@@ -81,7 +81,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// Получить пользователя по Id
     /// </summary>
     /// <param name="userId">Идентификатор пользователя</param>
-    /// <param name="getUserByIdUseCase">Сценарий получения пользователя по Id</param>
+    /// <param name="useCase">Сценарий получения пользователя по Id</param>
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Данные пользователя</returns>
     [HttpGet("getUserById/{userId:guid}")]
@@ -91,10 +91,10 @@ public class UserController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUserById(
         Guid userId,
-        [FromServices] IGetUserByIdUseCase getUserByIdUseCase,
+        [FromServices] IGetUserByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var user = await getUserByIdUseCase.Execute(new GetUserByIdQuery(userId), cancellationToken);
+        var user = await useCase.Execute(new GetUserByIdQuery(userId), cancellationToken);
         return Ok(mapper.Map<UserResponse>(user));
     }
     
@@ -102,7 +102,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// Получить пользователей по роли
     /// </summary>
     /// <param name="request">Роль пользователей</param>
-    /// <param name="getUsersByRoleUseCase">Сценарий получения пользователей по роли</param>
+    /// <param name="useCase">Сценарий получения пользователей по роли</param>
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Данные пользователей</returns>
     [HttpGet("getUsersByRole")]
@@ -112,10 +112,10 @@ public class UserController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUsersByRole(
         [FromQuery] GetUsersByRoleRequest request,
-        [FromServices] IGetUsersByRoleUseCase getUsersByRoleUseCase,
+        [FromServices] IGetUsersByRoleUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var users = await getUsersByRoleUseCase.Execute(new GetUsersByRoleQuery(EnumTypeHelper.FromExtensionRoleMethod(request.Role)), cancellationToken);
+        var users = await useCase.Execute(new GetUsersByRoleQuery(EnumTypeHelper.FromExtensionRoleMethod(request.Role)), cancellationToken);
         return Ok(users?.Select(mapper.Map<UserResponse>) ?? Array.Empty<UserResponse>());
     }
     
@@ -244,7 +244,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// Изменить роль для пользователя по логину
     /// </summary>
     /// <param name="request">Запрос с данными для изменения роли пользователя</param>
-    /// <param name="changeRoleUserByLoginUseCase">Сценарий для изменения роли пользователя</param>
+    /// <param name="useCase">Сценарий для изменения роли пользователя</param>
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changeRoleUserByLogin")]
@@ -254,10 +254,10 @@ public class UserController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> ChangeRoleUserByLogin(
         [FromQuery] ChangeRoleUserByLoginRequest request,
-        [FromServices] IChangeRoleUserByLoginUseCase changeRoleUserByLoginUseCase,
+        [FromServices] IChangeRoleUserByLoginUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var user = await changeRoleUserByLoginUseCase.Execute(
+        var user = await useCase.Execute(
             new ChangeRoleUserByLoginCommand(request.Name, 
                 EnumTypeHelper.FromExtensionRoleMethod(request.Role)),
             cancellationToken);
@@ -270,7 +270,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// </summary>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="request">Запрос с данными для изменения роли пользователя</param>
-    /// <param name="changeRoleUserByIdUseCase">Сценарий для изменения роли пользователя</param>
+    /// <param name="useCase">Сценарий для изменения роли пользователя</param>
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changeRoleUserById/{userId:guid}")]
@@ -281,10 +281,10 @@ public class UserController(IMapper mapper) : ControllerBase
     public async Task<IActionResult> ChangeRoleUserById(
         [FromRoute] Guid userId,
         [FromQuery] ChangeRoleUserByIdRequest request,
-        [FromServices] IChangeRoleUserByIdUseCase changeRoleUserByIdUseCase,
+        [FromServices] IChangeRoleUserByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var user = await changeRoleUserByIdUseCase.Execute(
+        var user = await useCase.Execute(
             new ChangeRoleUserByIdCommand(userId, 
                 EnumTypeHelper.FromExtensionRoleMethod(request.Role)),
             cancellationToken);
@@ -297,7 +297,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// </summary>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="request">Запрос с данными для изменения заказчика для пользователя</param>
-    /// <param name="changeCustomerFromUserUseCase">Сценарий изменения заказчика для пользователя</param>
+    /// <param name="useCase">Сценарий изменения заказчика для пользователя</param>
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changeCustomerFromUser")]
@@ -308,10 +308,10 @@ public class UserController(IMapper mapper) : ControllerBase
     public async Task<IActionResult> ChangeCustomerFromUser(
         [FromRoute] Guid userId,
         [FromQuery] ChangeCustomerFromUserRequest request,
-        [FromServices] IChangeCustomerFromUserUseCase changeCustomerFromUserUseCase,
+        [FromServices] IChangeCustomerFromUserUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var user = await changeCustomerFromUserUseCase.Execute(
+        var user = await useCase.Execute(
             new ChangeCustomerFromUserCommand(userId, request.CustomerId),
             cancellationToken);
 
@@ -323,7 +323,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// </summary>
     /// <param name="userId">Идентификатор пользователя</param>
     /// <param name="request">Запрос с данными для изменения пароля у пользователя</param>
-    /// <param name="changePasswordFromUserUseCase">Сервис для изменения пароля у пользователя</param>
+    /// <param name="useCase">Сервис для изменения пароля у пользователя</param>
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Результат обновления пользователя</returns>
     [HttpPatch("changePasswordFromUser")]
@@ -334,10 +334,10 @@ public class UserController(IMapper mapper) : ControllerBase
     public async Task<IActionResult> ChangePasswordFromUser(
         [FromRoute] Guid userId,
         [FromBody] ChangePasswordFromUserRequest request,
-        [FromServices] IChangePasswordFromUserUseCase changePasswordFromUserUseCase,
+        [FromServices] IChangePasswordFromUserUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var success = await changePasswordFromUserUseCase.Execute(
+        var success = await useCase.Execute(
             new ChangePasswordFromUserCommand(userId, request.OldPassword, request.NewPassword),
             cancellationToken);
 
@@ -348,7 +348,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// Удалить пользователя по Id
     /// </summary>
     /// <param name="userId">Идентификатор пользователя для удаления</param>
-    /// <param name="byIdUseCase">Сервис для удаления пользователя по Id</param>
+    /// <param name="useCase">Сервис для удаления пользователя по Id</param>
     /// <param name="cancellationToken">Токен для отмены операции</param>
     /// <returns>Статус операции удаления пользователя</returns>
     [HttpDelete("deleteUserById/{userId:guid}")]
@@ -358,10 +358,10 @@ public class UserController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> DeleteUserById(
         [FromRoute] Guid userId,
-        [FromServices] IDeleteUserByIdUseCase byIdUseCase,
+        [FromServices] IDeleteUserByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var result = await byIdUseCase.Execute(new DeleteUserByIdCommand(userId), cancellationToken);
+        var result = await useCase.Execute(new DeleteUserByIdCommand(userId), cancellationToken);
         return Ok(result);
     }
 
@@ -369,7 +369,7 @@ public class UserController(IMapper mapper) : ControllerBase
     /// Удалить пользователя по логину.
     /// </summary>
     /// <param name="login">Логин пользователя для удаления.</param>
-    /// <param name="byLoginUseCase">Сервис для удаления пользователя по логину.</param>
+    /// <param name="useCase">Сервис для удаления пользователя по логину.</param>
     /// <param name="cancellationToken">Токен для отмены операции.</param>
     /// <returns>Статус операции удаления пользователя.</returns>
     [HttpDelete("deleteUserByLogin/{login}")]
@@ -379,10 +379,10 @@ public class UserController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> DeleteUserByLoginAsync(
         string login,
-        [FromServices] IDeleteUserByLoginUseCase byLoginUseCase,
+        [FromServices] IDeleteUserByLoginUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var result = await byLoginUseCase.Execute(new DeleteUserByLoginCommand(login), cancellationToken);
+        var result = await useCase.Execute(new DeleteUserByLoginCommand(login), cancellationToken);
         return Ok(result);
     }
 }
