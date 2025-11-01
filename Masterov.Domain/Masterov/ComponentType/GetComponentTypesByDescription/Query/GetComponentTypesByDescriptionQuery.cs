@@ -1,0 +1,3 @@
+﻿namespace Masterov.Domain.Masterov.ComponentType.GetComponentTypesByDescription.Query;
+
+public record GetComponentTypesByDescriptionQuery(string Description);

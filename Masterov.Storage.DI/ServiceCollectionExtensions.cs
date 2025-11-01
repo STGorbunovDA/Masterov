@@ -5,6 +5,7 @@ using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByDescription;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetSuppliesByComponentTypeId;
 using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId;
@@ -178,6 +179,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetComponentTypesByCreatedAtStorage, GetComponentTypesByCreatedAtStorage>()
             .AddScoped<IAddComponentTypeStorage, AddComponentTypeStorage>()
             .AddScoped<IGetSuppliesByComponentTypeIdStorage, GetSuppliesByComponentTypeIdStorage>()
+            .AddScoped<IGetComponentTypesByDescriptionStorage, GetComponentTypesByDescriptionStorage>()
             .AddScoped<IGetComponentTypeByNameStorage, GetComponentTypeByNameStorage>()
             .AddScoped<IGetUsedComponentsByComponentTypeIdStorage, GetUsedComponentsByComponentTypeIdStorage>()
             .AddScoped<IGetComponentTypesStorage, GetComponentTypesStorage>()
