@@ -9,18 +9,20 @@ namespace Masterov.Storage.Storages.Masterov.Supplier;
 
 internal class AddSupplierStorage(MasterovDbContext dbContext, IGuidFactory guidFactory, IMapper mapper) : IAddSupplierStorage
 {
-    public async Task<SupplierDomain> AddSupplier(string name, string? address, string? phone, 
+    public async Task<SupplierDomain> AddSupplier(string name, string surname, string? email, string? phone, string? address,
         CancellationToken cancellationToken)
     {
         var supplierId = guidFactory.Create();
 
-        // Создаем нового клиента
         var supplier = new Storage.Supplier
         {
             SupplierId = supplierId,
             Name = name,
+            Surname = surname,
+            Email = email,
+            Phone = phone,
             Address = address,
-            Phone = phone
+            CreatedAt = DateTime.Now
         };
 
         await dbContext.Suppliers.AddAsync(supplier, cancellationToken);
@@ -31,4 +33,5 @@ internal class AddSupplierStorage(MasterovDbContext dbContext, IGuidFactory guid
             .ProjectTo<SupplierDomain>(mapper.ConfigurationProvider)
             .FirstAsync(cancellationToken);
     }
+    
 }

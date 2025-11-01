@@ -10,7 +10,6 @@ public class GetUsersByRoleUseCase(IValidator<GetUsersByRoleQuery> validator, IG
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(usersByRoleQuery, cancellationToken);
-        
         return await storage.GetUsersByRole(usersByRoleQuery.role, cancellationToken);
     }
 }

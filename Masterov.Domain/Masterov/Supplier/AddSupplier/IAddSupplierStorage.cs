@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.Supplier.AddSupplier;
 
 public interface IAddSupplierStorage
 {
-    Task<SupplierDomain> AddSupplier(string name, string? address, string? phone, CancellationToken cancellationToken);
+    Task<SupplierDomain> AddSupplier(string name, string surname, string? email, string? phone, string? address, CancellationToken cancellationToken);
 }

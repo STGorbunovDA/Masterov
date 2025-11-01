@@ -75,7 +75,7 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// <summary>
     /// Получить типы компонента по имени
     /// </summary>
-    /// <param name="componentTypeName">Название типа компонента</param>
+    /// <param name="request">Название типа компонента</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типах компонентов</returns>
@@ -85,11 +85,11 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetComponentTypesByName(
-        [FromRoute] string componentTypeName,
+        [FromQuery] GetComponentTypesByNameRequest request,
         [FromServices] IGetComponentTypesByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var componentTypes = await useCase.Execute(new GetComponentTypesByNameQuery(componentTypeName), cancellationToken);
+        var componentTypes = await useCase.Execute(new GetComponentTypesByNameQuery(request.ComponentTypeName), cancellationToken);
         return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
     }
     
@@ -103,7 +103,6 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     [HttpGet("getComponentTypesByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetComponentTypesByCreatedAt(
         [FromQuery] GetComponentTypesByCreatedAtRequest request,
         [FromServices] IGetComponentTypesByCreatedAtUseCase useCase,
@@ -123,7 +122,6 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     [HttpGet("getComponentTypesByUpdatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetComponentTypesByUpdatedAt(
         [FromQuery] GetComponentTypesByUpdatedAtRequest request,
         [FromServices] IGetComponentTypesByUpdatedAtUseCase useCase,
@@ -143,7 +141,6 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     [HttpGet("getComponentTypesByDescription")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetComponentTypesByDescription(
         [FromQuery] GetComponentTypesByDescriptionRequest request,
         [FromServices] IGetComponentTypesByDescriptionUseCase useCase,
@@ -222,13 +219,13 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация выполения</returns>
-    [HttpDelete("deleteComponentType/{componentTypeId:guid}/")]
+    [HttpDelete("deleteComponentType/{componentTypeId:guid}")]
     [ProducesResponseType(204, Type = typeof(bool))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteComponentType(
-        Guid componentTypeId,
+        [FromRoute] Guid componentTypeId,
         [FromServices] IDeleteComponentTypeUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -250,7 +247,7 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateComponentType(
-        Guid componentTypeId,
+        [FromRoute] Guid componentTypeId,
         [FromBody] UpdateComponentTypeRequest request,
         [FromServices] IUpdateComponentTypeUseCase useCase,
         CancellationToken cancellationToken)

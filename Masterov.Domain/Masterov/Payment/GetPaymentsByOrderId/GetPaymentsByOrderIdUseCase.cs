@@ -12,7 +12,6 @@ public class GetPaymentsByOrderIdUseCase(IValidator<GetPaymentsByOrderIdQuery> v
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(paymentsByOrderIdQuery, cancellationToken);
-        
         return await storage.GetPaymentsByOrderId(paymentsByOrderIdQuery.OrderId, cancellationToken);
     }
 }

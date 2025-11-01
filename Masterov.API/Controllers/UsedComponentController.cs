@@ -46,7 +46,6 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     /// <returns>Информация о компонентах</returns>
     [HttpGet("getUsedComponents")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetUsedComponents(
         [FromServices] IGetUsedComponentsUseCase useCase,
@@ -87,7 +86,6 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     [HttpGet("getUsedComponentsByQuantity")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetUsedComponentsByQuantity(
         [FromQuery] UsedComponentsByQuantityRequest request,
@@ -109,7 +107,6 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     [HttpGet("getUsedComponentsByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetUsedComponentsByCreatedAt(
         [FromQuery] GetUsedComponentsByCreatedAtRequest request,
@@ -132,7 +129,6 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     [HttpGet("getUsedComponentsByUpdatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetUsedComponentsByUpdatedAt(
         [FromQuery] GetUsedComponentsByUpdatedAtRequest request,
@@ -254,7 +250,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteUsedComponent(
-        Guid usedComponentId,
+        [FromRoute] Guid usedComponentId,
         [FromQuery] DeleteUsedComponentRequest request,
         [FromServices] IDeleteUsedComponentUseCase useCase,
         CancellationToken cancellationToken)
@@ -276,6 +272,8 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(UsedComponentResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(500, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateUsedComponent(
         [FromRoute] Guid usedComponentId,

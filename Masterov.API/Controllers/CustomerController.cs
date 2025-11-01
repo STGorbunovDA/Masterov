@@ -44,7 +44,6 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// <returns>Информация о заказчиках</returns>
     [HttpGet("getCustomers")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerResponse>))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetCustomers(
         [FromServices] IGetCustomersUseCase useCase,
@@ -148,7 +147,6 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomersByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetCustomersByCreatedAt(
         [FromQuery] GetCustomersByCreatedAtRequest request,
         [FromServices] IGetCustomersByCreatedAtUseCase useCase,
@@ -168,7 +166,6 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [HttpGet("getCustomersByUpdatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<CustomerResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetCustomersByUpdatedAt(
         [FromQuery] GetCustomersByUpdatedAtRequest request,
         [FromServices] IGetCustomersByUpdatedAtUseCase useCase,
@@ -235,7 +232,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteCustomer(
-        Guid customerId,
+        [FromRoute] Guid customerId,
         [FromServices] IDeleteCustomerUseCase useCase,
         CancellationToken cancellationToken)
     {

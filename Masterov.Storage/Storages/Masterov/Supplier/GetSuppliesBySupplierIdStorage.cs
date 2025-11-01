@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
+using Masterov.Domain.Masterov.Supplier.GetSuppliesBySupplierId;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Masterov.Storage.Storages.Masterov.Supplier;
 
-public class GetNewSuppliesBySupplierIdStorage (MasterovDbContext dbContext, IMapper mapper) : IGetNewSuppliesBySupplierIdStorage
+internal class GetSuppliesBySupplierIdStorage (MasterovDbContext dbContext, IMapper mapper) : IGetSuppliesBySupplierIdStorage
 {
-    public async Task<IEnumerable<SupplyDomain>?> GetNewSuppliesBySupplierId(Guid supplierId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<SupplyDomain>?> GetSuppliesBySupplierId(Guid supplierId, CancellationToken cancellationToken)
     {
         var supplier = await dbContext.Suppliers
             .AsNoTracking()

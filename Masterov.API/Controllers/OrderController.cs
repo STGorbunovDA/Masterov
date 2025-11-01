@@ -55,7 +55,6 @@ public class OrderController(IMapper mapper) : ControllerBase
     /// <returns>Информация о всех заказах (ордерах)</returns>
     [HttpGet("getOrders")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetOrders(
         [FromServices] IGetOrdersUseCase useCase,
@@ -95,7 +94,6 @@ public class OrderController(IMapper mapper) : ControllerBase
     [HttpGet("getOrdersByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByCreatedAt(
         [FromQuery] GetOrdersByCreatedAtRequest request,
         [FromServices] IGetOrdersByCreatedAtUseCase useCase,
@@ -116,7 +114,6 @@ public class OrderController(IMapper mapper) : ControllerBase
     [HttpGet("getOrdersByUpdatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByUpdatedAt(
         [FromQuery] GetOrdersByUpdatedAtRequest request,
         [FromServices] IGetOrdersByUpdatedAtUseCase useCase,
@@ -137,7 +134,6 @@ public class OrderController(IMapper mapper) : ControllerBase
     [HttpGet("getOrdersByCompletedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByCompletedAt(
         [FromQuery] GetOrdersByCompletedAtRequest request,
         [FromServices] IGetOrdersByCompletedAtUseCase useCase,
@@ -158,7 +154,6 @@ public class OrderController(IMapper mapper) : ControllerBase
     [HttpGet("getOrdersByDescription")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByDescription(
         [FromQuery] GetOrdersByDescriptionRequest request,
         [FromServices] IGetOrdersByDescriptionUseCase useCase,
@@ -178,7 +173,6 @@ public class OrderController(IMapper mapper) : ControllerBase
     [HttpGet("getOrdersByStatus")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<OrderResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByStatus(
         [FromQuery] GetOrdersByStatusRequest request,
         [FromServices] IGetOrdersByStatusUseCase useCase,
@@ -258,7 +252,6 @@ public class OrderController(IMapper mapper) : ControllerBase
     [HttpGet("getPaymentsByOrderId")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentNewResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize]
     public async Task<IActionResult> GetPaymentsByOrderId(
         [FromQuery] GetPaymentsByOrderIdRequest request,
@@ -305,11 +298,11 @@ public class OrderController(IMapper mapper) : ControllerBase
     [HttpPatch("updateOrderStatus/{orderId:guid}")]
     [ProducesResponseType(201, Type = typeof(OrderResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateOrderStatus(
         [FromRoute] Guid orderId,
-        [FromForm] UpdateOrderStatusRequest request,
+        [FromBody] UpdateOrderStatusRequest request,
         [FromServices] IUpdateOrderStatusUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -335,7 +328,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     [ProducesResponseType(404, Type = typeof(OrderResponse))]
     public async Task<IActionResult> UpdateOrder(
         [FromRoute] Guid orderId,
-        [FromForm] UpdateOrderRequest request,
+        [FromBody] UpdateOrderRequest request,
         [FromServices] IUpdateOrderUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -369,7 +362,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [ProducesResponseType(409, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> DeleteOrder(
-        Guid orderId,
+        [FromRoute] Guid orderId,
         [FromServices] IDeleteOrderUseCase useCase,
         CancellationToken cancellationToken)
     {

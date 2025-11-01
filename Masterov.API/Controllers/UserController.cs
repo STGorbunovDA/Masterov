@@ -46,7 +46,6 @@ public class UserController(IMapper mapper) : ControllerBase
     /// <returns>Список пользователей</returns>
     [HttpGet("getUsers")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UserResponse>))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUsers(
         [FromServices] IGetUsersUseCase useCase,
@@ -90,7 +89,7 @@ public class UserController(IMapper mapper) : ControllerBase
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUserById(
-        Guid userId,
+        [FromRoute] Guid userId,
         [FromServices] IGetUserByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -108,7 +107,6 @@ public class UserController(IMapper mapper) : ControllerBase
     [HttpGet("getUsersByRole")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UserResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUsersByRole(
         [FromQuery] GetUsersByRoleRequest request,
@@ -129,7 +127,6 @@ public class UserController(IMapper mapper) : ControllerBase
     [HttpGet("getUsersByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UserResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUsersByCreatedAt(
         [FromQuery] GetUsersByCreatedAtRequest request,
@@ -150,7 +147,6 @@ public class UserController(IMapper mapper) : ControllerBase
     [HttpGet("getUsersByAccountLoginDate")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UserResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUsersByAccountLoginDate(
         [FromQuery] GetUsersByAccountLoginDateRequest request,
@@ -171,7 +167,6 @@ public class UserController(IMapper mapper) : ControllerBase
     [HttpGet("getUsersByUpdatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<UserResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> GetUsersByUpdatedAt(
         [FromQuery] GetUsersByUpdatedAtRequest request,
@@ -329,6 +324,7 @@ public class UserController(IMapper mapper) : ControllerBase
     [HttpPatch("changePasswordFromUser")]
     [ProducesResponseType(200, Type = typeof(UserResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(401, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
     public async Task<IActionResult> ChangePasswordFromUser(
@@ -366,23 +362,23 @@ public class UserController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Удалить пользователя по логину.
+    /// Удалить пользователя по логину
     /// </summary>
-    /// <param name="login">Логин пользователя для удаления.</param>
-    /// <param name="useCase">Сервис для удаления пользователя по логину.</param>
-    /// <param name="cancellationToken">Токен для отмены операции.</param>
-    /// <returns>Статус операции удаления пользователя.</returns>
-    [HttpDelete("deleteUserByLogin/{login}")]
+    /// <param name="request">Логин пользователя для удаления</param>
+    /// <param name="useCase">Сервис для удаления пользователя по логину</param>
+    /// <param name="cancellationToken">Токен для отмены операции</param>
+    /// <returns>Статус операции удаления пользователя</returns>
+    [HttpDelete("deleteUserByLogin")]
     [ProducesResponseType(204)]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin")]
-    public async Task<IActionResult> DeleteUserByLoginAsync(
-        string login,
+    public async Task<IActionResult> DeleteUserByLogin(
+        [FromQuery] DeleteUserByLoginRequest request,
         [FromServices] IDeleteUserByLoginUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var result = await useCase.Execute(new DeleteUserByLoginCommand(login), cancellationToken);
+        var result = await useCase.Execute(new DeleteUserByLoginCommand(request.Login), cancellationToken);
         return Ok(result);
     }
 }

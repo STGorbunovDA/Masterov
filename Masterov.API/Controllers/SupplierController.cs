@@ -5,8 +5,6 @@ using Masterov.Domain.Masterov.Supplier.AddSupplier;
 using Masterov.Domain.Masterov.Supplier.AddSupplier.Command;
 using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
 using Masterov.Domain.Masterov.Supplier.DeleteSupplier.Command;
-using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
-using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByEmail;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByEmail.Query;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById;
@@ -20,6 +18,8 @@ using Masterov.Domain.Masterov.Supplier.GetSuppliersByName;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByName.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersBySurname;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersBySurname.Query;
+using Masterov.Domain.Masterov.Supplier.GetSuppliesBySupplierId;
+using Masterov.Domain.Masterov.Supplier.GetSuppliesBySupplierId.Query;
 using Masterov.Domain.Masterov.Supplier.UpdateSupplier;
 using Masterov.Domain.Masterov.Supplier.UpdateSupplier.Command;
 using Microsoft.AspNetCore.Authorization;
@@ -35,8 +35,7 @@ namespace Masterov.API.Controllers;
 [Route("api/suppliers")]
 public class SupplierController(IMapper mapper) : ControllerBase
 {
-    // TODO при добавлении поставщика имя должно быть уникальным
-    
+   
     /// <summary>
     /// Получить всех поставщиков
     /// </summary>
@@ -45,7 +44,6 @@ public class SupplierController(IMapper mapper) : ControllerBase
     /// <returns>Информация о поставщиках</returns>
     [HttpGet("getSuppliers")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<SupplierResponse>))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliers(
         [FromServices] IGetSuppliersUseCase useCase,
@@ -84,9 +82,8 @@ public class SupplierController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставщиках</returns>
     [HttpGet("GetSuppliersByName")]
-    [ProducesResponseType(200, Type = typeof(SupplierResponse))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplierResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliersByName(
         [FromQuery] GetSuppliersByNameRequest request,
@@ -105,9 +102,8 @@ public class SupplierController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставщиках</returns>
     [HttpGet("getSuppliersBySurname")]
-    [ProducesResponseType(200, Type = typeof(SupplierResponse))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplierResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliersBySurname(
         [FromQuery] GetSuppliersBySurnameRequest request,
@@ -128,7 +124,7 @@ public class SupplierController(IMapper mapper) : ControllerBase
     [HttpGet("GetSupplierByPhone")]
     [ProducesResponseType(200, Type = typeof(SupplierResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSupplierByPhone(
         [FromQuery] GetSuppliersByPhoneRequest request,
@@ -161,16 +157,15 @@ public class SupplierController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить потавщика по адресу
+    /// Получить поставщика по адресу
     /// </summary>
     /// <param name="request">Адрес поставщика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставщике</returns>
     [HttpGet("getSuppliersByAddress")]
-    [ProducesResponseType(200, Type = typeof(SupplierResponse))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplierResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliersByAddress(
         [FromQuery] GetSuppliersByAddressRequest request,
@@ -185,25 +180,24 @@ public class SupplierController(IMapper mapper) : ControllerBase
     /// Получить список поставок поставщика
     /// </summary>
     /// <param name="request">Идентификатор поставщика</param>
-    /// <param name="getNewSuppliesBySupplierIdUseCase"></param>
+    /// <param name="useCase"></param>
     /// <param name="cancellationToken"></param>
     /// <returns>Результат получения списка поставок поставщика</returns>
-    [HttpGet("GetNewSuppliesBySupplierId")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
+    [HttpGet("getSuppliesBySupplierId")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNewResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetNewSuppliesBySupplierId(
+    public async Task<IActionResult> GetSuppliesBySupplierId(
         [FromQuery] GetSuppliesBySupplierIdRequest request,
-        [FromServices] IGetNewSuppliesBySupplierIdUseCase getNewSuppliesBySupplierIdUseCase,
+        [FromServices] IGetSuppliesBySupplierIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supplies = await getNewSuppliesBySupplierIdUseCase.Execute(new GetNewSuppliesBySupplierIdQuery(request.SupplierId), cancellationToken);
+        var supplies = await useCase.Execute(new GetSuppliesBySupplierIdIdQuery(request.SupplierId), cancellationToken);
         return Ok(supplies?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
     }
     
     /// <summary>
-    /// Добавить потавщика
+    /// Добавить поставщика
     /// </summary>
     /// <param name="request">Данные о поставщике</param>
     /// <param name="useCase">Сценарий добавления поставщика</param>
@@ -212,14 +206,14 @@ public class SupplierController(IMapper mapper) : ControllerBase
     [HttpPost("addSupplier")]
     [ProducesResponseType(201, Type = typeof(SupplierResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddSupplier(
-        [FromForm] AddSupplierRequest request,
+        [FromBody] AddSupplierRequest request,
         [FromServices] IAddSupplierUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supplier = await useCase.Execute(new AddSupplierCommand(request.Name, request.Address, request.Phone), cancellationToken);
+        var supplier = await useCase.Execute(new AddSupplierCommand(request.Name,request.Surname, request.Email, request.Phone, request.Address), cancellationToken);
     
         return CreatedAtAction(nameof(GetSupplierById),
             new { supplierId = supplier.SupplierId },
@@ -227,16 +221,19 @@ public class SupplierController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Удаление поставщика по Id.
+    /// Удаление поставщика по Id. <===
     /// </summary>
     /// <param name="supplierId">Идентификатор поставщика.</param>
     /// <param name="useCase">Сценарий удаления поставщика.</param>
     /// <param name="cancellationToken">Токен отмены операции.</param>
     /// <returns>Ответ с кодом 204, если поставщик был успешно удален.</returns>
-    [HttpDelete("deleteSupplier")]
+    [HttpDelete("deleteSupplier/{supplierId:guid}")]
+    [ProducesResponseType(204, Type = typeof(bool))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteSupplier(
-        Guid supplierId,
+        [FromRoute] Guid supplierId,
         [FromServices] IDeleteSupplierUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -247,22 +244,24 @@ public class SupplierController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Обновить поставщика по Id
     /// </summary>
+    /// <param name="supplierId">Идентификатор поставщика</param>
     /// <param name="request">Данные для обновления поставщика</param>
     /// <param name="useCase">Сценарий обновления поставщика</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления</returns>
-    [HttpPatch("updateSupplier")]
+    [HttpPatch("updateSupplier/{supplierId:guid}")]
     [ProducesResponseType(200, Type = typeof(SupplierResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateSupplier(
+        [FromRoute] Guid supplierId,
         [FromForm] UpdateSupplierRequest request,
         [FromServices] IUpdateSupplierUseCase useCase,
         CancellationToken cancellationToken)
     {
         var updateSupplier = await useCase.Execute(
-            new UpdateSupplierCommand(request.SupplierId, request.Name, request.Address, request.Phone),
+            new UpdateSupplierCommand(supplierId, request.Name, request.Address, request.Phone),
             cancellationToken);
         return Ok(mapper.Map<SupplierResponse>(updateSupplier));
     }

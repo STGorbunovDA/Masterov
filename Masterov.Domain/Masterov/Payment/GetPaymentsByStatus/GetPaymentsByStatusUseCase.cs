@@ -9,7 +9,6 @@ public class GetPaymentsByStatusUseCase(IValidator<GetPaymentsByStatusQuery> val
     public async Task<IEnumerable<PaymentDomain>?> Execute(GetPaymentsByStatusQuery getPaymentsByStatusQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getPaymentsByStatusQuery, cancellationToken);
-        
         return await storage.GetPaymentsByStatus(getPaymentsByStatusQuery.PaymentMethod, cancellationToken);
     }
 }

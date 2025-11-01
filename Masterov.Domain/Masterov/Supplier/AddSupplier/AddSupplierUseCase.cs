@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.Supplier.AddSupplier.Command;
+using Masterov.Domain.Masterov.Supplier.GetSupplierByEmail;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByAddress;
 using Masterov.Domain.Models;
@@ -10,7 +11,7 @@ namespace Masterov.Domain.Masterov.Supplier.AddSupplier;
 public class AddSupplierUseCase(
     IValidator<AddSupplierCommand> validator,
     IAddSupplierStorage addSupplierStorage,
-    IGetSupplierByAddressStorage getSupplierByAddressStorage,
+    IGetSupplierByEmailStorage getSupplierByEmailStorage,
     IGetSupplierByPhoneStorage getSupplierByPhoneStorage) : IAddSupplierUseCase
 {
     public async Task<SupplierDomain> Execute(AddSupplierCommand addSupplierCommand,
@@ -18,18 +19,33 @@ public class AddSupplierUseCase(
     {
         await validator.ValidateAndThrowAsync(addSupplierCommand, cancellationToken);
         
-        SupplierDomain? supplier = null;
+        if (!string.IsNullOrWhiteSpace(addSupplierCommand.Email))
+        {
+            var supplierByEmail = await getSupplierByEmailStorage.GetSupplierByEmail(
+                addSupplierCommand.Email, cancellationToken);
+            if (supplierByEmail is not null)
+                throw new SupplierExistsException(
+                    addSupplierCommand.Name, 
+                    addSupplierCommand.Surname,
+                    addSupplierCommand.Email,
+                    addSupplierCommand.Phone,
+                    addSupplierCommand.Address);
+        }
+    
+        if (!string.IsNullOrWhiteSpace(addSupplierCommand.Phone))
+        {
+            var supplierByPhone = await getSupplierByPhoneStorage.GetSupplierByPhone(
+                addSupplierCommand.Phone, cancellationToken);
+            if (supplierByPhone is not null)
+                throw new SupplierExistsException(
+                    addSupplierCommand.Name, 
+                    addSupplierCommand.Surname,
+                    addSupplierCommand.Email,
+                    addSupplierCommand.Phone,
+                    addSupplierCommand.Address);
+        }
 
-        if (addSupplierCommand.Phone is not null)
-            supplier = await getSupplierByPhoneStorage.GetSupplierByPhone(addSupplierCommand.Phone, cancellationToken);
-        // else if (supplier is null && addSupplierCommand.Address is not null)
-        //     supplier = await getSupplierByAddressStorage.GetSuppliersByAddress(addSupplierCommand.Address, cancellationToken); // TODO 
-
-        if (supplier is not null)
-            if (supplier is { Address: not null, Phone: not null })
-                throw new SupplierExistsException(supplier.Name, supplier.Address, supplier.Phone);
-
-        return await addSupplierStorage.AddSupplier(addSupplierCommand.Name,
-            addSupplierCommand?.Address, addSupplierCommand?.Phone, cancellationToken);
+        return await addSupplierStorage.AddSupplier(addSupplierCommand.Name, addSupplierCommand.Surname, addSupplierCommand.Email,
+            addSupplierCommand.Phone, addSupplierCommand.Address, cancellationToken);
     }
 }

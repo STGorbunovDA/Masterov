@@ -12,7 +12,6 @@ public class GetCustomersByCreatedAtUseCase(IValidator<GetCustomersByCreatedAtQu
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(customersByCreatedAtQuery, cancellationToken);
-        
         return await storage.GetCustomersByCreatedAt(customersByCreatedAtQuery.CreatedAt, cancellationToken);
     }
 }

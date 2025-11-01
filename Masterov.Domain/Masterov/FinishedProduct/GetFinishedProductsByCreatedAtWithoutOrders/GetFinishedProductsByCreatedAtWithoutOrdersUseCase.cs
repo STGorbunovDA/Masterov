@@ -12,7 +12,6 @@ public class GetFinishedProductsByCreatedAtWithoutOrdersUseCase(IValidator<GetFi
         CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(finishedProductsByCreatedAtQuery, cancellationToken);
-        
         return await storage.GetFinishedProductsByCreatedAtWithoutOrders(finishedProductsByCreatedAtQuery.CreatedAt, cancellationToken);
     }
 }

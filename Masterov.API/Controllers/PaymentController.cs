@@ -45,7 +45,6 @@ public class PaymentController(IMapper mapper) : ControllerBase
     /// <returns>Информация о платежах</returns>
     [HttpGet("getPayments")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentResponse>))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPayments(
         [FromServices] IGetPaymentsUseCase useCase,
@@ -86,7 +85,6 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [HttpGet("getPaymentsByStatus")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPaymentsByStatus(
         [FromQuery] GetPaymentsByStatusRequest request,
@@ -110,7 +108,6 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [HttpGet("getPaymentsByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPaymentsByCreatedAt(
         [FromQuery] GetPaymentsByCreatedAtRequest request,
@@ -131,7 +128,6 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [HttpGet("getPaymentsByUpdatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<PaymentResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetPaymentsByUpdatedAt(
         [FromQuery] GetPaymentsByUpdatedAtRequest request,
@@ -217,6 +213,8 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(201, Type = typeof(PaymentResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(500, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddPayment(
         [FromRoute] Guid orderId,
@@ -275,6 +273,8 @@ public class PaymentController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(PaymentResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(500, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdatePayment(
         [FromRoute] Guid paymentId,
