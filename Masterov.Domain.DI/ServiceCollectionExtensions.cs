@@ -71,6 +71,7 @@ using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByName;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersBySurname;
 using Masterov.Domain.Masterov.Supplier.UpdateSupplier;
 using Masterov.Domain.Masterov.Supply.AddSupply;
 using Masterov.Domain.Masterov.Supply.DeleteSupply;
@@ -234,6 +235,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetNewSuppliesBySupplierIdUseCase, GetNewSuppliesBySupplierIdUseCase>()
             .AddScoped<IDeleteSupplierUseCase, DeleteSupplierUseCase>()
             .AddScoped<IUpdateSupplierUseCase, UpdateSupplierUseCase>()
+            .AddScoped<IGetSuppliersBySurnameUseCase, GetSuppliersBySurnameUseCase>()
             .AddScoped<IAddSupplierUseCase, AddSupplierUseCase>()
             .AddScoped<IGetSupplierByIdUseCase, GetSupplierByIdUseCase>();
         
