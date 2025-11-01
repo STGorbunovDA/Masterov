@@ -9,7 +9,7 @@ namespace Masterov.Storage.Storages.UserFolder;
 internal class GetUsersStorage(MasterovDbContext dbContext, IMapper mapper)
     : IGetUsersStorage
 {
-    public async Task<IEnumerable<UserDomain>> GetUsers(CancellationToken cancellationToken)
+    public async Task<IEnumerable<UserDomain?>> GetUsers(CancellationToken cancellationToken)
     {
         var users = await dbContext.Users
             .AsNoTracking()

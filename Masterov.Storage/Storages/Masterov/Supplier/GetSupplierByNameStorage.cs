@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Masterov.Domain.Masterov.Supplier.GetSupplierByName;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByName;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 

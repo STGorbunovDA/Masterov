@@ -8,13 +8,13 @@ using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent.Command;
 using Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent.Command;
-using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetComponentTypeByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetComponentTypeByUsedComponentId.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById.Query;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt.Query;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
@@ -53,7 +53,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var usedComponents = await useCase.Execute(cancellationToken);
-        return Ok(usedComponents.Select(mapper.Map<UsedComponentResponse>));
+        return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     {
         var usedComponents =
             await useCase.Execute(new GetUsedComponentsByQuantityQuery(request.Quantity), cancellationToken);
-        return Ok(usedComponents.Select(mapper.Map<UsedComponentResponse>));
+        return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить тип продукта используемого компонента ппо идентификатору используемого компонента
+    /// Получить тип продукта используемого компонента по идентификатору используемого компонента
     /// </summary>
     /// <param name="request">Идентификатор используемого компонента</param>
     /// <param name="useCase">Сценарий использования</param>
@@ -191,7 +191,7 @@ public class UsedComponentController(IMapper mapper) : ControllerBase
     }
 
     /// <summary>
-    /// Получить склад используемого компонента по идентификатору используемого компонента
+    /// Получить склад по идентификатору используемого компонента
     /// </summary>
     /// <param name="request">Идентификатор используемого компонента</param>
     /// <param name="useCase">Сценарий использования</param>

@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.Payment.GetPayments;
 
 public interface IGetPaymentsUseCase
 {
-    Task<IEnumerable<PaymentDomain>> Execute(CancellationToken cancellationToken);
+    Task<IEnumerable<PaymentDomain?>> Execute(CancellationToken cancellationToken);
 }

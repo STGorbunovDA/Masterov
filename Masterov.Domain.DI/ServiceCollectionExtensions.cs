@@ -1,10 +1,10 @@
 ﻿using Masterov.Domain.Masterov.ComponentType.AddComponentType;
 using Masterov.Domain.Masterov.ComponentType.DeleteComponentType;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByDescription;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByName;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetSuppliesByComponentTypeId;
 using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId;
@@ -13,10 +13,10 @@ using Masterov.Domain.Masterov.Customer.AddCustomer;
 using Masterov.Domain.Masterov.Customer.DeleteCustomer;
 using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
-using Masterov.Domain.Masterov.Customer.GetCustomerByName;
 using Masterov.Domain.Masterov.Customer.GetCustomerByPhone;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Masterov.Domain.Masterov.Customer.GetCustomersByCreatedAt;
+using Masterov.Domain.Masterov.Customer.GetCustomersByName;
 using Masterov.Domain.Masterov.Customer.GetCustomersByUpdatedAt;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer;
@@ -24,11 +24,11 @@ using Masterov.Domain.Masterov.FinishedProduct.AddFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.DeleteFinishedProduct;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithoutOrders;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByNameWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByName;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByNameWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAtWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsWithoutOrders;
@@ -68,9 +68,9 @@ using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
 using Masterov.Domain.Masterov.Supplier.GetNewSuppliesBySupplierId;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByAddress;
 using Masterov.Domain.Masterov.Supplier.GetSupplierById;
-using Masterov.Domain.Masterov.Supplier.GetSupplierByName;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByName;
 using Masterov.Domain.Masterov.Supplier.UpdateSupplier;
 using Masterov.Domain.Masterov.Supply.AddSupply;
 using Masterov.Domain.Masterov.Supply.DeleteSupply;
@@ -85,10 +85,10 @@ using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
 using Masterov.Domain.Masterov.Supply.UpdateSupply;
 using Masterov.Domain.Masterov.UsedComponent.AddUsedComponent;
 using Masterov.Domain.Masterov.UsedComponent.DeleteUsedComponent;
-using Masterov.Domain.Masterov.UsedComponent.GetComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetComponentTypeByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetOrderByUsedComponentId;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentById;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponents;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByCreatedAt;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByQuantity;
 using Masterov.Domain.Masterov.UsedComponent.GetUsedComponentsByUpdatedAt;
@@ -129,14 +129,14 @@ public static class ServiceCollectionExtensions
         // FinishedProduct
         services
             .AddScoped<Masterov.FinishedProduct.GetFinishedProductById.IGetFinishedProductByIdUseCase, GetFinishedProductByIdUseCase>()
-            .AddScoped<IGetFinishedProductByNameUseCase, GetFinishedProductByNameUseCase>()
+            .AddScoped<IGetFinishedProductsByNameUseCase, GetFinishedProductsByNameUseCase>()
             .AddScoped<IDeleteFinishedProductUseCase, DeleteFinishedProductUseCase>()
             .AddScoped<IAddFinishedProductUseCase, AddFinishedProductUseCase>()
             .AddScoped<IUpdateFinishedProductUseCase, UpdateFinishedProductUseCase>()
             .AddScoped<IGetFinishedProductsByCreatedAtUseCase, GetFinishedProductsByCreatedAtUseCase>()
             .AddScoped<IGetFinishedProductsWithoutOrdersUseCase, GetFinishedProductsWithoutOrdersUseCase>()
             .AddScoped<IGetFinishedProductByIdWithoutOrdersUseCase, GetFinishedProductByIdWithoutOrdersUseCase>()
-            .AddScoped<IGetFinishedProductByNameWithoutOrdersUseCase, GetFinishedProductByNameWithoutOrdersUseCase>()
+            .AddScoped<IGetFinishedProductsByNameWithoutOrdersUseCase, GetFinishedProductsByNameWithoutOrdersUseCase>()
             .AddScoped<IGetFinishedProductsByCreatedAtWithoutOrdersUseCase, GetFinishedProductsByCreatedAtWithoutOrdersUseCase>()
             .AddScoped<IGetFinishedProductsByUpdatedAtWithoutOrdersUseCase, GetFinishedProductsByUpdatedAtWithoutOrdersUseCase>()
             .AddScoped<IGetFinishedProductsByUpdatedAtUseCase, GetFinishedProductsByUpdatedAtUseCase>()
@@ -169,7 +169,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetComponentTypesByDescriptionUseCase, GetComponentTypesByDescriptionUseCase>()
             .AddScoped<IGetUsedComponentsByComponentTypeIdUseCase, GetUsedComponentsByComponentTypeIdUseCase>()
             .AddScoped<IGetSuppliesByComponentTypeIdUseCase, GetSuppliesByComponentTypeIdUseCase>()
-            .AddScoped<IGetComponentTypeByNameUseCase, GetComponentTypeByNameUseCase>()
+            .AddScoped<IGetComponentTypesByNameUseCase, GetComponentTypesByNameUseCase>()
             .AddScoped<IAddComponentTypeUseCase, AddComponentTypeUseCase>()
             .AddScoped<IGetComponentTypeByIdUseCase, GetComponentTypeByIdUseCase>()
             .AddScoped<IGetComponentTypesUseCase, ComponentTypesUseCase>();
@@ -200,7 +200,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IAddCustomerUseCase, AddCustomerUseCase>()
             .AddScoped<IGetCustomersUseCase, GetCustomersUseCase>()
             .AddScoped<IGetCustomersUseCase, GetCustomersUseCase>()
-            .AddScoped<IGetCustomerByNameUseCase, GetCustomerByNameUseCase>()
+            .AddScoped<IGetCustomersByNameUseCase, GetCustomersByNameUseCase>()
             .AddScoped<IGetCustomerByPhoneUseCase, GetCustomerByPhoneUseCase>()
             .AddScoped<IGetOrdersByCustomerIdUseCase, GetOrdersByCustomerIdUseCase>()
             .AddScoped<IGetCustomersByCreatedAtUseCase, GetCustomersByCreatedAtUseCase>()
@@ -228,7 +228,7 @@ public static class ServiceCollectionExtensions
         // Supplier
         services
             .AddScoped<IGetSuppliersUseCase, GetSuppliersUseCase>()
-            .AddScoped<IGetSupplierByNameUseCase, GetSupplierByNameUseCase>()
+            .AddScoped<IGetSuppliersByNameUseCase, GetSuppliersByNameUseCase>()
             .AddScoped<IGetSupplierByPhoneUseCase, GetSupplierByPhoneUseCase>()
             .AddScoped<IGetSupplierByAddressUseCase, GetSupplierByAddressUseCase>()
             .AddScoped<IGetNewSuppliesBySupplierIdUseCase, GetNewSuppliesBySupplierIdUseCase>()

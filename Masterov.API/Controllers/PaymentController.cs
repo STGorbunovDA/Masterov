@@ -52,7 +52,7 @@ public class PaymentController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var payments = await useCase.Execute(cancellationToken);
-        return Ok(payments.Select(mapper.Map<PaymentResponse>));
+        return Ok(payments?.Select(mapper.Map<PaymentResponse>) ?? Array.Empty<PaymentResponse>());
     }
 
     /// <summary>

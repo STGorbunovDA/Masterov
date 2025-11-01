@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
 using Masterov.Domain.Masterov.ComponentType.AddComponentType.Command;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByName;
 using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.ComponentType.AddComponentType;
@@ -15,7 +15,7 @@ public class AddComponentTypeUseCase(IValidator<AddComponentTypeCommand> validat
     {
         await validator.ValidateAndThrowAsync(addComponentTypeCommand, cancellationToken);
 
-        var componentType = await getComponentTypeByNameStorage.GetComponentTypeByName(addComponentTypeCommand.Name, cancellationToken);
+        var componentType = await getComponentTypeByNameStorage.GetComponentTypesByName(addComponentTypeCommand.Name, cancellationToken);
 
         if (componentType is not null)
             throw new ComponentTypeExistsException(addComponentTypeCommand.Name);

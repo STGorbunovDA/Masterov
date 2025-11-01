@@ -11,15 +11,15 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductById.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithoutOrders.Query;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByName.Query;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByNameWithoutOrders;
-using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByNameWithoutOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByName;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByName.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByNameWithoutOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByNameWithoutOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAtWithoutOrders;
@@ -57,7 +57,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var finishedProducts = await useCase.Execute(cancellationToken);
-        return Ok(finishedProducts.Select(mapper.Map<FinishedProductNoOrdersResponse>));
+        return Ok(finishedProducts?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
     }
     
     /// <summary>
@@ -74,7 +74,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var finishedProducts = await useCase.Execute(cancellationToken);
-        return Ok(finishedProducts.Select(mapper.Map<FinishedProductResponse>));
+        return Ok(finishedProducts?.Select(mapper.Map<FinishedProductResponse>) ?? Array.Empty<FinishedProductResponse>());
     }
 
     /// <summary>
@@ -124,17 +124,17 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о готовом мебельном изделии</returns>
-    [HttpGet("getFinishedProductByNameWithoutOrders/{finishedProductName}")]
+    [HttpGet("getFinishedProductsByNameWithoutOrders/{finishedProductName}")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductNoOrdersResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> GetFinishedProductByNameWithoutOrders(
+    public async Task<IActionResult> GetFinishedProductsByNameWithoutOrders(
         [FromRoute] string finishedProductName,
-        [FromServices] IGetFinishedProductByNameWithoutOrdersUseCase useCase,
+        [FromServices] IGetFinishedProductsByNameWithoutOrdersUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var finishedProducts = await useCase.Execute(new GetFinishedProductByNameWithoutOrdersQuery(finishedProductName), cancellationToken);
-        return Ok(finishedProducts.Select(mapper.Map<FinishedProductNoOrdersResponse>));
+        var finishedProducts = await useCase.Execute(new GetFinishedProductsByNameWithoutOrdersQuery(finishedProductName), cancellationToken);
+        return Ok(finishedProducts?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
     }
     
     /// <summary>
@@ -148,13 +148,13 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> GetFinishedProductByName(
+    public async Task<IActionResult> GetFinishedProductsByName(
         [FromRoute] string finishedProductName,
-        [FromServices] IGetFinishedProductByNameUseCase useCase,
+        [FromServices] IGetFinishedProductsByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var finishedProducts = await useCase.Execute(new GetFinishedProductByNameQuery(finishedProductName), cancellationToken);
-        return Ok(finishedProducts.Select(mapper.Map<FinishedProductResponse>));
+        var finishedProducts = await useCase.Execute(new GetFinishedProductsByNameQuery(finishedProductName), cancellationToken);
+        return Ok(finishedProducts?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
     }
     
     /// <summary>
@@ -173,8 +173,8 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         [FromServices] IGetFinishedProductsByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var products = await useCase.Execute(new GetFinishedProductsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
-        return Ok(products?.Select(mapper.Map<FinishedProductResponse>) ?? Array.Empty<FinishedProductResponse>());
+        var finishedProducts = await useCase.Execute(new GetFinishedProductsByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(finishedProducts?.Select(mapper.Map<FinishedProductResponse>) ?? Array.Empty<FinishedProductResponse>());
     }
     
     /// <summary>
@@ -193,8 +193,8 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         [FromServices] IGetFinishedProductsByCreatedAtWithoutOrdersUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var products = await useCase.Execute(new GetFinishedProductsByCreatedAtWithoutOrdersQuery(request.CreatedAt.ToDateTime()), cancellationToken);
-        return Ok(products?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
+        var finishedProducts = await useCase.Execute(new GetFinishedProductsByCreatedAtWithoutOrdersQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(finishedProducts?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
     }
     
     /// <summary>
@@ -213,8 +213,8 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         [FromServices] IGetFinishedProductsByUpdatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var products = await useCase.Execute(new GetFinishedProductsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
-        return Ok(products?.Select(mapper.Map<FinishedProductResponse>) ?? Array.Empty<FinishedProductResponse>());
+        var finishedProducts = await useCase.Execute(new GetFinishedProductsByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
+        return Ok(finishedProducts?.Select(mapper.Map<FinishedProductResponse>) ?? Array.Empty<FinishedProductResponse>());
     }
     
     /// <summary>
@@ -233,8 +233,8 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         [FromServices] IGetFinishedProductsByUpdatedAtWithoutOrdersUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var products = await useCase.Execute(new GetFinishedProductsByUpdatedAtWithoutOrdersQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
-        return Ok(products?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
+        var finishedProducts = await useCase.Execute(new GetFinishedProductsByUpdatedAtWithoutOrdersQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
+        return Ok(finishedProducts?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
     }
     
     /// <summary>

@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.Supplier;
 
 internal class GetSuppliersStorage(MasterovDbContext dbContext, IMapper mapper) : IGetSuppliersStorage
 {
-    public async Task<IEnumerable<SupplierDomain>> GetSuppliers(CancellationToken cancellationToken)
+    public async Task<IEnumerable<SupplierDomain?>> GetSuppliers(CancellationToken cancellationToken)
     {
         var suppliers = await dbContext.Suppliers
             .AsNoTracking()

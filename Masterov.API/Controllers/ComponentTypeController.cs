@@ -9,13 +9,13 @@ using Masterov.Domain.Masterov.ComponentType.DeleteComponentType;
 using Masterov.Domain.Masterov.ComponentType.DeleteComponentType.Command;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById.Query;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByName.Query;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt.Query;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByDescription;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByDescription.Query;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByName;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByName.Query;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt.Query;
 using Masterov.Domain.Masterov.ComponentType.GetSuppliesByComponentTypeId;
@@ -48,7 +48,7 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
         CancellationToken cancellationToken)
     {
         var componentTypes = await useCase.Execute(cancellationToken);
-        return Ok(componentTypes.Select(mapper.Map<ComponentTypeResponse>));
+        return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
     }
     
     /// <summary>
@@ -73,24 +73,24 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     }
     
     /// <summary>
-    /// Получить тип компонента по имени
+    /// Получить типы компонента по имени
     /// </summary>
     /// <param name="componentTypeName">Название типа компонента</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе компонента</returns>
-    [HttpGet("getComponentTypeByName/{componentTypeName}")]
+    /// <returns>Информация о типах компонентов</returns>
+    [HttpGet("getComponentTypesByName/{componentTypeName}")]
     [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetComponentTypeByName(
+    public async Task<IActionResult> GetComponentTypesByName(
         [FromRoute] string componentTypeName,
-        [FromServices] IGetComponentTypeByNameUseCase useCase,
+        [FromServices] IGetComponentTypesByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var componentType = await useCase.Execute(new GetComponentTypeByNameQuery(componentTypeName), cancellationToken);
-        return Ok(mapper.Map<ComponentTypeResponse>(componentType));
+        var componentTypes = await useCase.Execute(new GetComponentTypesByNameQuery(componentTypeName), cancellationToken);
+        return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
     }
     
     /// <summary>

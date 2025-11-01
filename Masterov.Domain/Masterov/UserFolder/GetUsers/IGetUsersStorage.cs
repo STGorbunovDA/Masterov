@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.UserFolder.GetUsers;
 
 public interface IGetUsersStorage
 {
-    Task<IEnumerable<UserDomain>> GetUsers(CancellationToken cancellationToken);
+    Task<IEnumerable<UserDomain?>> GetUsers(CancellationToken cancellationToken);
 }

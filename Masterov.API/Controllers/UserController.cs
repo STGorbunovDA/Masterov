@@ -53,7 +53,7 @@ public class UserController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var users = await useCase.Execute(cancellationToken);
-        return Ok(users.Select(mapper.Map<UserResponse>));
+        return Ok(users?.Select(mapper.Map<UserResponse>) ?? Array.Empty<UserResponse>());
     }
     
     /// <summary>

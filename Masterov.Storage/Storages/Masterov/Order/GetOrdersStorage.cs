@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.Order;
 
 internal class GetOrdersStorage(MasterovDbContext dbContext, IMapper mapper) : IGetOrdersStorage
 {
-    public async Task<IEnumerable<OrderDomain>> GetOrders(CancellationToken cancellationToken)
+    public async Task<IEnumerable<OrderDomain?>> GetOrders(CancellationToken cancellationToken)
     {
         var orders = await dbContext.Orders
             .AsNoTracking()

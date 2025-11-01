@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 
 public interface IGetFinishedProductsStorage
 {
-    Task<IEnumerable<FinishedProductDomain>> GetFinishedProducts(CancellationToken cancellationToken);
+    Task<IEnumerable<FinishedProductDomain?>> GetFinishedProducts(CancellationToken cancellationToken);
 }

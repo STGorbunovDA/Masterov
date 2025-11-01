@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Masterov.Domain.Masterov.UsedComponent.GetComponents;
+using Masterov.Domain.Masterov.UsedComponent.GetUsedComponents;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.UsedComponent;
 
 internal class GetUsedComponentsStorage(MasterovDbContext dbContext, IMapper mapper) : IGetUsedComponentsStorage
 {
-    public async Task<IEnumerable<UsedComponentDomain>> GetUsedComponents(CancellationToken cancellationToken)
+    public async Task<IEnumerable<UsedComponentDomain?>> GetUsedComponents(CancellationToken cancellationToken)
     {
         var usedComponents = await dbContext.UsedComponents
             .AsNoTracking()

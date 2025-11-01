@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.Customer;
 
 internal class GetCustomersStorage(MasterovDbContext dbContext, IMapper mapper) : IGetCustomersStorage
 {
-    public async Task<IEnumerable<CustomerDomain>> GetCustomers(CancellationToken cancellationToken)
+    public async Task<IEnumerable<CustomerDomain?>> GetCustomers(CancellationToken cancellationToken)
     {
         var customers = await dbContext.Customers
             .AsNoTracking()

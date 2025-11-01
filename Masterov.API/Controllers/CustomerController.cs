@@ -10,13 +10,13 @@ using Masterov.Domain.Masterov.Customer.GetCustomerByEmail;
 using Masterov.Domain.Masterov.Customer.GetCustomerByEmail.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomerById;
 using Masterov.Domain.Masterov.Customer.GetCustomerById.Query;
-using Masterov.Domain.Masterov.Customer.GetCustomerByName;
-using Masterov.Domain.Masterov.Customer.GetCustomerByName.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomerByPhone;
 using Masterov.Domain.Masterov.Customer.GetCustomerByPhone.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomers;
 using Masterov.Domain.Masterov.Customer.GetCustomersByCreatedAt;
 using Masterov.Domain.Masterov.Customer.GetCustomersByCreatedAt.Query;
+using Masterov.Domain.Masterov.Customer.GetCustomersByName;
+using Masterov.Domain.Masterov.Customer.GetCustomersByName.Query;
 using Masterov.Domain.Masterov.Customer.GetCustomersByUpdatedAt;
 using Masterov.Domain.Masterov.Customer.GetCustomersByUpdatedAt.Query;
 using Masterov.Domain.Masterov.Customer.GetOrdersByCustomerId;
@@ -51,7 +51,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var customers = await useCase.Execute(cancellationToken);
-        return Ok(customers.Select(mapper.Map<CustomerResponse>));
+        return Ok(customers?.Select(mapper.Map<CustomerResponse>) ?? Array.Empty<CustomerResponse>());
     }
     
     /// <summary>
@@ -76,24 +76,24 @@ public class CustomerController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить заказчика по имени
+    /// Получить заказчиков по имени
     /// </summary>
     /// <param name="request">Имя заказчика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказчике</returns>
-    [HttpGet("getCustomerByName")]
+    /// <returns>Информация о заказчиках</returns>
+    [HttpGet("getCustomersByName")]
     [ProducesResponseType(200, Type = typeof(CustomerResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetCustomerByName(
-        [FromQuery] GetCustomerByNameRequest request,
-        [FromServices] IGetCustomerByNameUseCase useCase,
+    public async Task<IActionResult> GetCustomersByName(
+        [FromQuery] GetCustomersByNameRequest request,
+        [FromServices] IGetCustomersByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var customer = await useCase.Execute(new GetCustomerByNameQuery(request.Name), cancellationToken);
-        return Ok(mapper.Map<CustomerResponse>(customer));
+        var customers = await useCase.Execute(new GetCustomersByNameQuery(request.Name), cancellationToken);
+        return Ok(customers?.Select(mapper.Map<CustomerResponse>) ?? Array.Empty<CustomerResponse>());
     }
     
     /// <summary>
@@ -182,8 +182,8 @@ public class CustomerController(IMapper mapper) : ControllerBase
     /// Получить список ордеров заказчика
     /// </summary>
     /// <param name="request">Идентификатор заказчика</param>
-    /// <param name="getOrdersByCustomerIdUseCase"></param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат получения списка ордеров заказчика</returns>
     [HttpGet("getOrdersByCustomerId")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<OrderNoCustumerResponse>))]

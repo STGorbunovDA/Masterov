@@ -40,14 +40,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Masterov.API.Controllers;
 
 /// <summary>
-/// Ордера (заказы)
+/// Заказы
 /// </summary>
 /// <param name="mapper"></param>
 [ApiController]
 [Route("api/orders")]
 public class OrderController(IMapper mapper) : ControllerBase
 {
-    
     /// <summary>
     /// Получить все заказы
     /// </summary>
@@ -63,7 +62,7 @@ public class OrderController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var orders = await useCase.Execute(cancellationToken);
-        return Ok(orders.Select(mapper.Map<OrderResponse>));
+        return Ok(orders?.Select(mapper.Map<OrderResponse>) ?? Array.Empty<OrderResponse>());
     }
 
     /// <summary>
@@ -98,7 +97,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByCreatedAt(
-        [FromQuery] GetOrderByCreatedAtRequest request,
+        [FromQuery] GetOrdersByCreatedAtRequest request,
         [FromServices] IGetOrdersByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -119,7 +118,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByUpdatedAt(
-        [FromQuery] GetOrderByUpdatedAtRequest request,
+        [FromQuery] GetOrdersByUpdatedAtRequest request,
         [FromServices] IGetOrdersByUpdatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -140,7 +139,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByCompletedAt(
-        [FromQuery] GetOrderByCompletedAtRequest request,
+        [FromQuery] GetOrdersByCompletedAtRequest request,
         [FromServices] IGetOrdersByCompletedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -161,7 +160,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByDescription(
-        [FromQuery] GetOrderByDescriptionRequest request,
+        [FromQuery] GetOrdersByDescriptionRequest request,
         [FromServices] IGetOrdersByDescriptionUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -181,7 +180,7 @@ public class OrderController(IMapper mapper) : ControllerBase
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     public async Task<IActionResult> GetOrdersByStatus(
-        [FromQuery] GetOrderByStatusRequest request,
+        [FromQuery] GetOrdersByStatusRequest request,
         [FromServices] IGetOrdersByStatusUseCase useCase,
         CancellationToken cancellationToken)
     {
