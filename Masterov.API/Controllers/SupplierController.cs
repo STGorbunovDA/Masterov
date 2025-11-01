@@ -57,11 +57,11 @@ public class SupplierController(IMapper mapper) : ControllerBase
     /// <param name="supplierId">Идентификатор поставщика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказчике</returns>
+    /// <returns>Информация о поставщике</returns>
     [HttpGet("getSupplierById/{supplierId:guid}")]
     [ProducesResponseType(200, Type = typeof(SupplierResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSupplierById(
         [FromRoute] Guid supplierId,

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Masterov.Domain.Masterov.Customer.GetCustomerById.Query;
 
 namespace Masterov.Domain.Masterov.Supplier.GetSupplierById.Query;
 
