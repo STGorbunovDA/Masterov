@@ -25,6 +25,7 @@ using Masterov.Domain.Masterov.Customer.UpdateCustomer;
 using Masterov.Domain.Masterov.Customer.UpdateCustomer.Command;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using GetCustomersByUpdatedAtQuery = Masterov.Domain.Masterov.Customer.GetCustomersByUpdatedAt.Query.GetCustomersByUpdatedAtQuery;
 
 namespace Masterov.API.Controllers;
 

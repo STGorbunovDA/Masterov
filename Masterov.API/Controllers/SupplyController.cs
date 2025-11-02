@@ -19,6 +19,8 @@ using Masterov.Domain.Masterov.Supply.GetSuppliesByPrice;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByPrice.Query;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity.Query;
+using Masterov.Domain.Masterov.Supply.GetSuppliesByUpdatedAt;
+using Masterov.Domain.Masterov.Supply.GetSuppliesByUpdatedAt.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetSupplyById.Query;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
@@ -133,6 +135,26 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplies = await useCase.Execute(new GetSuppliesByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(supplies?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
+    }
+    
+    /// <summary>
+    /// Получить все поставки по дате обновления
+    /// </summary>
+    /// <param name="request">Дата обновления поставки</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставках</returns>
+    [HttpGet("getSuppliesByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetSuppliesByUpdatedAt(
+        [FromQuery] GetSuppliesByUpdatedAtRequest request,
+        [FromServices] IGetSuppliesByUpdatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var supplies = await useCase.Execute(new GetSuppliesByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(supplies?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
     }
     
