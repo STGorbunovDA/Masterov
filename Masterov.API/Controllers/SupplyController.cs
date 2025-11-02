@@ -44,8 +44,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
     [HttpGet("getSupplies")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNewResponse>))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSupplies(
         [FromServices] IGetSuppliesUseCase useCase,
@@ -65,7 +64,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     [HttpGet("getSupplyById/{supplyId:guid}")]
     [ProducesResponseType(200, Type = typeof(SupplyNewResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSupplyById(
         [FromRoute] Guid supplyId,
