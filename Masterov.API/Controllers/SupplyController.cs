@@ -180,12 +180,12 @@ public class SupplyController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить тип продукта по идентификатору поставки
+    /// Получить поставленный тип компонента по идентификатору поставки
     /// </summary>
     /// <param name="request">Идентификатор поставки</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе продука</returns>
+    /// <returns>Информация о типе компонента</returns>
     [HttpGet("GetComponentTypeBySupplyId")]
     [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]

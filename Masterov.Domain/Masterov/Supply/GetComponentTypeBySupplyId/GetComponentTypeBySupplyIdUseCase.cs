@@ -6,7 +6,8 @@ using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.Supply.GetComponentTypeBySupplyId;
 
-public class GetComponentTypeBySupplyIdUseCase(IValidator<GetComponentTypeBySupplyIdQuery> validator, IGetComponentTypeBySupplyIdStorage storage, IGetSupplyByIdStorage getSupplyByIdStorage) : IGetComponentTypeBySupplyIdUseCase
+public class GetComponentTypeBySupplyIdUseCase(IValidator<GetComponentTypeBySupplyIdQuery> validator, 
+    IGetComponentTypeBySupplyIdStorage storage, IGetSupplyByIdStorage getSupplyByIdStorage) : IGetComponentTypeBySupplyIdUseCase
 {
     public async Task<ComponentTypeDomain?> Execute(GetComponentTypeBySupplyIdQuery getComponentTypeBySupplyIdQuery, CancellationToken cancellationToken)
     {
