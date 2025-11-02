@@ -22,6 +22,8 @@ using Masterov.Domain.Masterov.Supplier.GetSuppliersByName;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByName.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersBySurname;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersBySurname.Query;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByUpdatedAt;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByUpdatedAt.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliesBySupplierId;
 using Masterov.Domain.Masterov.Supplier.GetSuppliesBySupplierId.Query;
 using Masterov.Domain.Masterov.Supplier.UpdateSupplier;
@@ -181,12 +183,12 @@ public class SupplierController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить заказчиков по дате создания
+    /// Получить поставщика по дате создания
     /// </summary>
-    /// <param name="request">Дата создания заказчиков</param>
+    /// <param name="request">Дата создания поставщика</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о заказчиках</returns>
+    /// <returns>Информация о поставщиках</returns>
     [HttpGet("getSuppliersByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<SupplierResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -196,6 +198,25 @@ public class SupplierController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var suppliers = await useCase.Execute(new GetSuppliersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(suppliers?.Select(mapper.Map<SupplierResponse>) ?? Array.Empty<SupplierResponse>());
+    }
+    
+    /// <summary>
+    /// Получить поставщика по дате обновления
+    /// </summary>
+    /// <param name="request">Дата обновления поставщика</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о поставщиках</returns>
+    [HttpGet("getSuppliersByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplierResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    public async Task<IActionResult> GetSuppliersByUpdatedAt(
+        [FromQuery] GetSuppliersByUpdatedAtRequest request,
+        [FromServices] IGetSuppliersByUpdatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var suppliers = await useCase.Execute(new GetSuppliersByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(suppliers?.Select(mapper.Map<SupplierResponse>) ?? Array.Empty<SupplierResponse>());
     }
     
