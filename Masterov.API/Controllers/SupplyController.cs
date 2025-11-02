@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Masterov.API.Extensions;
 using Masterov.API.Models.ComponentType;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
@@ -12,12 +13,12 @@ using Masterov.Domain.Masterov.Supply.GetComponentTypeBySupplyId.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplies;
+using Masterov.Domain.Masterov.Supply.GetSuppliesByCreatedAt;
+using Masterov.Domain.Masterov.Supply.GetSuppliesByCreatedAt.Query;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByPrice;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByPrice.Query;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity.Query;
-using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
-using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetSupplyById.Query;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
@@ -116,24 +117,23 @@ public class SupplyController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить поставки по дате
+    /// Получить все поставки по дате поставки
     /// </summary>
     /// <param name="request">Дата поставки</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
-    [HttpGet("getSuppliesBySupplyDate")]
+    [HttpGet("getSuppliesByCreatedAt")]
     [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetSuppliesBySupplyDate(
-        [FromQuery] GetSuppliesBySupplyDateRequest request,
-        [FromServices] IGetSuppliesBySupplyDateUseCase useCase,
+    public async Task<IActionResult> GetSuppliesByCreatedAt(
+        [FromQuery] GetSuppliesByCreatedAtRequest request,
+        [FromServices] IGetSuppliesByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var payments = await useCase.Execute(new GetSuppliesBySupplyDateQuery(request.SupplyDate), cancellationToken);
-        return Ok(payments?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
+        var supplies = await useCase.Execute(new GetSuppliesByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(supplies?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
     }
     
     /// <summary>

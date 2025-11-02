@@ -81,9 +81,9 @@ using Masterov.Domain.Masterov.Supply.DeleteSupply;
 using Masterov.Domain.Masterov.Supply.GetComponentTypeBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplies;
+using Masterov.Domain.Masterov.Supply.GetSuppliesByCreatedAt;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByPrice;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity;
-using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.GetWarehouseBySupplyId;
 using Masterov.Domain.Masterov.Supply.UpdateSupply;
@@ -254,7 +254,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetComponentTypeBySupplyIdUseCase, GetComponentTypeBySupplyIdUseCase>()
             .AddScoped<IGetSupplierBySupplyIdUseCase, GetSupplierBySupplyIdUseCase>()
             .AddScoped<IAddSupplyUseCase, AddSupplyUseCase>()
-            .AddScoped<IGetSuppliesBySupplyDateUseCase, GetSuppliesBySupplyDateUseCase>()
+            .AddScoped<IGetSuppliesByCreatedAtUseCase, GetSuppliesByCreatedAtUseCase>()
             .AddScoped<IUpdateSupplyUseCase, UpdateSupplyUseCase>()
             .AddScoped<IDeleteSupplyUseCase, DeleteSupplyUseCase>()
             .AddScoped<IGetSuppliesUseCase, GetSuppliesUseCase>();
