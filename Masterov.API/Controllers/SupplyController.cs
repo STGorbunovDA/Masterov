@@ -34,7 +34,7 @@ namespace Masterov.API.Controllers;
 /// </summary>
 /// <param name="mapper"></param>
 [ApiController]
-[Route("api/supply")]
+[Route("api/supplies")]
 public class SupplyController(IMapper mapper) : ControllerBase
 {
     /// <summary>
@@ -52,7 +52,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplies = await useCase.Execute(cancellationToken);
-        return Ok(supplies.Select(mapper.Map<SupplyNewResponse>));
+        return Ok(supplies?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
     }
     
     /// <summary>

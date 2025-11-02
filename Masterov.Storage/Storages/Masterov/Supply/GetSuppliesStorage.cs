@@ -2,27 +2,21 @@
 using Masterov.Domain.Masterov.Supply.GetSupplies;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Masterov.Storage.Storages.Masterov.Supply;
 
-internal class GetSuppliesStorage (MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetSuppliesStorage
+internal class GetSuppliesStorage(MasterovDbContext dbContext, IMapper mapper) : IGetSuppliesStorage
 {
-    public async Task<IEnumerable<SupplyDomain>> GetSupplies(CancellationToken cancellationToken) =>
-        (await memoryCache.GetOrCreateAsync(
-            nameof(GetSupplies),
-            async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
+    public async Task<IEnumerable<SupplyDomain?>> GetSupplies(CancellationToken cancellationToken)
+    {
+        var supplies = await dbContext.Supplies
+            .AsNoTracking()
+                .Include(c => c.Supplier)
+                .Include(c => c.ComponentType)
+                .Include(o => o.Warehouse)
+                    .ThenInclude(w => w.ComponentType)
+            .ToArrayAsync(cancellationToken);
 
-                var supplies = await dbContext.Supplies
-                    .AsNoTracking()
-                        .Include(c => c.Supplier)
-                        .Include(c => c.ComponentType)
-                        .Include(o => o.Warehouse) 
-                            .ThenInclude(w => w.ComponentType)
-                    .ToArrayAsync(cancellationToken);
-
-                return mapper.Map<SupplyDomain[]>(supplies); 
-            }))!;
+        return mapper.Map<IEnumerable<SupplyDomain>>(supplies);
+    }
 }
