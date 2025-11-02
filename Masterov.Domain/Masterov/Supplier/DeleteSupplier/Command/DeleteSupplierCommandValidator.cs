@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Masterov.Domain.Masterov.Customer.DeleteCustomer.Command;
 
 namespace Masterov.Domain.Masterov.Supplier.DeleteSupplier.Command;
 

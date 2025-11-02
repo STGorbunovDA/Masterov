@@ -22,7 +22,14 @@ public class UpdateSupplierUseCase(
         if (supplierExists is null)
             throw new NotFoundByIdException(updateSupplierCommand.SupplierId, "Поставщик");
 
-        return await updateSupplierStorage.UpdateSupplier(updateSupplierCommand.SupplierId, updateSupplierCommand.Name,
-            updateSupplierCommand.Address, updateSupplierCommand.Phone, cancellationToken);
+        return await updateSupplierStorage.UpdateSupplier(
+            updateSupplierCommand.SupplierId, 
+            updateSupplierCommand.Name,
+            updateSupplierCommand.Surname,
+            updateSupplierCommand.Email,
+            updateSupplierCommand.Phone,
+            updateSupplierCommand.Address, 
+            updateSupplierCommand.CreatedAt, 
+            cancellationToken);
     }
 }

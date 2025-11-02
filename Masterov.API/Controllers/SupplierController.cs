@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Masterov.API.Extensions;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
@@ -213,7 +214,13 @@ public class SupplierController(IMapper mapper) : ControllerBase
         [FromServices] IAddSupplierUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supplier = await useCase.Execute(new AddSupplierCommand(request.Name,request.Surname, request.Email, request.Phone, request.Address), cancellationToken);
+        var supplier = await useCase.Execute(new AddSupplierCommand(
+            request.Name,
+            request.Surname, 
+            request.Email, 
+            request.Phone, 
+            request.Address), 
+            cancellationToken);
     
         return CreatedAtAction(nameof(GetSupplierById),
             new { supplierId = supplier.SupplierId },
@@ -221,12 +228,12 @@ public class SupplierController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Удаление поставщика по Id. <===
+    /// Удаление поставщика по Id
     /// </summary>
-    /// <param name="supplierId">Идентификатор поставщика.</param>
-    /// <param name="useCase">Сценарий удаления поставщика.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Ответ с кодом 204, если поставщик был успешно удален.</returns>
+    /// <param name="supplierId">Идентификатор поставщика</param>
+    /// <param name="useCase">Сценарий удаления поставщика</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <returns>Ответ с кодом 204, если поставщик был успешно удален</returns>
     [HttpDelete("deleteSupplier/{supplierId:guid}")]
     [ProducesResponseType(204, Type = typeof(bool))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -256,12 +263,19 @@ public class SupplierController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateSupplier(
         [FromRoute] Guid supplierId,
-        [FromForm] UpdateSupplierRequest request,
+        [FromBody] UpdateSupplierRequest request,
         [FromServices] IUpdateSupplierUseCase useCase,
         CancellationToken cancellationToken)
     {
         var updateSupplier = await useCase.Execute(
-            new UpdateSupplierCommand(supplierId, request.Name, request.Address, request.Phone),
+            new UpdateSupplierCommand(
+                supplierId, 
+                request.Name,
+                request.Surname, 
+                request.Email, 
+                request.Phone, 
+                request.Address,
+                request.CreatedAt.ToDateTime()),
             cancellationToken);
         return Ok(mapper.Map<SupplierResponse>(updateSupplier));
     }
