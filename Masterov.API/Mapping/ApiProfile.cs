@@ -88,10 +88,6 @@ internal class ApiProfile : Profile
         // Остальные маппинги
         CreateMap<SupplierDomain, SupplierResponse>();
         CreateMap<SupplierDomain, SupplierNewResponse>();
-        CreateMap<SupplyDomain, SupplyRequest>()
-            .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse))
-            .ForMember(dest => dest.Supplier, opt => opt.MapFrom(src => src.Supplier))
-            .ForMember(dest => dest.ComponentType, opt => opt.MapFrom(src => src.ComponentType));
         CreateMap<SupplierDomain, SupplierRequestNoSupply>();
         
         CreateMap<SupplyDomain, SupplyNewResponse>()

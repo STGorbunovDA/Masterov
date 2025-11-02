@@ -9,6 +9,7 @@ public class SupplyNoWarehouseNewResponse
     public SupplierRequestNoSupply Supplier { get; set; }
     public ComponentTypeResponse ComponentType { get; set; }
     public int Quantity { get; set; }
-    public decimal PriceSupply { get; set; }
-    public DateTime SupplyDate { get; set; }
+    public decimal Price { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt  { get; set; }
 }

@@ -24,7 +24,7 @@ public class DeleteSupplyUseCase(IValidator<DeleteSupplyCommand> validator,
         var warehouse = await updateWarehouseStorage.UpdateWarehouse(supplyExists.Warehouse.WarehouseId,
             supplyExists.Warehouse.ComponentType.ComponentTypeId, supplyExists.Warehouse.Name,
             supplyExists.Warehouse.Quantity - supplyExists.Quantity,
-            supplyExists.Warehouse.Price - supplyExists.PriceSupply, cancellationToken);
+            supplyExists.Warehouse.Price - supplyExists.Price, cancellationToken);
         
         if (warehouse is null)
             throw new Conflict422Exception("Невозможно обработать запрос: склада не существует");

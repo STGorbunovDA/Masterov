@@ -23,8 +23,8 @@ internal class AddSupplyStorage(MasterovDbContext dbContext, IGuidFactory guidFa
             ComponentTypeId = componentTypeId,
             WarehouseId = warehouseId,
             Quantity = quantity,
-            PriceSupply = priceSupply,
-            SupplyDate = DateTime.UtcNow
+            Price = priceSupply,
+            CreatedAt = DateTime.UtcNow
         };
 
         await dbContext.Supplies.AddAsync(supply, cancellationToken);

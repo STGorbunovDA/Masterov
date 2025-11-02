@@ -11,7 +11,7 @@ internal class GetSuppliesByPriceSupplyStorage(MasterovDbContext dbContext, IMap
     {
         var supplies = await dbContext.Supplies
             .AsNoTracking() 
-            .Where(p => p.PriceSupply == priceSupply)
+            .Where(p => p.Price == priceSupply)
                 .Include(c => c.ComponentType)
                 .Include(o => o.Warehouse) 
                     .ThenInclude(w => w.ComponentType)

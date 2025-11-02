@@ -24,7 +24,8 @@ public class Supply
     public int Quantity { get; set; }
 
     [Column(TypeName = "decimal(18,2)")]
-    public decimal PriceSupply { get; set; }
+    public decimal Price { get; set; }
 
-    public DateTime SupplyDate { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? UpdatedAt  { get; set; }
 }

@@ -18,7 +18,7 @@ internal class UpdateSupplyStorage(MasterovDbContext dbContext, IMapper mapper) 
         supplyExists.ComponentTypeId = componentTypeId;
         supplyExists.WarehouseId = warehouseId;
         supplyExists.Quantity = quantity;
-        supplyExists.PriceSupply = priceSupply;
+        supplyExists.Price = priceSupply;
         
         await dbContext.SaveChangesAsync(cancellationToken);
         
