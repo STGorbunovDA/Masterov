@@ -6,7 +6,8 @@ using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
 
-public class GetSupplierBySupplyIdUseCase(IValidator<GetSupplierBySupplyIdQuery> validator, IGetSupplierBySupplyIdStorage storage, IGetSupplyByIdStorage getSupplyByIdStorage) : IGetSupplierBySupplyIdUseCase
+public class GetSupplierBySupplyIdUseCase(IValidator<GetSupplierBySupplyIdQuery> validator, 
+    IGetSupplierBySupplyIdStorage storage, IGetSupplyByIdStorage getSupplyByIdStorage) : IGetSupplierBySupplyIdUseCase
 {
     public async Task<SupplierDomain?> Execute(GetSupplierBySupplyIdQuery getSupplierBySupplyIdQuery, CancellationToken cancellationToken)
     {
