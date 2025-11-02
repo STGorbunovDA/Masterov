@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
+using Masterov.API.Models.Customer;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
@@ -15,6 +16,8 @@ using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByAddress;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByAddress.Query;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByCreatedAt;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByCreatedAt.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByName;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByName.Query;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersBySurname;
@@ -174,6 +177,25 @@ public class SupplierController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var suppliers = await useCase.Execute(new GetSuppliersByAddressQuery(request.SupplierAddress), cancellationToken);
+        return Ok(suppliers?.Select(mapper.Map<SupplierResponse>) ?? Array.Empty<SupplierResponse>());
+    }
+    
+    /// <summary>
+    /// Получить заказчиков по дате создания
+    /// </summary>
+    /// <param name="request">Дата создания заказчиков</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о заказчиках</returns>
+    [HttpGet("getSuppliersByCreatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplierResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    public async Task<IActionResult> GetSuppliersByCreatedAt(
+        [FromQuery] GetSuppliersByCreatedAtRequest request,
+        [FromServices] IGetSuppliersByCreatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var suppliers = await useCase.Execute(new GetSuppliersByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
         return Ok(suppliers?.Select(mapper.Map<SupplierResponse>) ?? Array.Empty<SupplierResponse>());
     }
     

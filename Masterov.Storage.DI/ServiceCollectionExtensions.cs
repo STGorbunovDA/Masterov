@@ -68,6 +68,7 @@ using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByPhone;
 using Masterov.Domain.Masterov.Supplier.GetSuppliers;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByAddress;
+using Masterov.Domain.Masterov.Supplier.GetSuppliersByCreatedAt;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersByName;
 using Masterov.Domain.Masterov.Supplier.GetSuppliersBySurname;
 using Masterov.Domain.Masterov.Supplier.GetSuppliesBySupplierId;
@@ -242,6 +243,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetSupplierByAddressStorage, GetSupplierByAddressStorage>()
             .AddScoped<IGetSupplierByPhoneStorage, GetSupplierByPhoneStorage>()
             .AddScoped<IGetSupplierByEmailStorage, GetSupplierByEmailStorage>()
+            .AddScoped<IGetSuppliersByCreatedAtStorage, GetSuppliersByCreatedAtStorage>()
             .AddScoped<IGetSuppliesBySupplierIdStorage, GetSuppliesBySupplierIdStorage>()
             .AddScoped<IGetSuppliersBySurnameStorage, GetSuppliersBySurnameStorage>()
             .AddScoped<IAddSupplierStorage, AddSupplierStorage>()
