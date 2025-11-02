@@ -13,7 +13,7 @@ public class GetPaymentsByAmountUseCase(IValidator<GetPaymentsByAmountQuery> val
         var paymentsExists = await storage.GetPaymentsByAmount(getPaymentsByAmountQuery.Amount, cancellationToken);
         
         if (paymentsExists is null)
-            throw new NotFoundByAmountException(getPaymentsByAmountQuery.Amount, "Платежы");
+            throw new NotFoundByPriceException(getPaymentsByAmountQuery.Amount, "Платежы");
         
         return paymentsExists;
     }

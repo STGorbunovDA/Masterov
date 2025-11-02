@@ -9,8 +9,6 @@ public class GetSuppliesByQuantityUseCase(IValidator<GetSuppliesByQuantityQuery>
     public async Task<IEnumerable<SupplyDomain?>> Execute(GetSuppliesByQuantityQuery getSuppliesByQuantityQuery, CancellationToken cancellationToken)
     {
         await validator.ValidateAndThrowAsync(getSuppliesByQuantityQuery, cancellationToken);
-        var suppliesExists = await storage.GetSuppliesByQuantity(getSuppliesByQuantityQuery.Quantity, cancellationToken);
-        
-        return suppliesExists;
+        return await storage.GetSuppliesByQuantity(getSuppliesByQuantityQuery.Quantity, cancellationToken);
     }
 }

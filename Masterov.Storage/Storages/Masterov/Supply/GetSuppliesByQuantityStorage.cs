@@ -9,7 +9,6 @@ internal class GetSuppliesByQuantityStorage(MasterovDbContext dbContext, IMapper
 {
     public async Task<IEnumerable<SupplyDomain?>> GetSuppliesByQuantity(int quantity, CancellationToken cancellationToken)
     {
-       
         var supplies = await dbContext.Supplies
             .AsNoTracking() 
             .Where(p => p.Quantity == quantity)

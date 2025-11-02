@@ -12,8 +12,8 @@ using Masterov.Domain.Masterov.Supply.GetComponentTypeBySupplyId.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId;
 using Masterov.Domain.Masterov.Supply.GetSupplierBySupplyId.Query;
 using Masterov.Domain.Masterov.Supply.GetSupplies;
-using Masterov.Domain.Masterov.Supply.GetSuppliesByPriceSupply;
-using Masterov.Domain.Masterov.Supply.GetSuppliesByPriceSupply.Query;
+using Masterov.Domain.Masterov.Supply.GetSuppliesByPrice;
+using Masterov.Domain.Masterov.Supply.GetSuppliesByPrice.Query;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity;
 using Masterov.Domain.Masterov.Supply.GetSuppliesByQuantity.Query;
 using Masterov.Domain.Masterov.Supply.GetSuppliesBySupplyDate;
@@ -76,16 +76,15 @@ public class SupplyController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить все поставки по количеству запчастей
+    /// Получить все поставки по количеству поставленных компонентов
     /// </summary>
-    /// <param name="request">Количество поставленных запчастей</param>
+    /// <param name="request">Количество поставленных компонентов</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
     [HttpGet("getSuppliesByQuantity")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNewResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliesByQuantity(
         [FromQuery] SuppliesByQuantityRequest request,
@@ -93,28 +92,27 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplies = await useCase.Execute(new GetSuppliesByQuantityQuery(request.Quantity), cancellationToken);
-        return Ok(supplies.Select(mapper.Map<SupplyNewResponse>));
+        return Ok(supplies?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
     }
     
     /// <summary>
-    /// Получить поставки по цене
+    /// Получить все поставки по цене поставленных компонентов
     /// </summary>
-    /// <param name="request">Сумма оплаты</param>
+    /// <param name="request">Цена поставки</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
-    [HttpGet("getSuppliesByPriceSupply")]
+    [HttpGet("getSuppliesByPrice")]
     [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404)]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetSuppliesByPriceSupply(
-        [FromQuery] GetSuppliesByPriceSupplyRequest request,
-        [FromServices] IGetSuppliesByPriceSupplyUseCase useCase,
+    public async Task<IActionResult> GetSuppliesByPrice(
+        [FromQuery] GetSuppliesByPriceRequest request,
+        [FromServices] IGetSuppliesByPriceUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var payments = await useCase.Execute(new GetSuppliesByAmountPriceSupply(request.PriceSupply), cancellationToken);
-        return Ok(payments?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
+        var supplies = await useCase.Execute(new GetSuppliesByPriceQuery(request.Price), cancellationToken);
+        return Ok(supplies?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
     }
     
     /// <summary>
