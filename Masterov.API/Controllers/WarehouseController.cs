@@ -87,7 +87,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Получить поставки по идентификатору склада
+    /// Получить все поставки склада по идентификатору склада
     /// </summary>
     /// <param name="request">Идентификатор склада</param>
     /// <param name="useCase">Сценарий использования</param>
@@ -104,7 +104,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var supplies = await useCase.Execute(new GetSuppliesByWarehouseIdQuery(request.WarehouseId), cancellationToken);
-        return Ok(mapper.Map<IEnumerable<SupplyNoWarehouseNewResponse>>(supplies));
+        return Ok(supplies?.Select(mapper.Map<SupplyNoWarehouseNewResponse>) ?? Array.Empty<SupplyNoWarehouseNewResponse>());
     }
     
     /// <summary>
