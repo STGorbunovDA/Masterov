@@ -25,7 +25,7 @@ namespace Masterov.API.Controllers;
 /// </summary>
 /// <param name="mapper"></param>
 [ApiController]
-[Route("api/warehouse")]
+[Route("api/warehouses")]
 public class WarehouseController(IMapper mapper) : ControllerBase
 {
     /// <summary>

@@ -19,6 +19,7 @@ public class Warehouse
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal Price { get; set; }
-
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime? UpdatedAt  { get; set; }
     public ICollection<Supply> Supplies { get; set; } = new List<Supply>();
 }
