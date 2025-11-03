@@ -5,7 +5,6 @@ using Masterov.Domain.Masterov.Supplier.GetSupplierById;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
 using Masterov.Domain.Masterov.Supply.UpdateSupply.Command;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
-using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.Supply.UpdateSupply;
@@ -24,26 +23,22 @@ public class UpdateSupplyUseCase(
         await validator.ValidateAndThrowAsync(updateSupplyCommand, cancellationToken);
         
         var supplyExists = await getSupplyByIdStorage.GetSupplyById(updateSupplyCommand.SupplyId, cancellationToken);
-        
         if (supplyExists is null)
             throw new NotFoundByIdException(updateSupplyCommand.SupplyId, "Поставка");
         
         var supplierExists = await getSupplierByIdStorage.GetSupplierById(updateSupplyCommand.SupplierId, cancellationToken);
-        
         if (supplierExists is null)
             throw new NotFoundByIdException(updateSupplyCommand.SupplierId, "Поставщик");
 
         var componentTypeExists = await getComponentTypeByIdStorage.GetComponentTypeById(updateSupplyCommand.ComponentTypeId, cancellationToken);
-        
         if (componentTypeExists is null)
             throw new NotFoundByIdException(updateSupplyCommand.ComponentTypeId, "Тип изделия");
         
         var warehouseExists = await getWarehouseByIdStorage.GetWarehouseById(updateSupplyCommand.WarehouseId, cancellationToken);
-        
         if (warehouseExists is null)
             throw new NotFoundByIdException(updateSupplyCommand.WarehouseId, "Склад");
 
         return await updateSupplyStorage.UpdateSupply(updateSupplyCommand.SupplyId, updateSupplyCommand.SupplierId, updateSupplyCommand.ComponentTypeId,
-            updateSupplyCommand.WarehouseId, updateSupplyCommand.Quantity, updateSupplyCommand.PriceSupply, cancellationToken);
+            updateSupplyCommand.WarehouseId, updateSupplyCommand.Quantity, updateSupplyCommand.Price, cancellationToken);
     }
 }

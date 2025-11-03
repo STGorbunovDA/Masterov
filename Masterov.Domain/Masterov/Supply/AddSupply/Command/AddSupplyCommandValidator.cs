@@ -24,7 +24,7 @@ public class AddSupplyCommandValidator : AbstractValidator<AddSupplyCommand>
             .GreaterThanOrEqualTo(0)
             .WithMessage("The quantity cannot be negative.");
         
-        RuleFor(q => q.PriceSupply).Cascade(CascadeMode.Stop)
+        RuleFor(q => q.Price).Cascade(CascadeMode.Stop)
             .GreaterThanOrEqualTo(0)
             .WithMessage("The PriceSupply cannot be negative.");
     }

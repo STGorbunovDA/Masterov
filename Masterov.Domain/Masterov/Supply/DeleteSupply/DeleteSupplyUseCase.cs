@@ -18,6 +18,9 @@ public class DeleteSupplyUseCase(IValidator<DeleteSupplyCommand> validator,
         
         if (supplyExists is null)
             throw new NotFoundByIdException(deleteSupplyCommand.SupplyId, "Поставка");
+        
+        if (supplyExists.Warehouse.Quantity - supplyExists.Quantity < 0)
+            throw new Conflict422Exception("Невозможно удалить поставку: количество на складе стало бы отрицательным.");
 
         var result = await storage.DeleteSupply(deleteSupplyCommand.SupplyId, cancellationToken);
         

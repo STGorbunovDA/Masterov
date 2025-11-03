@@ -34,7 +34,7 @@ public class AddSupplyUseCase(
             await getComponentTypeByIdStorage.GetComponentTypeById(addSupplyCommand.ComponentTypeId, cancellationToken);
 
         if (componentTypeExists is null)
-            throw new NotFoundByIdException(addSupplyCommand.ComponentTypeId, "Тип изделия");
+            throw new NotFoundByIdException(addSupplyCommand.ComponentTypeId, "Тип компонента");
 
         var warehouseExists =
             await getWarehouseByIdStorage.GetWarehouseById(addSupplyCommand.WarehouseId, cancellationToken);
@@ -44,7 +44,7 @@ public class AddSupplyUseCase(
 
         var supplyDomain = await addSupplyStorage.AddSupply(addSupplyCommand.SupplierId,
             addSupplyCommand.ComponentTypeId, addSupplyCommand.WarehouseId, addSupplyCommand.Quantity,
-            addSupplyCommand.PriceSupply, cancellationToken);
+            addSupplyCommand.Price, cancellationToken);
 
         if (supplyDomain is null)
             throw new Conflict422Exception("Невозможно обработать запрос: поставки не существует");
@@ -52,7 +52,7 @@ public class AddSupplyUseCase(
         var warehouse = await updateWarehouseStorage.UpdateWarehouse(supplyDomain.Warehouse.WarehouseId,
             supplyDomain.Warehouse.ComponentType.ComponentTypeId, supplyDomain.Warehouse.Name,
             supplyDomain.Warehouse.Quantity + addSupplyCommand.Quantity,
-            supplyDomain.Warehouse.Price + addSupplyCommand.PriceSupply, cancellationToken);
+            supplyDomain.Warehouse.Price + addSupplyCommand.Price, cancellationToken);
         
         if (warehouse is null)
             throw new Conflict422Exception("Невозможно обработать запрос: склада не существует");

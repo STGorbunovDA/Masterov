@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.Supply;
 
 internal class UpdateSupplyStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateSupplyStorage
 {
-    public async Task<SupplyDomain> UpdateSupply(Guid supplyId, Guid supplierId, Guid componentTypeId, Guid warehouseId, int quantity, decimal priceSupply, CancellationToken cancellationToken)
+    public async Task<SupplyDomain> UpdateSupply(Guid supplyId, Guid supplierId, Guid componentTypeId, Guid warehouseId, int quantity, decimal price, CancellationToken cancellationToken)
     {
         var supplyExists = await dbContext.Set<Storage.Supply>().FindAsync([supplyId], cancellationToken);
         
@@ -18,7 +18,8 @@ internal class UpdateSupplyStorage(MasterovDbContext dbContext, IMapper mapper) 
         supplyExists.ComponentTypeId = componentTypeId;
         supplyExists.WarehouseId = warehouseId;
         supplyExists.Quantity = quantity;
-        supplyExists.Price = priceSupply;
+        supplyExists.Price = price;
+        supplyExists.UpdatedAt = DateTime.Now;
         
         await dbContext.SaveChangesAsync(cancellationToken);
         

@@ -222,7 +222,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Добавить поставку
+    /// Добавить поставку <= //TODO надо продумать UpdateWarehouseComponentQuantityPrice
     /// </summary>
     /// <param name="request">Данные о поставке</param>
     /// <param name="useCase">Сценарий добавления поставки</param>
@@ -231,31 +231,45 @@ public class SupplyController(IMapper mapper) : ControllerBase
     [HttpPost("addSupply")]
     [ProducesResponseType(201, Type = typeof(SupplyNewResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(422, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> AddSupply(
-        [FromForm] AddSupplyRequest request,
+        [FromBody] AddSupplyRequest request,
         [FromServices] IAddSupplyUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var supply = await useCase.Execute(new AddSupplyCommand(request.SupplierId, request.ComponentTypeId, request.WarehouseId, request.Quantity, request.PriceSupply), cancellationToken);
+        var supply = await useCase.Execute(new AddSupplyCommand(request.SupplierId, request.ComponentTypeId, request.WarehouseId, request.Quantity, request.Price), cancellationToken);
     
+        if (supply is null)
+        {
+            return NotFound(new ProblemDetails
+            {
+                Title = "Поставка не создана",
+                Detail = "Не удалось создать поставку. Проверьте корректность введённых данных."
+            });
+        }
+
         return CreatedAtAction(nameof(GetSupplyById),
             new { supplyId = supply.SupplyId },
             mapper.Map<SupplyNewResponse>(supply));
     }
     
     /// <summary>
-    /// Удаление поставки по Id.
+    /// Удаление поставки по Id
     /// </summary>
-    /// <param name="supplyId">Идентификатор поставки.</param>
-    /// <param name="useCase">Сценарий удаления поставки.</param>
-    /// <param name="cancellationToken">Токен отмены операции.</param>
-    /// <returns>Ответ с кодом 204, если поставка бала успешно удалена.</returns>
-    [HttpDelete("deleteSupply")]
+    /// <param name="supplyId">Идентификатор поставки</param>
+    /// <param name="useCase">Сценарий удаления поставки</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <returns>Ответ с кодом 204, если поставка бала успешно удалена</returns>
+    [HttpDelete("deleteSupply/{supplyId:guid}")]
+    [ProducesResponseType(204, Type = typeof(bool))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(422, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteSupply(
-        Guid supplyId,
+        [FromRoute] Guid supplyId,
         [FromServices] IDeleteSupplyUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -266,22 +280,24 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Обновить поставку по Id
     /// </summary>
+    /// <param name="supplyId">Идентификатор поставки</param>
     /// <param name="request">Данные для обновления поставки</param>
     /// <param name="useCase">Сценарий обновления поставки</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления</returns>
-    [HttpPatch("updateSupply")]
+    [HttpPatch("updateSupply/{supplyId:guid}")]
     [ProducesResponseType(200, Type = typeof(SupplyNewResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateSupply(
-        [FromForm] UpdateSupplyRequest request,
+        [FromRoute] Guid supplyId,
+        [FromBody] UpdateSupplyRequest request,
         [FromServices] IUpdateSupplyUseCase useCase,
         CancellationToken cancellationToken)
     {
         var updateSupply = await useCase.Execute(
-            new UpdateSupplyCommand(request.SupplyId, request.SupplierId, request.ComponentTypeId, request.WarehouseId, request.Quantity, request.PriceSupply),
+            new UpdateSupplyCommand(supplyId, request.SupplierId, request.ComponentTypeId, request.WarehouseId, request.Quantity, request.Price),
             cancellationToken);
         return Ok(mapper.Map<SupplyNewResponse>(updateSupply));
     }

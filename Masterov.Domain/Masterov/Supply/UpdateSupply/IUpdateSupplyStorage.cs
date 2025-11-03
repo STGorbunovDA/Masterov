@@ -4,5 +4,5 @@ namespace Masterov.Domain.Masterov.Supply.UpdateSupply;
 
 public interface IUpdateSupplyStorage
 {
-    Task<SupplyDomain> UpdateSupply(Guid supplyId, Guid supplierId, Guid componentTypeId, Guid warehouseId, int quantity, decimal priceSupply, CancellationToken cancellationToken);
+    Task<SupplyDomain> UpdateSupply(Guid supplyId, Guid supplierId, Guid componentTypeId, Guid warehouseId, int quantity, decimal price, CancellationToken cancellationToken);
 }
