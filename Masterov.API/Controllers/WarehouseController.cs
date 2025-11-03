@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Masterov.API.Extensions;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.API.Models.Warehouse;
@@ -9,6 +10,8 @@ using Masterov.Domain.Masterov.Warehouse.GetWarehouseById.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
+using Masterov.Domain.Masterov.Warehouse.GetWarehousesByCreatedAt;
+using Masterov.Domain.Masterov.Warehouse.GetWarehousesByCreatedAt.Query;
 using Masterov.Domain.Masterov.Warehouse.UpdatePriceWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdatePriceWarehouseById.Command;
 using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById;
@@ -105,6 +108,26 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     {
         var supplies = await useCase.Execute(new GetSuppliesByWarehouseIdQuery(request.WarehouseId), cancellationToken);
         return Ok(supplies?.Select(mapper.Map<SupplyNoWarehouseNewResponse>) ?? Array.Empty<SupplyNoWarehouseNewResponse>());
+    }
+    
+    /// <summary>
+    /// Получить склады по дате создания
+    /// </summary>
+    /// <param name="request">Дата создания</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о складах</returns>
+    [HttpGet("getWarehousesByCreatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<WarehouseResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetWarehousesByCreatedAt(
+        [FromQuery] GetWarehousesByCreatedAtRequest request,
+        [FromServices] IGetWarehousesByCreatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var warehouses = await useCase.Execute(new GetWarehousesByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(warehouses?.Select(mapper.Map<WarehouseResponse>) ?? Array.Empty<WarehouseResponse>());
     }
     
     /// <summary>
