@@ -74,7 +74,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о складе</returns>
     [HttpGet("getWarehouseByName/{nameWarehouse}")]
-    [ProducesResponseType(200, Type = typeof(WarehouseResponse[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<WarehouseResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404)]
     public async Task<IActionResult> GetWarehouseByName(
@@ -82,9 +82,8 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         [FromServices] IGetWarehouseByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var warehouses =
-            await useCase.Execute(new GetWarehouseByNameQuery(nameWarehouse), cancellationToken);
-        return Ok(warehouses.Select(mapper.Map<WarehouseResponse>));
+        var warehouses = await useCase.Execute(new GetWarehouseByNameQuery(nameWarehouse), cancellationToken);
+        return Ok(warehouses?.Select(mapper.Map<WarehouseResponse>) ?? Array.Empty<WarehouseResponse>());
     }
     
     /// <summary>
