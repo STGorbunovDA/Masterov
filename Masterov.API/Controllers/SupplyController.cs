@@ -106,7 +106,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
     [HttpGet("getSuppliesByPrice")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNewResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliesByPrice(
@@ -126,7 +126,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
     [HttpGet("getSuppliesByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNewResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliesByCreatedAt(
@@ -146,7 +146,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о поставках</returns>
     [HttpGet("getSuppliesByUpdatedAt")]
-    [ProducesResponseType(200, Type = typeof(SupplyNewResponse[]))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNewResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetSuppliesByUpdatedAt(

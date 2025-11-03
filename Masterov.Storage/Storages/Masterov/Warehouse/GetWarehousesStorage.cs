@@ -2,24 +2,18 @@
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
 using Masterov.Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace Masterov.Storage.Storages.Masterov.Warehouse;
 
-internal class GetWarehousesStorage (MasterovDbContext dbContext, IMemoryCache memoryCache, IMapper mapper) : IGetWarehousesStorage
+internal class GetWarehousesStorage(MasterovDbContext dbContext, IMapper mapper) : IGetWarehousesStorage
 {
-    public async Task<IEnumerable<WarehouseDomain>> GetWarehouses(CancellationToken cancellationToken) =>
-        (await memoryCache.GetOrCreateAsync(
-            nameof(GetWarehouses),
-            async entry =>
-            {
-                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(1);
+    public async Task<IEnumerable<WarehouseDomain>> GetWarehouses(CancellationToken cancellationToken)
+    {
+        var warehouses = await dbContext.Warehouses
+            .AsNoTracking()
+                .Include(c => c.ComponentType)
+            .ToArrayAsync(cancellationToken);
 
-                var supplies = await dbContext.Warehouses
-                    .AsNoTracking()
-                        .Include(c => c.ComponentType)
-                    .ToArrayAsync(cancellationToken);
-
-                return mapper.Map<WarehouseDomain[]>(supplies); 
-            }))!;
+        return mapper.Map<WarehouseDomain[]>(warehouses);
+    }
 }

@@ -35,15 +35,14 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о складах</returns>
     [HttpGet("getWarehouses")]
-    [ProducesResponseType(200, Type = typeof(WarehouseResponse[]))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<WarehouseResponse>))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> GetWarehouses(
         [FromServices] IGetWarehousesUseCase useCase,
         CancellationToken cancellationToken)
     {
         var warehouses = await useCase.Execute(cancellationToken);
-        return Ok(warehouses.Select(mapper.Map<WarehouseResponse>));
+        return Ok(warehouses?.Select(mapper.Map<WarehouseResponse>) ?? Array.Empty<WarehouseResponse>());
     }
     
     /// <summary>
