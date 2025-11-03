@@ -118,6 +118,7 @@ using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
 using Masterov.Domain.Masterov.Warehouse.GetWarehousesByCreatedAt;
+using Masterov.Domain.Masterov.Warehouse.GetWarehousesByUpdatedAt;
 using Masterov.Domain.Masterov.Warehouse.UpdatePriceWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
@@ -276,6 +277,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IUpdateWarehouseStorage, UpdateWarehouseStorage>()
             .AddScoped<IGetWarehouseByNameStorage, GetWarehouseByNameStorage>()
             .AddScoped<IGetWarehousesByCreatedAtStorage, GetWarehousesByCreatedAtStorage>()
+            .AddScoped<IGetWarehousesByUpdatedAtStorage, GetWarehousesByUpdatedAtStorage>()
             .AddScoped<IUpdatePriceWarehouseByIdStorage, UpdatePriceWarehouseByIdStorage>()
             .AddScoped<IGetSuppliesByWarehouseIdStorage, GetSuppliesByWarehouseIdStorage>()
             .AddScoped<IGetWarehousesStorage, GetWarehousesStorage>();

@@ -12,6 +12,8 @@ using Masterov.Domain.Masterov.Warehouse.GetWarehouseByName.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouses;
 using Masterov.Domain.Masterov.Warehouse.GetWarehousesByCreatedAt;
 using Masterov.Domain.Masterov.Warehouse.GetWarehousesByCreatedAt.Query;
+using Masterov.Domain.Masterov.Warehouse.GetWarehousesByUpdatedAt;
+using Masterov.Domain.Masterov.Warehouse.GetWarehousesByUpdatedAt.Query;
 using Masterov.Domain.Masterov.Warehouse.UpdatePriceWarehouseById;
 using Masterov.Domain.Masterov.Warehouse.UpdatePriceWarehouseById.Command;
 using Masterov.Domain.Masterov.Warehouse.UpdateQuantityWarehouseById;
@@ -127,6 +129,26 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var warehouses = await useCase.Execute(new GetWarehousesByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(warehouses?.Select(mapper.Map<WarehouseResponse>) ?? Array.Empty<WarehouseResponse>());
+    }
+    
+    /// <summary>
+    /// Получить склады по дате обновления
+    /// </summary>
+    /// <param name="request">Дата обновления</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о складах</returns>
+    [HttpGet("getWarehousesByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<WarehouseResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetWarehousesByUpdatedAt(
+        [FromQuery] GetWarehousesByUpdatedAtRequest request,
+        [FromServices] IGetWarehousesByUpdatedAtUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var warehouses = await useCase.Execute(new GetWarehousesByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(warehouses?.Select(mapper.Map<WarehouseResponse>) ?? Array.Empty<WarehouseResponse>());
     }
     
