@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using Masterov.Domain.Exceptions;
+using Masterov.Domain.Masterov.ServiceAdditional.ServiceSupply;
 using Masterov.Domain.Masterov.Supply.DeleteSupply.Command;
 using Masterov.Domain.Masterov.Supply.GetSupplyById;
-using Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 
 namespace Masterov.Domain.Masterov.Supply.DeleteSupply;
 
 public class DeleteSupplyUseCase(IValidator<DeleteSupplyCommand> validator, 
     IDeleteSupplyStorage storage, IGetSupplyByIdStorage getSupplyByIdStorage,
-    IUpdateWarehouseStorage updateWarehouseStorage) : IDeleteSupplyUseCase
+    IUpdateWarehouseQuantityPriceSupply updateWarehouseQuantityPriceSupply) : IDeleteSupplyUseCase
 {
     public async Task<bool> Execute(DeleteSupplyCommand deleteSupplyCommand, CancellationToken cancellationToken)
     {
@@ -24,13 +24,14 @@ public class DeleteSupplyUseCase(IValidator<DeleteSupplyCommand> validator,
 
         var result = await storage.DeleteSupply(deleteSupplyCommand.SupplyId, cancellationToken);
         
-        var warehouse = await updateWarehouseStorage.UpdateWarehouse(supplyExists.Warehouse.WarehouseId,
-            supplyExists.Warehouse.ComponentType.ComponentTypeId, supplyExists.Warehouse.Name,
-            supplyExists.Warehouse.Quantity - supplyExists.Quantity,
-            supplyExists.Warehouse.Price - supplyExists.Price, cancellationToken);
+        if(!result)
+            throw new Conflict422Exception("Невозможно удалить поставку");
+        
+        var warehouse = await updateWarehouseQuantityPriceSupply.RemoveSupplyFromWarehouse(supplyExists.Warehouse.WarehouseId,
+            supplyExists.Quantity, supplyExists.Price, cancellationToken);
         
         if (warehouse is null)
-            throw new Conflict422Exception("Невозможно обработать запрос: склада не существует");
+            throw new Conflict422Exception("Невозможно обновить склад после удаления поставки");
         
         return result;
     }

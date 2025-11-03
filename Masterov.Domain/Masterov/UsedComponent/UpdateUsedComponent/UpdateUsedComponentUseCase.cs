@@ -17,7 +17,7 @@ public class UpdateUsedComponentUseCase(
     IGetOrderByIdStorage orderStorage,
     IGetComponentTypeByIdStorage componentTypeStorage,
     IGetWarehouseByIdStorage warehouseStorage,
-    IUpdateWarehouseComponentQuantityPrice updateWarehouseComponentQuantityPrice) : IUpdateUsedComponentUseCase
+    IUpdateWarehouseQuantityPriceUsedComponent updateWarehouseQuantityPriceUsedComponent) : IUpdateUsedComponentUseCase
 {
     public async Task<UsedComponentDomain> Execute(UpdateUsedComponentCommand updateUsedComponentCommand,
         CancellationToken cancellationToken)
@@ -41,12 +41,12 @@ public class UpdateUsedComponentUseCase(
             throw new NotFoundByIdException(updateUsedComponentCommand.WarehouseId, "Склад");
 
         if (usedComponentExists.Quantity > updateUsedComponentCommand.Quantity)
-           await updateWarehouseComponentQuantityPrice.ReturnQuantityPriceWarehouse(
+           await updateWarehouseQuantityPriceUsedComponent.ReturnQuantityPriceWarehouse(
                 updateUsedComponentCommand.WarehouseId,
                 usedComponentExists.Quantity - updateUsedComponentCommand.Quantity,
                 cancellationToken);
         else if(usedComponentExists.Quantity < updateUsedComponentCommand.Quantity)
-            await updateWarehouseComponentQuantityPrice.RemoveQuantityPriceWarehouse(
+            await updateWarehouseQuantityPriceUsedComponent.RemoveQuantityPriceWarehouse(
                 updateUsedComponentCommand.WarehouseId,
                 updateUsedComponentCommand.Quantity - usedComponentExists.Quantity,
                 cancellationToken);

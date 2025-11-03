@@ -62,6 +62,7 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.ServiceAdditional.ServicePayment;
+using Masterov.Domain.Masterov.ServiceAdditional.ServiceSupply;
 using Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
 using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
@@ -287,7 +288,8 @@ public static class ServiceCollectionExtensions
 
         services
             .AddScoped<IUpdateOrderStatusAfterPayment, UpdateOrderStatusAfterPayment>()
-            .AddScoped<IUpdateWarehouseComponentQuantityPrice, UpdateWarehouseComponentQuantityPrice>();
+            .AddScoped<IUpdateWarehouseQuantityPriceSupply, UpdateWarehouseQuantityPriceSupply>()
+            .AddScoped<IUpdateWarehouseQuantityPriceUsedComponent, UpdateWarehouseQuantityPriceUsedComponent>();
             
         return services;
     }

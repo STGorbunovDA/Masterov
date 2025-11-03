@@ -10,7 +10,7 @@ public class DeleteUsedComponentUseCase(
     IValidator<DeleteUsedComponentCommand> validator,
     IDeleteUsedComponentStorage storage,
     IGetUsedComponentByIdStorage getUsedComponentByIdStorage,
-    IUpdateWarehouseComponentQuantityPrice updateWarehouseComponentQuantityPrice) : IDeleteUsedComponentUseCase
+    IUpdateWarehouseQuantityPriceUsedComponent updateWarehouseQuantityPriceUsedComponent) : IDeleteUsedComponentUseCase
 {
     public async Task<bool> Execute(DeleteUsedComponentCommand deleteUsedComponentCommand,
         CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ public class DeleteUsedComponentUseCase(
 
         if (deleteUsedComponentCommand.DeleteWarehouse)
         {
-          await updateWarehouseComponentQuantityPrice.ReturnQuantityPriceWarehouse(usedComponentExists.Warehouse.WarehouseId,
+          await updateWarehouseQuantityPriceUsedComponent.ReturnQuantityPriceWarehouse(usedComponentExists.Warehouse.WarehouseId,
                 usedComponentExists.Quantity, cancellationToken);
         }
 

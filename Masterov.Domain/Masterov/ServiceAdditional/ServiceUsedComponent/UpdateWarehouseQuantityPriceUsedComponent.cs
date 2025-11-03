@@ -6,9 +6,9 @@ using Masterov.Domain.Models;
 
 namespace Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
 
-public class UpdateWarehouseComponentQuantityPrice (IUpdatePriceWarehouseByIdStorage updatePriceWarehouseByIdStorage,
+public class UpdateWarehouseQuantityPriceUsedComponent (IUpdatePriceWarehouseByIdStorage updatePriceWarehouseByIdStorage,
     IUpdateQuantityWarehouseByIdStorage updateQuantityWarehouseByIdStorage,
-    IGetWarehouseByIdStorage warehouseByIdStorage) : IUpdateWarehouseComponentQuantityPrice
+    IGetWarehouseByIdStorage warehouseByIdStorage) : IUpdateWarehouseQuantityPriceUsedComponent
 {
     // Метод использует подсчет средней цены исходя из кол-ва на складе
     public async Task<WarehouseDomain> RemoveQuantityPriceWarehouse(Guid warehouseId, int quantityToUse, CancellationToken cancellationToken)
@@ -26,6 +26,7 @@ public class UpdateWarehouseComponentQuantityPrice (IUpdatePriceWarehouseByIdSto
         var unitPrice = warehouse.Quantity > 0 ? decimal.Round(warehouse.Price / warehouse.Quantity, 2) : 0;
     
         var newQuantity = warehouse.Quantity - quantityToUse;
+        
         var newPrice = decimal.Round(warehouse.Price - (unitPrice * quantityToUse), 2);
         
         if (newQuantity == 0)
@@ -67,7 +68,7 @@ public class UpdateWarehouseComponentQuantityPrice (IUpdatePriceWarehouseByIdSto
         
         var updatedPrice = await updatePriceWarehouseByIdStorage.UpdatePriceWarehouseById(warehouseId, newPrice, cancellationToken);
     
-        if (updatedQuantity is null)
+        if (updatedPrice is null)
             throw new Conflict409Exception("Не удалось обновить цену на складе");
 
         return updatedPrice;

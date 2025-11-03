@@ -222,7 +222,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
-    /// Добавить поставку <= //TODO надо продумать UpdateWarehouseComponentQuantityPrice
+    /// Добавить поставку
     /// </summary>
     /// <param name="request">Данные о поставке</param>
     /// <param name="useCase">Сценарий добавления поставки</param>
@@ -266,7 +266,9 @@ public class SupplyController(IMapper mapper) : ControllerBase
     [ProducesResponseType(204, Type = typeof(bool))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
     [ProducesResponseType(422, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(500, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> DeleteSupply(
         [FromRoute] Guid supplyId,
@@ -289,6 +291,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(SupplyNewResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(422, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateSupply(
         [FromRoute] Guid supplyId,
