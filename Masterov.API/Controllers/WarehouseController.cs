@@ -248,7 +248,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateWarehouse(
         [FromRoute] Guid warehouseId,
-        [FromForm] UpdateWarehouseRequest request,
+        [FromBody] UpdateWarehouseRequest request,
         [FromServices] IUpdateWarehouseUseCase useCase,
         CancellationToken cancellationToken)
     {
@@ -266,7 +266,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     /// <param name="useCase">Сценарий обновления скалад</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления</returns>
-    [HttpPatch("updateQuantityWarehouseById{warehouseId:guid}")]
+    [HttpPatch("updateQuantityWarehouseById/{warehouseId:guid}")]
     [ProducesResponseType(200, Type = typeof(WarehouseResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
