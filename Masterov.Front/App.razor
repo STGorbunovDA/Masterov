@@ -1,0 +1,17 @@
+﻿<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+
+        <NotFound>
+            <PageTitle>404 — Не найдено</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <h3>⚠ Страница не найдена</h3>
+                <p>Такой страницы нет. Попробуйте <a href="/">вернуться на главную</a>.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+<BlazoredToasts />

@@ -1,0 +1,16 @@
+﻿@page "/"
+@using Masterov.Front.Services
+@inject NavigationManager Navigation
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject TokenService TokenService
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await LocalStorage.GetItemAsStringAsync("authToken");
+        if (string.IsNullOrWhiteSpace(token) || !TokenService.IsTokenValid(token))
+            Navigation.NavigateTo("/login", true);
+        else
+            Navigation.NavigateTo("/main", true);
+    }
+}

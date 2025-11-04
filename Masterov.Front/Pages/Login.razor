@@ -1,0 +1,32 @@
+﻿@page "/login"
+@using Masterov.Front.Models
+@using Masterov.Front.Services
+@inject AuthService Auth
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<div class="login-container">
+    <div class="login-header">
+        <h2>Авторизация</h2>
+    </div>
+    <EditForm Model="model" OnValidSubmit="HandleLogin" class="login-form">
+        <div class="form-group">
+            <InputText @bind-Value="model.Login" placeholder="Логин" class="form-control" />
+        </div>
+        <div class="form-group">
+            <InputText @bind-Value="model.Password" type="password" placeholder="Пароль" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Войти</button>
+    </EditForm>
+</div>
+
+@code {
+    private AuthLoginUserDto model = new();
+
+    private async Task HandleLogin()
+    {
+        if (await Auth.Login(model))
+            Navigation.NavigateTo("/main", true);
+        else  await JS.InvokeVoidAsync("alert", "Ошибка авторизации");
+    }
+}

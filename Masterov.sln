@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masterov.Domain.DI", "Maste
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masterov.API", "Masterov.API\Masterov.API.csproj", "{BEE3A51C-5292-410C-8415-F893A6378E23}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masterov.Front", "Masterov.Front\Masterov.Front.csproj", "{28700BAC-A580-4A61-8B2F-030A9CD66ED3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{BEE3A51C-5292-410C-8415-F893A6378E23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEE3A51C-5292-410C-8415-F893A6378E23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEE3A51C-5292-410C-8415-F893A6378E23}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28700BAC-A580-4A61-8B2F-030A9CD66ED3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28700BAC-A580-4A61-8B2F-030A9CD66ED3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28700BAC-A580-4A61-8B2F-030A9CD66ED3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28700BAC-A580-4A61-8B2F-030A9CD66ED3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
