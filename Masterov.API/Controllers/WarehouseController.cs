@@ -5,6 +5,8 @@ using Masterov.API.Models.Supply;
 using Masterov.API.Models.Warehouse;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByWarehouseId;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByWarehouseId.Query;
+using Masterov.Domain.Masterov.Warehouse.AddWarehouse;
+using Masterov.Domain.Masterov.Warehouse.AddWarehouse.Command;
 using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId;
 using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
@@ -176,6 +178,38 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     }
     
     /// <summary>
+    /// Добавить склад
+    /// </summary>
+    /// <param name="request">Данные о складе</param>
+    /// <param name="useCase">Сценарий добавления склада</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Результат выполнения</returns>
+    [HttpPost("addWarehouse")]
+    [ProducesResponseType(201, Type = typeof(WarehouseResponse))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(409, Type = typeof(ProblemDetails))]
+    public async Task<IActionResult> AddWarehouse(
+        [FromBody] AddWarehouseRequest request,
+        [FromServices] IAddWarehouseUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var warehouse = await useCase.Execute(new AddWarehouseCommand(request.Name, request.ComponentTypeId), cancellationToken);
+    
+        if (warehouse is null)
+        {
+            return NotFound(new ProblemDetails
+            {
+                Title = "Склад не создан",
+                Detail = "Не удалось создать склад. Проверьте корректность введённых данных."
+            });
+        }
+        
+        return CreatedAtAction(nameof(GetWarehouseById),
+            new { warehouseId = warehouse.WarehouseId },
+            mapper.Map<WarehouseResponse>(warehouse));
+    }
+    
+    /// <summary>
     /// Обновить склад по Id
     /// </summary>
     /// <param name="warehouseId">Идентификатор заказчика</param>
@@ -241,7 +275,7 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdatePriceWarehouseById(
         [FromRoute] Guid warehouseId,
-        [FromBody] UpdatePriceWarehouseByIdRequest request,
+        [FromQuery] UpdatePriceWarehouseByIdRequest request,
         [FromServices] IUpdatePriceWarehouseByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
