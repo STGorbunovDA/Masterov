@@ -304,7 +304,7 @@ public class SupplyController(IMapper mapper) : ControllerBase
         CancellationToken cancellationToken)
     {
         var updateSupply = await useCase.Execute(
-            new UpdateSupplyCommand(supplyId, request.SupplierId, request.ComponentTypeId, request.WarehouseId, request.Quantity, request.Price),
+            new UpdateSupplyCommand(supplyId, request.SupplierId, request.ComponentTypeId, request.WarehouseId, request.Quantity, request.Price, request.CreatedAt.ToDateTime()),
             cancellationToken);
         return Ok(mapper.Map<SupplyNewResponse>(updateSupply));
     }

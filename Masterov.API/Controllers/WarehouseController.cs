@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
 using Masterov.API.Models.ComponentType;
-using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.API.Models.Warehouse;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByWarehouseId;
@@ -179,22 +178,24 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Обновить склад по Id
     /// </summary>
+    /// <param name="warehouseId">Идентификатор заказчика</param>
     /// <param name="request">Данные для обновления склада</param>
     /// <param name="useCase">Сценарий обновления скалад</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления</returns>
-    [HttpPatch("updateWarehouse")]
+    [HttpPatch("updateWarehouse/{warehouseId:guid}")]
     [ProducesResponseType(200, Type = typeof(WarehouseResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(410)]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateWarehouse(
+        [FromRoute] Guid warehouseId,
         [FromForm] UpdateWarehouseRequest request,
         [FromServices] IUpdateWarehouseUseCase useCase,
         CancellationToken cancellationToken)
     {
         var updateWarehouse = await useCase.Execute(
-            new UpdateWarehouseCommand(request.WarehouseId, request.ComponentTypeId, request.Name, request.Quantity, request.Price),
+            new UpdateWarehouseCommand(warehouseId, request.ComponentTypeId, request.Name, request.Quantity, request.Price, request.CreatedAt.ToDateTime()),
             cancellationToken);
         return Ok(mapper.Map<WarehouseResponse>(updateWarehouse));
     }

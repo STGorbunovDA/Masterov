@@ -9,7 +9,7 @@ namespace Masterov.Domain.Masterov.Warehouse.UpdateWarehouse;
 
 public class UpdateWarehouseUseCase(
     IValidator<UpdateWarehouseCommand> validator,
-    IUpdateWarehouseStorage updateSupplyStorage,
+    IUpdateWarehouseStorage updateWarehouseStorage,
     IGetComponentTypeByIdStorage getComponentTypeByIdStorage,
     IGetWarehouseByIdStorage getWarehouseByIdStorage) : IUpdateWarehouseUseCase
 {
@@ -30,8 +30,8 @@ public class UpdateWarehouseUseCase(
         if (warehouseExists is null)
             throw new NotFoundByIdException(updateWarehouseCommand.WarehouseId, "Склад");
 
-        return await updateSupplyStorage.UpdateWarehouse(updateWarehouseCommand.WarehouseId,
+        return await updateWarehouseStorage.UpdateWarehouse(updateWarehouseCommand.WarehouseId,
             updateWarehouseCommand.ComponentTypeId, updateWarehouseCommand.Name, updateWarehouseCommand.Quantity,
-            updateWarehouseCommand.Price, cancellationToken);
+            updateWarehouseCommand.Price, updateWarehouseCommand.CreatedAt, cancellationToken);
     }
 }

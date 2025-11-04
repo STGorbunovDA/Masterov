@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.Warehouse;
 
 internal class UpdateWarehouseStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateWarehouseStorage
 {
-    public async Task<WarehouseDomain> UpdateWarehouse(Guid warehouseId, Guid componentTypeId, string name, int quantity, decimal price,
+    public async Task<WarehouseDomain> UpdateWarehouse(Guid warehouseId, Guid componentTypeId, string name, int quantity, decimal price, DateTime? createdAt,
         CancellationToken cancellationToken)
     {
         var warehouseExists = await dbContext.Set<Storage.Warehouse>().FindAsync([warehouseId], cancellationToken);
@@ -19,6 +19,11 @@ internal class UpdateWarehouseStorage(MasterovDbContext dbContext, IMapper mappe
         warehouseExists.Name = name;
         warehouseExists.Quantity = quantity;
         warehouseExists.Price = price;
+        
+        if (createdAt.HasValue)
+            warehouseExists.CreatedAt = createdAt.Value;
+        
+        warehouseExists.UpdatedAt = DateTime.Now;
         
         await dbContext.SaveChangesAsync(cancellationToken);
         

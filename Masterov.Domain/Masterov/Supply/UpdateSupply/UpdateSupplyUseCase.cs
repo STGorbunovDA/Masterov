@@ -46,6 +46,7 @@ public class UpdateSupplyUseCase(
             updateSupplyCommand.WarehouseId,
             updateSupplyCommand.Quantity,
             updateSupplyCommand.Price,
+            updateSupplyCommand.CreatedAt,
             cancellationToken);
 
         // Пересчитываем склад

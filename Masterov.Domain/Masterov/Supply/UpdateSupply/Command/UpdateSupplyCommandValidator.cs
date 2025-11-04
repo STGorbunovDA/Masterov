@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Masterov.Domain.Extension;
 
 namespace Masterov.Domain.Masterov.Supply.UpdateSupply.Command;
 
@@ -33,5 +34,12 @@ public class UpdateSupplyCommandValidator : AbstractValidator<UpdateSupplyComman
         RuleFor(q => q.Price).Cascade(CascadeMode.Stop)
             .GreaterThan(0)
             .WithMessage("The PriceSupply must be greater than zero.");
+        
+        // Валидация даты создания (CreatedAt)
+        RuleFor(c => c.CreatedAt)
+            .Must(DomainExtension.BeValidPastOrPresentDate)
+            .When(c => c.CreatedAt.HasValue)
+            .WithErrorCode("InvalidCreatedAt")
+            .WithMessage("Creation date cannot be in the future.");
     }
 }

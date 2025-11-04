@@ -7,4 +7,5 @@ public class UpdateSupplyRequest
     public Guid WarehouseId { get; set; }
     public int Quantity { get; set; }
     public decimal Price { get; set; }
+    public string? CreatedAt { get; set; }
 }
