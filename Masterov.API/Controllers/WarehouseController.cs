@@ -203,23 +203,25 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     /// <summary>
     /// Обновить количество на складе по Id
     /// </summary>
+    /// <param name="warehouseId">Идентификатор склада</param>
     /// <param name="request">Данные для обновления склада</param>
     /// <param name="useCase">Сценарий обновления скалад</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Результат обновления</returns>
-    [HttpPatch("updateQuantityWarehouseById")]
+    [HttpPatch("updateQuantityWarehouseById{warehouseId:guid}")]
     [ProducesResponseType(200, Type = typeof(WarehouseResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [ProducesResponseType(409, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
     public async Task<IActionResult> UpdateQuantityWarehouseById(
-        [FromForm] UpdateQuantityWarehouseByIdRequest request,
+        [FromRoute] Guid warehouseId,
+        [FromQuery] UpdateQuantityWarehouseByIdRequest request,
         [FromServices] IUpdateQuantityWarehouseByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
         var updateWarehouse = await useCase.Execute(
-            new UpdateQuantityWarehouseByIdCommand(request.WarehouseId, request.Quantity), cancellationToken);
+            new UpdateQuantityWarehouseByIdCommand(warehouseId, request.Quantity), cancellationToken);
         return Ok(mapper.Map<WarehouseResponse>(updateWarehouse));
     }
     

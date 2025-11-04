@@ -12,7 +12,7 @@ public class UpdateQuantityWarehouseByIdCommandValidator : AbstractValidator<Upd
             .WithMessage("SupplyId must not be an empty GUID.");
         
         RuleFor(q => q.Quantity).Cascade(CascadeMode.Stop)
-            .GreaterThanOrEqualTo(0)
-            .WithMessage("The quantity cannot be negative.");
+            .GreaterThan(0)
+            .WithMessage("The quantity must be greater than zero.");
     }
 }
