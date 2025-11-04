@@ -12,7 +12,7 @@ public class UpdatePriceWarehouseByIdCommandValidator : AbstractValidator<Update
             .WithMessage("WarehouseId must not be an empty GUID.");
         
         RuleFor(q => q.Price).Cascade(CascadeMode.Stop)
-            .GreaterThan(0)
-            .WithMessage("The PriceSupply must be greater than zero.");
+            .GreaterThanOrEqualTo(0)
+            .WithMessage("The Price cannot be negative.");
     }
 }

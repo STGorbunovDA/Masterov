@@ -7,6 +7,8 @@ using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByWarehouseId;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByWarehouseId.Query;
 using Masterov.Domain.Masterov.Warehouse.AddWarehouse;
 using Masterov.Domain.Masterov.Warehouse.AddWarehouse.Command;
+using Masterov.Domain.Masterov.Warehouse.DeleteWarehouse;
+using Masterov.Domain.Masterov.Warehouse.DeleteWarehouse.Command;
 using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId;
 using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
@@ -207,6 +209,28 @@ public class WarehouseController(IMapper mapper) : ControllerBase
         return CreatedAtAction(nameof(GetWarehouseById),
             new { warehouseId = warehouse.WarehouseId },
             mapper.Map<WarehouseResponse>(warehouse));
+    }
+    
+    /// <summary>
+    /// Удаление склада по Id
+    /// </summary>
+    /// <param name="warehouseId">Идентификатор склада</param>
+    /// <param name="useCase">Сценарий удаления склада</param>
+    /// <param name="cancellationToken">Токен отмены операции</param>
+    /// <returns>Ответ с кодом 204, если склад был успешно удален</returns>
+    [HttpDelete("deleteWarehouse/{warehouseId:guid}")]
+    [ProducesResponseType(204, Type = typeof(bool))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
+    [ProducesResponseType(422, Type = typeof(ProblemDetails))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> DeleteWarehouse(
+        [FromRoute] Guid warehouseId,
+        [FromServices] IDeleteWarehouseUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        await useCase.Execute(new DeleteWarehouseCommand(warehouseId), cancellationToken);
+        return NoContent();
     }
     
     /// <summary>
