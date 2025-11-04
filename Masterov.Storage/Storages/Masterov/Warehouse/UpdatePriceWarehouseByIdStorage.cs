@@ -15,6 +15,7 @@ internal class UpdatePriceWarehouseByIdStorage(MasterovDbContext dbContext, IMap
             throw new Exception("warehouse not found");
         
         warehouseExists.Price = price;
+        warehouseExists.UpdatedAt = DateTime.Now;
         
         await dbContext.SaveChangesAsync(cancellationToken);
         

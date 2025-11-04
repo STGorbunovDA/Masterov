@@ -14,6 +14,7 @@ internal class UpdateQuantityWarehouseByIdStorage(MasterovDbContext dbContext, I
         if (warehouseExists == null)
             throw new Exception("warehouse not found");
         warehouseExists.Quantity = quantity;
+        warehouseExists.UpdatedAt = DateTime.Now;
 
         if (warehouseExists.Quantity == 0)
             warehouseExists.Price = 0;

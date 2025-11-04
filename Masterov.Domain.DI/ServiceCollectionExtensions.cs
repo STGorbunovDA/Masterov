@@ -1,6 +1,7 @@
 ﻿using Masterov.Domain.Masterov.ComponentType.AddComponentType;
 using Masterov.Domain.Masterov.ComponentType.DeleteComponentType;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByWarehouseId;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
 using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByDescription;
@@ -270,6 +271,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IUpdateWarehouseUseCase, UpdateWarehouseUseCase>()
             .AddScoped<IGetWarehouseByNameUseCase, GetWarehouseByNameUseCase>()
             .AddScoped<IGetWarehousesByUpdatedAtUseCase, GetWarehousesByUpdatedAtUseCase>()
+            .AddScoped<IGetComponentTypeByWarehouseIdUseCase, GetComponentTypeByWarehouseIdUseCase>()
             .AddScoped<IUpdatePriceWarehouseByIdUseCase, UpdatePriceWarehouseByIdUseCase>()
             .AddScoped<IGetWarehousesByCreatedAtUseCase, GetWarehousesByCreatedAtUseCase>()
             .AddScoped<IGetSuppliesByWarehouseIdUseCase, GetSuppliesByWarehouseIdUseCase>()

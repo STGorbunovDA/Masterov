@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using Masterov.API.Extensions;
+using Masterov.API.Models.ComponentType;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.API.Models.Warehouse;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByWarehouseId;
+using Masterov.Domain.Masterov.ComponentType.GetComponentTypeByWarehouseId.Query;
 using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId;
 using Masterov.Domain.Masterov.Warehouse.GetSuppliesByWarehouseId.Query;
 using Masterov.Domain.Masterov.Warehouse.GetWarehouseById;
@@ -150,6 +153,27 @@ public class WarehouseController(IMapper mapper) : ControllerBase
     {
         var warehouses = await useCase.Execute(new GetWarehousesByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
         return Ok(warehouses?.Select(mapper.Map<WarehouseResponse>) ?? Array.Empty<WarehouseResponse>());
+    }
+    
+    /// <summary>
+    /// Получить тип компонента хранящийся на склале по идентификатору склада
+    /// </summary>
+    /// <param name="request">Идентификатор склада</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о типе компонента</returns>
+    [HttpGet("getComponentTypeByWarehouseId")]
+    [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    [ProducesResponseType(404)]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetComponentTypeByWarehouseId(
+        [FromQuery] GetComponentTypeByWarehouseIdRequest request,
+        [FromServices] IGetComponentTypeByWarehouseIdUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var componentType = await useCase.Execute(new GetComponentTypeByWarehouseIdQuery(request.WarehouseId), cancellationToken);
+        return Ok(mapper.Map<ComponentTypeResponse>(componentType));
     }
     
     /// <summary>

@@ -1,0 +1,3 @@
+﻿namespace Masterov.Domain.Masterov.ComponentType.GetComponentTypeByWarehouseId.Query;
+
+public record GetComponentTypeByWarehouseIdQuery(Guid WarehouseId);
