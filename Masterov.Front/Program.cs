@@ -1,7 +1,7 @@
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Masterov.Front;
+using Masterov.Front.Components;
 using Masterov.Front.Services;
 using Microsoft.AspNetCore.Components;
 
