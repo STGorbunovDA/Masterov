@@ -6,7 +6,7 @@ namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
 internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateFinishedProductStorage
 {
-    public async Task<FinishedProductDomain> UpdateFinishedProduct(Guid finishedProductId, string name, decimal? price, int? width, int? height, int? depth,
+    public async Task<FinishedProductDomain> UpdateFinishedProduct(Guid finishedProductId, string name, string type, decimal? price, int? width, int? height, int? depth,
         byte[]? image, DateTime? createdAt, CancellationToken cancellationToken)
     {
         var finishedProductExists = await dbContext.Set<Storage.FinishedProduct>().FindAsync([finishedProductId], cancellationToken);
@@ -15,6 +15,7 @@ internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper
             throw new Exception("FinishedProduct not found");
         
         finishedProductExists.Name = name.Trim();
+        finishedProductExists.Type = type.Trim();
 
         if (createdAt.HasValue)
             finishedProductExists.CreatedAt = createdAt.Value;

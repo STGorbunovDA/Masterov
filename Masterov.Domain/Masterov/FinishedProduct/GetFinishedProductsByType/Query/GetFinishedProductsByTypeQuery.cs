@@ -1,0 +1,3 @@
+﻿namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByType.Query;
+
+public record GetFinishedProductsByTypeQuery(string FinishedProductType);

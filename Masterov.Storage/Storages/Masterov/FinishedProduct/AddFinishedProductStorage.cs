@@ -9,7 +9,7 @@ namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
 internal class AddFinishedProductStorage(MasterovDbContext dbContext, IGuidFactory guidFactory, IMapper mapper) : IAddFinishedProductStorage
 {
-    public async Task<FinishedProductDomain> AddFinishedProduct(string name, decimal? price, int? width, int? height, int? depth, byte[]? image,
+    public async Task<FinishedProductDomain> AddFinishedProduct(string name, string type, decimal? price, int? width, int? height, int? depth, byte[]? image,
         CancellationToken cancellationToken)
     {
         var finishedProductGuide = guidFactory.Create();
@@ -18,6 +18,7 @@ internal class AddFinishedProductStorage(MasterovDbContext dbContext, IGuidFacto
         {
             FinishedProductId = finishedProductGuide,
             Name = name,
+            Type = type,
             Price = price ?? 0.00m,
             Width = width ?? 0,
             Height = height ?? 0,

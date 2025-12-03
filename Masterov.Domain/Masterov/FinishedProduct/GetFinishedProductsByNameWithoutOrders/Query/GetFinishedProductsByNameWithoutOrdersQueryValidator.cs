@@ -2,9 +2,9 @@
 
 namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByNameWithoutOrders.Query;
 
-public class GetFinishedProductsByNameWithoutOrdersValidator : AbstractValidator<GetFinishedProductsByNameWithoutOrdersQuery>
+public class GetFinishedProductsByNameWithoutOrdersQueryValidator : AbstractValidator<GetFinishedProductsByNameWithoutOrdersQuery>
 {
-    public GetFinishedProductsByNameWithoutOrdersValidator()
+    public GetFinishedProductsByNameWithoutOrdersQueryValidator()
     {
         RuleFor(c => c.FinishedProductName).Cascade(CascadeMode.Stop)
             .NotEmpty()

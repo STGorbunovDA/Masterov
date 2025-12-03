@@ -3,6 +3,7 @@
 public class AddFinishedProductRequest
 {
     public string Name { get; set; }
+    public string Type { get; set; }
     public decimal? Price { get; set; }
     public int? Width { get; set; }  // в мм
     public int? Height { get; set; }  // в мм

@@ -14,7 +14,7 @@ internal class GetFinishedProductsByNameWithoutOrdersStorage(MasterovDbContext d
     
         return await dbContext.FinishedProducts
             .AsNoTracking() 
-            .Where(f => f.Name.ToLower() == normalizedName)
+            .Where(f => f.Name.ToLower().Contains(normalizedName))
             .ProjectTo<FinishedProductNoOrdersDomain>(mapper.ConfigurationProvider)
             .ToArrayAsync(cancellationToken);
     }

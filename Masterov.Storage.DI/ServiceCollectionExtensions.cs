@@ -31,6 +31,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByNameWithoutOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByType;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByTypeWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByUpdatedAtWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsWithoutOrders;
@@ -152,6 +154,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IAddFinishedProductStorage, AddFinishedProductStorage>()
             .AddScoped<IGetFinishedProductByIdStorage, GetFinishedProductByIdStorage>()
             .AddScoped<IDeleteFinishedProductStorage, DeleteFinishedProductStorage>()
+            .AddScoped<IGetFinishedProductByTypeStorage, GetFinishedProductByTypeStorage>()
+            .AddScoped<IGetFinishedProductsByTypeWithoutOrdersStorage, GetFinishedProductsByTypeWithoutOrdersStorage>()
             .AddScoped<IUpdateFinishedProductStorage, UpdateFinishedProductStorage>()
             .AddScoped<IGetFinishedProductsByCreatedAtStorage, GetFinishedProductsByCreatedAtStorage>()
             .AddScoped<IGetFinishedProductsByUpdatedAtStorage, GetFinishedProductsByUpdatedAtStorage>()

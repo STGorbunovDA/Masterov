@@ -13,8 +13,8 @@ internal class GetFinishedProductsByNameStorage(MasterovDbContext dbContext, IMa
         var normalizedName = finishedProductName.Trim().ToLower();
     
         return await dbContext.FinishedProducts
-            .AsNoTracking() 
-            .Where(f => f.Name.ToLower() == normalizedName)
+            .AsNoTracking()
+            .Where(f => f.Name.ToLower().Contains(normalizedName))
             .ProjectTo<FinishedProductDomain>(mapper.ConfigurationProvider)
             .ToArrayAsync(cancellationToken);
     }

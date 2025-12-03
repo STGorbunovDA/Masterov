@@ -13,7 +13,7 @@ public class AddFinishedProductUseCase(
     {
         await validator.ValidateAndThrowAsync(addFinishedProductCommand, cancellationToken);
         
-        return await addFinishedProductStorage.AddFinishedProduct(addFinishedProductCommand.Name,
+        return await addFinishedProductStorage.AddFinishedProduct(addFinishedProductCommand.Name, addFinishedProductCommand.Type,
             addFinishedProductCommand?.Price, addFinishedProductCommand?.Width, addFinishedProductCommand?.Height,
             addFinishedProductCommand?.Depth, addFinishedProductCommand?.Image, cancellationToken);
     }

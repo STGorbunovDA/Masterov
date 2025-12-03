@@ -10,6 +10,9 @@ public class FinishedProduct
 
     [Required, MaxLength(100)]
     public string Name { get; set; }
+    
+    [Required, MaxLength(100)]
+    public string Type { get; set; }
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal Price { get; set; }
