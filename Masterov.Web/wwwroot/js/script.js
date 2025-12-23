@@ -7,8 +7,8 @@
       $('#header-nav').on('click', '.search-button', function(e) {
         $('.search-popup').toggleClass('is-visible');
       });
-
-      $('#header-nav').on('click', '.btn-close-search', function(e) {
+        searchPopup
+        $('#header-nav').on('click', '.btn-close-search', function(e) {
         $('.search-popup').toggleClass('is-visible');
       });
       

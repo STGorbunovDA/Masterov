@@ -1,0 +1,141 @@
+@using Masterov.Web.Services
+@inject IJSRuntime Js
+@inject NavigationManager Navigation
+@inject FinishedProductSearchService SearchService
+
+
+<div class="search-popup @(_isVisible ? "is-visible" : "")" >
+    <div class="search-popup-container">
+        <form role="search" class="search-form" @onsubmit="HandleSearch">
+            <input type="search"
+                   id="search-form"
+                   class="search-field"
+                   placeholder="Введите название изделия (например стол)"
+                   @bind="_searchText"
+                   @onkeydown="HandleKeyDown"
+                   name="s"/>
+            <button type="submit" class="search-submit">
+                <svg class="search">
+                    <use xlink:href="#search"></use>
+                </svg>
+            </button>
+        </form>
+
+        <h5 class="cat-list-title">Типы изделий</h5>
+
+        <ul class="cat-list">
+            @foreach (var category in _categories)
+            {
+                <li class="cat-list-item">
+                    <span type="button" class="category-link" @onclick="() => SearchCategory(category)"> 
+                        @category
+                    </span>
+                </li>
+            }
+        </ul>
+
+    </div>
+</div>
+
+@code {
+    private bool _isVisible = false;
+    private string _searchText = "";
+    private DotNetObjectReference<SearchPopup>? _dotNetRef;
+    private List<string> _categories = ["Столы", "Кухни", "Стулья"];
+
+    private void CloseSearch()
+    {
+        _isVisible = false;
+        _searchText = "";
+        StateHasChanged();
+    }
+
+    private void OpenSearch()
+    {
+        _isVisible = true;
+        StateHasChanged();
+
+        // Фокус на поле ввода после отрисовки
+        Task.Run(async () =>
+        {
+            await Task.Delay(50);
+            await InvokeAsync(async () => { await Js.InvokeVoidAsync("focusElement", "search-form"); });
+        });
+    }
+
+    private void HandleSearch()
+    {
+        if (string.IsNullOrWhiteSpace(_searchText)) return;
+        Navigation.NavigateTo($"/search?q={Uri.EscapeDataString(_searchText)}");
+        CloseSearch();
+    }
+
+    private void SearchCategory(string category)
+    {
+        Navigation.NavigateTo($"/search?type={Uri.EscapeDataString(category)}");
+        CloseSearch();
+    }
+
+    private void HandleKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            HandleSearch();
+        }
+        else if (e.Key == "Escape")
+        {
+            CloseSearch();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _dotNetRef = DotNetObjectReference.Create(this);
+            await Js.InvokeVoidAsync("initSearchPopup", _dotNetRef);
+        }
+        
+        await SetupClickTracking();
+
+        if (_isVisible)
+            await Js.InvokeVoidAsync("showSearchPopup");
+        else
+            await Js.InvokeVoidAsync("hideSearchPopup");
+    }
+    
+    private async Task SetupClickTracking()
+    {
+        try
+        {
+            // Создаем JS модуль для отслеживания кликов
+            var module = await Js.InvokeAsync<IJSObjectReference>("import", "./js/searchModule.js");
+            await module.InvokeVoidAsync("setupClickTracking", _dotNetRef);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error setting up click tracking: {ex.Message}");
+        }
+    }
+    
+    // Метод для проверки клика вне поиска
+    [JSInvokable]
+    public void HandleOutsideClick()
+    {
+        if (_isVisible)
+        {
+            CloseSearch();
+        }
+    }
+
+
+    // Метод для вызова из JavaScript
+    [JSInvokable]
+    public void GetCloseFromJs() => CloseSearch();
+    
+    [JSInvokable]
+    public void GetOpenFromJs() => OpenSearch();
+    
+    public void Dispose() => _dotNetRef?.Dispose();
+    
+}

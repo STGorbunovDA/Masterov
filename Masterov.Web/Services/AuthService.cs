@@ -2,9 +2,9 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using Blazored.LocalStorage;
-using Masterov.Front.Models;
+using Masterov.Front.Models.Auth;
 
-namespace Masterov.Front.Services;
+namespace Masterov.Web.Services;
 
 public class AuthService
 {

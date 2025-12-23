@@ -1,7 +1,7 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
 
-namespace Masterov.Front.Services;
+namespace Masterov.Web.Services;
 
 public class NavigationHelperService
 {

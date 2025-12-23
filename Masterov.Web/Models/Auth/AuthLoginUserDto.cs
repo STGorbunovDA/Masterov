@@ -1,4 +1,4 @@
-﻿namespace Masterov.Front.Models;
+﻿namespace Masterov.Front.Models.Auth;
 
 public class AuthLoginUserDto
 {

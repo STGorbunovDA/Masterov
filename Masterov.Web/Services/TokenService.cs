@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Masterov.Front.Services;
+namespace Masterov.Web.Services;
 
 public class TokenService
 {

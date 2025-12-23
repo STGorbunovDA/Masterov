@@ -1,8 +1,8 @@
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Masterov.Front.Components;
-using Masterov.Front.Services;
+using Masterov.Web.Components;
+using Masterov.Web.Services;
 using Microsoft.AspNetCore.Components;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -14,6 +14,7 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<NavigationHelperService>();
+builder.Services.AddScoped<FinishedProductSearchService>();
 
 builder.Services.AddScoped(sp =>
 {
