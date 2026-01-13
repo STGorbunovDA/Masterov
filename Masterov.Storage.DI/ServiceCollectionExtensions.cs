@@ -29,6 +29,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductByIdWithoutOrde
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProducts;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByElite;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByEliteWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByNameWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByType;
@@ -160,6 +162,8 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetFinishedProductsByCreatedAtStorage, GetFinishedProductsByCreatedAtStorage>()
             .AddScoped<IGetFinishedProductsByUpdatedAtStorage, GetFinishedProductsByUpdatedAtStorage>()
             .AddScoped<IGetFinishedProductsWithoutOrdersStorage, GetFinishedProductsWithoutOrdersStorage>()
+            .AddScoped<IGetFinishedProductsByEliteWithoutOrdersStorage, GetFinishedProductsByEliteWithoutOrdersStorage>()
+            .AddScoped<IGetFinishedProductsByEliteStorage, GetFinishedProductsByEliteStorage>()
             .AddScoped<IGetOrdersByFinishedProductStorage, GetOrdersByFinishedProductStorage>()
             .AddScoped<IGuidFactory, GuidFactory>()
             .AddDbContextPool<MasterovDbContext>(options => options.UseMySql(dbConnectionString, ServerVersion.AutoDetect(dbConnectionString)));

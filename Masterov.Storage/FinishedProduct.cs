@@ -30,6 +30,8 @@ public class FinishedProduct
 
     [Range(0, 30000)]
     public int Depth { get; set; }
+    
+    public bool Elite { get; set; }
 
     public byte[]? Image { get; set; }
 

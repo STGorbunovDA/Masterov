@@ -14,5 +14,6 @@ public class FinishedProductResponse
     public int Height { get; set; }  // в мм
     public int Depth { get; set; }  // в мм
     public byte[]? Image { get; set; }
+    public bool Elite { get; set; }
     public OrderResponse[] Orders { get; set; }
 }

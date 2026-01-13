@@ -1,38 +1,27 @@
-using Blazored.LocalStorage;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Masterov.Web.Components;
-using Masterov.Web.Services;
-using Microsoft.AspNetCore.Components;
 
-var builder = WebAssemblyHostBuilder.CreateDefault(args);
+var builder = WebApplication.CreateBuilder(args);
 
-builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
+// Add services to the container.
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
 
-builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<NavigationHelperService>();
-builder.Services.AddScoped<FinishedProductSearchService>();
+var app = builder.Build();
 
-builder.Services.AddScoped(sp =>
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
 {
-    var nav = sp.GetRequiredService<NavigationManager>();
-    var localStorage = sp.GetRequiredService<ILocalStorageService>();
-    var interceptor = new HttpInterceptorService(nav, localStorage)
-    {
-        InnerHandler = new HttpClientHandler()
-    };
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
 
-    var client = new HttpClient(interceptor)
-    {
-        //BaseAddress = new Uri("https://ort-pr.ru"),
-        BaseAddress = new Uri("https://localhost:7214"),
-        MaxResponseContentBufferSize = 1024 * 1024 * 100 // 100 MB
-    };
-    
-    return client;
-});
+app.UseHttpsRedirection();
 
-await builder.Build().RunAsync();
+app.UseStaticFiles();
+app.UseAntiforgery();
+
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
+
+app.Run();

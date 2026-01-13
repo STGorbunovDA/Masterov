@@ -15,6 +15,6 @@ public class AddFinishedProductUseCase(
         
         return await addFinishedProductStorage.AddFinishedProduct(addFinishedProductCommand.Name, addFinishedProductCommand.Type,
             addFinishedProductCommand?.Price, addFinishedProductCommand?.Width, addFinishedProductCommand?.Height,
-            addFinishedProductCommand?.Depth, addFinishedProductCommand?.Image, cancellationToken);
+            addFinishedProductCommand?.Depth, addFinishedProductCommand?.Image, addFinishedProductCommand.Elite, cancellationToken);
     }
 }

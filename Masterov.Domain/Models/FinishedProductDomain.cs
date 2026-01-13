@@ -11,6 +11,7 @@ public class FinishedProductDomain
     public int Width { get; set; }  // в мм
     public int Height { get; set; }  // в мм
     public int Depth { get; set; }  // в мм
+    public bool Elite { get; set; }
     public byte[]? Image { get; set; }
     public OrderDomain[] Orders { get; set; }
 }

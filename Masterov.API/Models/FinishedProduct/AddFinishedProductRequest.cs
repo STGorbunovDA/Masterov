@@ -8,5 +8,6 @@ public class AddFinishedProductRequest
     public int? Width { get; set; }  // в мм
     public int? Height { get; set; }  // в мм
     public int? Depth { get; set; }  // в мм
+    public bool Elite { get; set; }
     public IFormFile? Image { get; set; }
 }

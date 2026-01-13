@@ -16,6 +16,8 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByElite;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByEliteWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByName;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByName.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByNameWithoutOrders;
@@ -77,6 +79,39 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
     {
         var finishedProducts = await useCase.Execute(cancellationToken);
         return Ok(finishedProducts?.Select(mapper.Map<FinishedProductResponse>) ?? Array.Empty<FinishedProductResponse>());
+    }
+    
+    /// <summary>
+    /// Получить элитные готовые мебельные изделия с заказами
+    /// </summary>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о всех готовых мебельных изделий</returns>
+    [HttpGet("getFinishedProductsByElite")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductResponse>))]
+    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    public async Task<IActionResult> GetFinishedProductsByElite(
+        [FromServices] IGetFinishedProductsByEliteUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var finishedProductsByElite = await useCase.Execute(cancellationToken);
+        return Ok(finishedProductsByElite?.Select(mapper.Map<FinishedProductResponse>) ?? Array.Empty<FinishedProductResponse>());
+    }
+    
+    /// <summary>
+    /// Получить элитные готовые мебельные изделия без заказов
+    /// </summary>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о всех готовых мебельных изделий без заказов</returns>
+    [HttpGet("getFinishedProductsByEliteWithoutOrders")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductNoOrdersResponse>))]
+    public async Task<IActionResult> GetFinishedProductsByEliteWithoutOrders(
+        [FromServices] IGetFinishedProductsByEliteWithoutOrdersUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var finishedProductsByElite = await useCase.Execute(cancellationToken);
+        return Ok(finishedProductsByElite?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
     }
 
     /// <summary>
@@ -276,6 +311,8 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         return Ok(finishedProducts?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
     }
     
+    
+    
     /// <summary>
     /// Получить список ордеров готового изделия с возможностью фильтрации по Id || даты создания || даты выполнения || Статуса || Описания
     /// </summary>
@@ -338,6 +375,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
                 request.Width,
                 request.Height,
                 request.Depth,
+                request.Elite,
                 request.Image == null ? null : await request.Image.ToByteArrayAsync()),
             cancellationToken);
 
@@ -389,7 +427,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         var updateFinishedProduct = await useCase.Execute(
             new UpdateFinishedProductCommand(finishedProductId, request.Name, request.Type, request.Price, request.Width,
                 request.Height, request.Depth, request.Image == null ? null : await request.Image.ToByteArrayAsync(), 
-                request.CreatedAt?.ToDateTime()),
+                request.CreatedAt?.ToDateTime(), request.Elite),
             cancellationToken);
         return Ok(mapper.Map<FinishedProductResponse>(updateFinishedProduct));
     }
