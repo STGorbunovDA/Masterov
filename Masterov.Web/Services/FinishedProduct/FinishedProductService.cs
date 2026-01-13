@@ -10,7 +10,7 @@ public class FinishedProductService(HttpClient http, ILogger<FinishedProductServ
         try
         {
             var result = await http.GetFromJsonAsync<IEnumerable<FinishedProductDto>>(
-                "getFinishedProductsByEliteWithoutOrders", cancellationToken);
+                "api/finishedProducts/getFinishedProductsByEliteWithoutOrders", cancellationToken);
 
             return result ?? Enumerable.Empty<FinishedProductDto>();
         }
