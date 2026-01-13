@@ -1,0 +1,62 @@
+﻿@page "/elite-products"
+@using Masterov.Web.Models
+@using Masterov.Web.Services.FinishedProduct
+@inject FinishedProductService ProductService
+
+<h3>Elite Product List</h3>
+
+@if (_isLoading)
+{
+    <p>Загрузка...</p>
+}
+else if (_eliteProducts == null || !_eliteProducts.Any())
+{
+    <p>Нет элитных изделий без заказов.</p>
+}
+else
+{
+    <div class="product-grid">
+        @foreach (var product in _eliteProducts)
+        {
+            <div class="product-card">
+                <h4>@product.Name</h4>
+                <p><strong>Тип:</strong> @product.Type</p>
+                <p><strong>Цена:</strong> @product.Price:C</p>
+                <p><strong>Размеры (мм):</strong> @product.Width x @product.Height x @product.Depth</p>
+                <p><strong>Элитное:</strong> @(product.Elite ? "Да" : "Нет")</p>
+                <p><strong>Создано:</strong> @product.CreatedAt</p>
+                @if (!string.IsNullOrEmpty(product.UpdatedAt))
+                {
+                    <p><strong>Обновлено:</strong> @product.UpdatedAt</p>
+                }
+                @if (product.Image != null)
+                {
+                    <img src="@($"data:image/png;base64,{Convert.ToBase64String(product.Image)}")" 
+                         alt="@product.Name" width="150" />
+                }
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private IEnumerable<FinishedProductDto> _eliteProducts = Enumerable.Empty<FinishedProductDto>();
+    private bool _isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _eliteProducts = await ProductService.GetEliteProductsWithoutOrdersAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Ошибка при загрузке элитных изделий: {ex.Message}");
+            _eliteProducts = Enumerable.Empty<FinishedProductDto>();
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+    }
+}
