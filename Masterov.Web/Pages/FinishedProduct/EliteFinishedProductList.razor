@@ -1,6 +1,4 @@
-﻿@page "/elite-products"
-@using Masterov.Web.Models
-@using Masterov.Web.Services.FinishedProduct
+﻿@page "/elite-finishedProduct"
 @inject IFinishedProductService ProductService
 
 @if (_isLoading)
@@ -19,18 +17,17 @@ else
             @foreach (var product in ProductService.FinishedProducts)
             {
                 <div class="product-card">
-
-                    <h4 class="product-title">@product.Name</h4>
-
+                    <a href="/product/@product.FinishedProductId">
+                        <h4 class="product-title">@product.Name</h4>
+                    </a>
                     <div class="product-body">
                         @if (product.Image != null && product.Image.Length > 0)
                         {
                             <img class="product-img"
                                  src="@($"data:image/png;base64,{Convert.ToBase64String(product.Image)}")"
                                  alt="@product.Name"
-                                 onclick="openImg(this.src)" />
+                                 onclick="openImg(this.src)"/>
                         }
-
                         <div class="product-info">
                             <p class="desc-text">@product.Description</p>
                         </div>
@@ -44,7 +41,7 @@ else
                 </div>
             }
         }
-        
+
     </div>
 }
 
@@ -54,8 +51,8 @@ else
     protected override async Task OnInitializedAsync()
     {
         try
-        { 
-            await ProductService.GetEliteProductsWithoutOrdersAsync();
+        {
+            await ProductService.GetEliteFinishedProductsWithoutOrders();
         }
         catch (Exception ex)
         {
@@ -66,6 +63,7 @@ else
             _isLoading = false;
         }
     }
+
 }
 
 <style>
@@ -77,6 +75,25 @@ else
         grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
         gap: 1.5rem;
         padding: 1rem;
+        text-decoration: none;
+        color: inherit;    
+    }
+    
+    .product-grid a:focus,
+    .product-grid a:active {
+        outline: none;
+        border: none;
+        box-shadow: none;
+    }
+    
+    .product-grid a {
+        text-decoration: none !important;
+        color: inherit !important;
+    }
+    
+    .product-grid a * {
+        text-decoration: none !important;
+        color: inherit !important;
     }
 
     /* ============================================================
@@ -87,12 +104,18 @@ else
         border-radius: 18px;
         padding: 1.5rem;
         border: 1px solid #e6e6e6;
-
+    
         box-shadow:
             8px 8px 18px rgba(0,0,0,0.15),
             -4px -4px 12px rgba(255,255,255,0.9);
-
+    
         transition: 0.25s ease;
+        
+        /* Добавляем flex для вертикального центрирования */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; /* Равномерно распределяем пространство */
+        min-height: 380px; /* Фиксируем высоту для одинаковых карточек */
     }
 
     /* --- эффект подъёма карточки --- */
@@ -107,42 +130,19 @@ else
        НАЗВАНИЕ ТОВАРА — сверху, строгое и благородное
     ============================================================ */
     .product-title {
-    
-        /* размер текста — крупный, солидный */
         font-size: 1.7rem;
-        /* толщина — полужирная, но без грубости */
         font-weight: 600;
-        /* выравнивание по центру для акцентного вида */
         text-align: center;
-        /* глубокий графитовый цвет для дорогого стиля */
         color: #2a2a2a;
-    
-        /* капитель — статусный премиальный стиль */
         font-variant: small-caps;
-    
-        /* увеличенный интервал между буквами — благородность */
         letter-spacing: 1.2px;
-    
-        /* лёгкое тиснение: создаёт эффект рельефности */
         text-shadow: 
-            /* светлая линия сверху */
             0 1px 1px rgba(255,255,255,0.4),
-            /* мягкая тень снизу */
             0 2px 4px rgba(0,0,0,0.25);
-    
-        /* расстояние снизу до следующего блока */
         margin-bottom: 1.2rem;
-    
-        /* отступ под золотую линию */
         padding-bottom: 0.35rem;
-    
-        /* золотая линия — премиум-деталь */
         border-bottom: 2px solid rgba(184,138,37,0.55);
-    
-        /* ограничение ширины для аккуратной композиции */
         width: 80%;
-    
-        /* центрирование линии */
         margin-left: auto;
         margin-right: auto;
     }
@@ -154,6 +154,9 @@ else
         display: flex;
         gap: 1.2rem;
         align-items: center;
+        justify-content: center; /* Центрируем по горизонтали */
+        flex: 1; /* Занимает доступное пространство */
+        margin: 1rem 0; /* Отступы сверху и снизу */
     }
 
     /* ============================================================
@@ -161,14 +164,13 @@ else
     ============================================================ */
     .product-img {
         width: 165px;
-        height: auto;
+        height: 165px; /* Фиксируем высоту для квадратных изображений */
+        object-fit: cover; /* Сохраняем пропорции изображения */
         border-radius: 12px;
         cursor: zoom-in;
-
         box-shadow:
             4px 4px 12px rgba(0,0,0,0.25),
             -2px -2px 8px rgba(255,255,255,0.8);
-
         transition: 0.3s ease;
     }
 
@@ -185,6 +187,7 @@ else
         display: flex;
         justify-content: center;
         align-items: center;
+        height: 100%; /* Занимает всю высоту */
     }
     
     .desc-text {
@@ -193,7 +196,6 @@ else
         line-height: 1.5;
         margin: 0;
         padding: 0;
-    
         text-align: center;
     }
 
@@ -201,7 +203,7 @@ else
        ЦЕНА — снизу, отделена линией, золотистый благородный стиль
     ============================================================ */
     .price-wrapper {
-        margin-top: 1.1rem;
+        margin-top: auto; /* Прижимаем к низу карточки */
         padding-top: 0.7rem;
         text-align: center;
         border-top: 1px solid #dcdcdc;

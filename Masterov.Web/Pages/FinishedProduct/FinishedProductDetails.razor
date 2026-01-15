@@ -1,0 +1,273 @@
+﻿@page "/product/{id:guid}"
+@using Masterov.Web.Models
+@inject IFinishedProductService EliteProductService
+@inject NavigationManager NavigationManager
+
+@if (_isLoading)
+{
+    <p>Загрузка...</p>
+}
+else if (_productDto is null)
+{
+    <p>Товар не найден</p>
+}
+else
+{
+    <div class="product-page-container">
+
+        <!-- Левая часть — большое изображение -->
+        <div class="product-image-box">
+            @if (_productDto.Image != null)
+            {
+                <img class="product-image-big"
+                     src="@($"data:image/png;base64,{Convert.ToBase64String(_productDto.Image)}")"
+                     alt="@_productDto.Name"
+                     onclick="openImg(this.src)"/>
+            }
+        </div>
+
+        <!-- Правая часть — текстовое описание -->
+        <div class="product-details-box">
+            <h1 class="product-title-big">@_productDto.Name</h1>
+            <p class="product-description">@_productDto.Description</p>
+            <div class="product-specs">
+                <p>
+                    <strong>Тип:</strong>
+                    <span class="clickable-type" @onclick="() => NavigateToTypeProducts(_productDto.Type)">
+                        @_productDto.Type
+                    </span>
+                </p>
+                <p><strong>Размеры (мм):</strong> @_productDto.Width x @_productDto.Height x @_productDto.Depth</p>
+                <p><strong>Создано:</strong> @_productDto.CreatedAt</p>
+                @if (!string.IsNullOrEmpty(_productDto.UpdatedAt))
+                {
+                    <p><strong>Обновлено:</strong> @_productDto.UpdatedAt</p>
+                }
+                @* <p><strong>Элитный продукт:</strong> @_productDto.Elite</p> *@
+            </div>
+
+            <div class="product-price-box">
+                <span class="price-label">Цена:</span>
+                <span class="price-value">@_productDto.Price руб.</span>
+            </div>
+
+        </div>
+    </div>
+}
+
+@code {
+    private FinishedProductDto _productDto;
+    private bool _isLoading = true;
+    [Parameter] public Guid Id { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadProduct();
+    }
+    
+    private async Task LoadProduct()
+    {
+        _isLoading = true;
+        StateHasChanged();
+
+        try
+        {
+            _productDto = await EliteProductService.GetFinishedProductByIdWithoutOrders(Id);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Ошибка при загрузке продукта: {ex.Message}");
+            _productDto = null;
+        }
+        finally
+        {
+            _isLoading = false;
+            StateHasChanged();
+        }
+    }
+    
+    private async Task NavigateToTypeProducts(string type)
+    {
+        await EliteProductService.GetFinishedProductsByTypeWithoutOrders(type);
+        NavigationManager.NavigateTo("/");
+    }
+}
+
+<style>
+    /* ============================================================
+       ГЛАВНЫЙ КОНТЕЙНЕР — двухколоночный макет товара
+    ============================================================ */
+    .product-page-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+    
+        background: linear-gradient(145deg, #ffffff, #f3f3f3);
+        padding: 2.5rem;
+        border-radius: 22px;
+    
+        border: 1px solid #e7e7e7;
+    
+        box-shadow:
+            10px 10px 25px rgba(0,0,0,0.18),
+            -6px -6px 18px rgba(255,255,255,0.9);
+    
+        animation: fadeIn 0.4s ease;
+    }
+    
+    /* ============================================================
+       ЛЕВАЯ ЧАСТЬ — БОЛЬШАЯ КАРТИНКА
+    ============================================================ */
+    .product-image-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .product-image-big {
+        width: 90%;
+        border-radius: 18px;
+        box-shadow:
+            6px 6px 18px rgba(0,0,0,0.25),
+            -3px -3px 12px rgba(255,255,255,0.8);
+    
+        transition: 0.3s ease;
+    }
+    
+    /* лёгкое увеличение при наведении */
+    .product-image-big:hover {
+        transform: scale(1.02);
+    }
+    
+    /* ============================================================
+       ПРАВАЯ ЧАСТЬ — ТЕКСТ
+    ============================================================ */
+    .product-details-box {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    /* Название — премиальный стиль small-caps + золото */
+    .product-title-big {
+        font-size: 2.3rem;
+        font-weight: 600;
+        color: #2b2b2b;
+        text-align: center;
+        font-variant: small-caps;
+        letter-spacing: 1.4px;
+    
+        text-shadow:
+            0 1px 1px rgba(255,255,255,0.45),
+            0 2px 3px rgba(0,0,0,0.25);
+    
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid rgba(184,138,37,0.55);
+        /*width: 70%;*/
+        margin-bottom: 1.3rem;
+    }
+    
+    /* Описание товара */
+    .product-description {
+        font-size: 1.15rem;
+        color: #444;
+        line-height: 1.55;
+        margin-bottom: 1.5rem;
+    }
+    
+    /* Характеристики */
+    .product-specs {
+        background: #fafafa;
+        padding: 1rem 1.3rem;
+        border-radius: 12px;
+    
+        border: 1px solid #e2e2e2;
+    
+        box-shadow:
+            inset 2px 2px 6px rgba(0,0,0,0.08),
+            inset -2px -2px 6px rgba(255,255,255,0.7);
+    
+        margin-bottom: 1.7rem;
+    }
+    
+    .product-specs p {
+        margin: 0.2rem 0;
+        font-size: 1.05rem;
+    }
+    
+    /* ============================================================
+       ЦЕНА — премиальный золотой стиль
+    ============================================================ */
+    .product-price-box {
+        margin-top: 0.8rem;
+        padding-top: 1rem;
+        border-top: 1px solid #dcdcdc;
+    }
+    
+    .price-label {
+        font-size: 1.2rem;
+        color: #666;
+        margin-right: 6px;
+    }
+    
+    .price-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #b88a25;
+        text-shadow: 0 0 5px rgba(0,0,0,0.25);
+    }
+    
+    /* Плавное появление */
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+
+     /* ============================================================
+           МОДАЛЬНОЕ ОКНО ДЛЯ УВЕЛИЧЕНИЯ КАРТИНКИ
+        ============================================================ */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+    
+        /* --- увеличенная картинка в центре --- */
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 14px;
+    
+            box-shadow:
+                0 0 25px rgba(0,0,0,0.5),
+                0 0 10px rgba(255,255,255,0.2);
+    
+            animation: zoomIn 0.25s ease;
+        }
+    
+        /* --- анимация появления --- */
+        @@keyframes zoomIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to   { transform: scale(1); opacity: 1; }
+        }
+    
+        /* --- кнопка закрытия модалки --- */
+        .close {
+            position: absolute;
+            top: 25px;
+            right: 40px;
+            font-size: 45px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            text-shadow: 0 0 10px black;
+        }
+    
+        .close:hover {
+            color: #ffdddd;
+        }
+</style>
