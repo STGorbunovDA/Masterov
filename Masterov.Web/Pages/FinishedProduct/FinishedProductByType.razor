@@ -1,13 +1,14 @@
-﻿@page "/elite-finishedProduct"
+﻿@page "/products/type/{type}"
+@using Masterov.Web.Models
 @inject IFinishedProductService ProductService
 
 @if (_isLoading)
 {
     <p>Загрузка...</p>
 }
-else if (!ProductService.FinishedProducts.Any())
+else if (!_products.Any())
 {
-    <p>Нет элитных мебельных изделий</p>
+    <p>Нет изделий этого типа</p>
 }
 else
 {
@@ -43,22 +44,17 @@ else
 }
 
 @code {
+    [Parameter] public string type { get; set; }
     private bool _isLoading = true;
+    private IEnumerable<FinishedProductDto> _products = [];
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        try
-        {
-            await ProductService.GetEliteFinishedProductsWithoutOrders();
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"Ошибка при загрузке элитных изделий: {ex.Message}");
-        }
-        finally
-        {
-            _isLoading = false;
-        }
+        _isLoading = true;
+
+        _products = await ProductService.GetFinishedProductsByTypeWithoutOrders(type);
+
+        _isLoading = false;
     }
 
 }

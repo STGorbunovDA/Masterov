@@ -33,9 +33,9 @@ else
             <div class="product-specs">
                 <p>
                     <strong>Тип:</strong>
-                    <span class="clickable-type" @onclick="() => NavigateToTypeProducts(_productDto.Type)">
-                        @_productDto.Type
-                    </span>
+                    <a href="/products/type/@_productDto.Type">
+                         @_productDto.Type
+                    </a>
                 </p>
                 <p><strong>Размеры (мм):</strong> @_productDto.Width x @_productDto.Height x @_productDto.Depth</p>
                 <p><strong>Создано:</strong> @_productDto.CreatedAt</p>
@@ -84,12 +84,6 @@ else
             _isLoading = false;
             StateHasChanged();
         }
-    }
-    
-    private async Task NavigateToTypeProducts(string type)
-    {
-        await EliteProductService.GetFinishedProductsByTypeWithoutOrders(type);
-        NavigationManager.NavigateTo("/");
     }
 }
 
