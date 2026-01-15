@@ -11,4 +11,5 @@ public class UpdateFinishedProductRequest
     public bool Elite { get; set; }
     public IFormFile? Image { get; set; }
     public string? CreatedAt { get; set; }
+    public string Description { get; set; }
 }

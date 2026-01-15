@@ -1,58 +1,65 @@
 ﻿@page "/elite-products"
 @using Masterov.Web.Models
 @using Masterov.Web.Services.FinishedProduct
-@inject FinishedProductService ProductService
-
-<h3>Elite Product List</h3>
+@inject IFinishedProductService ProductService
 
 @if (_isLoading)
 {
     <p>Загрузка...</p>
 }
-else if (_eliteProducts == null || !_eliteProducts.Any())
+else if (!ProductService.FinishedProducts.Any())
 {
-    <p>Нет элитных изделий без заказов.</p>
+    <p>Нет элитных мебельных изделий</p>
 }
 else
 {
     <div class="product-grid">
-        @foreach (var product in _eliteProducts)
+        @for (int i = 0; i < 25; i++)
         {
-            <div class="product-card">
-                <h4>@product.Name</h4>
-                <p><strong>Тип:</strong> @product.Type</p>
-                <p><strong>Цена:</strong> @product.Price:C</p>
-                <p><strong>Размеры (мм):</strong> @product.Width x @product.Height x @product.Depth</p>
-                <p><strong>Элитное:</strong> @(product.Elite ? "Да" : "Нет")</p>
-                <p><strong>Создано:</strong> @product.CreatedAt</p>
-                @if (!string.IsNullOrEmpty(product.UpdatedAt))
-                {
-                    <p><strong>Обновлено:</strong> @product.UpdatedAt</p>
-                }
-                @if (product.Image != null)
-                {
-                    <img src="@($"data:image/png;base64,{Convert.ToBase64String(product.Image)}")" 
-                         alt="@product.Name" width="150" />
-                }
-            </div>
+            @foreach (var product in ProductService.FinishedProducts)
+            {
+                <div class="product-card">
+
+                    <h4 class="product-title">@product.Name</h4>
+
+                    <div class="product-body">
+                        @if (product.Image != null && product.Image.Length > 0)
+                        {
+                            <img class="product-img"
+                                 src="@($"data:image/png;base64,{Convert.ToBase64String(product.Image)}")"
+                                 alt="@product.Name"
+                                 onclick="openImg(this.src)" />
+                        }
+
+                        <div class="product-info">
+                            <p class="desc-text">@product.Description</p>
+                        </div>
+                    </div>
+
+                    <div class="price-wrapper">
+                        <span class="price-label">Цена:</span>
+                        <span class="price-value">@product.Price руб.</span>
+                    </div>
+
+                </div>
+            }
         }
+        
     </div>
 }
 
 @code {
-    private IEnumerable<FinishedProductDto> _eliteProducts = Enumerable.Empty<FinishedProductDto>();
     private bool _isLoading = true;
 
     protected override async Task OnInitializedAsync()
     {
         try
-        {
-            _eliteProducts = await ProductService.GetEliteProductsWithoutOrdersAsync();
+        { 
+            await ProductService.GetEliteProductsWithoutOrdersAsync();
         }
         catch (Exception ex)
         {
             Console.Error.WriteLine($"Ошибка при загрузке элитных изделий: {ex.Message}");
-            _eliteProducts = Enumerable.Empty<FinishedProductDto>();
         }
         finally
         {
@@ -62,22 +69,202 @@ else
 }
 
 <style>
+    /* ============================================================
+       СЕТКА КАРТОЧЕК — адаптивная, широкие премиальные карточки
+    ============================================================ */
     .product-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1rem;
-    }
-    
-    .product-card {
-        border: 1px solid #ccc;
-        border-radius: 8px;
+        grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+        gap: 1.5rem;
         padding: 1rem;
+    }
+
+    /* ============================================================
+       КАРТОЧКА — мягкий премиальный неоморфизм + лёгкий объём
+    ============================================================ */
+    .product-card {
+        background: linear-gradient(145deg, #ffffff, #f3f3f3);
+        border-radius: 18px;
+        padding: 1.5rem;
+        border: 1px solid #e6e6e6;
+
+        box-shadow:
+            8px 8px 18px rgba(0,0,0,0.15),
+            -4px -4px 12px rgba(255,255,255,0.9);
+
+        transition: 0.25s ease;
+    }
+
+    /* --- эффект подъёма карточки --- */
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow:
+            12px 12px 24px rgba(0,0,0,0.22),
+            -6px -6px 18px rgba(255,255,255,0.95);
+    }
+
+    /* ============================================================
+       НАЗВАНИЕ ТОВАРА — сверху, строгое и благородное
+    ============================================================ */
+    .product-title {
+    
+        /* размер текста — крупный, солидный */
+        font-size: 1.7rem;
+        /* толщина — полужирная, но без грубости */
+        font-weight: 600;
+        /* выравнивание по центру для акцентного вида */
         text-align: center;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        /* глубокий графитовый цвет для дорогого стиля */
+        color: #2a2a2a;
+    
+        /* капитель — статусный премиальный стиль */
+        font-variant: small-caps;
+    
+        /* увеличенный интервал между буквами — благородность */
+        letter-spacing: 1.2px;
+    
+        /* лёгкое тиснение: создаёт эффект рельефности */
+        text-shadow: 
+            /* светлая линия сверху */
+            0 1px 1px rgba(255,255,255,0.4),
+            /* мягкая тень снизу */
+            0 2px 4px rgba(0,0,0,0.25);
+    
+        /* расстояние снизу до следующего блока */
+        margin-bottom: 1.2rem;
+    
+        /* отступ под золотую линию */
+        padding-bottom: 0.35rem;
+    
+        /* золотая линия — премиум-деталь */
+        border-bottom: 2px solid rgba(184,138,37,0.55);
+    
+        /* ограничение ширины для аккуратной композиции */
+        width: 80%;
+    
+        /* центрирование линии */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* ============================================================
+       КОНТЕЙНЕР КОНТЕНТА — картинка слева, описание справа
+    ============================================================ */
+    .product-body {
+        display: flex;
+        gap: 1.2rem;
+        align-items: center;
+    }
+
+    /* ============================================================
+       КАРТИНКА — слева, аккуратное скругление и объём
+    ============================================================ */
+    .product-img {
+        width: 165px;
+        height: auto;
+        border-radius: 12px;
+        cursor: zoom-in;
+
+        box-shadow:
+            4px 4px 12px rgba(0,0,0,0.25),
+            -2px -2px 8px rgba(255,255,255,0.8);
+
+        transition: 0.3s ease;
+    }
+
+    /* --- лёгкое увеличение при наведении --- */
+    .product-img:hover {
+        transform: scale(1.05);
+    }
+
+    /* ============================================================
+       ОПИСАНИЕ — занимает всю ширину, ровная вертикальная линия
+    ============================================================ */
+    .product-info {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
     
-    .product-card img {
-        margin-top: 0.5rem;
-        border-radius: 4px;
+    .desc-text {
+        font-size: 1rem;
+        color: #333;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0;
+    
+        text-align: center;
+    }
+
+    /* ============================================================
+       ЦЕНА — снизу, отделена линией, золотистый благородный стиль
+    ============================================================ */
+    .price-wrapper {
+        margin-top: 1.1rem;
+        padding-top: 0.7rem;
+        text-align: center;
+        border-top: 1px solid #dcdcdc;
+    }
+
+    .price-label {
+        font-size: 1.05rem;
+        color: #666;
+        margin-right: 6px;
+    }
+
+    .price-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #b88a25; /* благородное золото */
+        text-shadow: 0 0 4px rgba(0,0,0,0.25);
+    }
+
+    /* ============================================================
+       МОДАЛЬНОЕ ОКНО ДЛЯ УВЕЛИЧЕНИЯ КАРТИНКИ
+    ============================================================ */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        inset: 0;
+        background: rgba(0,0,0,0.8);
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* --- увеличенная картинка в центре --- */
+    .modal-content {
+        max-width: 90%;
+        max-height: 90%;
+        border-radius: 14px;
+
+        box-shadow:
+            0 0 25px rgba(0,0,0,0.5),
+            0 0 10px rgba(255,255,255,0.2);
+
+        animation: zoomIn 0.25s ease;
+    }
+
+    /* --- анимация появления --- */
+    @@keyframes zoomIn {
+        from { transform: scale(0.5); opacity: 0; }
+        to   { transform: scale(1); opacity: 1; }
+    }
+
+    /* --- кнопка закрытия модалки --- */
+    .close {
+        position: absolute;
+        top: 25px;
+        right: 40px;
+        font-size: 45px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        text-shadow: 0 0 10px black;
+    }
+
+    .close:hover {
+        color: #ffdddd;
     }
 </style>

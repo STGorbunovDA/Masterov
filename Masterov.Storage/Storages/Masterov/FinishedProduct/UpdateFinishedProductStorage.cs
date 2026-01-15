@@ -7,7 +7,7 @@ namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateFinishedProductStorage
 {
     public async Task<FinishedProductDomain> UpdateFinishedProduct(Guid finishedProductId, string name, string type, decimal? price, int? width, int? height, int? depth,
-        byte[]? image, DateTime? createdAt, bool elite, CancellationToken cancellationToken)
+        byte[]? image, DateTime? createdAt, bool elite, string description, CancellationToken cancellationToken)
     {
         var finishedProductExists = await dbContext.Set<Storage.FinishedProduct>().FindAsync([finishedProductId], cancellationToken);
         
@@ -27,6 +27,7 @@ internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper
         finishedProductExists.Depth = depth ?? finishedProductExists.Depth;
         finishedProductExists.Image = image ?? finishedProductExists.Image;
         finishedProductExists.Elite = elite;
+        finishedProductExists.Description = description;
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return mapper.Map<FinishedProductDomain>(finishedProductExists);

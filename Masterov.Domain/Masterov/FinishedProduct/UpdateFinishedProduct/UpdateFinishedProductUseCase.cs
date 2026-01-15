@@ -22,6 +22,6 @@ public class UpdateFinishedProductUseCase(IValidator<UpdateFinishedProductComman
         return await updateFinishedProductStorage.UpdateFinishedProduct(updateFinishedProductCommand.FinishedProductId, 
             updateFinishedProductCommand.Name, updateFinishedProductCommand.Type, updateFinishedProductCommand.Price, updateFinishedProductCommand.Width, 
             updateFinishedProductCommand.Height, updateFinishedProductCommand.Depth, updateFinishedProductCommand.Image, 
-            updateFinishedProductCommand.CreatedAt, updateFinishedProductCommand.Elite, cancellationToken);
+            updateFinishedProductCommand.CreatedAt, updateFinishedProductCommand.Elite, updateFinishedProductCommand.Description, cancellationToken);
     }
 }

@@ -3,7 +3,7 @@ using Masterov.Web.Models;
 
 namespace Masterov.Web.Services.FinishedProduct;
 
-public class FinishedProductService(HttpClient http, ILogger<FinishedProductService> logger)
+public class FinishedProductService(HttpClient http, ILogger<FinishedProductService> logger) : IFinishedProductService
 {
     public async Task<IEnumerable<FinishedProductDto>> GetEliteProductsWithoutOrdersAsync(CancellationToken cancellationToken = default)
     {
@@ -11,13 +11,16 @@ public class FinishedProductService(HttpClient http, ILogger<FinishedProductServ
         {
             var result = await http.GetFromJsonAsync<IEnumerable<FinishedProductDto>>(
                 "api/finishedProducts/getFinishedProductsByEliteWithoutOrders", cancellationToken);
-
-            return result ?? Enumerable.Empty<FinishedProductDto>();
+            if(result is not null) FinishedProducts = result;
+            return FinishedProducts;
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Ошибка при получении элитных изделий");
+            logger.LogError(ex, "Ошибка при получении элитных готовых мебельных изделий");
             return Enumerable.Empty<FinishedProductDto>();
         }
     }
+
+    public IEnumerable<FinishedProductDto> FinishedProducts { get; set; } = new List<FinishedProductDto>();
+   
 }

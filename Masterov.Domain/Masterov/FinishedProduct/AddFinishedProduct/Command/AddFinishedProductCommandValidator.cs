@@ -64,5 +64,15 @@ public class AddFinishedProductCommandValidator : AbstractValidator<AddFinishedP
             .WithMessage("If a file is provided, it must not be empty and must be no more than 100 MB.")
             .Must(content => content == null || DomainExtension.IsImage(content))
             .WithMessage("The file must be an image.");
+        
+        RuleFor(c => c.Elite)
+            .NotNull()
+            .WithErrorCode("EliteRequired")
+            .WithMessage("Elite must be specified.");
+        
+        RuleFor(q => q.Description).Cascade(CascadeMode.Stop)
+            .MaximumLength(300)
+            .WithErrorCode("DescriptionTooLong")
+            .WithMessage("Description must be less than 300 characters.");
     }
 }

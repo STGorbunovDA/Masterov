@@ -75,5 +75,15 @@ public class UpdateFinishedProductCommandValidator : AbstractValidator<UpdateFin
             .When(c => c.CreatedAt.HasValue)
             .WithErrorCode("InvalidCreatedAt")
             .WithMessage("Creation date cannot be in the future.");
+        
+        RuleFor(c => c.Elite)
+            .NotNull()
+            .WithErrorCode("EliteRequired")
+            .WithMessage("Elite must be specified.");
+        
+        RuleFor(q => q.Description).Cascade(CascadeMode.Stop)
+            .MaximumLength(300)
+            .WithErrorCode("DescriptionTooLong")
+            .WithMessage("Description must be less than 300 characters.");
     }
 }

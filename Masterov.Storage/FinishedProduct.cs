@@ -16,6 +16,9 @@ public class FinishedProduct
 
     [Column(TypeName = "decimal(18,2)")]
     public decimal Price { get; set; }
+    
+    [Required, MaxLength(300)]
+    public string Description { get; set; }
 
     [Required]
     public DateTime CreatedAt { get; set; } = DateTime.Now;

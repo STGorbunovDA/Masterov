@@ -1,0 +1,3 @@
+﻿namespace Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByDescriptionAtWithoutOrders.Query;
+
+public record GetFinishedProductsByDescriptionAtWithoutOrdersQuery(string Description);

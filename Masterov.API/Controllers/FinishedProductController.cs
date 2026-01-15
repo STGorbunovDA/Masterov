@@ -16,6 +16,10 @@ using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAt.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByCreatedAtWithoutOrders.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByDescription;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByDescription.Query;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByDescriptionAtWithoutOrders;
+using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByDescriptionAtWithoutOrders.Query;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByElite;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByEliteWithoutOrders;
 using Masterov.Domain.Masterov.FinishedProduct.GetFinishedProductsByName;
@@ -311,7 +315,43 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         return Ok(finishedProducts?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
     }
     
+    /// <summary>
+    /// Получить готовое мебельное изделие по описанию без заказов
+    /// </summary>
+    /// <param name="request">Описание готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о готовых мебельных изделиях</returns>
+    [HttpGet("getFinishedProductsByDescriptionAtWithoutOrders")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductNoOrdersResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    public async Task<IActionResult> GetFinishedProductsByDescriptionAtWithoutOrders(
+        [FromQuery] GetFinishedProductsByDescriptionAtWithoutOrdersRequest request,
+        [FromServices] IGetFinishedProductsByDescriptionAtWithoutOrdersUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var finishedProducts = await useCase.Execute(new GetFinishedProductsByDescriptionAtWithoutOrdersQuery(request.Description), cancellationToken);
+        return Ok(finishedProducts?.Select(mapper.Map<FinishedProductNoOrdersResponse>) ?? Array.Empty<FinishedProductNoOrdersResponse>());
+    }
     
+    /// <summary>
+    /// Получить готовое мебельное изделие по описанию с заказами
+    /// </summary>
+    /// <param name="request">Описание готового мебельного изделия</param>
+    /// <param name="useCase">Сценарий использования</param>
+    /// <param name="cancellationToken">Токен отмены</param>
+    /// <returns>Информация о готовых мебельных изделиях</returns>
+    [HttpGet("getFinishedProductsByDescription")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<FinishedProductResponse>))]
+    [ProducesResponseType(400, Type = typeof(string))]
+    public async Task<IActionResult> GetFinishedProductsByDescription(
+        [FromQuery] GetFinishedProductsByDescriptionRequest request,
+        [FromServices] IGetFinishedProductsByDescriptionUseCase useCase,
+        CancellationToken cancellationToken)
+    {
+        var finishedProducts = await useCase.Execute(new GetFinishedProductsByDescriptionQuery(request.Description), cancellationToken);
+        return Ok(finishedProducts?.Select(mapper.Map<FinishedProductResponse>) ?? Array.Empty<FinishedProductResponse>());
+    }
     
     /// <summary>
     /// Получить список ордеров готового изделия с возможностью фильтрации по Id || даты создания || даты выполнения || Статуса || Описания
@@ -376,7 +416,8 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
                 request.Height,
                 request.Depth,
                 request.Elite,
-                request.Image == null ? null : await request.Image.ToByteArrayAsync()),
+                request.Image == null ? null : await request.Image.ToByteArrayAsync(),
+                request.Description),
             cancellationToken);
 
         return CreatedAtAction(nameof(GetFinishedProductById),
@@ -427,7 +468,7 @@ public class FinishedProductController(IMapper mapper) : ControllerBase
         var updateFinishedProduct = await useCase.Execute(
             new UpdateFinishedProductCommand(finishedProductId, request.Name, request.Type, request.Price, request.Width,
                 request.Height, request.Depth, request.Image == null ? null : await request.Image.ToByteArrayAsync(), 
-                request.CreatedAt?.ToDateTime(), request.Elite),
+                request.CreatedAt?.ToDateTime(), request.Elite, request.Description),
             cancellationToken);
         return Ok(mapper.Map<FinishedProductResponse>(updateFinishedProduct));
     }

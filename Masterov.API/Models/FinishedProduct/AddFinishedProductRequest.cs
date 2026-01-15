@@ -10,4 +10,5 @@ public class AddFinishedProductRequest
     public int? Depth { get; set; }  // в мм
     public bool Elite { get; set; }
     public IFormFile? Image { get; set; }
+    public string Description { get; set; }
 }
