@@ -32,6 +32,8 @@ using Masterov.Domain.Masterov.ProductType.GetProductTypesByCreatedAt;
 using Masterov.Domain.Masterov.ProductType.GetProductTypesByCreatedAt.Query;
 using Masterov.Domain.Masterov.ProductType.GetProductTypesByName;
 using Masterov.Domain.Masterov.ProductType.GetProductTypesByName.Query;
+using Masterov.Domain.Masterov.ProductType.GetProductTypesByUpdatedAt;
+using Masterov.Domain.Masterov.ProductType.GetProductTypesByUpdatedAt.Query;
 using Masterov.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -121,83 +123,22 @@ public class ProductTypesController(IMapper mapper): ControllerBase
     }
     
     /// <summary>
-    /// Получить компонент по дате обновления
+    /// Получить типы готового мебельного изделия по дате обновления
     /// </summary>
-    /// <param name="request">Дата обновления компонента</param>
+    /// <param name="request">Дата обновления типа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе компонента</returns>
-    [HttpGet("getComponentTypesByUpdatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
+    /// <returns>Информация о типе готового мебельного изделия</returns>
+    [HttpGet("getProductTypesByUpdatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductTypeDomain>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    public async Task<IActionResult> GetComponentTypesByUpdatedAt(
-        [FromQuery] GetComponentTypesByUpdatedAtRequest request,
-        [FromServices] IGetComponentTypesByUpdatedAtUseCase useCase,
+    public async Task<IActionResult> GetProductTypesByUpdatedAt(
+        [FromQuery] GetProductTypesByUpdatedAtRequest request,
+        [FromServices] IGetProductTypesByUpdatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var componentTypes = await useCase.Execute(new GetComponentTypesByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
-        return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
-    }
-    
-    /// <summary>
-    /// Получить список типов компонентов по описанию
-    /// </summary>
-    /// <param name="request">Описание типа компонента</param>
-    /// <param name="useCase">Сценарий использования</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе компонента</returns>
-    [HttpGet("getComponentTypesByDescription")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    public async Task<IActionResult> GetComponentTypesByDescription(
-        [FromQuery] GetComponentTypesByDescriptionRequest request,
-        [FromServices] IGetComponentTypesByDescriptionUseCase useCase,
-        CancellationToken cancellationToken)
-    {
-        var componentTypes = await useCase.Execute(new GetComponentTypesByDescriptionQuery(request.Description), cancellationToken);
-        return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
-    }
-    
-    /// <summary>
-    /// Получить используемые компоненты по идентификатору типа компонента
-    /// </summary>
-    /// <param name="request">Идентификатор компонента</param>
-    /// <param name="useCase">Сценарий использования</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Результат получения списка используемых компонентов</returns>
-    [HttpGet("getUsedComponentsByComponentTypeId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<UsedComponentResponse>))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetUsedComponentsByComponentTypeId(
-        [FromQuery] GetUsedComponentsByComponentTypeIdRequest request,
-        [FromServices] IGetUsedComponentsByComponentTypeIdUseCase useCase,
-        CancellationToken cancellationToken)
-    {
-        var usedComponents = await useCase.Execute(new GetUsedComponentsByComponentTypeIdQuery(request.ComponentTypeId), cancellationToken);
-        return Ok(usedComponents?.Select(mapper.Map<UsedComponentResponse>) ?? Array.Empty<UsedComponentResponse>());
-    }
-    
-    /// <summary>
-    /// Получить поставки по идентификатору типа компонента
-    /// </summary>
-    /// <param name="request">Идентификатор компонента</param>
-    /// <param name="useCase">Сценарий использования</param>
-    /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Результат получения списка поставок</returns>
-    [HttpGet("getSuppliesByComponentTypeId")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<SupplyNewResponse>))]
-    [ProducesResponseType(400, Type = typeof(string))]
-    [ProducesResponseType(404, Type = typeof(ProblemDetails))]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetSuppliesByComponentTypeId(
-        [FromQuery] GetSuppliesByComponentTypeIdRequest request,
-        [FromServices] IGetSuppliesByComponentTypeIdUseCase useCase,
-        CancellationToken cancellationToken)
-    {
-        var supplies = await useCase.Execute(new GetSuppliesByComponentTypeIdQuery(request.ComponentTypeId), cancellationToken);
-        return Ok(supplies?.Select(mapper.Map<SupplyNewResponse>) ?? Array.Empty<SupplyNewResponse>());
+        var productTypes = await useCase.Execute(new GetProductTypesByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
+        return Ok(productTypes?.Select(mapper.Map<ProductTypeDomain>) ?? Array.Empty<ProductTypeDomain>());
     }
     
     /// <summary>

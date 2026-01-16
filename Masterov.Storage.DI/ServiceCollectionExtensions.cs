@@ -72,6 +72,7 @@ using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypes;
 using Masterov.Domain.Masterov.ProductType.GetProductTypesByCreatedAt;
 using Masterov.Domain.Masterov.ProductType.GetProductTypesByName;
+using Masterov.Domain.Masterov.ProductType.GetProductTypesByUpdatedAt;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
 using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByEmail;
@@ -326,6 +327,7 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetProductTypesStorage, GetProductTypesStorage>()
             .AddScoped<IGetProductTypesByNameStorage, GetProductTypesByNameStorage>()
             .AddScoped<IGetProductTypesByCreatedAtStorage, GetProductTypesByCreatedAtStorage>()
+            .AddScoped<IGetProductTypesByUpdatedAtStorage, GetProductTypesByUpdatedAtStorage>()
             .AddScoped<IGetProductTypeByIdStorage, GetProductTypeByIdStorage>();
         
         services.AddMemoryCache();
