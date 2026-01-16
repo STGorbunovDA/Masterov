@@ -14,7 +14,7 @@ internal class GetFinishedProductByTypeStorage(MasterovDbContext dbContext, IMap
     
         return await dbContext.FinishedProducts
             .AsNoTracking() 
-            .Where(f => f.Type.ToLower() == normalizedType)
+            .Where(f => f.ProductType.Name.ToLower() == normalizedType)
             .ProjectTo<FinishedProductDomain>(mapper.ConfigurationProvider)
             .ToArrayAsync(cancellationToken);
     }

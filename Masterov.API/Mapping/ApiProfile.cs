@@ -4,6 +4,7 @@ using Masterov.API.Models.Customer;
 using Masterov.API.Models.FinishedProduct;
 using Masterov.API.Models.Order;
 using Masterov.API.Models.Payment;
+using Masterov.API.Models.ProductType;
 using Masterov.API.Models.Supplier;
 using Masterov.API.Models.Supply;
 using Masterov.API.Models.UsedComponent;
@@ -100,6 +101,7 @@ internal class ApiProfile : Profile
             .ForMember(dest => dest.ComponentType, opt => opt.MapFrom(src => src.ComponentType));
         
         CreateMap<CustomerDomain, CustomerNoOrdersResponse>();
+        CreateMap<ProductTypeDomain, ProductTypeResponse>();
         CreateMap<FinishedProductNoOrdersDomain, FinishedProductNoOrdersResponse>();
     }
 }

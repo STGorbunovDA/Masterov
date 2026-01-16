@@ -13,13 +13,28 @@ internal class AddFinishedProductStorage(MasterovDbContext dbContext, IGuidFacto
         byte[]? image, bool elite, string description,
         CancellationToken cancellationToken)
     {
-        var finishedProductGuide = guidFactory.Create();
+       
+        var normalizedType = type.Trim().ToLower();
+        var productType = await dbContext.ProductTypes
+            .FirstOrDefaultAsync(t => t.Name.ToLower() == normalizedType, cancellationToken);
 
+        if (productType == null)
+        {
+            productType = new Storage.ProductType
+            {
+                Name = type
+            };
+
+            await dbContext.ProductTypes.AddAsync(productType, cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        var finishedProductGuide = guidFactory.Create();
         var finishedProduct = new Storage.FinishedProduct
         {
             FinishedProductId = finishedProductGuide,
             Name = name,
-            Type = type,
+            ProductTypeId = productType.Id,
             Price = price ?? 0.00m,
             Width = width ?? 0,
             Height = height ?? 0,

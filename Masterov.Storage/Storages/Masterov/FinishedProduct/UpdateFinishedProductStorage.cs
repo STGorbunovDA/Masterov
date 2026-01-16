@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
@@ -14,8 +15,26 @@ internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper
         if (finishedProductExists == null)
             throw new Exception("FinishedProduct not found");
         
+        // 1. Поиск типа
+        var normalizedType = type.Trim().ToLower();
+
+        var productType = await dbContext.ProductTypes
+            .FirstOrDefaultAsync(t => t.Name.ToLower() == normalizedType, cancellationToken);
+
+        // 2. Если типа нет — создаём
+        if (productType == null)
+        {
+            productType = new Storage.ProductType
+            {
+                Name = type.Trim()
+            };
+
+            await dbContext.ProductTypes.AddAsync(productType, cancellationToken);
+            await dbContext.SaveChangesAsync(cancellationToken);
+        }
+        
         finishedProductExists.Name = name.Trim();
-        finishedProductExists.Type = type.Trim();
+        finishedProductExists.ProductTypeId = productType.Id;
 
         if (createdAt.HasValue)
             finishedProductExists.CreatedAt = createdAt.Value;
@@ -27,7 +46,8 @@ internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper
         finishedProductExists.Depth = depth ?? finishedProductExists.Depth;
         finishedProductExists.Image = image ?? finishedProductExists.Image;
         finishedProductExists.Elite = elite;
-        finishedProductExists.Description = description;
+        if(!string.IsNullOrWhiteSpace(description))
+            finishedProductExists.Description = description;
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return mapper.Map<FinishedProductDomain>(finishedProductExists);

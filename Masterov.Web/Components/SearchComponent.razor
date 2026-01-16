@@ -1,0 +1,22 @@
+﻿@inject NavigationManager Navigation
+
+<input @bind="searchQuery"
+       @onkeydown="HandleEnter"
+       placeholder="@Placeholder"
+       class="search-input" />
+
+@code {
+    [Parameter] public string Placeholder { get; set; } = "Поиск...";
+    [Parameter] public string SearchRoute { get; set; } = "/products/type";
+
+    private string searchQuery = "";
+
+    private void HandleEnter(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter" && !string.IsNullOrWhiteSpace(searchQuery))
+        {
+            var encodedQuery = Uri.EscapeDataString(searchQuery.Trim());
+            Navigation.NavigateTo($"{SearchRoute}/{encodedQuery}");
+        }
+    }
+}

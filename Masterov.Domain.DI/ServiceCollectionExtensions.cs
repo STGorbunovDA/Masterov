@@ -68,6 +68,7 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByOrderId;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByStatus;
 using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
+using Masterov.Domain.Masterov.ProductType.GetProductTypes;
 using Masterov.Domain.Masterov.ServiceAdditional.ServicePayment;
 using Masterov.Domain.Masterov.ServiceAdditional.ServiceSupply;
 using Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
@@ -308,6 +309,10 @@ public static class ServiceCollectionExtensions
             .AddScoped<IGetUsedComponentsByUpdatedAtUseCase, GetUsedComponentsByUpdatedAtUseCase>()
             .AddScoped<IGetUsedComponentByIdUseCase, GetUsedComponentByIdUseCase>();
 
+        // ProductType
+        services
+            .AddScoped<IGetProductTypesUseCase, GetProductTypesUseCase>();
+        
         services
             .AddScoped<IUpdateOrderStatusAfterPayment, UpdateOrderStatusAfterPayment>()
             .AddScoped<IUpdateWarehouseQuantityPriceSupply, UpdateWarehouseQuantityPriceSupply>()

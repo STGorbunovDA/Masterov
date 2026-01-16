@@ -7,46 +7,52 @@ internal class StorageProfile : Profile
 {
     public StorageProfile()
     {
-        // Product mapping
+        // FinishedProduct → FinishedProductDomain
         CreateMap<FinishedProduct, FinishedProductDomain>()
+            .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.ProductType.Name))
             .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders));
-            
-        // ProductionOrder mapping
+
+        // FinishedProduct → FinishedProductNoOrdersDomain
+        CreateMap<FinishedProduct, FinishedProductNoOrdersDomain>()
+            .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.ProductType.Name));
+
+        // ProductType → ProductTypeDomain
+        CreateMap<ProductType, ProductTypeDomain>();
+
+        // Order
         CreateMap<Order, OrderDomain>()
             .ForMember(dest => dest.UsedComponents, opt => opt.MapFrom(src => src.UsedComponents))
             .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments))
             .ForMember(dest => dest.FinishedProductId, opt => opt.MapFrom(src => src.FinishedProduct.FinishedProductId))
             .ForMember(dest => dest.FullPriceFinishedProduct, opt => opt.MapFrom(src => src.FinishedProduct.Price));
-            
-        // ProductComponent mapping
+
+        // UsedComponent
         CreateMap<UsedComponent, UsedComponentDomain>()
             .ForMember(dest => dest.ComponentType, opt => opt.MapFrom(src => src.ComponentType))
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.Warehouse))
             .ForMember(dest => dest.OrderId, opt => opt.MapFrom(src => src.OrderId));
-            
-        // Product mapping
+
+        // Customer
         CreateMap<Customer, CustomerDomain>()
             .ForMember(dest => dest.Orders, opt => opt.MapFrom(src => src.Orders));
-        
+
+        // Payment
         CreateMap<Payment, PaymentDomain>()
             .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer));
-        
+
+        // User
         CreateMap<User, UserDomain>()
             .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.Customer))
             .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.UserId));
 
-        
-        // ComponentType mapping
+        // Warehouse + ComponentType
         CreateMap<ComponentType, ComponentTypeDomain>();
-            
-        // Warehouse mapping
         CreateMap<Warehouse, WarehouseDomain>();
-        // Supplier mapping (если нужно)
+
+        // Supplier
         CreateMap<Supplier, SupplierDomain>();
-            
-        // Supply mapping (если нужно)
+
+        // Supply
         CreateMap<Supply, SupplyDomain>();
-        
-        CreateMap<FinishedProduct, FinishedProductNoOrdersDomain>();
     }
 }

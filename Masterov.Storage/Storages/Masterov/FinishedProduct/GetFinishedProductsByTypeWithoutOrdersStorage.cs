@@ -10,11 +10,11 @@ internal class GetFinishedProductsByTypeWithoutOrdersStorage(MasterovDbContext d
 {
     public async Task<IEnumerable<FinishedProductNoOrdersDomain?>> GetFinishedProductByTypeWithoutOrders(string finishedProductType, CancellationToken cancellationToken)
     {
-        var normalizedName = finishedProductType.Trim().ToLower();
+        var normalizedType = finishedProductType.Trim().ToLower();
     
         return await dbContext.FinishedProducts
             .AsNoTracking() 
-            .Where(f => f.Type.ToLower() == normalizedName)
+            .Where(f => f.ProductType.Name.ToLower() == normalizedType)
             .ProjectTo<FinishedProductNoOrdersDomain>(mapper.ConfigurationProvider)
             .ToArrayAsync(cancellationToken);
     }
