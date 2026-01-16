@@ -79,7 +79,7 @@ public class ComponentTypeController(IMapper mapper): ControllerBase
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типах компонентов</returns>
-    [HttpGet("getComponentTypesByName/{componentTypeName}")]
+    [HttpGet("getComponentTypesByName")]
     [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]

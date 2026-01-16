@@ -70,6 +70,7 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypes;
+using Masterov.Domain.Masterov.ProductType.GetProductTypesByName;
 using Masterov.Domain.Masterov.ServiceAdditional.ServicePayment;
 using Masterov.Domain.Masterov.ServiceAdditional.ServiceSupply;
 using Masterov.Domain.Masterov.ServiceAdditional.ServiceUsedComponent;
@@ -313,6 +314,7 @@ public static class ServiceCollectionExtensions
         // ProductType
         services
             .AddScoped<IGetProductTypesUseCase, GetProductTypesUseCase>()
+            .AddScoped<IGetProductTypesByNameUseCase, GetProductTypesByNameUseCase>()
             .AddScoped<IGetProductTypeByIdUseCase, GetProductTypeByIdUseCase>();
         
         services

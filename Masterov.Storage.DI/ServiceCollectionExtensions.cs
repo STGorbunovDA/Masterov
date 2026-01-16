@@ -70,6 +70,7 @@ using Masterov.Domain.Masterov.Payment.GetPaymentsByUpdatedAt;
 using Masterov.Domain.Masterov.Payment.UpdatePayment;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypes;
+using Masterov.Domain.Masterov.ProductType.GetProductTypesByName;
 using Masterov.Domain.Masterov.Supplier.AddSupplier;
 using Masterov.Domain.Masterov.Supplier.DeleteSupplier;
 using Masterov.Domain.Masterov.Supplier.GetSupplierByEmail;
@@ -322,6 +323,7 @@ public static class ServiceCollectionExtensions
         // ProductType
         services
             .AddScoped<IGetProductTypesStorage, GetProductTypesStorage>()
+            .AddScoped<IGetProductTypesByNameStorage, GetProductTypesByNameStorage>()
             .AddScoped<IGetProductTypeByIdStorage, GetProductTypeByIdStorage>();
         
         services.AddMemoryCache();

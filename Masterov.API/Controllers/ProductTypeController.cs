@@ -28,6 +28,8 @@ using Masterov.Domain.Masterov.ComponentType.UpdateComponentType.Command;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById.Query;
 using Masterov.Domain.Masterov.ProductType.GetProductTypes;
+using Masterov.Domain.Masterov.ProductType.GetProductTypesByName;
+using Masterov.Domain.Masterov.ProductType.GetProductTypesByName.Query;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,11 +40,11 @@ namespace Masterov.API.Controllers;
 public class ProductTypesController(IMapper mapper): ControllerBase
 {
     /// <summary>
-    /// Получить все типы мебельных изделий
+    /// Получить все типы готовых мебельных изделий
     /// </summary>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Типы компонентов</returns>
+    /// <returns>Типы готовых мебельных изделий</returns>
     [HttpGet("getProductTypes")]
     [ProducesResponseType(200, Type = typeof(IEnumerable<ProductTypeResponse>))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
@@ -55,12 +57,12 @@ public class ProductTypesController(IMapper mapper): ControllerBase
     }
     
     /// <summary>
-    /// Получить тип мебельного изделия по Id
+    /// Получить тип готового мебельного изделия по Id
     /// </summary>
     /// <param name="productTypeId">Идентификатор типа мебельного изделия</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе мебельного изделия</returns>
+    /// <returns>Информация о типе готового мебельного изделия</returns>
     [HttpGet("getProductTypeById/{productTypeId:guid}")]
     [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
@@ -76,24 +78,24 @@ public class ProductTypesController(IMapper mapper): ControllerBase
     }
     
     /// <summary>
-    /// Получить типы компонента по имени
+    /// Получить типы готового мебельного изделия по имени
     /// </summary>
-    /// <param name="request">Название типа компонента</param>
+    /// <param name="request">Название типа готового мебельного изделия</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типах компонентов</returns>
-    [HttpGet("getComponentTypesByName/{componentTypeName}")]
-    [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
+    /// <returns>Информация о типе готового мебельного изделия</returns>
+    [HttpGet("getProductTypesByName")]
+    [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetComponentTypesByName(
-        [FromQuery] GetComponentTypesByNameRequest request,
-        [FromServices] IGetComponentTypesByNameUseCase useCase,
+    public async Task<IActionResult> GetProductTypesByName(
+        [FromQuery] GetProductTypesByNameRequest request,
+        [FromServices] IGetProductTypesByNameUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var componentTypes = await useCase.Execute(new GetComponentTypesByNameQuery(request.ComponentTypeName), cancellationToken);
-        return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
+        var productType = await useCase.Execute(new GetProductTypesByNameQuery(request.ProductTypeName), cancellationToken);
+        return Ok(productType?.Select(mapper.Map<ProductTypeResponse>) ?? Array.Empty<ProductTypeResponse>());
     }
     
     /// <summary>
