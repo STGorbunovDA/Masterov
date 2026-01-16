@@ -25,6 +25,8 @@ using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId;
 using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId.Query;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType.Command;
+using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
+using Masterov.Domain.Masterov.ProductType.GetProductTypeById.Query;
 using Masterov.Domain.Masterov.ProductType.GetProductTypes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,24 +55,24 @@ public class ProductTypesController(IMapper mapper): ControllerBase
     }
     
     /// <summary>
-    /// Получить тип компонента по Id
+    /// Получить тип мебельного изделия по Id
     /// </summary>
-    /// <param name="componentTypeId">Идентификатор типа компонента</param>
+    /// <param name="productTypeId">Идентификатор типа мебельного изделия</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе компонента</returns>
-    [HttpGet("getComponentTypeById/{componentTypeId:guid}")]
-    [ProducesResponseType(200, Type = typeof(ComponentTypeResponse))]
+    /// <returns>Информация о типе мебельного изделия</returns>
+    [HttpGet("getProductTypeById/{productTypeId:guid}")]
+    [ProducesResponseType(200, Type = typeof(ProductTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
     [Authorize(Roles = "SuperAdmin, Admin, Manager")]
-    public async Task<IActionResult> GetComponentTypeById(
-        [FromRoute] Guid componentTypeId,
-        [FromServices] IGetComponentTypeByIdUseCase useCase,
+    public async Task<IActionResult> GetProductTypeById(
+        [FromRoute] Guid productTypeId,
+        [FromServices] IGetProductTypeByIdUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var componentType = await useCase.Execute(new GetComponentTypeByIdQuery(componentTypeId), cancellationToken);
-        return Ok(mapper.Map<ComponentTypeResponse>(componentType));
+        var productType = await useCase.Execute(new GetProductTypeByIdQuery(productTypeId), cancellationToken);
+        return Ok(mapper.Map<ProductTypeResponse>(productType));
     }
     
     /// <summary>
@@ -210,7 +212,7 @@ public class ProductTypesController(IMapper mapper): ControllerBase
         CancellationToken cancellationToken)
     {
         var componentType = await useCase.Execute(new AddComponentTypeCommand(request.Name, request.Description), cancellationToken);
-        return CreatedAtAction(nameof(GetComponentTypeById), new { componentTypeId = componentType.ComponentTypeId }, mapper.Map<ComponentTypeResponse>(componentType));
+        return CreatedAtAction(nameof(GetProductTypeById), new { componentTypeId = componentType.ComponentTypeId }, mapper.Map<ComponentTypeResponse>(componentType));
     }
     
     /// <summary>

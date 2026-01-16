@@ -5,7 +5,7 @@ namespace Masterov.Storage;
 public class ProductType
 {
     [Key]
-    public int Id { get; set; }
+    public Guid ProductTypeId { get; set; }
 
     [Required, MaxLength(100)]
     public string Name { get; set; }

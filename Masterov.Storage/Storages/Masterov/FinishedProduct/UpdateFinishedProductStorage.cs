@@ -34,7 +34,7 @@ internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper
         }
         
         finishedProductExists.Name = name.Trim();
-        finishedProductExists.ProductTypeId = productType.Id;
+        finishedProductExists.ProductTypeId = productType.ProductTypeId;
 
         if (createdAt.HasValue)
             finishedProductExists.CreatedAt = createdAt.Value;

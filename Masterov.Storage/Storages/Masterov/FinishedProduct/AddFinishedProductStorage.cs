@@ -34,7 +34,7 @@ internal class AddFinishedProductStorage(MasterovDbContext dbContext, IGuidFacto
         {
             FinishedProductId = finishedProductGuide,
             Name = name,
-            ProductTypeId = productType.Id,
+            ProductTypeId = productType.ProductTypeId,
             Price = price ?? 0.00m,
             Width = width ?? 0,
             Height = height ?? 0,
