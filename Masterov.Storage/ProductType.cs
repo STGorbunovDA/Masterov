@@ -9,6 +9,11 @@ public class ProductType
 
     [Required, MaxLength(100)]
     public string Name { get; set; }
+    
+    [Required]
+    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    
+    public DateTime? UpdatedAt  { get; set; }
 
     public ICollection<FinishedProduct> Products { get; set; }
 }

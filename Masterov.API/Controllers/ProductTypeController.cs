@@ -28,8 +28,11 @@ using Masterov.Domain.Masterov.ComponentType.UpdateComponentType.Command;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById.Query;
 using Masterov.Domain.Masterov.ProductType.GetProductTypes;
+using Masterov.Domain.Masterov.ProductType.GetProductTypesByCreatedAt;
+using Masterov.Domain.Masterov.ProductType.GetProductTypesByCreatedAt.Query;
 using Masterov.Domain.Masterov.ProductType.GetProductTypesByName;
 using Masterov.Domain.Masterov.ProductType.GetProductTypesByName.Query;
+using Masterov.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -99,22 +102,22 @@ public class ProductTypesController(IMapper mapper): ControllerBase
     }
     
     /// <summary>
-    /// Получить компонент по дате создания
+    /// Получить типы готового мебельного изделия по дате создания
     /// </summary>
-    /// <param name="request">Дата создания компонента</param>
+    /// <param name="request">Дата создания типа</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
-    /// <returns>Информация о типе компонента</returns>
-    [HttpGet("getComponentTypesByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<ComponentTypeResponse>))]
+    /// <returns>Информация о типе готового мебельного изделия</returns>
+    [HttpGet("getProductTypesByCreatedAt")]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductTypeDomain>))]
     [ProducesResponseType(400, Type = typeof(string))]
-    public async Task<IActionResult> GetComponentTypesByCreatedAt(
-        [FromQuery] GetComponentTypesByCreatedAtRequest request,
-        [FromServices] IGetComponentTypesByCreatedAtUseCase useCase,
+    public async Task<IActionResult> GetProductTypesByCreatedAt(
+        [FromQuery] GetProductTypesByCreatedAtRequest request,
+        [FromServices] IGetProductTypesByCreatedAtUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var componentTypes = await useCase.Execute(new GetComponentTypesByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
-        return Ok(componentTypes?.Select(mapper.Map<ComponentTypeResponse>) ?? Array.Empty<ComponentTypeResponse>());
+        var productTypes = await useCase.Execute(new GetProductTypesByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
+        return Ok(productTypes?.Select(mapper.Map<ProductTypeDomain>) ?? Array.Empty<ProductTypeDomain>());
     }
     
     /// <summary>

@@ -22,7 +22,9 @@ internal class AddFinishedProductStorage(MasterovDbContext dbContext, IGuidFacto
         {
             productType = new Storage.ProductType
             {
-                Name = type
+                ProductTypeId = guidFactory.Create(),
+                Name = type.Trim(),
+                CreatedAt = DateTime.Now
             };
 
             await dbContext.ProductTypes.AddAsync(productType, cancellationToken);

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Masterov.Domain.Masterov.FinishedProduct.UpdateFinishedProduct;
 using Masterov.Domain.Models;
+using Masterov.Storage.Extension;
 using Microsoft.EntityFrameworkCore;
 
 namespace Masterov.Storage.Storages.Masterov.FinishedProduct;
 
-internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper mapper) : IUpdateFinishedProductStorage
+internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IGuidFactory guidFactory, IMapper mapper) : IUpdateFinishedProductStorage
 {
     public async Task<FinishedProductDomain> UpdateFinishedProduct(Guid finishedProductId, string name, string type, decimal? price, int? width, int? height, int? depth,
         byte[]? image, DateTime? createdAt, bool elite, string description, CancellationToken cancellationToken)
@@ -26,7 +27,9 @@ internal class UpdateFinishedProductStorage(MasterovDbContext dbContext, IMapper
         {
             productType = new Storage.ProductType
             {
-                Name = type.Trim()
+                ProductTypeId = guidFactory.Create(),
+                Name = type.Trim(),
+                CreatedAt = DateTime.Now
             };
 
             await dbContext.ProductTypes.AddAsync(productType, cancellationToken);
