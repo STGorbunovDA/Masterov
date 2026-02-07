@@ -2,29 +2,14 @@
 using Masterov.API.Extensions;
 using Masterov.API.Models.ComponentType;
 using Masterov.API.Models.ProductType;
-using Masterov.API.Models.Supply;
-using Masterov.API.Models.UsedComponent;
 using Masterov.Domain.Masterov.ComponentType.AddComponentType;
 using Masterov.Domain.Masterov.ComponentType.AddComponentType.Command;
 using Masterov.Domain.Masterov.ComponentType.DeleteComponentType;
 using Masterov.Domain.Masterov.ComponentType.DeleteComponentType.Command;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypeById.Query;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypes;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByCreatedAt.Query;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByDescription;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByDescription.Query;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByName;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByName.Query;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt;
-using Masterov.Domain.Masterov.ComponentType.GetComponentTypesByUpdatedAt.Query;
-using Masterov.Domain.Masterov.ComponentType.GetSuppliesByComponentTypeId;
-using Masterov.Domain.Masterov.ComponentType.GetSuppliesByComponentTypeId.Query;
-using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId;
-using Masterov.Domain.Masterov.ComponentType.GetUsedComponentsByComponentTypeId.Query;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType;
 using Masterov.Domain.Masterov.ComponentType.UpdateComponentType.Command;
+using Masterov.Domain.Masterov.ProductType.AddProductType;
+using Masterov.Domain.Masterov.ProductType.AddProductType.Command;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById;
 using Masterov.Domain.Masterov.ProductType.GetProductTypeById.Query;
 using Masterov.Domain.Masterov.ProductType.GetProductTypes;
@@ -34,7 +19,6 @@ using Masterov.Domain.Masterov.ProductType.GetProductTypesByName;
 using Masterov.Domain.Masterov.ProductType.GetProductTypesByName.Query;
 using Masterov.Domain.Masterov.ProductType.GetProductTypesByUpdatedAt;
 using Masterov.Domain.Masterov.ProductType.GetProductTypesByUpdatedAt.Query;
-using Masterov.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -111,7 +95,7 @@ public class ProductTypesController(IMapper mapper): ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе готового мебельного изделия</returns>
     [HttpGet("getProductTypesByCreatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductTypeDomain>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductTypeResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     public async Task<IActionResult> GetProductTypesByCreatedAt(
         [FromQuery] GetProductTypesByCreatedAtRequest request,
@@ -119,7 +103,7 @@ public class ProductTypesController(IMapper mapper): ControllerBase
         CancellationToken cancellationToken)
     {
         var productTypes = await useCase.Execute(new GetProductTypesByCreatedAtQuery(request.CreatedAt.ToDateTime()), cancellationToken);
-        return Ok(productTypes?.Select(mapper.Map<ProductTypeDomain>) ?? Array.Empty<ProductTypeDomain>());
+        return Ok(productTypes?.Select(mapper.Map<ProductTypeResponse>) ?? Array.Empty<ProductTypeResponse>());
     }
     
     /// <summary>
@@ -130,7 +114,7 @@ public class ProductTypesController(IMapper mapper): ControllerBase
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе готового мебельного изделия</returns>
     [HttpGet("getProductTypesByUpdatedAt")]
-    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductTypeDomain>))]
+    [ProducesResponseType(200, Type = typeof(IEnumerable<ProductTypeResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     public async Task<IActionResult> GetProductTypesByUpdatedAt(
         [FromQuery] GetProductTypesByUpdatedAtRequest request,
@@ -138,27 +122,28 @@ public class ProductTypesController(IMapper mapper): ControllerBase
         CancellationToken cancellationToken)
     {
         var productTypes = await useCase.Execute(new GetProductTypesByUpdatedAtQuery(request.UpdatedAt.ToDateTime()), cancellationToken);
-        return Ok(productTypes?.Select(mapper.Map<ProductTypeDomain>) ?? Array.Empty<ProductTypeDomain>());
+        return Ok(productTypes?.Select(mapper.Map<ProductTypeResponse>) ?? Array.Empty<ProductTypeResponse>());
     }
     
     /// <summary>
-    /// Добавить тип изделия
+    /// Добавить тип готового мебельного изделия
     /// </summary>
-    /// <param name="request">Данные о типе изделия</param>
+    /// <param name="request">Данные о типе готового мебельного изделия</param>
     /// <param name="useCase">Сценарий использования</param>
     /// <param name="cancellationToken">Токен отмены</param>
     /// <returns>Информация о типе изделия</returns>
-    [HttpPost("addComponentType")]
-    [ProducesResponseType(201, Type = typeof(ComponentTypeResponse))]
+    [HttpPost("addProductType")]
+    [ProducesResponseType(201, Type = typeof(ProductTypeResponse))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(409, Type = typeof(ProblemDetails))]
-    public async Task<IActionResult> AddComponentType(
-        [FromBody] AddComponentTypeRequest request,
-        [FromServices] IAddComponentTypeUseCase useCase,
+    public async Task<IActionResult> AddProductType(
+        [FromBody] AddProductTypeRequest request,
+        [FromServices] IAddProductTypeUseCase useCase,
         CancellationToken cancellationToken)
     {
-        var componentType = await useCase.Execute(new AddComponentTypeCommand(request.Name, request.Description), cancellationToken);
-        return CreatedAtAction(nameof(GetProductTypeById), new { componentTypeId = componentType.ComponentTypeId }, mapper.Map<ComponentTypeResponse>(componentType));
+        var productType = await useCase.Execute(new AddProductTypeCommand(request.Name), cancellationToken);
+        return CreatedAtAction(nameof(GetProductTypeById), new { productTypeId = productType.ProductTypeId }, 
+            mapper.Map<ProductTypeResponse>(productType));
     }
     
     /// <summary>
