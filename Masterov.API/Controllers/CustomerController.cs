@@ -187,7 +187,7 @@ public class CustomerController(IMapper mapper) : ControllerBase
     [ProducesResponseType(200, Type = typeof(IEnumerable<OrderNoCustumerResponse>))]
     [ProducesResponseType(400, Type = typeof(string))]
     [ProducesResponseType(404, Type = typeof(ProblemDetails))]
-    [Authorize(Roles = "SuperAdmin, Admin, Manager")]
+    [Authorize]
     public async Task<IActionResult> GetOrdersByCustomerId(
         [FromQuery] GetOrdersByCustomerIdRequest request,
         [FromServices] IGetOrdersByCustomerIdUseCase useCase,

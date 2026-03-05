@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Masterov.Domain.Masterov.ComponentType.AddComponentType.Command;
 
 namespace Masterov.Domain.Masterov.ProductType.AddProductType.Command;
 
